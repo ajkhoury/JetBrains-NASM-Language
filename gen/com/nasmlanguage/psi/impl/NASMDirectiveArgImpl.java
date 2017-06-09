@@ -34,6 +34,12 @@ public class NASMDirectiveArgImpl extends ASTWrapperPsiElement implements NASMDi
 
   @Override
   @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLabel() {
     return findChildByType(LABEL);
   }

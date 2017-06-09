@@ -28,6 +28,12 @@ public class NASMAddressImpl extends ASTWrapperPsiElement implements NASMAddress
 
   @Override
   @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLabel() {
     return findChildByType(LABEL);
   }

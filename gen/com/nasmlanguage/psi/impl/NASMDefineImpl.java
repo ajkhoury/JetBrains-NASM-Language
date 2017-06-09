@@ -11,14 +11,14 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMInstruction {
+public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
 
-  public NASMInstructionImpl(ASTNode node) {
+  public NASMDefineImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitInstruction(this);
+    visitor.visitDefine(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,26 +28,8 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @NotNull
-  public List<NASMAddress> getAddressList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMAddress.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getComment() {
-    return findChildByType(COMMENT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLabelDef() {
-    return findChildByType(LABEL_DEF);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getMnemonicOp() {
-    return findNotNullChildByType(MNEMONIC_OP);
+  public PsiElement getDefineTag() {
+    return findNotNullChildByType(DEFINE_TAG);
   }
 
 }

@@ -11,14 +11,14 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMInstruction {
+public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
 
-  public NASMInstructionImpl(ASTNode node) {
+  public NASMMacroImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitInstruction(this);
+    visitor.visitMacro(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,26 +28,32 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @NotNull
-  public List<NASMAddress> getAddressList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMAddress.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getComment() {
-    return findChildByType(COMMENT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLabelDef() {
-    return findChildByType(LABEL_DEF);
+  public List<NASMData> getDataList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMData.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getMnemonicOp() {
-    return findNotNullChildByType(MNEMONIC_OP);
+  public List<NASMInstruction> getInstructionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMInstruction.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getMacroTag() {
+    return findNotNullChildByType(MACRO_TAG);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getNumber() {
+    return findNotNullChildByType(NUMBER);
   }
 
 }

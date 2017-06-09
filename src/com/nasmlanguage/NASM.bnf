@@ -15,26 +15,20 @@
     psiImplUtilClass="com.nasmlanguage.psi.impl.NASMPsiImplUtil"
 
     tokens = [
-        COLON               = ':'
-        SQUARE_L            = '['
-        SQUARE_R            = ']'
-        SEPARATOR           = ','
-
-        PLUS                = '+'
-        MINUS               = '-'
-        TIMES               = '*'
-        DIVIDE              = '\'
-
         CRLF                = 'regexp:\R|\n|\r\n'
         //WHITE_SPACE         = 'regexp:[\ \t\f]'
         COMMENT             = 'regexp:;.*'
         EQU                 = 'regexp:[eE][qQ][uU]'
         SECTION_TAG         = 'regexp:[sS][eE][cC][tT][iI][oO][nN]'
+        INCLUDE_TAG         = 'regexp:\%[iI][nN][cC][lL][uU][dD][eE]'
+        DEFINE_TAG          = 'regexp:\%([xX]?[iI]?[dD][eE][fF][iI][nN][eE])'
+        MACRO_TAG           = 'regexp:\%([iI]?[mM][aA][cC][rR][oO])'
         CODE_SECTION_NAME   = 'regexp:\.[tT][eE][xX][tT]'
         DATA_SECTION_NAME   = 'regexp:\.[dD][aA][tT][aA]'
         BSS_SECTION_NAME    = 'regexp:\.[bB][sS][sS]'
 
         DIRECTIVE_OP        = 'regexp:[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]'
+        PREPROCESSOR_OP     = 'regexp:\%([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])'
         DATA_OP             = 'regexp:(res|d)[bwdqt]|[tT][iI][mM][eE][sS]'
 
         INS_DATA_TRANS_MOV  = 'regexp:(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)'                            // Data Transfer MOV
@@ -56,7 +50,6 @@
         INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)'                                     // Bit Manipulation (BMI)
         INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))'                            // 64 bit Instructions
 
-
         MNEMONIC_OP         = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}|{INS_64_BIT}'
 
 
@@ -67,28 +60,67 @@
         LABEL_DEF           = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
 
         // Make last!
-        LABEL               = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*'
+        IDENTIFIER          = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
+        LABEL               = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Label can have chars like '.', '?', '@', etc
+
+        COLON               = ':'
+        SQUARE_L            = '['
+        SQUARE_R            = ']'
+        ROUND_L             = '('
+        ROUND_R             = ')'
+        SEPARATOR           = ','
+
+        PLUS                = '+'
+        MINUS               = '-'
+        TIMES               = '*'
+        DIVIDE              = '\'
+
+        DOLLARSIGN          = '$'
+        DOLLARSIGN2         = '$$'
+        PERCENT             = '%'
+
     ]
 
 }
 
 NASMFile ::= Element*
 
-private Element ::= (COMMENT | CRLF | COMMENT CRLF | Section | Directive | SQUARE_L Section SQUARE_R | SQUARE_L Directive SQUARE_R)
+private Element ::= COMMENT
+                | CRLF
+                | COMMENT CRLF
+                | Section
+                | Preprocessor
+                | Directive
+                | SQUARE_L Section SQUARE_R
+                | SQUARE_L Directive SQUARE_R
+                | Data
+                | Instruction
+                ;
 
 private Section ::= DataSection | CodeSection
-DataSection ::= (SECTION_TAG DATA_SECTION_NAME (CRLF)* (Data | Directive)*)
-CodeSection ::= (SECTION_TAG CODE_SECTION_NAME (CRLF)* (Instruction | Directive)*)
+DataSection ::= (SECTION_TAG DATA_SECTION_NAME CRLF* (Data | Directive)*)
+CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction | Directive)*)
+
+Preprocessor ::= (Include | Define | Macro | PREPROCESSOR_OP)
+Include ::= (INCLUDE_TAG STRING)
+Define ::= (DEFINE_TAG IDENTIFIER (NUMBER|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?))) | (DEFINE_TAG MacroCall Expression)
+Macro ::= (MACRO_TAG IDENTIFIER NUMBER CRLF* (Data | Instruction)*)
+
 
 Directive ::= (DIRECTIVE_OP (DirectiveArg)*)
-DirectiveArg ::= NUMBER | Address | LABEL
+DirectiveArg ::= NUMBER | Address | Identifier
 
-Data ::= (LABEL_DEF? DATA_OP DataValue?)|((LABEL EQU) (NUMBER)?)
+Data ::= (LABEL_DEF? DATA_OP DataValue?)|((Identifier EQU) NumericExpression)
 DataValue ::= ((NUMBER SEPARATOR|NUMBER)|(STRING SEPARATOR|STRING))*
 
-Instruction ::= (LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | (LABEL_DEF [COMMENT])
+Instruction ::= (LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?)
 private MnemonicOperation ::= MNEMONIC_OP
-private MnemonicOperationArg ::= REGISTER | NUMBER | Address | LABEL
+private MnemonicOperationArg ::= REGISTER | NUMBER | Address | Identifier | MacroCall
 
 Address ::= SIZE? SQUARE_L AddressInternal SQUARE_R
-private AddressInternal ::= (REGISTER (PLUS (NUMBER TIMES)?(NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | LABEL
+private AddressInternal ::= (REGISTER (PLUS (NUMBER TIMES)?(NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | Identifier
+
+private Identifier ::= (IDENTIFIER|LABEL)
+private NumericExpression ::= (((NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|MacroCall|IDENTIFIER))
+private Expression ::= (((NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|REGISTER|MacroCall|IDENTIFIER))
+private MacroCall ::= (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R)

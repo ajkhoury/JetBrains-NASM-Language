@@ -38,14 +38,26 @@ public class NASMParser implements PsiParser, LightPsiParser {
     else if (t == DATA_VALUE) {
       r = DataValue(b, 0);
     }
+    else if (t == DEFINE) {
+      r = Define(b, 0);
+    }
     else if (t == DIRECTIVE) {
       r = Directive(b, 0);
     }
     else if (t == DIRECTIVE_ARG) {
       r = DirectiveArg(b, 0);
     }
+    else if (t == INCLUDE) {
+      r = Include(b, 0);
+    }
     else if (t == INSTRUCTION) {
       r = Instruction(b, 0);
+    }
+    else if (t == MACRO) {
+      r = Macro(b, 0);
+    }
+    else if (t == PREPROCESSOR) {
+      r = Preprocessor(b, 0);
     }
     else {
       r = parse_root_(t, b, 0);
@@ -80,14 +92,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (REGISTER (PLUS (NUMBER TIMES)?(NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | LABEL
+  // (REGISTER (PLUS (NUMBER TIMES)?(NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | Identifier
   static boolean AddressInternal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddressInternal")) return false;
-    if (!nextTokenIs(b, "", LABEL, REGISTER)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = AddressInternal_0(b, l + 1);
-    if (!r) r = consumeToken(b, LABEL);
+    if (!r) r = Identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -182,7 +193,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SECTION_TAG CODE_SECTION_NAME (CRLF)* (Instruction | Directive)*
+  // SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction | Directive)*
   public static boolean CodeSection(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CodeSection")) return false;
     if (!nextTokenIs(b, SECTION_TAG)) return false;
@@ -195,7 +206,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (CRLF)*
+  // CRLF*
   private static boolean CodeSection_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CodeSection_2")) return false;
     int c = current_position_(b);
@@ -231,7 +242,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (LABEL_DEF? DATA_OP DataValue?)|((LABEL EQU) (NUMBER)?)
+  // (LABEL_DEF? DATA_OP DataValue?)|((Identifier EQU) NumericExpression)
   public static boolean Data(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data")) return false;
     boolean r;
@@ -268,36 +279,30 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (LABEL EQU) (NUMBER)?
+  // (Identifier EQU) NumericExpression
   private static boolean Data_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Data_1_0(b, l + 1);
-    r = r && Data_1_1(b, l + 1);
+    r = r && NumericExpression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // LABEL EQU
+  // Identifier EQU
   private static boolean Data_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, LABEL, EQU);
+    r = Identifier(b, l + 1);
+    r = r && consumeToken(b, EQU);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (NUMBER)?
-  private static boolean Data_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Data_1_1")) return false;
-    consumeToken(b, NUMBER);
-    return true;
-  }
-
   /* ********************************************************** */
-  // SECTION_TAG DATA_SECTION_NAME (CRLF)* (Data | Directive)*
+  // SECTION_TAG DATA_SECTION_NAME CRLF* (Data | Directive)*
   public static boolean DataSection(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DataSection")) return false;
     if (!nextTokenIs(b, SECTION_TAG)) return false;
@@ -310,7 +315,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (CRLF)*
+  // CRLF*
   private static boolean DataSection_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DataSection_2")) return false;
     int c = current_position_(b);
@@ -394,6 +399,90 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (DEFINE_TAG IDENTIFIER (NUMBER|(PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) |
+  //            (DEFINE_TAG IDENTIFIER MacroCall Expression)
+  public static boolean Define(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define")) return false;
+    if (!nextTokenIs(b, DEFINE_TAG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Define_0(b, l + 1);
+    if (!r) r = Define_1(b, l + 1);
+    exit_section_(b, m, DEFINE, r);
+    return r;
+  }
+
+  // DEFINE_TAG IDENTIFIER (NUMBER|(PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)
+  private static boolean Define_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, DEFINE_TAG, IDENTIFIER);
+    r = r && Define_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NUMBER|(PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?
+  private static boolean Define_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NUMBER);
+    if (!r) r = Define_0_2_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?
+  private static boolean Define_0_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Define_0_2_1_0(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    r = r && Define_0_2_1_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (PERCENT SQUARE_L)?
+  private static boolean Define_0_2_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2_1_0")) return false;
+    Define_0_2_1_0_0(b, l + 1);
+    return true;
+  }
+
+  // PERCENT SQUARE_L
+  private static boolean Define_0_2_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2_1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, PERCENT, SQUARE_L);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SQUARE_R?
+  private static boolean Define_0_2_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2_1_2")) return false;
+    consumeToken(b, SQUARE_R);
+    return true;
+  }
+
+  // DEFINE_TAG IDENTIFIER MacroCall Expression
+  private static boolean Define_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, DEFINE_TAG, IDENTIFIER);
+    r = r && MacroCall(b, l + 1);
+    r = r && Expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // DIRECTIVE_OP (DirectiveArg)*
   public static boolean Directive(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Directive")) return false;
@@ -429,20 +518,29 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NUMBER | Address | LABEL
+  // NUMBER | Address | Identifier
   public static boolean DirectiveArg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveArg")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, DIRECTIVE_ARG, "<directive arg>");
     r = consumeToken(b, NUMBER);
     if (!r) r = Address(b, l + 1);
-    if (!r) r = consumeToken(b, LABEL);
+    if (!r) r = Identifier(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // COMMENT | CRLF | COMMENT CRLF | Section | Directive | SQUARE_L Section SQUARE_R | SQUARE_L Directive SQUARE_R
+  // COMMENT
+  //                 | CRLF
+  //                 | COMMENT CRLF
+  //                 | Section
+  //                 | Preprocessor
+  //                 | Directive
+  //                 | SQUARE_L Section SQUARE_R
+  //                 | SQUARE_L Directive SQUARE_R
+  //                 | Data
+  //                 | Instruction
   static boolean Element(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Element")) return false;
     boolean r;
@@ -451,16 +549,19 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, CRLF);
     if (!r) r = parseTokens(b, 0, COMMENT, CRLF);
     if (!r) r = Section(b, l + 1);
+    if (!r) r = Preprocessor(b, l + 1);
     if (!r) r = Directive(b, l + 1);
-    if (!r) r = Element_5(b, l + 1);
     if (!r) r = Element_6(b, l + 1);
+    if (!r) r = Element_7(b, l + 1);
+    if (!r) r = Data(b, l + 1);
+    if (!r) r = Instruction(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // SQUARE_L Section SQUARE_R
-  private static boolean Element_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Element_5")) return false;
+  private static boolean Element_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Element_6")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, SQUARE_L);
@@ -471,8 +572,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // SQUARE_L Directive SQUARE_R
-  private static boolean Element_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Element_6")) return false;
+  private static boolean Element_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Element_7")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, SQUARE_L);
@@ -483,71 +584,158 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | (LABEL_DEF [COMMENT])
+  // ((NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|REGISTER|MacroCall|IDENTIFIER)
+  static boolean Expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Expression_0(b, l + 1);
+    r = r && Expression_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ((NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))*
+  private static boolean Expression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!Expression_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Expression_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES)
+  private static boolean Expression_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Expression_0_0_0(b, l + 1);
+    r = r && Expression_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NUMBER|REGISTER|MacroCall|IDENTIFIER
+  private static boolean Expression_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NUMBER);
+    if (!r) r = consumeToken(b, REGISTER);
+    if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // PLUS|MINUS|TIMES
+  private static boolean Expression_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression_0_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, TIMES);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NUMBER|REGISTER|MacroCall|IDENTIFIER
+  private static boolean Expression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NUMBER);
+    if (!r) r = consumeToken(b, REGISTER);
+    if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER|LABEL
+  static boolean Identifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Identifier")) return false;
+    if (!nextTokenIs(b, "", IDENTIFIER, LABEL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    if (!r) r = consumeToken(b, LABEL);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // INCLUDE_TAG STRING
+  public static boolean Include(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Include")) return false;
+    if (!nextTokenIs(b, INCLUDE_TAG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, INCLUDE_TAG, STRING);
+    exit_section_(b, m, INCLUDE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?
   public static boolean Instruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction")) return false;
     if (!nextTokenIs(b, "<instruction>", LABEL_DEF, MNEMONIC_OP)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, INSTRUCTION, "<instruction>");
     r = Instruction_0(b, l + 1);
-    if (!r) r = Instruction_1(b, l + 1);
+    r = r && MnemonicOperation(b, l + 1);
+    r = r && Instruction_2(b, l + 1);
+    r = r && Instruction_3(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?
+  // LABEL_DEF?
   private static boolean Instruction_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Instruction_0_0(b, l + 1);
-    r = r && MnemonicOperation(b, l + 1);
-    r = r && Instruction_0_2(b, l + 1);
-    r = r && Instruction_0_3(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // LABEL_DEF?
-  private static boolean Instruction_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_0")) return false;
     consumeToken(b, LABEL_DEF);
     return true;
   }
 
   // ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)?
-  private static boolean Instruction_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_2")) return false;
-    Instruction_0_2_0(b, l + 1);
+  private static boolean Instruction_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_2")) return false;
+    Instruction_2_0(b, l + 1);
     return true;
   }
 
   // (MnemonicOperationArg SEPARATOR)* MnemonicOperationArg
-  private static boolean Instruction_0_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_2_0")) return false;
+  private static boolean Instruction_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Instruction_0_2_0_0(b, l + 1);
+    r = Instruction_2_0_0(b, l + 1);
     r = r && MnemonicOperationArg(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (MnemonicOperationArg SEPARATOR)*
-  private static boolean Instruction_0_2_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_2_0_0")) return false;
+  private static boolean Instruction_2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_2_0_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!Instruction_0_2_0_0_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Instruction_0_2_0_0", c)) break;
+      if (!Instruction_2_0_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Instruction_2_0_0", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // MnemonicOperationArg SEPARATOR
-  private static boolean Instruction_0_2_0_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_2_0_0_0")) return false;
+  private static boolean Instruction_2_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_2_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = MnemonicOperationArg(b, l + 1);
@@ -557,28 +745,113 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // COMMENT?
-  private static boolean Instruction_0_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_3")) return false;
+  private static boolean Instruction_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_3")) return false;
     consumeToken(b, COMMENT);
     return true;
   }
 
-  // LABEL_DEF [COMMENT]
-  private static boolean Instruction_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_1")) return false;
+  /* ********************************************************** */
+  // MACRO_TAG IDENTIFIER NUMBER CRLF* (Data | Instruction)*
+  public static boolean Macro(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Macro")) return false;
+    if (!nextTokenIs(b, MACRO_TAG)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, LABEL_DEF);
-    r = r && Instruction_1_1(b, l + 1);
+    r = consumeTokens(b, 0, MACRO_TAG, IDENTIFIER, NUMBER);
+    r = r && Macro_3(b, l + 1);
+    r = r && Macro_4(b, l + 1);
+    exit_section_(b, m, MACRO, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean Macro_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Macro_3")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Macro_3", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (Data | Instruction)*
+  private static boolean Macro_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Macro_4")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!Macro_4_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Macro_4", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // Data | Instruction
+  private static boolean Macro_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Macro_4_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Data(b, l + 1);
+    if (!r) r = Instruction(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // [COMMENT]
-  private static boolean Instruction_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_1_1")) return false;
-    consumeToken(b, COMMENT);
+  /* ********************************************************** */
+  // IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R
+  static boolean MacroCall(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, IDENTIFIER, ROUND_L);
+    r = r && MacroCall_2(b, l + 1);
+    r = r && consumeToken(b, ROUND_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ((IDENTIFIER SEPARATOR)* IDENTIFIER)?
+  private static boolean MacroCall_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_2")) return false;
+    MacroCall_2_0(b, l + 1);
     return true;
+  }
+
+  // (IDENTIFIER SEPARATOR)* IDENTIFIER
+  private static boolean MacroCall_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MacroCall_2_0_0(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (IDENTIFIER SEPARATOR)*
+  private static boolean MacroCall_2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_2_0_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MacroCall_2_0_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MacroCall_2_0_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // IDENTIFIER SEPARATOR
+  private static boolean MacroCall_2_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_2_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, IDENTIFIER, SEPARATOR);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -588,7 +861,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // REGISTER | NUMBER | Address | LABEL
+  // REGISTER | NUMBER | Address | Identifier | MacroCall
   static boolean MnemonicOperationArg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MnemonicOperationArg")) return false;
     boolean r;
@@ -596,7 +869,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, REGISTER);
     if (!r) r = consumeToken(b, NUMBER);
     if (!r) r = Address(b, l + 1);
-    if (!r) r = consumeToken(b, LABEL);
+    if (!r) r = Identifier(b, l + 1);
+    if (!r) r = MacroCall(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -612,6 +886,92 @@ public class NASMParser implements PsiParser, LightPsiParser {
       c = current_position_(b);
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // ((NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|MacroCall|IDENTIFIER)
+  static boolean NumericExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumericExpression")) return false;
+    if (!nextTokenIs(b, "", IDENTIFIER, NUMBER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = NumericExpression_0(b, l + 1);
+    r = r && NumericExpression_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ((NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))*
+  private static boolean NumericExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumericExpression_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!NumericExpression_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "NumericExpression_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES)
+  private static boolean NumericExpression_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumericExpression_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = NumericExpression_0_0_0(b, l + 1);
+    r = r && NumericExpression_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NUMBER|MacroCall|IDENTIFIER
+  private static boolean NumericExpression_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumericExpression_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NUMBER);
+    if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // PLUS|MINUS|TIMES
+  private static boolean NumericExpression_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumericExpression_0_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, TIMES);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NUMBER|MacroCall|IDENTIFIER
+  private static boolean NumericExpression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumericExpression_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NUMBER);
+    if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Include | Define | Macro | PREPROCESSOR_OP
+  public static boolean Preprocessor(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Preprocessor")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PREPROCESSOR, "<preprocessor>");
+    r = Include(b, l + 1);
+    if (!r) r = Define(b, l + 1);
+    if (!r) r = Macro(b, l + 1);
+    if (!r) r = consumeToken(b, PREPROCESSOR_OP);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */

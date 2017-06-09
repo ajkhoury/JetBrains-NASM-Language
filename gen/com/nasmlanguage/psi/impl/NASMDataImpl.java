@@ -56,10 +56,4 @@ public class NASMDataImpl extends ASTWrapperPsiElement implements NASMData {
     return findChildByType(LABEL_DEF);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getNumber() {
-    return findChildByType(NUMBER);
-  }
-
 }

@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMAddress extends PsiElement {
 
   @Nullable
+  PsiElement getIdentifier();
+
+  @Nullable
   PsiElement getLabel();
 
   @Nullable

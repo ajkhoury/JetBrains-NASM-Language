@@ -11,14 +11,14 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMInstruction {
+public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPreprocessor {
 
-  public NASMInstructionImpl(ASTNode node) {
+  public NASMPreprocessorImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitInstruction(this);
+    visitor.visitPreprocessor(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,27 +27,27 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
   }
 
   @Override
-  @NotNull
-  public List<NASMAddress> getAddressList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMAddress.class);
+  @Nullable
+  public NASMDefine getDefine() {
+    return findChildByClass(NASMDefine.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getComment() {
-    return findChildByType(COMMENT);
+  public NASMInclude getInclude() {
+    return findChildByClass(NASMInclude.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getLabelDef() {
-    return findChildByType(LABEL_DEF);
+  public NASMMacro getMacro() {
+    return findChildByClass(NASMMacro.class);
   }
 
   @Override
-  @NotNull
-  public PsiElement getMnemonicOp() {
-    return findNotNullChildByType(MNEMONIC_OP);
+  @Nullable
+  public PsiElement getPreprocessorOp() {
+    return findChildByType(PREPROCESSOR_OP);
   }
 
 }

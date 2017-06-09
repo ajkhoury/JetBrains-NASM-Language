@@ -22,7 +22,4 @@ public interface NASMData extends PsiElement {
   @Nullable
   PsiElement getLabelDef();
 
-  @Nullable
-  PsiElement getNumber();
-
 }

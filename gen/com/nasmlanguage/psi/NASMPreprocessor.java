@@ -5,18 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMInstruction extends PsiElement {
-
-  @NotNull
-  List<NASMAddress> getAddressList();
+public interface NASMPreprocessor extends PsiElement {
 
   @Nullable
-  PsiElement getComment();
+  NASMDefine getDefine();
 
   @Nullable
-  PsiElement getLabelDef();
+  NASMInclude getInclude();
 
-  @NotNull
-  PsiElement getMnemonicOp();
+  @Nullable
+  NASMMacro getMacro();
+
+  @Nullable
+  PsiElement getPreprocessorOp();
 
 }
