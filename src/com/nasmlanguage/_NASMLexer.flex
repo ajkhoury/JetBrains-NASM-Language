@@ -82,7 +82,6 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }
   {DIRECTIVE_OP}              { return DIRECTIVE_OP; }
   {DATA_OP}                   { return DATA_OP; }
-
   {MNEMONIC_OP}               { return MNEMONIC_OP; }
   {REGISTER}                  { return REGISTER; }
   {SIZE}                      { return SIZE; }

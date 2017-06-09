@@ -72,22 +72,23 @@
 
 }
 
-NASMFile ::= item*
+NASMFile ::= Element*
 
-private item ::= (COMMENT | CRLF | (COMMENT CRLF) | section | directive | SQUARE_L section SQUARE_R | SQUARE_L directive SQUARE_R)
-private section ::= data_section | code_section
-data_section ::= (SECTION_TAG DATA_SECTION_NAME (CRLF)* (data | directive)*)
-code_section ::= (SECTION_TAG CODE_SECTION_NAME (CRLF)* (command | directive)*)
+private Element ::= (COMMENT | CRLF | COMMENT CRLF | Section | Directive | SQUARE_L Section SQUARE_R | SQUARE_L Directive SQUARE_R)
 
-directive ::= (DIRECTIVE_OP (directive_arg)*)
-directive_arg ::= NUMBER | address | LABEL
+private Section ::= DataSection | CodeSection
+DataSection ::= (SECTION_TAG DATA_SECTION_NAME (CRLF)* (Data | Directive)*)
+CodeSection ::= (SECTION_TAG CODE_SECTION_NAME (CRLF)* (Instruction | Directive)*)
 
-data ::= (LABEL_DEF? DATA_OP data_value?)|((LABEL EQU) (NUMBER)?)
-data_value ::= ((NUMBER SEPARATOR|NUMBER)|(STRING SEPARATOR|STRING))*
-command ::= (LABEL_DEF? op ((op_arg SEPARATOR)*op_arg)? [COMMENT]) | (LABEL_DEF [COMMENT])
+Directive ::= (DIRECTIVE_OP (DirectiveArg)*)
+DirectiveArg ::= NUMBER | Address | LABEL
 
-private op ::= MNEMONIC_OP
-private op_arg ::= REGISTER | NUMBER | address | LABEL
+Data ::= (LABEL_DEF? DATA_OP DataValue?)|((LABEL EQU) (NUMBER)?)
+DataValue ::= ((NUMBER SEPARATOR|NUMBER)|(STRING SEPARATOR|STRING))*
 
-address ::= SIZE? SQUARE_L address_internal SQUARE_R
-private address_internal ::= (REGISTER (PLUS (NUMBER TIMES)?(NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | LABEL
+Instruction ::= (LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | (LABEL_DEF [COMMENT])
+private MnemonicOperation ::= MNEMONIC_OP
+private MnemonicOperationArg ::= REGISTER | NUMBER | Address | LABEL
+
+Address ::= SIZE? SQUARE_L AddressInternal SQUARE_R
+private AddressInternal ::= (REGISTER (PLUS (NUMBER TIMES)?(NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | LABEL

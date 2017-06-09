@@ -10,12 +10,12 @@ public interface NASMTypes {
 
   IElementType ADDRESS = new NASMElementType("ADDRESS");
   IElementType CODE_SECTION = new NASMElementType("CODE_SECTION");
-  IElementType COMMAND = new NASMElementType("COMMAND");
   IElementType DATA = new NASMElementType("DATA");
   IElementType DATA_SECTION = new NASMElementType("DATA_SECTION");
   IElementType DATA_VALUE = new NASMElementType("DATA_VALUE");
   IElementType DIRECTIVE = new NASMElementType("DIRECTIVE");
   IElementType DIRECTIVE_ARG = new NASMElementType("DIRECTIVE_ARG");
+  IElementType INSTRUCTION = new NASMElementType("INSTRUCTION");
 
   IElementType BSS_SECTION_NAME = new NASMTokenType("BSS_SECTION_NAME");
   IElementType CODE_SECTION_NAME = new NASMTokenType("CODE_SECTION_NAME");
@@ -69,9 +69,6 @@ public interface NASMTypes {
       else if (type == CODE_SECTION) {
         return new NASMCodeSectionImpl(node);
       }
-      else if (type == COMMAND) {
-        return new NASMCommandImpl(node);
-      }
       else if (type == DATA) {
         return new NASMDataImpl(node);
       }
@@ -86,6 +83,9 @@ public interface NASMTypes {
       }
       else if (type == DIRECTIVE_ARG) {
         return new NASMDirectiveArgImpl(node);
+      }
+      else if (type == INSTRUCTION) {
+        return new NASMInstructionImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

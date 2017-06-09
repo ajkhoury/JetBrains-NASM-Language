@@ -28,14 +28,14 @@ public class NASMCodeSectionImpl extends ASTWrapperPsiElement implements NASMCod
 
   @Override
   @NotNull
-  public List<NASMCommand> getCommandList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMCommand.class);
+  public List<NASMDirective> getDirectiveList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMDirective.class);
   }
 
   @Override
   @NotNull
-  public List<NASMDirective> getDirectiveList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMDirective.class);
+  public List<NASMInstruction> getInstructionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMInstruction.class);
   }
 
   @Override

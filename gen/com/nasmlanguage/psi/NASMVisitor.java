@@ -15,10 +15,6 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitCommand(@NotNull NASMCommand o) {
-    visitPsiElement(o);
-  }
-
   public void visitData(@NotNull NASMData o) {
     visitPsiElement(o);
   }
@@ -36,6 +32,10 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitDirectiveArg(@NotNull NASMDirectiveArg o) {
+    visitPsiElement(o);
+  }
+
+  public void visitInstruction(@NotNull NASMInstruction o) {
     visitPsiElement(o);
   }
 
