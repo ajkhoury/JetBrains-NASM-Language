@@ -55,7 +55,7 @@
 
         REGISTER            = 'regexp:[a-d][lh]|e?[a-d]x|e?[sb]p|e?[sd]i|[c-gs]s|st[0-7]|mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
         SIZE                = 'regexp:byte|[dq]?word'
-        NUMBER              = 'regexp:0b[0-1]+|0y[0-1]+[0-1]*b|[0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|0d[0-9]+|[0-9]+'
+        NUMBER              = 'regexp:0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|0d[0-9]+|[0-9]+'
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
         LABEL_DEF           = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
 

@@ -399,8 +399,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (DEFINE_TAG IDENTIFIER (NUMBER|(PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) |
-  //            (DEFINE_TAG IDENTIFIER MacroCall Expression)
+  // (DEFINE_TAG IDENTIFIER (NUMBER|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?))) | (DEFINE_TAG MacroCall Expression)
   public static boolean Define(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define")) return false;
     if (!nextTokenIs(b, DEFINE_TAG)) return false;
@@ -412,7 +411,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // DEFINE_TAG IDENTIFIER (NUMBER|(PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)
+  // DEFINE_TAG IDENTIFIER (NUMBER|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?))
   private static boolean Define_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define_0")) return false;
     boolean r;
@@ -423,7 +422,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NUMBER|(PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?
+  // NUMBER|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)
   private static boolean Define_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define_0_2")) return false;
     boolean r;
@@ -470,12 +469,12 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // DEFINE_TAG IDENTIFIER MacroCall Expression
+  // DEFINE_TAG MacroCall Expression
   private static boolean Define_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DEFINE_TAG, IDENTIFIER);
+    r = consumeToken(b, DEFINE_TAG);
     r = r && MacroCall(b, l + 1);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
