@@ -1,0 +1,93 @@
+{
+    parserClass="com.nasmlanguage.parser.NASMParser"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="NASM"
+    psiImplClassSuffix="Impl"
+    psiPackage="com.nasmlanguage.psi"
+    psiImplPackage="com.nasmlanguage.psi.impl"
+
+    elementTypeHolderClass="com.nasmlanguage.psi.NASMTypes"
+    elementTypeClass="com.nasmlanguage.psi.NASMElementType"
+    tokenTypeClass="com.nasmlanguage.psi.NASMTokenType"
+
+    psiImplUtilClass="com.nasmlanguage.psi.impl.NASMPsiImplUtil"
+
+    tokens = [
+        COLON               = ':'
+        SQUARE_L            = '['
+        SQUARE_R            = ']'
+        SEPARATOR           = ','
+
+        PLUS                = '+'
+        MINUS               = '-'
+        TIMES               = '*'
+        DIVIDE              = '\'
+
+        CRLF                = 'regexp:\R|\n|\r\n'
+        //WHITE_SPACE         = 'regexp:[\ \t\f]'
+        COMMENT             = 'regexp:;.*'
+        EQU                 = 'regexp:[eE][qQ][uU]'
+        SECTION_TAG         = 'regexp:[sS][eE][cC][tT][iI][oO][nN]'
+        CODE_SECTION_NAME   = 'regexp:\.[tT][eE][xX][tT]'
+        DATA_SECTION_NAME   = 'regexp:\.[dD][aA][tT][aA]'
+        BSS_SECTION_NAME    = 'regexp:\.[bB][sS][sS]'
+
+        DIRECTIVE_OP        = 'regexp:[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]'
+        DATA_OP             = 'regexp:(res|d)[bwdqt]|[tT][iI][mM][eE][sS]'
+
+        INS_DATA_TRANS_MOV  = 'regexp:(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)'                            // Data Transfer MOV
+        INS_DATA_TRANS_XCHG = 'regexp:(xchg|bswap|xadd|cmpxchg(8b)?)'                                                                               // Data Transfer XCHG
+        INS_DATA_TRANS_OTHER= 'regexp:((push|pop)(ad?)?|cwde?|cdq|cbw)'                                                                             // Data Transfer Other
+        INS_DECIMAL_ARITH   = 'regexp:(daa|das|aaa|aas|aam|aad)'                                                                                    // Decimal Arithmetic
+        INS_BINARY_ARITH    = 'regexp:(adcx?|adox|add|sub|sbb|i?mul|i?div|inc|dec|neg|cmp)'                                                         // Binary Arithmetic
+        INS_BINARY_LOGICAL  = 'regexp:(and|x?or|not)'                                                                                               // Binary Logical
+        INS_BINARY_ROTATE   = 'regexp:(s[ah][rl]|sh[rl]d|r[co][rl])'                                                                                // Binary Rotation
+        INS_BINARY_SET      = 'regexp:(set(n?[abceglopsz]|n?[abgl]e|p[eo]))'                                                                        // Binary Set
+        INS_BINARY_OTHER    = 'regexp:(bt[crs]?|bs[fr]|test|crc32|popcnt)'                                                                          // Binary Other
+        INS_CONTROL_TRANS   = 'regexp:(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret|iret[dq]?|into?|bound|enter|leave)' // Control Transfer
+        INS_STRING_DATA     = 'regexp:((mov|cmp|sca|lod|sto)(s[bdw]?)|rep(n?[ez])?)'                                                                // String Data
+        INS_INPUT_OUTPUT    = 'regexp:((in|out)(s[bdw]?)?)'                                                                                         // I/O
+        INS_FLAG_CONTROL    = 'regexp:((st|cl)[cdi]|cmc|[ls]ahf|(push|pop)f[dq]?)'                                                                  // Flag Control
+        INS_SEG_REGS        = 'regexp:(l[defgs]s)'                                                                                                  // Segment Registers
+        INS_MISC_OTHER      = 'regexp:(lea|nop|ud2|xlatb?|cpuid|movbe)'                                                                             // Misc/Other
+        INS_RNG_RAND        = 'regexp:(rdrand|rdseed)'                                                                                              // Random Number Generation (RNG)
+        INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)'                                     // Bit Manipulation (BMI)
+        INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))'                            // 64 bit Instructions
+
+
+        MNEMONIC_OP         = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}|{INS_64_BIT}'
+
+
+        REGISTER            = 'regexp:[a-d][lh]|e?[a-d]x|e?[sb]p|e?[sd]i|[c-gs]s|st[0-7]|mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
+        SIZE                = 'regexp:byte|[dq]?word'
+        NUMBER              = 'regexp:0b[0-1]+|0y[0-1]+[0-1]*b|[0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|0d[0-9]+|[0-9]+'
+        STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+        LABEL_DEF           = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
+
+        // Make last!
+        LABEL               = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*'
+    ]
+
+}
+
+NASMFile ::= item*
+
+private item ::= (COMMENT | CRLF | (COMMENT CRLF) | section | directive | SQUARE_L section SQUARE_R | SQUARE_L directive SQUARE_R)
+private section ::= data_section | code_section
+data_section ::= (SECTION_TAG DATA_SECTION_NAME (CRLF)* (data | directive)*)
+code_section ::= (SECTION_TAG CODE_SECTION_NAME (CRLF)* (command | directive)*)
+
+directive ::= (DIRECTIVE_OP (directive_arg)*)
+directive_arg ::= NUMBER | address | LABEL
+
+data ::= (LABEL_DEF? DATA_OP data_value?)|((LABEL EQU) (NUMBER)?)
+data_value ::= ((NUMBER SEPARATOR|NUMBER)|(STRING SEPARATOR|STRING))*
+command ::= (LABEL_DEF? op ((op_arg SEPARATOR)*op_arg)? [COMMENT]) | (LABEL_DEF [COMMENT])
+
+private op ::= MNEMONIC_OP
+private op_arg ::= REGISTER | NUMBER | address | LABEL
+
+address ::= SIZE? SQUARE_L address_internal SQUARE_R
+private address_internal ::= (REGISTER (PLUS (NUMBER TIMES)?(NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | LABEL
