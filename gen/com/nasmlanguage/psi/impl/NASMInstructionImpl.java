@@ -34,6 +34,12 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
+  public NASMDirective getDirective() {
+    return findChildByClass(NASMDirective.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getComment() {
     return findChildByType(COMMENT);
   }
@@ -45,9 +51,9 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getMnemonicOp() {
-    return findNotNullChildByType(MNEMONIC_OP);
+    return findChildByType(MNEMONIC_OP);
   }
 
 }

@@ -11,12 +11,15 @@ public interface NASMInstruction extends PsiElement {
   List<NASMAddress> getAddressList();
 
   @Nullable
+  NASMDirective getDirective();
+
+  @Nullable
   PsiElement getComment();
 
   @Nullable
   PsiElement getLabelDef();
 
-  @NotNull
+  @Nullable
   PsiElement getMnemonicOp();
 
 }

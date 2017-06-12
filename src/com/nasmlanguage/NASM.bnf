@@ -110,10 +110,10 @@ Macro ::= (MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data | Ins
 Directive ::= (DIRECTIVE_OP (DirectiveArg)*)
 DirectiveArg ::= NUMBER | Address | Identifier
 
-Data ::= (LABEL_DEF? DATA_OP DataValue?)|((Identifier EQU) NumericExpression)
+Data ::= ((LABEL_DEF? DATA_OP DataValue?) | (Identifier EQU NumericExpression))
 DataValue ::= ((NUMBER|STRING) SEPARATOR?)*
 
-Instruction ::= (LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?)
+Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall))
 private MnemonicOperation ::= MNEMONIC_OP
 private MnemonicOperationArg ::= REGISTER | NUMBER | Address | Identifier | MacroCall
 
@@ -125,5 +125,5 @@ private MacroParams ::= (NUMBER MINUS (NUMBER TIMES|TIMES|NUMBER) | NUMBER PLUS)
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NUMBER)
 
 private Identifier ::= (IDENTIFIER|LABEL)
-private NumericExpression ::= (((NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|MacroCall|IDENTIFIER))
-private Expression ::= (((NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|REGISTER|MacroCall|IDENTIFIER))
+private NumericExpression ::= (((NUMBER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NUMBER|MacroCall|IDENTIFIER))
+private Expression ::= (((NUMBER|REGISTER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NUMBER|REGISTER|MacroCall|IDENTIFIER))

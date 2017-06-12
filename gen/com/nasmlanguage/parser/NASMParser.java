@@ -242,7 +242,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (LABEL_DEF? DATA_OP DataValue?)|((Identifier EQU) NumericExpression)
+  // (LABEL_DEF? DATA_OP DataValue?) | (Identifier EQU NumericExpression)
   public static boolean Data(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data")) return false;
     boolean r;
@@ -279,24 +279,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (Identifier EQU) NumericExpression
+  // Identifier EQU NumericExpression
   private static boolean Data_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Data_1_0(b, l + 1);
-    r = r && NumericExpression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Identifier EQU
-  private static boolean Data_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Data_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
     r = Identifier(b, l + 1);
     r = r && consumeToken(b, EQU);
+    r = r && NumericExpression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -579,7 +569,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ((NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|REGISTER|MacroCall|IDENTIFIER)
+  // ((NUMBER|REGISTER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NUMBER|REGISTER|MacroCall|IDENTIFIER)
   static boolean Expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     boolean r;
@@ -590,7 +580,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ((NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))*
+  // ((NUMBER|REGISTER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))*
   private static boolean Expression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression_0")) return false;
     int c = current_position_(b);
@@ -602,7 +592,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES)
+  // (NUMBER|REGISTER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES)
   private static boolean Expression_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression_0_0")) return false;
     boolean r;
@@ -677,16 +667,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?
+  // LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall)
   public static boolean Instruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction")) return false;
-    if (!nextTokenIs(b, "<instruction>", LABEL_DEF, MNEMONIC_OP)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, INSTRUCTION, "<instruction>");
     r = Instruction_0(b, l + 1);
-    r = r && MnemonicOperation(b, l + 1);
-    r = r && Instruction_2(b, l + 1);
-    r = r && Instruction_3(b, l + 1);
+    r = r && Instruction_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -698,39 +685,63 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
+  // (MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall
+  private static boolean Instruction_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Instruction_1_0(b, l + 1);
+    if (!r) r = Directive(b, l + 1);
+    if (!r) r = MacroCall(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?
+  private static boolean Instruction_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MnemonicOperation(b, l + 1);
+    r = r && Instruction_1_0_1(b, l + 1);
+    r = r && Instruction_1_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   // ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)?
-  private static boolean Instruction_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_2")) return false;
-    Instruction_2_0(b, l + 1);
+  private static boolean Instruction_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_1_0_1")) return false;
+    Instruction_1_0_1_0(b, l + 1);
     return true;
   }
 
   // (MnemonicOperationArg SEPARATOR)* MnemonicOperationArg
-  private static boolean Instruction_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_2_0")) return false;
+  private static boolean Instruction_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_1_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Instruction_2_0_0(b, l + 1);
+    r = Instruction_1_0_1_0_0(b, l + 1);
     r = r && MnemonicOperationArg(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (MnemonicOperationArg SEPARATOR)*
-  private static boolean Instruction_2_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_2_0_0")) return false;
+  private static boolean Instruction_1_0_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_1_0_1_0_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!Instruction_2_0_0_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Instruction_2_0_0", c)) break;
+      if (!Instruction_1_0_1_0_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Instruction_1_0_1_0_0", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // MnemonicOperationArg SEPARATOR
-  private static boolean Instruction_2_0_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_2_0_0_0")) return false;
+  private static boolean Instruction_1_0_1_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_1_0_1_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = MnemonicOperationArg(b, l + 1);
@@ -740,8 +751,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // COMMENT?
-  private static boolean Instruction_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_3")) return false;
+  private static boolean Instruction_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_1_0_2")) return false;
     consumeToken(b, COMMENT);
     return true;
   }
@@ -945,7 +956,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ((NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|MacroCall|IDENTIFIER)
+  // ((NUMBER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NUMBER|MacroCall|IDENTIFIER)
   static boolean NumericExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumericExpression")) return false;
     if (!nextTokenIs(b, "", IDENTIFIER, NUMBER)) return false;
@@ -957,7 +968,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ((NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))*
+  // ((NUMBER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))*
   private static boolean NumericExpression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumericExpression_0")) return false;
     int c = current_position_(b);
@@ -969,7 +980,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES)
+  // (NUMBER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES)
   private static boolean NumericExpression_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumericExpression_0_0")) return false;
     boolean r;
