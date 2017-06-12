@@ -32,6 +32,7 @@ SECTION_TAG=[sS][eE][cC][tT][iI][oO][nN]
 INCLUDE_TAG=\%[iI][nN][cC][lL][uU][dD][eE]
 DEFINE_TAG=\%([xX]?[iI]?[dD][eE][fF][iI][nN][eE])
 MACRO_TAG=\%([iI]?[mM][aA][cC][rR][oO])
+MACRO_END_TAG=\%([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
 CODE_SECTION_NAME=\.[tT][eE][xX][tT]
 DATA_SECTION_NAME=\.[dD][aA][tT][aA]
 BSS_SECTION_NAME=\.[bB][sS][sS]
@@ -58,7 +59,7 @@ INS_BIT_MANIPULATION=(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|s
 INS_64_BIT=(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))
 MNEMONIC_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}|{INS_64_BIT}
 REGISTER=[a-d][lh]|e?[a-d]x|e?[sb]p|e?[sd]i|[c-gs]s|st[0-7]|mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]
-SIZE=byte|[dq]?word
+SIZE_TYPE=byte|[dq]?word
 NUMBER=0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|0d[0-9]+|[0-9]+
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 LABEL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
@@ -90,6 +91,7 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {INCLUDE_TAG}               { return INCLUDE_TAG; }
   {DEFINE_TAG}                { return DEFINE_TAG; }
   {MACRO_TAG}                 { return MACRO_TAG; }
+  {MACRO_END_TAG}             { return MACRO_END_TAG; }
   {CODE_SECTION_NAME}         { return CODE_SECTION_NAME; }
   {DATA_SECTION_NAME}         { return DATA_SECTION_NAME; }
   {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }
@@ -99,7 +101,7 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
 
   {MNEMONIC_OP}               { return MNEMONIC_OP; }
   {REGISTER}                  { return REGISTER; }
-  {SIZE}                      { return SIZE; }
+  {SIZE_TYPE}                 { return SIZE_TYPE; }
   {NUMBER}                    { return NUMBER; }
   {STRING}                    { return STRING; }
   {LABEL_DEF}                 { return LABEL_DEF; }

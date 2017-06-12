@@ -19,6 +19,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey SIZE = createTextAttributesKey("NASM_SIZE", DefaultLanguageHighlighterColors.METADATA);
     public static final TextAttributesKey COMMENT = createTextAttributesKey("NASM_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey LABEL = createTextAttributesKey("NASM_LABEL", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+    public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("NASM_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
     public static final TextAttributesKey DIRECTIVE = createTextAttributesKey("NASM_DIRECTIVE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey STRING = createTextAttributesKey("NASM_STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("NASM_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
@@ -33,6 +34,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] SIZE_KEYS = { SIZE };
     private static final TextAttributesKey[] COMMENT_KEYS = { COMMENT };
     private static final TextAttributesKey[] LABEL_KEYS = { LABEL };
+    private static final TextAttributesKey[] IDENTIFIER_KEYS = { IDENTIFIER };
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
     @NotNull
@@ -54,8 +56,10 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             return STRING_KEYS;
         } else if (tokenType.equals(NASMTypes.NUMBER)) {
             return NUMBER_KEYS;
-        } else if ((tokenType.equals(NASMTypes.LABEL)) || (tokenType.equals(NASMTypes.LABEL_DEF))) {
+        } else if (tokenType.equals(NASMTypes.LABEL) || tokenType.equals(NASMTypes.LABEL_DEF)) {
             return LABEL_KEYS;
+        } else if (tokenType.equals(NASMTypes.IDENTIFIER)) {
+            return IDENTIFIER_KEYS;
         } else if (tokenType.equals(NASMTypes.COMMENT)) {
             return COMMENT_KEYS;
         } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {

@@ -17,9 +17,15 @@ public interface NASMMacro extends PsiElement {
   PsiElement getIdentifier();
 
   @NotNull
-  PsiElement getMacroTag();
+  PsiElement getMacroEndTag();
 
   @NotNull
-  PsiElement getNumber();
+  PsiElement getMacroTag();
+
+  @Nullable
+  PsiElement getRegister();
+
+  @Nullable
+  PsiElement getString();
 
 }

@@ -56,6 +56,7 @@ public interface NASMTypes {
   IElementType INS_STRING_DATA = new NASMTokenType("INS_STRING_DATA");
   IElementType LABEL = new NASMTokenType("LABEL");
   IElementType LABEL_DEF = new NASMTokenType("LABEL_DEF");
+  IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
   IElementType MINUS = new NASMTokenType("-");
   IElementType MNEMONIC_OP = new NASMTokenType("MNEMONIC_OP");
@@ -68,7 +69,7 @@ public interface NASMTypes {
   IElementType ROUND_R = new NASMTokenType(")");
   IElementType SECTION_TAG = new NASMTokenType("SECTION_TAG");
   IElementType SEPARATOR = new NASMTokenType(",");
-  IElementType SIZE = new NASMTokenType("SIZE");
+  IElementType SIZE_TYPE = new NASMTokenType("SIZE_TYPE");
   IElementType SQUARE_L = new NASMTokenType("[");
   IElementType SQUARE_R = new NASMTokenType("]");
   IElementType STRING = new NASMTokenType("STRING");

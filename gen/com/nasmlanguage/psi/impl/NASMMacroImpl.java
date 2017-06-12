@@ -46,14 +46,26 @@ public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
 
   @Override
   @NotNull
+  public PsiElement getMacroEndTag() {
+    return findNotNullChildByType(MACRO_END_TAG);
+  }
+
+  @Override
+  @NotNull
   public PsiElement getMacroTag() {
     return findNotNullChildByType(MACRO_TAG);
   }
 
   @Override
-  @NotNull
-  public PsiElement getNumber() {
-    return findNotNullChildByType(NUMBER);
+  @Nullable
+  public PsiElement getRegister() {
+    return findChildByType(REGISTER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getString() {
+    return findChildByType(STRING);
   }
 
 }

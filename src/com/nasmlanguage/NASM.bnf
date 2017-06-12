@@ -23,6 +23,7 @@
         INCLUDE_TAG         = 'regexp:\%[iI][nN][cC][lL][uU][dD][eE]'
         DEFINE_TAG          = 'regexp:\%([xX]?[iI]?[dD][eE][fF][iI][nN][eE])'
         MACRO_TAG           = 'regexp:\%([iI]?[mM][aA][cC][rR][oO])'
+        MACRO_END_TAG       = 'regexp:\%([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
         CODE_SECTION_NAME   = 'regexp:\.[tT][eE][xX][tT]'
         DATA_SECTION_NAME   = 'regexp:\.[dD][aA][tT][aA]'
         BSS_SECTION_NAME    = 'regexp:\.[bB][sS][sS]'
@@ -54,7 +55,7 @@
 
 
         REGISTER            = 'regexp:[a-d][lh]|e?[a-d]x|e?[sb]p|e?[sd]i|[c-gs]s|st[0-7]|mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
-        SIZE                = 'regexp:byte|[dq]?word'
+        SIZE_TYPE           = 'regexp:byte|[dq]?word'
         NUMBER              = 'regexp:0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|0d[0-9]+|[0-9]+'
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
         LABEL_DEF           = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
@@ -104,23 +105,25 @@ CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction | Directive)*)
 Preprocessor ::= (Include | Define | Macro | PREPROCESSOR_OP)
 Include ::= (INCLUDE_TAG STRING)
 Define ::= (DEFINE_TAG IDENTIFIER (NUMBER|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?))) | (DEFINE_TAG MacroCall Expression)
-Macro ::= (MACRO_TAG IDENTIFIER NUMBER CRLF* (Data | Instruction)*)
-
+Macro ::= (MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data | Instruction)* MACRO_END_TAG)
 
 Directive ::= (DIRECTIVE_OP (DirectiveArg)*)
 DirectiveArg ::= NUMBER | Address | Identifier
 
 Data ::= (LABEL_DEF? DATA_OP DataValue?)|((Identifier EQU) NumericExpression)
-DataValue ::= ((NUMBER SEPARATOR|NUMBER)|(STRING SEPARATOR|STRING))*
+DataValue ::= ((NUMBER|STRING) SEPARATOR?)*
 
 Instruction ::= (LABEL_DEF? MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?)
 private MnemonicOperation ::= MNEMONIC_OP
 private MnemonicOperationArg ::= REGISTER | NUMBER | Address | Identifier | MacroCall
 
-Address ::= SIZE? SQUARE_L AddressInternal SQUARE_R
-private AddressInternal ::= (REGISTER (PLUS (NUMBER TIMES)?(NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | Identifier
+Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R
+private AddressInternal ::= (REGISTER (PLUS (NUMBER TIMES)? (NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | Identifier
+
+private MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R)
+private MacroParams ::= (NUMBER MINUS (NUMBER TIMES|TIMES|NUMBER) | NUMBER PLUS)
+private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NUMBER)
 
 private Identifier ::= (IDENTIFIER|LABEL)
 private NumericExpression ::= (((NUMBER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|MacroCall|IDENTIFIER))
 private Expression ::= (((NUMBER|REGISTER|MacroCall|IDENTIFIER) (PLUS|MINUS|TIMES))* (NUMBER|REGISTER|MacroCall|IDENTIFIER))
-private MacroCall ::= (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R)

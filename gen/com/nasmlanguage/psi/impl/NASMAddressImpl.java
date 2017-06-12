@@ -40,8 +40,8 @@ public class NASMAddressImpl extends ASTWrapperPsiElement implements NASMAddress
 
   @Override
   @Nullable
-  public PsiElement getSize() {
-    return findChildByType(SIZE);
+  public PsiElement getSizeType() {
+    return findChildByType(SIZE_TYPE);
   }
 
 }
