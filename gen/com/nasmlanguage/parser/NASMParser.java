@@ -642,14 +642,31 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IDENTIFIER|LABEL
+  // SIZE_TYPE? (LABEL|IDENTIFIER)
   static boolean Identifier(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Identifier")) return false;
-    if (!nextTokenIs(b, "", IDENTIFIER, LABEL)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    if (!r) r = consumeToken(b, LABEL);
+    r = Identifier_0(b, l + 1);
+    r = r && Identifier_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SIZE_TYPE?
+  private static boolean Identifier_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Identifier_0")) return false;
+    consumeToken(b, SIZE_TYPE);
+    return true;
+  }
+
+  // LABEL|IDENTIFIER
+  private static boolean Identifier_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Identifier_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LABEL);
+    if (!r) r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -922,9 +939,16 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MNEMONIC_OP
+  // INS_PREFIX MNEMONIC_OP | MNEMONIC_OP
   static boolean MnemonicOperation(PsiBuilder b, int l) {
-    return consumeToken(b, MNEMONIC_OP);
+    if (!recursion_guard_(b, l, "MnemonicOperation")) return false;
+    if (!nextTokenIs(b, "", INS_PREFIX, MNEMONIC_OP)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = parseTokens(b, 0, INS_PREFIX, MNEMONIC_OP);
+    if (!r) r = consumeToken(b, MNEMONIC_OP);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */

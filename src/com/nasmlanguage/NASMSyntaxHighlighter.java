@@ -14,9 +14,11 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
 public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey REGISTER = createTextAttributesKey("NASM_REGISTER", DefaultLanguageHighlighterColors.CONSTANT);
     public static final TextAttributesKey OPERATION = createTextAttributesKey("NASM_OPERATION", DefaultLanguageHighlighterColors.KEYWORD);
-    public static final TextAttributesKey BAD_OPERATION = createTextAttributesKey("NASM_BAD_OPERATION", HighlighterColors.BAD_CHARACTER);
+    public static final TextAttributesKey SEPARATOR = createTextAttributesKey("NASM_SEPARATOR", DefaultLanguageHighlighterColors.COMMA);
+    public static final TextAttributesKey BAD_OP = createTextAttributesKey("NASM_BAD_OP", HighlighterColors.BAD_CHARACTER);
     public static final TextAttributesKey NUMBER = createTextAttributesKey("NASM_HEX", DefaultLanguageHighlighterColors.NUMBER);
-    public static final TextAttributesKey SIZE = createTextAttributesKey("NASM_SIZE", DefaultLanguageHighlighterColors.METADATA);
+    public static final TextAttributesKey SIZE_TYPE = createTextAttributesKey("NASM_SIZE_TYPE", DefaultLanguageHighlighterColors.METADATA);
+    public static final TextAttributesKey INS_PREFIX = createTextAttributesKey("NASM_INS_PREFIX", DefaultLanguageHighlighterColors.METADATA);
     public static final TextAttributesKey COMMENT = createTextAttributesKey("NASM_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey LABEL = createTextAttributesKey("NASM_LABEL", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
     public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("NASM_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
@@ -25,13 +27,15 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("NASM_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = { BAD_CHARACTER };
+    private static final TextAttributesKey[] SEPARATOR_KEYS = { SEPARATOR };
     private static final TextAttributesKey[] REGISTER_KEYS = { REGISTER };
     private static final TextAttributesKey[] OPERATION_KEYS = { OPERATION };
     private static final TextAttributesKey[] DIRECTIVE_KEYS = { DIRECTIVE };
     private static final TextAttributesKey[] STRING_KEYS = { STRING };
-    private static final TextAttributesKey[] BAD_OPERATION_KEYS = { BAD_OPERATION };
+    private static final TextAttributesKey[] BAD_OP_KEYS = { BAD_OP };
     private static final TextAttributesKey[] NUMBER_KEYS = { NUMBER };
-    private static final TextAttributesKey[] SIZE_KEYS = { SIZE };
+    private static final TextAttributesKey[] SIZE_TYPE_KEYS = { SIZE_TYPE };
+    private static final TextAttributesKey[] INS_PREFIX_KEYS = { INS_PREFIX };
     private static final TextAttributesKey[] COMMENT_KEYS = { COMMENT };
     private static final TextAttributesKey[] LABEL_KEYS = { LABEL };
     private static final TextAttributesKey[] IDENTIFIER_KEYS = { IDENTIFIER };
@@ -48,9 +52,15 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
         if (tokenType.equals(NASMTypes.REGISTER)) {
             return REGISTER_KEYS;
-        } else if ((tokenType.equals(NASMTypes.MNEMONIC_OP)) || (tokenType.equals(NASMTypes.DATA_OP)))  {
+        } else if (tokenType.equals(NASMTypes.SEPARATOR)) {
+            return SEPARATOR_KEYS;
+        } else if (tokenType.equals(NASMTypes.SIZE_TYPE)) {
+            return SIZE_TYPE_KEYS;
+        } else if (tokenType.equals(NASMTypes.INS_PREFIX)) {
+            return INS_PREFIX_KEYS;
+        } else if (tokenType.equals(NASMTypes.MNEMONIC_OP) || tokenType.equals(NASMTypes.DATA_OP))  {
             return OPERATION_KEYS;
-        } else if ((tokenType.equals(NASMTypes.DIRECTIVE_OP)) || (tokenType.equals(NASMTypes.SECTION_TAG)) || (tokenType.equals(NASMTypes.EQU)))  {
+        } else if (tokenType.equals(NASMTypes.DIRECTIVE_OP) || tokenType.equals(NASMTypes.SECTION_TAG) || tokenType.equals(NASMTypes.EQU))  {
             return DIRECTIVE_KEYS;
         } else if (tokenType.equals(NASMTypes.STRING)) {
             return STRING_KEYS;

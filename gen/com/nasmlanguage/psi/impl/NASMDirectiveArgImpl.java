@@ -50,4 +50,10 @@ public class NASMDirectiveArgImpl extends ASTWrapperPsiElement implements NASMDi
     return findChildByType(NUMBER);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSizeType() {
+    return findChildByType(SIZE_TYPE);
+  }
+
 }

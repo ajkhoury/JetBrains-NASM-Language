@@ -57,9 +57,10 @@ INS_MISC_OTHER=(lea|nop|ud2|xlatb?|cpuid|movbe)
 INS_RNG_RAND=(rdrand|rdseed)
 INS_BIT_MANIPULATION=(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)
 INS_64_BIT=(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))
+INS_PREFIX=((rep(n?[ez])|rep)|lock|[c-gs]s)
 MNEMONIC_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}|{INS_64_BIT}
 REGISTER=[a-d][lh]|e?[a-d]x|e?[sb]p|e?[sd]i|[c-gs]s|st[0-7]|mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]
-SIZE_TYPE=byte|[dq]?word
+SIZE_TYPE=byte|short|[dq]?word
 NUMBER=0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|0d[0-9]+|[0-9]+
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 LABEL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
@@ -99,6 +100,7 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
   {DATA_OP}                   { return DATA_OP; }
 
+  {INS_PREFIX}                { return INS_PREFIX; }
   {MNEMONIC_OP}               { return MNEMONIC_OP; }
   {REGISTER}                  { return REGISTER; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }

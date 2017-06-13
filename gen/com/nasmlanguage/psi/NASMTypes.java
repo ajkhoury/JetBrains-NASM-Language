@@ -51,6 +51,7 @@ public interface NASMTypes {
   IElementType INS_FLAG_CONTROL = new NASMTokenType("INS_FLAG_CONTROL");
   IElementType INS_INPUT_OUTPUT = new NASMTokenType("INS_INPUT_OUTPUT");
   IElementType INS_MISC_OTHER = new NASMTokenType("INS_MISC_OTHER");
+  IElementType INS_PREFIX = new NASMTokenType("INS_PREFIX");
   IElementType INS_RNG_RAND = new NASMTokenType("INS_RNG_RAND");
   IElementType INS_SEG_REGS = new NASMTokenType("INS_SEG_REGS");
   IElementType INS_STRING_DATA = new NASMTokenType("INS_STRING_DATA");

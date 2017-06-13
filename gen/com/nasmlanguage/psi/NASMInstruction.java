@@ -17,6 +17,9 @@ public interface NASMInstruction extends PsiElement {
   PsiElement getComment();
 
   @Nullable
+  PsiElement getInsPrefix();
+
+  @Nullable
   PsiElement getLabelDef();
 
   @Nullable

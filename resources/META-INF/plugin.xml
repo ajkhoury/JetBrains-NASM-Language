@@ -26,6 +26,8 @@
     <fileTypeFactory implementation="com.nasmlanguage.NASMFileTypeFactory"/>
     <lang.parserDefinition language="NASM" implementationClass="com.nasmlanguage.NASMParserDefinition"/>
     <lang.syntaxHighlighterFactory key="NASM" implementationClass="com.nasmlanguage.NASMSyntaxHighlighterFactory"/>
+    <colorSettingsPage implementation="com.nasmlanguage.NASMColorSettingsPage"/>
+
   </extensions>
 
   <actions>

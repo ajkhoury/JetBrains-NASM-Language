@@ -19,4 +19,7 @@ public interface NASMDirectiveArg extends PsiElement {
   @Nullable
   PsiElement getNumber();
 
+  @Nullable
+  PsiElement getSizeType();
+
 }

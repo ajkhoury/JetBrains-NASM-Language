@@ -13,7 +13,4 @@ public interface NASMAddress extends PsiElement {
   @Nullable
   PsiElement getLabel();
 
-  @Nullable
-  PsiElement getSizeType();
-
 }

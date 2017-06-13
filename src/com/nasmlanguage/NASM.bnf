@@ -50,12 +50,14 @@
         INS_RNG_RAND        = 'regexp:(rdrand|rdseed)'                                                                                              // Random Number Generation (RNG)
         INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)'                                     // Bit Manipulation (BMI)
         INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))'                            // 64 bit Instructions
+        INS_PREFIX          = 'regexp:((rep(n?[ez])|rep)|lock|[c-gs]s)'                                                                                         // Instruction prefixes
+
 
         MNEMONIC_OP         = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}|{INS_64_BIT}'
 
 
         REGISTER            = 'regexp:[a-d][lh]|e?[a-d]x|e?[sb]p|e?[sd]i|[c-gs]s|st[0-7]|mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
-        SIZE_TYPE           = 'regexp:byte|[dq]?word'
+        SIZE_TYPE           = 'regexp:byte|short|[dq]?word'
         NUMBER              = 'regexp:0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|0d[0-9]+|[0-9]+'
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
         LABEL_DEF           = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
@@ -70,6 +72,7 @@
         ROUND_L             = '('
         ROUND_R             = ')'
         SEPARATOR           = ','
+        DOT                 = '.'
 
         PLUS                = '+'
         MINUS               = '-'
@@ -114,7 +117,7 @@ Data ::= ((LABEL_DEF? DATA_OP DataValue?) | (Identifier EQU NumericExpression))
 DataValue ::= ((NUMBER|STRING) SEPARATOR?)*
 
 Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall))
-private MnemonicOperation ::= MNEMONIC_OP
+private MnemonicOperation ::= (INS_PREFIX MNEMONIC_OP | MNEMONIC_OP)
 private MnemonicOperationArg ::= REGISTER | NUMBER | Address | Identifier | MacroCall
 
 Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R
@@ -124,6 +127,6 @@ private MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* Numeri
 private MacroParams ::= (NUMBER MINUS (NUMBER TIMES|TIMES|NUMBER) | NUMBER PLUS)
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NUMBER)
 
-private Identifier ::= (IDENTIFIER|LABEL)
+private Identifier ::= (SIZE_TYPE? (LABEL|IDENTIFIER))
 private NumericExpression ::= (((NUMBER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NUMBER|MacroCall|IDENTIFIER))
 private Expression ::= (((NUMBER|REGISTER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NUMBER|REGISTER|MacroCall|IDENTIFIER))
