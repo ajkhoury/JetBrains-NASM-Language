@@ -33,6 +33,7 @@ public interface NASMTypes {
   IElementType DIVIDE = new NASMTokenType("\\");
   IElementType DOLLARSIGN = new NASMTokenType("$");
   IElementType DOLLARSIGN2 = new NASMTokenType("$$");
+  IElementType DOT = new NASMTokenType(".");
   IElementType EQU = new NASMTokenType("EQU");
   IElementType IDENTIFIER = new NASMTokenType("IDENTIFIER");
   IElementType INCLUDE_TAG = new NASMTokenType("INCLUDE_TAG");

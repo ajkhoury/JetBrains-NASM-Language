@@ -4,7 +4,7 @@ package com.nasmlanguage.parser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static com.nasmlanguage.parser.NASMParserUtil.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;

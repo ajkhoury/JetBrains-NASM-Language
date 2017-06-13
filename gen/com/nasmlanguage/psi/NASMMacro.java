@@ -28,4 +28,6 @@ public interface NASMMacro extends PsiElement {
   @Nullable
   PsiElement getString();
 
+  String getMacro();
+
 }

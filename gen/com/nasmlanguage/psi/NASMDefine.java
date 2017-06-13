@@ -10,4 +10,6 @@ public interface NASMDefine extends PsiElement {
   @NotNull
   PsiElement getDefineTag();
 
+  String getDefine();
+
 }
