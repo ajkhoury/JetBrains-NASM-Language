@@ -11,21 +11,21 @@ import javax.swing.*;
 
 public class NASMPsiImplUtil {
 
-    public static String getInclude(NASMInclude element) {
+    public static String getIncludeString(NASMInclude element) {
         ASTNode includeString = element.getNode().findChildByType(NASMTypes.STRING);
         if (includeString != null)
             return includeString.getText();
         return null;
     }
 
-    public static String getDefine(NASMDefine element) {
+    public static String getDefineIdentifier(NASMDefine element) {
         ASTNode defineIdentifier = element.getNode().findChildByType(NASMTypes.IDENTIFIER);
         if (defineIdentifier != null)
             return defineIdentifier.getText();
         return null;
     }
 
-    public static String getMacro(NASMMacro element) {
+    public static String getMacroIdentifier(NASMMacro element) {
         ASTNode macroIdentifier = element.getNode().findChildByType(NASMTypes.IDENTIFIER);
         if (macroIdentifier != null)
             return macroIdentifier.getText();

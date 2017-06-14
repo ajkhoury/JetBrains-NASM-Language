@@ -13,6 +13,6 @@ public interface NASMInclude extends PsiElement {
   @NotNull
   PsiElement getString();
 
-  String getInclude();
+  String getIncludeString();
 
 }

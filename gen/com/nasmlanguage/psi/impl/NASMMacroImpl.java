@@ -68,8 +68,8 @@ public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
     return findChildByType(STRING);
   }
 
-  public String getMacro() {
-    return NASMPsiImplUtil.getMacro(this);
+  public String getMacroIdentifier() {
+    return NASMPsiImplUtil.getMacroIdentifier(this);
   }
 
 }

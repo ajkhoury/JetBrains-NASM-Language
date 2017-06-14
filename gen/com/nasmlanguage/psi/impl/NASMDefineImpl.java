@@ -38,8 +38,8 @@ public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
     return findNotNullChildByType(DEFINE_TAG);
   }
 
-  public String getDefine() {
-    return NASMPsiImplUtil.getDefine(this);
+  public String getDefineIdentifier() {
+    return NASMPsiImplUtil.getDefineIdentifier(this);
   }
 
 }

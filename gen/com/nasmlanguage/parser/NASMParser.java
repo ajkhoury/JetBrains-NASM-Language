@@ -388,7 +388,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (DEFINE_TAG IDENTIFIER (NUMBER|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?))) | (DEFINE_TAG MacroCall Expression)
+  // (DEFINE_TAG IDENTIFIER (NUMBER|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)))
+  //         | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression)
   public static boolean Define(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define")) return false;
     if (!nextTokenIs(b, DEFINE_TAG)) return false;
@@ -458,14 +459,66 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // DEFINE_TAG MacroCall Expression
+  // DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression
   private static boolean Define_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, DEFINE_TAG);
-    r = r && MacroCall(b, l + 1);
+    r = r && Define_1_1(b, l + 1);
     r = r && Expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R
+  private static boolean Define_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, IDENTIFIER, ROUND_L);
+    r = r && Define_1_1_2(b, l + 1);
+    r = r && consumeToken(b, ROUND_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ((IDENTIFIER SEPARATOR)* IDENTIFIER)?
+  private static boolean Define_1_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_1_1_2")) return false;
+    Define_1_1_2_0(b, l + 1);
+    return true;
+  }
+
+  // (IDENTIFIER SEPARATOR)* IDENTIFIER
+  private static boolean Define_1_1_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_1_1_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Define_1_1_2_0_0(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (IDENTIFIER SEPARATOR)*
+  private static boolean Define_1_1_2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_1_1_2_0_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!Define_1_1_2_0_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Define_1_1_2_0_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // IDENTIFIER SEPARATOR
+  private static boolean Define_1_1_2_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_1_1_2_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, IDENTIFIER, SEPARATOR);
     exit_section_(b, m, null, r);
     return r;
   }

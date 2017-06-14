@@ -26,8 +26,8 @@ public class NASMAnnotator implements Annotator {
                     System.out.println("macro = \"" + macro.getText() + "\"");
                     String macroText = macro.getText();
                     if (macroText != null) {
-                        int idx = macroText.indexOf(macroIdentifier);
-                        if (idx != -1) {
+                        int identifierIdx = macroText.indexOf(macroIdentifier);
+                        if (identifierIdx != -1) {
                             System.out.println("start offset = \"" + element.getTextRange().getStartOffset() + "\"");
                             TextRange range = new TextRange(
                                     element.getTextRange().getStartOffset(),
@@ -39,6 +39,34 @@ public class NASMAnnotator implements Annotator {
                     }
                 }
             }
+        } else if (element instanceof NASMPreprocessor) {
+            NASMPreprocessor nasmPreprocessor = (NASMPreprocessor)element;
+            NASMMacro macro = nasmPreprocessor.getMacro();
+            if (macro != null) {
+                String macroIdentifier = macro.getMacroIdentifier();
+                if (macroIdentifier != null) {
+                    System.out.println("macroIdentifier = \"" + macroIdentifier + "\"");
+                    int identifierIdx = macro.getText().indexOf(macroIdentifier);
+                    if (identifierIdx != -1) {
+                        int startOffset = element.getTextRange().getStartOffset() + identifierIdx;
+                        TextRange range = new TextRange(
+                                startOffset,
+                                startOffset + macroIdentifier.length()
+                        );
+                        Annotation annotation = holder.createInfoAnnotation(range, null);
+                        annotation.setTextAttributes(NASMSyntaxHighlighter.MACRO_CALL);
+                    }
+                }
+            }
+            //else {
+            //    NASMDefine define = nasmPreprocessor.getDefine();
+            //    if (define != null) {
+            //        String defineIdentifier = define.getDefineIdentifier();
+            //        if (defineIdentifier != null) {
+            //            System.out.println("defineIdentifier = \"" + defineIdentifier + "\"");
+            //        }
+            //    }
+            //}
         }
     }
 }
