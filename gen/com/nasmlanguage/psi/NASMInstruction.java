@@ -20,12 +20,21 @@ public interface NASMInstruction extends PsiElement {
   PsiElement getComment();
 
   @Nullable
-  PsiElement getInsPrefix();
+  PsiElement getFpuOp();
+
+  @Nullable
+  PsiElement getGeneralOp();
 
   @Nullable
   PsiElement getLabelDef();
 
   @Nullable
-  PsiElement getMnemonicOp();
+  PsiElement getMmxOp();
+
+  @Nullable
+  PsiElement getOpPrefix();
+
+  @Nullable
+  PsiElement getX64Op();
 
 }

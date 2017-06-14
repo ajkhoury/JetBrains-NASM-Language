@@ -36,6 +36,8 @@ public interface NASMTypes {
   IElementType DOLLARSIGN2 = new NASMTokenType("$$");
   IElementType DOT = new NASMTokenType(".");
   IElementType EQU = new NASMTokenType("EQU");
+  IElementType FPU_OP = new NASMTokenType("FPU_OP");
+  IElementType GENERAL_OP = new NASMTokenType("GENERAL_OP");
   IElementType IDENTIFIER = new NASMTokenType("IDENTIFIER");
   IElementType INCLUDE_TAG = new NASMTokenType("INCLUDE_TAG");
   IElementType INS_64_BIT = new NASMTokenType("INS_64_BIT");
@@ -51,9 +53,22 @@ public interface NASMTypes {
   IElementType INS_DATA_TRANS_XCHG = new NASMTokenType("INS_DATA_TRANS_XCHG");
   IElementType INS_DECIMAL_ARITH = new NASMTokenType("INS_DECIMAL_ARITH");
   IElementType INS_FLAG_CONTROL = new NASMTokenType("INS_FLAG_CONTROL");
+  IElementType INS_FPU_BASIC_ARITH = new NASMTokenType("INS_FPU_BASIC_ARITH");
+  IElementType INS_FPU_COMPARISON = new NASMTokenType("INS_FPU_COMPARISON");
+  IElementType INS_FPU_CONTROL = new NASMTokenType("INS_FPU_CONTROL");
+  IElementType INS_FPU_DATA_TRANS = new NASMTokenType("INS_FPU_DATA_TRANS");
+  IElementType INS_FPU_LOAD = new NASMTokenType("INS_FPU_LOAD");
+  IElementType INS_FPU_STATE = new NASMTokenType("INS_FPU_STATE");
+  IElementType INS_FPU_TRANSCEND = new NASMTokenType("INS_FPU_TRANSCEND");
   IElementType INS_INPUT_OUTPUT = new NASMTokenType("INS_INPUT_OUTPUT");
   IElementType INS_MISC_OTHER = new NASMTokenType("INS_MISC_OTHER");
-  IElementType INS_PREFIX = new NASMTokenType("INS_PREFIX");
+  IElementType INS_MMX_ARITH = new NASMTokenType("INS_MMX_ARITH");
+  IElementType INS_MMX_COMPARISON = new NASMTokenType("INS_MMX_COMPARISON");
+  IElementType INS_MMX_CONVERSION = new NASMTokenType("INS_MMX_CONVERSION");
+  IElementType INS_MMX_DATA_TRANS = new NASMTokenType("INS_MMX_DATA_TRANS");
+  IElementType INS_MMX_LOGICAL = new NASMTokenType("INS_MMX_LOGICAL");
+  IElementType INS_MMX_ROTATE = new NASMTokenType("INS_MMX_ROTATE");
+  IElementType INS_MMX_STATE = new NASMTokenType("INS_MMX_STATE");
   IElementType INS_RNG_RAND = new NASMTokenType("INS_RNG_RAND");
   IElementType INS_SEG_REGS = new NASMTokenType("INS_SEG_REGS");
   IElementType INS_STRING_DATA = new NASMTokenType("INS_STRING_DATA");
@@ -62,8 +77,9 @@ public interface NASMTypes {
   IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
   IElementType MINUS = new NASMTokenType("-");
-  IElementType MNEMONIC_OP = new NASMTokenType("MNEMONIC_OP");
+  IElementType MMX_OP = new NASMTokenType("MMX_OP");
   IElementType NUMBER = new NASMTokenType("NUMBER");
+  IElementType OP_PREFIX = new NASMTokenType("OP_PREFIX");
   IElementType PERCENT = new NASMTokenType("%");
   IElementType PLUS = new NASMTokenType("+");
   IElementType PREPROCESSOR_OP = new NASMTokenType("PREPROCESSOR_OP");
@@ -77,6 +93,7 @@ public interface NASMTypes {
   IElementType SQUARE_R = new NASMTokenType("]");
   IElementType STRING = new NASMTokenType("STRING");
   IElementType TIMES = new NASMTokenType("*");
+  IElementType X64_OP = new NASMTokenType("X64_OP");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

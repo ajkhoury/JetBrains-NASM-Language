@@ -1,6 +1,6 @@
 {
     parserClass="com.nasmlanguage.parser.NASMParser"
-  parserUtilClass="com.nasmlanguage.parser.NASMParserUtil"
+    parserUtilClass="com.nasmlanguage.parser.NASMParserUtil"
 
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
@@ -33,31 +33,55 @@
         PREPROCESSOR_OP     = 'regexp:\%([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])'
         DATA_OP             = 'regexp:(res|d)[bwdqt]|[tT][iI][mM][eE][sS]'
 
-        INS_DATA_TRANS_MOV  = 'regexp:(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)'                            // Data Transfer MOV
-        INS_DATA_TRANS_XCHG = 'regexp:(xchg|bswap|xadd|cmpxchg(8b)?)'                                                                               // Data Transfer XCHG
-        INS_DATA_TRANS_OTHER= 'regexp:((push|pop)(ad?)?|cwde?|cdq|cbw)'                                                                             // Data Transfer Other
-        INS_DECIMAL_ARITH   = 'regexp:(daa|das|aaa|aas|aam|aad)'                                                                                    // Decimal Arithmetic
-        INS_BINARY_ARITH    = 'regexp:(adcx?|adox|add|sub|sbb|i?mul|i?div|inc|dec|neg|cmp)'                                                         // Binary Arithmetic
-        INS_BINARY_LOGICAL  = 'regexp:(and|x?or|not)'                                                                                               // Binary Logical
-        INS_BINARY_ROTATE   = 'regexp:(s[ah][rl]|sh[rl]d|r[co][rl])'                                                                                // Binary Rotation
-        INS_BINARY_SET      = 'regexp:(set(n?[abceglopsz]|n?[abgl]e|p[eo]))'                                                                        // Binary Set
-        INS_BINARY_OTHER    = 'regexp:(bt[crs]?|bs[fr]|test|crc32|popcnt)'                                                                          // Binary Other
-        INS_CONTROL_TRANS   = 'regexp:(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret|iret[dq]?|into?|bound|enter|leave)' // Control Transfer
-        INS_STRING_DATA     = 'regexp:((mov|cmp|sca|lod|sto)(s[bdw]?)|rep(n?[ez])?)'                                                                // String Data
-        INS_INPUT_OUTPUT    = 'regexp:((in|out)(s[bdw]?)?)'                                                                                         // I/O
-        INS_FLAG_CONTROL    = 'regexp:((st|cl)[cdi]|cmc|[ls]ahf|(push|pop)f[dq]?)'                                                                  // Flag Control
-        INS_SEG_REGS        = 'regexp:(l[defgs]s)'                                                                                                  // Segment Registers
-        INS_MISC_OTHER      = 'regexp:(lea|nop|ud2|xlatb?|cpuid|movbe)'                                                                             // Misc/Other
-        INS_RNG_RAND        = 'regexp:(rdrand|rdseed)'                                                                                              // Random Number Generation (RNG)
-        INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)'                                     // Bit Manipulation (BMI)
-        INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))'                            // 64 bit Instructions
-        INS_PREFIX          = 'regexp:((rep(n?[ez])|rep)|lock|[c-gs]s)'                                                                                         // Instruction prefixes
+        // General purpose instructions
+        INS_DATA_TRANS_MOV  = 'regexp:(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)'                                // Data Transfer MOV
+        INS_DATA_TRANS_XCHG = 'regexp:(xchg|bswap|xadd|cmpxchg(8b)?)'                                                                                   // Data Transfer XCHG
+        INS_DATA_TRANS_OTHER= 'regexp:((push|pop)(ad?)?|cwde?|cdq|cbw)'                                                                                 // Data Transfer Other
+        INS_DECIMAL_ARITH   = 'regexp:(daa|das|aaa|aas|aam|aad)'                                                                                        // Decimal Arithmetic
+        INS_BINARY_ARITH    = 'regexp:(adcx?|adox|add|sub|sbb|i?mul|i?div|inc|dec|neg|cmp)'                                                             // Binary Arithmetic
+        INS_BINARY_LOGICAL  = 'regexp:(and|x?or|not)'                                                                                                   // Binary Logical
+        INS_BINARY_ROTATE   = 'regexp:(s[ah][rl]|sh[rl]d|r[co][rl])'                                                                                    // Binary Rotation
+        INS_BINARY_SET      = 'regexp:(set(n?[abceglopsz]|n?[abgl]e|p[eo]))'                                                                            // Binary Set
+        INS_BINARY_OTHER    = 'regexp:(bt[crs]?|bs[fr]|test|crc32|popcnt)'                                                                              // Binary Other
+        INS_CONTROL_TRANS   = 'regexp:(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret|iret[dq]?|into?|bound|enter|leave)'     // Control Transfer
+        INS_STRING_DATA     = 'regexp:((mov|cmp|sca|lod|sto)(s[bdw]?)|rep(n?[ez])?)'                                                                    // String Data
+        INS_INPUT_OUTPUT    = 'regexp:((in|out)(s[bdw]?)?)'                                                                                             // I/O
+        INS_FLAG_CONTROL    = 'regexp:((st|cl)[cdi]|cmc|[ls]ahf|(push|pop)f[dq]?)'                                                                      // Flag Control
+        INS_SEG_REGS        = 'regexp:(l[defgs]s)'                                                                                                      // Segment Registers
+        INS_MISC_OTHER      = 'regexp:(lea|nop|ud2|xlatb?|cpuid|movbe)'                                                                                 // Misc/Other
+        INS_RNG_RAND        = 'regexp:(rdrand|rdseed)'                                                                                                  // Random Number Generation (RNG)
+        INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)'                                         // Bit Manipulation (BMI)
+
+        // 64 bit instructions
+        INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))'                                // 64 bit Instructions
+
+        // FPU instructions
+        INS_FPU_DATA_TRANS  = 'regexp:(fcmov(n?([beu]|be)))|(f(i?(ld|stp?)|b(ld|stp)|xch))'                                                             // FPU Data Transfer
+        INS_FPU_BASIC_ARITH = 'regexp:(f((add|div|mul|sub)p?|i(add|div|mul|sub)|(div|sub)rp?|i(div|sub)r))|(f(prem1?|abs|chs|rndint|scale|sqrt|xtract))'// FPU Basic Arithmetic
+        INS_FPU_COMPARISON  = 'regexp:(f(u?com[ip]?p?|icomp?|tst|xam))'                                                                                 // FPU Comparison
+        INS_FPU_TRANSCEND   = 'regexp:(f(sin|cos|sincos|pa?tan|2xm1|yl2x(p1)?))'                                                                        // FPU Transcendental
+        INS_FPU_LOAD        = 'regexp:(fld(1|z|pi|l2[et]|l[ng]2))'                                                                                      // FPU Load
+        INS_FPU_CONTROL     = 'regexp:(f((inc|dec)stp|free|n?(init|clex|st[cs]w|stenv|save)|ld(cw|env)|rstor|nop)|f?wait)'                              // FPU Control Management
+        INS_FPU_STATE       = 'regexp:(fx(save|rstor)(64)?)'                                                                                            // FPU State Management
+
+        // MMX instructions
+        INS_MMX_DATA_TRANS  = 'regexp:(mov[dq])'
+        INS_MMX_CONVERSION  = 'regexp:(pack(ssdw|[su]swb)|punpck[hl](bw|dq|wd))'
+        INS_MMX_ARITH       = 'regexp:(p(((add|sub)(d|(u?s)?[bw]))|maddwd|mul[lh]w))'
+        INS_MMX_COMPARISON  = 'regexp:(pcmp((eq|gt)[bdw]))'
+        INS_MMX_LOGICAL     = 'regexp:(pandn?|px?or)'
+        INS_MMX_ROTATE      = 'regexp:(ps([rl]l[dwq]|raw|rad))'
+        INS_MMX_STATE       = 'regexp:(emms)'
 
 
-        MNEMONIC_OP         = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}|{INS_64_BIT}'
+        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock|[c-gs]s)' // Instruction operation prefixes
+        GENERAL_OP          = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}'
+        X64_OP              = 'regexp:{INS_64_BIT}'
+        FPU_OP              = 'regexp:{INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}'
+        MMX_OP              = 'regexp:{INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}'
 
 
-        REGISTER            = 'regexp:[a-d][lh]|e?[a-d]x|e?[sb]p|e?[sd]i|[c-gs]s|st[0-7]|mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
+        REGISTER            = 'regexp:[a-d][lh]|([er])?[a-d]x|([er])?[sb]p|([er])?[sd]i|[c-gs]s|st[0-7]|x?mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
         SIZE_TYPE           = 'regexp:byte|short|[dq]?word'
         NUMBER              = 'regexp:0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0d[0-9]+|[0-9]+'
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
@@ -118,7 +142,7 @@ Data ::= ((LABEL_DEF? DATA_OP DataValue?) | (Identifier EQU NumericExpression))
 DataValue ::= ((NUMBER|STRING) SEPARATOR?)*
 
 Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall))
-private MnemonicOperation ::= (INS_PREFIX MNEMONIC_OP | MNEMONIC_OP)
+private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP | X64_OP | FPU_OP | MMX_OP))
 private MnemonicOperationArg ::= REGISTER | NUMBER | Address | Identifier | MacroCall
 
 Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R

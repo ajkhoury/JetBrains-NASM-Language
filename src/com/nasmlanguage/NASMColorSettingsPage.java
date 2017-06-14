@@ -19,7 +19,7 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Macro", NASMSyntaxHighlighter.MACRO_CALL),
             new AttributesDescriptor("Label", NASMSyntaxHighlighter.LABEL),
             new AttributesDescriptor("Size Type", NASMSyntaxHighlighter.SIZE_TYPE),
-            new AttributesDescriptor("Instruction Prefix", NASMSyntaxHighlighter.INS_PREFIX),
+            new AttributesDescriptor("Instruction Prefix", NASMSyntaxHighlighter.OP_PREFIX),
     };
 
     @Nullable
@@ -43,9 +43,9 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
                 "\n" +
                 "section\t.data\n" +
                 "\n" +
-                "value\tdd 1.23423\n" +
-                "fl1\tdb 0xFF\n" +
-                "fl2\tdb 0A1h\n" +
+                "floatval\tdd 3.14159\n" +
+                "byteval1\tdb 0xFF\n" +
+                "byteval2\tdb 0A1h\n" +
                 "\n" +
                 "section .text\n" +
                 "\n" +
@@ -58,8 +58,8 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
                 "\n" +
                 "func:\n" +
                 "    text_macro()\n" +
-                "    fadd\tS(0)\n" +
-                "    pxor\txmm0, xmm0\n" +
+                "    fadd\tS(0) ; FPU instruction\n" +
+                "    pxor\txmm0, xmm0 ; MMX instruction\n" +
                 "    cvtsi2ss\txmm0, rax\n" +
                 "    mov\teax, dword [ebp + 4*eax - 12h]\n" +
                 "    repz ret\n";

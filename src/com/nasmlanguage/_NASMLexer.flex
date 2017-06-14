@@ -57,9 +57,26 @@ INS_MISC_OTHER=(lea|nop|ud2|xlatb?|cpuid|movbe)
 INS_RNG_RAND=(rdrand|rdseed)
 INS_BIT_MANIPULATION=(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)
 INS_64_BIT=(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))
-INS_PREFIX=((rep(n?[ez])|rep)|lock|[c-gs]s)
-MNEMONIC_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}|{INS_64_BIT}
-REGISTER=[a-d][lh]|e?[a-d]x|e?[sb]p|e?[sd]i|[c-gs]s|st[0-7]|mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]
+INS_FPU_DATA_TRANS=(fcmov(n?([beu]|be)))|(f(i?(ld|stp?)|b(ld|stp)|xch))
+INS_FPU_BASIC_ARITH=(f((add|div|mul|sub)p?|i(add|div|mul|sub)|(div|sub)rp?|i(div|sub)r))|(f(prem1?|abs|chs|rndint|scale|sqrt|xtract))
+INS_FPU_COMPARISON=(f(u?com[ip]?p?|icomp?|tst|xam))
+INS_FPU_TRANSCEND=(f(sin|cos|sincos|pa?tan|2xm1|yl2x(p1)?))
+INS_FPU_LOAD=(fld(1|z|pi|l2[et]|l[ng]2))
+INS_FPU_CONTROL=(f((inc|dec)stp|free|n?(init|clex|st[cs]w|stenv|save)|ld(cw|env)|rstor|nop)|f?wait)
+INS_FPU_STATE=(fx(save|rstor)(64)?)
+INS_MMX_DATA_TRANS=(mov[dq])
+INS_MMX_CONVERSION=(pack(ssdw|[su]swb)|punpck[hl](bw|dq|wd))
+INS_MMX_ARITH=(p(((add|sub)(d|(u?s)?[bw]))|maddwd|mul[lh]w))
+INS_MMX_COMPARISON=(pcmp((eq|gt)[bdw]))
+INS_MMX_LOGICAL=(pandn?|px?or)
+INS_MMX_ROTATE=(ps([rl]l[dwq]|raw|rad))
+INS_MMX_STATE=(emms)
+OP_PREFIX=((rep(n?[ez])|rep)|lock|[c-gs]s)
+GENERAL_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}
+X64_OP={INS_64_BIT}
+FPU_OP={INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}
+MMX_OP={INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}
+REGISTER=[a-d][lh]|([er])?[a-d]x|([er])?[sb]p|([er])?[sd]i|[c-gs]s|st[0-7]|x?mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]
 SIZE_TYPE=byte|short|[dq]?word
 NUMBER=0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0d[0-9]+|[0-9]+
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
@@ -101,8 +118,11 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
   {DATA_OP}                   { return DATA_OP; }
 
-  {INS_PREFIX}                { return INS_PREFIX; }
-  {MNEMONIC_OP}               { return MNEMONIC_OP; }
+  {OP_PREFIX}                 { return OP_PREFIX; }
+  {GENERAL_OP}                { return GENERAL_OP; }
+  {X64_OP}                    { return X64_OP; }
+  {FPU_OP}                    { return FPU_OP; }
+  {MMX_OP}                    { return MMX_OP; }
   {REGISTER}                  { return REGISTER; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }
   {NUMBER}                    { return NUMBER; }

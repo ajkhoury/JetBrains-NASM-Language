@@ -18,7 +18,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey BAD_OP = createTextAttributesKey("NASM_BAD_OP", HighlighterColors.BAD_CHARACTER);
     public static final TextAttributesKey NUMBER = createTextAttributesKey("NASM_HEX", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey SIZE_TYPE = createTextAttributesKey("NASM_SIZE_TYPE", DefaultLanguageHighlighterColors.METADATA);
-    public static final TextAttributesKey INS_PREFIX = createTextAttributesKey("NASM_INS_PREFIX", DefaultLanguageHighlighterColors.METADATA);
+    public static final TextAttributesKey OP_PREFIX = createTextAttributesKey("NASM_OP_PREFIX", DefaultLanguageHighlighterColors.METADATA);
     public static final TextAttributesKey COMMENT = createTextAttributesKey("NASM_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey LABEL = createTextAttributesKey("NASM_LABEL", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
     public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("NASM_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
@@ -37,7 +37,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] BAD_OP_KEYS = { BAD_OP };
     private static final TextAttributesKey[] NUMBER_KEYS = { NUMBER };
     private static final TextAttributesKey[] SIZE_TYPE_KEYS = { SIZE_TYPE };
-    private static final TextAttributesKey[] INS_PREFIX_KEYS = { INS_PREFIX };
+    private static final TextAttributesKey[] OP_PREFIX_KEYS = { OP_PREFIX };
     private static final TextAttributesKey[] COMMENT_KEYS = { COMMENT };
     private static final TextAttributesKey[] LABEL_KEYS = { LABEL };
     private static final TextAttributesKey[] IDENTIFIER_KEYS = { IDENTIFIER };
@@ -61,9 +61,13 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             return SIZE_TYPE_KEYS;
         } else if (tokenType.equals(NASMTypes.MACRO_CALL)) {
             return MACRO_CALL_KEYS;
-        } else if (tokenType.equals(NASMTypes.INS_PREFIX)) {
-            return INS_PREFIX_KEYS;
-        } else if (tokenType.equals(NASMTypes.MNEMONIC_OP) || tokenType.equals(NASMTypes.DATA_OP))  {
+        } else if (tokenType.equals(NASMTypes.OP_PREFIX)) {
+            return OP_PREFIX_KEYS;
+        } else if (tokenType.equals(NASMTypes.GENERAL_OP)
+                || tokenType.equals(NASMTypes.X64_OP)
+                || tokenType.equals(NASMTypes.FPU_OP)
+                || tokenType.equals(NASMTypes.MMX_OP)
+                || tokenType.equals(NASMTypes.DATA_OP)) {
             return OPERATION_KEYS;
         } else if (tokenType.equals(NASMTypes.DIRECTIVE_OP) || tokenType.equals(NASMTypes.SECTION_TAG) || tokenType.equals(NASMTypes.EQU))  {
             return DIRECTIVE_KEYS;

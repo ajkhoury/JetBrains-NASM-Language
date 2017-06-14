@@ -52,8 +52,14 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
-  public PsiElement getInsPrefix() {
-    return findChildByType(INS_PREFIX);
+  public PsiElement getFpuOp() {
+    return findChildByType(FPU_OP);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getGeneralOp() {
+    return findChildByType(GENERAL_OP);
   }
 
   @Override
@@ -64,8 +70,20 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
-  public PsiElement getMnemonicOp() {
-    return findChildByType(MNEMONIC_OP);
+  public PsiElement getMmxOp() {
+    return findChildByType(MMX_OP);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getOpPrefix() {
+    return findChildByType(OP_PREFIX);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getX64Op() {
+    return findChildByType(X64_OP);
   }
 
 }

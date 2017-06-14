@@ -942,14 +942,33 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // INS_PREFIX MNEMONIC_OP | MNEMONIC_OP
+  // OP_PREFIX? (GENERAL_OP | X64_OP | FPU_OP | MMX_OP)
   static boolean MnemonicOperation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MnemonicOperation")) return false;
-    if (!nextTokenIs(b, "", INS_PREFIX, MNEMONIC_OP)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = parseTokens(b, 0, INS_PREFIX, MNEMONIC_OP);
-    if (!r) r = consumeToken(b, MNEMONIC_OP);
+    r = MnemonicOperation_0(b, l + 1);
+    r = r && MnemonicOperation_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // OP_PREFIX?
+  private static boolean MnemonicOperation_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MnemonicOperation_0")) return false;
+    consumeToken(b, OP_PREFIX);
+    return true;
+  }
+
+  // GENERAL_OP | X64_OP | FPU_OP | MMX_OP
+  private static boolean MnemonicOperation_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MnemonicOperation_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, GENERAL_OP);
+    if (!r) r = consumeToken(b, X64_OP);
+    if (!r) r = consumeToken(b, FPU_OP);
+    if (!r) r = consumeToken(b, MMX_OP);
     exit_section_(b, m, null, r);
     return r;
   }
