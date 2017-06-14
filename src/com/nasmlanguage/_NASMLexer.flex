@@ -71,11 +71,22 @@ INS_MMX_COMPARISON=(pcmp((eq|gt)[bdw]))
 INS_MMX_LOGICAL=(pandn?|px?or)
 INS_MMX_ROTATE=(ps([rl]l[dwq]|raw|rad))
 INS_MMX_STATE=(emms)
+INS_SSE_DATA_TRANS=(mov(([ahlu]|hl|lh|msk)ps|ss))
+INS_SSE_ARITH=((add|div|max|min|mul|rcp|r?sqrt|sub)[ps]s)
+INS_SSE_COMPARISON=(cmp[ps]s|u?comiss)
+INS_SSE_LOGICAL=((andn?|x?or)ps)
+INS_SSE_OTHER=((shuf|unpck[hl])ps)
+INS_SSE_CONVERSION=(cvt(pi2ps|si2ss|ps2pi|tps2pi|ss2si|tss2si))
+INS_SSE_STATE=((ld|st)mxcsr)
+INS_SSE_SIMD_INT=(p(avg[bw]|extrw|insrw|(max|min)(sw|ub)|sadbw|shufw|mulhuw|movmskb))
+INS_SSE_CACHE_CTRL=(maskmovq|movntps|sfence)
+INS_SSE_PREFETCH=(prefetch(nta|t[0-2]|w(t1)?))
 OP_PREFIX=((rep(n?[ez])|rep)|lock|[c-gs]s)
 GENERAL_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}
 X64_OP={INS_64_BIT}
 FPU_OP={INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}
 MMX_OP={INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}
+SSE_OP={INS_SSE_DATA_TRANS}|{INS_SSE_ARITH}|{INS_SSE_COMPARISON}|{INS_SSE_LOGICAL}|{INS_SSE_OTHER}|{INS_SSE_CONVERSION}|{INS_SSE_STATE}|{INS_SSE_SIMD_INT}|{INS_SSE_CACHE_CTRL}|{INS_SSE_PREFETCH}
 REGISTER=[a-d][lh]|([er])?[a-d]x|([er])?[sb]p|([er])?[sd]i|[c-gs]s|st[0-7]|x?mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]
 SIZE_TYPE=byte|short|[dq]?word
 NUMBER=0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0d[0-9]+|[0-9]+
@@ -123,6 +134,7 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {X64_OP}                    { return X64_OP; }
   {FPU_OP}                    { return FPU_OP; }
   {MMX_OP}                    { return MMX_OP; }
+  {SSE_OP}                    { return SSE_OP; }
   {REGISTER}                  { return REGISTER; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }
   {NUMBER}                    { return NUMBER; }

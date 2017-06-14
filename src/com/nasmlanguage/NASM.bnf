@@ -73,13 +73,26 @@
         INS_MMX_ROTATE      = 'regexp:(ps([rl]l[dwq]|raw|rad))'
         INS_MMX_STATE       = 'regexp:(emms)'
 
+        // SSE instructions
+        INS_SSE_DATA_TRANS  = 'regexp:(mov(([ahlu]|hl|lh|msk)ps|ss))'
+        INS_SSE_ARITH       = 'regexp:((add|div|max|min|mul|rcp|r?sqrt|sub)[ps]s)'
+        INS_SSE_COMPARISON  = 'regexp:(cmp[ps]s|u?comiss)'
+        INS_SSE_LOGICAL     = 'regexp:((andn?|x?or)ps)'
+        INS_SSE_OTHER       = 'regexp:((shuf|unpck[hl])ps)'
+        INS_SSE_CONVERSION  = 'regexp:(cvt(pi2ps|si2ss|ps2pi|tps2pi|ss2si|tss2si))'
+        INS_SSE_STATE       = 'regexp:((ld|st)mxcsr)'
+        INS_SSE_SIMD_INT    = 'regexp:(p(avg[bw]|extrw|insrw|(max|min)(sw|ub)|sadbw|shufw|mulhuw|movmskb))'
+        INS_SSE_CACHE_CTRL  = 'regexp:(maskmovq|movntps|sfence)'
+        INS_SSE_PREFETCH    = 'regexp:(prefetch(nta|t[0-2]|w(t1)?))'
+
+
 
         OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock|[c-gs]s)' // Instruction operation prefixes
         GENERAL_OP          = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}'
         X64_OP              = 'regexp:{INS_64_BIT}'
         FPU_OP              = 'regexp:{INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}'
         MMX_OP              = 'regexp:{INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}'
-
+        SSE_OP              = 'regexp:{INS_SSE_DATA_TRANS}|{INS_SSE_ARITH}|{INS_SSE_COMPARISON}|{INS_SSE_LOGICAL}|{INS_SSE_OTHER}|{INS_SSE_CONVERSION}|{INS_SSE_STATE}|{INS_SSE_SIMD_INT}|{INS_SSE_CACHE_CTRL}|{INS_SSE_PREFETCH}'
 
         REGISTER            = 'regexp:[a-d][lh]|([er])?[a-d]x|([er])?[sb]p|([er])?[sd]i|[c-gs]s|st[0-7]|x?mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
         SIZE_TYPE           = 'regexp:byte|short|[dq]?word'
@@ -142,7 +155,7 @@ Data ::= ((LABEL_DEF? DATA_OP DataValue?) | (Identifier EQU NumericExpression))
 DataValue ::= ((NUMBER|STRING) SEPARATOR?)*
 
 Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall))
-private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP | X64_OP | FPU_OP | MMX_OP))
+private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP))
 private MnemonicOperationArg ::= REGISTER | NUMBER | Address | Identifier | MacroCall
 
 Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R

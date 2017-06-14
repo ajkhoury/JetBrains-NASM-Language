@@ -71,6 +71,16 @@ public interface NASMTypes {
   IElementType INS_MMX_STATE = new NASMTokenType("INS_MMX_STATE");
   IElementType INS_RNG_RAND = new NASMTokenType("INS_RNG_RAND");
   IElementType INS_SEG_REGS = new NASMTokenType("INS_SEG_REGS");
+  IElementType INS_SSE_ARITH = new NASMTokenType("INS_SSE_ARITH");
+  IElementType INS_SSE_CACHE_CTRL = new NASMTokenType("INS_SSE_CACHE_CTRL");
+  IElementType INS_SSE_COMPARISON = new NASMTokenType("INS_SSE_COMPARISON");
+  IElementType INS_SSE_CONVERSION = new NASMTokenType("INS_SSE_CONVERSION");
+  IElementType INS_SSE_DATA_TRANS = new NASMTokenType("INS_SSE_DATA_TRANS");
+  IElementType INS_SSE_LOGICAL = new NASMTokenType("INS_SSE_LOGICAL");
+  IElementType INS_SSE_OTHER = new NASMTokenType("INS_SSE_OTHER");
+  IElementType INS_SSE_PREFETCH = new NASMTokenType("INS_SSE_PREFETCH");
+  IElementType INS_SSE_SIMD_INT = new NASMTokenType("INS_SSE_SIMD_INT");
+  IElementType INS_SSE_STATE = new NASMTokenType("INS_SSE_STATE");
   IElementType INS_STRING_DATA = new NASMTokenType("INS_STRING_DATA");
   IElementType LABEL = new NASMTokenType("LABEL");
   IElementType LABEL_DEF = new NASMTokenType("LABEL_DEF");
@@ -91,6 +101,7 @@ public interface NASMTypes {
   IElementType SIZE_TYPE = new NASMTokenType("SIZE_TYPE");
   IElementType SQUARE_L = new NASMTokenType("[");
   IElementType SQUARE_R = new NASMTokenType("]");
+  IElementType SSE_OP = new NASMTokenType("SSE_OP");
   IElementType STRING = new NASMTokenType("STRING");
   IElementType TIMES = new NASMTokenType("*");
   IElementType X64_OP = new NASMTokenType("X64_OP");
