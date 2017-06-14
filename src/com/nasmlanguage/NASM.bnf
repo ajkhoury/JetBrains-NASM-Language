@@ -124,7 +124,7 @@ private MnemonicOperationArg ::= REGISTER | NUMBER | Address | Identifier | Macr
 Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R
 private AddressInternal ::= (REGISTER (PLUS (NUMBER TIMES)? (NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | Identifier
 
-private MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R)
+MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R)
 private MacroParams ::= (NUMBER MINUS (NUMBER TIMES|TIMES|NUMBER) | NUMBER PLUS)
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NUMBER)
 

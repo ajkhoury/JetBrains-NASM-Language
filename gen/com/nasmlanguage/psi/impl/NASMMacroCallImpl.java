@@ -11,14 +11,14 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
+public class NASMMacroCallImpl extends ASTWrapperPsiElement implements NASMMacroCall {
 
-  public NASMDefineImpl(ASTNode node) {
+  public NASMMacroCallImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitDefine(this);
+    visitor.visitMacroCall(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -30,16 +30,6 @@ public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
   @NotNull
   public List<NASMMacroCall> getMacroCallList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMMacroCall.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getDefineTag() {
-    return findNotNullChildByType(DEFINE_TAG);
-  }
-
-  public String getDefine() {
-    return NASMPsiImplUtil.getDefine(this);
   }
 
 }

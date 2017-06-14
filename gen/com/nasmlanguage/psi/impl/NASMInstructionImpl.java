@@ -39,6 +39,12 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
   }
 
   @Override
+  @NotNull
+  public List<NASMMacroCall> getMacroCallList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMMacroCall.class);
+  }
+
+  @Override
   @Nullable
   public PsiElement getComment() {
     return findChildByType(COMMENT);

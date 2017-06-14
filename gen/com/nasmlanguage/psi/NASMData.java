@@ -10,6 +10,9 @@ public interface NASMData extends PsiElement {
   @Nullable
   NASMDataValue getDataValue();
 
+  @NotNull
+  List<NASMMacroCall> getMacroCallList();
+
   @Nullable
   PsiElement getDataOp();
 

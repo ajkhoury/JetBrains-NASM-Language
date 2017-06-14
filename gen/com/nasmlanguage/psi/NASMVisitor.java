@@ -51,6 +51,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMacroCall(@NotNull NASMMacroCall o) {
+    visitPsiElement(o);
+  }
+
   public void visitPreprocessor(@NotNull NASMPreprocessor o) {
     visitPsiElement(o);
   }

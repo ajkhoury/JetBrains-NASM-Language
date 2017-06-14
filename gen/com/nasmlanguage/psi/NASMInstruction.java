@@ -13,6 +13,9 @@ public interface NASMInstruction extends PsiElement {
   @Nullable
   NASMDirective getDirective();
 
+  @NotNull
+  List<NASMMacroCall> getMacroCallList();
+
   @Nullable
   PsiElement getComment();
 

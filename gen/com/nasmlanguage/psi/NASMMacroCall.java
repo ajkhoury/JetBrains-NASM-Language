@@ -5,14 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMDefine extends PsiElement {
+public interface NASMMacroCall extends PsiElement {
 
   @NotNull
   List<NASMMacroCall> getMacroCallList();
-
-  @NotNull
-  PsiElement getDefineTag();
-
-  String getDefine();
 
 }

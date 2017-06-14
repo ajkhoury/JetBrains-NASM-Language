@@ -22,9 +22,11 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey COMMENT = createTextAttributesKey("NASM_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey LABEL = createTextAttributesKey("NASM_LABEL", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
     public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("NASM_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
+    public static final TextAttributesKey MACRO_CALL = createTextAttributesKey("NASM_MACRO_CALL", DefaultLanguageHighlighterColors.FUNCTION_CALL);
     public static final TextAttributesKey DIRECTIVE = createTextAttributesKey("NASM_DIRECTIVE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey STRING = createTextAttributesKey("NASM_STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("NASM_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
+
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = { BAD_CHARACTER };
     private static final TextAttributesKey[] SEPARATOR_KEYS = { SEPARATOR };
@@ -39,6 +41,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] COMMENT_KEYS = { COMMENT };
     private static final TextAttributesKey[] LABEL_KEYS = { LABEL };
     private static final TextAttributesKey[] IDENTIFIER_KEYS = { IDENTIFIER };
+    private static final TextAttributesKey[] MACRO_CALL_KEYS = { MACRO_CALL };
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
     @NotNull
@@ -56,6 +59,8 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             return SEPARATOR_KEYS;
         } else if (tokenType.equals(NASMTypes.SIZE_TYPE)) {
             return SIZE_TYPE_KEYS;
+        } else if (tokenType.equals(NASMTypes.MACRO_CALL)) {
+            return MACRO_CALL_KEYS;
         } else if (tokenType.equals(NASMTypes.INS_PREFIX)) {
             return INS_PREFIX_KEYS;
         } else if (tokenType.equals(NASMTypes.MNEMONIC_OP) || tokenType.equals(NASMTypes.DATA_OP))  {

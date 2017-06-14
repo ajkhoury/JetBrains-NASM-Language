@@ -33,6 +33,12 @@ public class NASMDataImpl extends ASTWrapperPsiElement implements NASMData {
   }
 
   @Override
+  @NotNull
+  public List<NASMMacroCall> getMacroCallList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMMacroCall.class);
+  }
+
+  @Override
   @Nullable
   public PsiElement getDataOp() {
     return findChildByType(DATA_OP);

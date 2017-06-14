@@ -19,6 +19,7 @@ public interface NASMTypes {
   IElementType INCLUDE = new NASMElementType("INCLUDE");
   IElementType INSTRUCTION = new NASMElementType("INSTRUCTION");
   IElementType MACRO = new NASMElementType("MACRO");
+  IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
 
   IElementType BSS_SECTION_NAME = new NASMTokenType("BSS_SECTION_NAME");
@@ -112,6 +113,9 @@ public interface NASMTypes {
       }
       else if (type == MACRO) {
         return new NASMMacroImpl(node);
+      }
+      else if (type == MACRO_CALL) {
+        return new NASMMacroCallImpl(node);
       }
       else if (type == PREPROCESSOR) {
         return new NASMPreprocessorImpl(node);

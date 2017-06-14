@@ -56,6 +56,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     else if (t == MACRO) {
       r = Macro(b, 0);
     }
+    else if (t == MACRO_CALL) {
+      r = MacroCall(b, 0);
+    }
     else if (t == PREPROCESSOR) {
       r = Preprocessor(b, 0);
     }
@@ -835,7 +838,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R
-  static boolean MacroCall(PsiBuilder b, int l) {
+  public static boolean MacroCall(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroCall")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
@@ -843,7 +846,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, IDENTIFIER, ROUND_L);
     r = r && MacroCall_2(b, l + 1);
     r = r && consumeToken(b, ROUND_R);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, MACRO_CALL, r);
     return r;
   }
 

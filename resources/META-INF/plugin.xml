@@ -27,7 +27,7 @@
     <lang.parserDefinition language="NASM" implementationClass="com.nasmlanguage.NASMParserDefinition"/>
     <lang.syntaxHighlighterFactory key="NASM" implementationClass="com.nasmlanguage.NASMSyntaxHighlighterFactory"/>
     <colorSettingsPage implementation="com.nasmlanguage.NASMColorSettingsPage"/>
-
+    <annotator language="NASM" implementationClass="com.nasmlanguage.NASMAnnotator"/>
   </extensions>
 
   <actions>
