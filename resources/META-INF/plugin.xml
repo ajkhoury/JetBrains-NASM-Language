@@ -10,6 +10,11 @@
 
   <change-notes><![CDATA[
       Version 0.0.1 pre-release<br>
+      <ul>
+      <li>General, FPU, MMX, and SSE instruction support</li>
+      <li>Syntax highlighting/li>
+      <li>Single and multiline macro support</li>
+      <li>Preprocessor directives support</li>
     ]]>
   </change-notes>
 
