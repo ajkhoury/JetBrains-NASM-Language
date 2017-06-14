@@ -6,6 +6,14 @@ There is a plugin in development [here](https://plugins.jetbrains.com/plugin/938
 
 ![NASM Language](https://github.com/dude719/JetBrains-NASM-Language/blob/master/resources/nasm.png "NASM Language Preview")
 
+# Changes
+
+Version 0.0.2 pre-release
+- General, FPU, MMX, and SSE instruction support
+- Syntax highlighting
+- Single and multiline macro support
+- Preprocessor directives support
+
 # License
 
 Copyright (C) 2016 Aidan Khoury (dude719)
