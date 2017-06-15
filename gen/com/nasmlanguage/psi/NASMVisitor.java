@@ -15,6 +15,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitConditional(@NotNull NASMConditional o) {
+    visitPsiElement(o);
+  }
+
   public void visitData(@NotNull NASMData o) {
     visitPsiElement(o);
   }

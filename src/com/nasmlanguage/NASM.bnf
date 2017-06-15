@@ -21,10 +21,16 @@
         COMMENT             = 'regexp:;.*'
         EQU                 = 'regexp:[eE][qQ][uU]'
         SECTION_TAG         = 'regexp:[sS][eE][cC][tT][iI][oO][nN]'
-        INCLUDE_TAG         = 'regexp:\%[iI][nN][cC][lL][uU][dD][eE]'
-        DEFINE_TAG          = 'regexp:\%([xX]?[iI]?[dD][eE][fF][iI][nN][eE])'
-        MACRO_TAG           = 'regexp:\%([iI]?[mM][aA][cC][rR][oO])'
-        MACRO_END_TAG       = 'regexp:\%([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
+        INCLUDE_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][nN][cC][lL][uU][dD][eE])'
+        DEFINE_TAG          = 'regexp:((\s+)?[#%](\s+)?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])'
+        MACRO_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI]?[mM][aA][cC][rR][oO])'
+        MACRO_END_TAG       = 'regexp:((\s+)?[#%](\s+)?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
+        IF_TAG              = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][nN]?([dD][eE][fF])?)'
+        IFMACRO_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][mM][aA][cC][rR][oO])'
+        IFCTX_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][cC][tT][xX])'
+        ELIF_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)'
+        ELSE_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][sS][eE])'
+        ENDIF_TAG           = 'regexp:((\s+)?[#%](\s+)?)([eE][nN][dD][iI][fF])'
         CODE_SECTION_NAME   = 'regexp:\.[tT][eE][xX][tT]'
         DATA_SECTION_NAME   = 'regexp:\.[dD][aA][tT][aA]'
         BSS_SECTION_NAME    = 'regexp:\.[bB][sS][sS]'
@@ -125,6 +131,8 @@
         SEPARATOR           = ','
         DOT                 = '.'
 
+        EQUAL               = '='
+        EQUALEQUAL          = '=='
         PLUS                = '+'
         MINUS               = '-'
         TIMES               = '*'
@@ -156,11 +164,13 @@ private Section ::= DataSection | CodeSection
 DataSection ::= (SECTION_TAG DATA_SECTION_NAME CRLF* (Data | Directive)*)
 CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction | Directive)*)
 
-Preprocessor ::= (Include | Define | Macro | PREPROCESSOR_OP)
+Preprocessor ::= (Include | Define | Macro | Conditional | PREPROCESSOR_OP)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG IDENTIFIER (NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)))
         | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression) {methods=[getDefineIdentifier]}
-Macro ::= (MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data | Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
+Macro ::= (MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
+Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
+                | (IFMACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 
 Directive ::= (DIRECTIVE_OP (DirectiveArg)*)
 DirectiveArg ::= NumericLiteral | Address | Identifier
@@ -181,6 +191,8 @@ private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral)
 
 private NumericExpression ::= (((NumericLiteral|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NumericLiteral|MacroCall|IDENTIFIER))
 private Expression ::= (((NumericLiteral|REGISTER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NumericLiteral|REGISTER|MacroCall|IDENTIFIER))
+
+private Condition ::= ((Expression EQUALEQUAL Expression)|Expression)
 
 private Identifier ::= (SIZE_TYPE? (LABEL|IDENTIFIER))
 private NumericLiteral ::= ((PLUS|MINUS)? NUMBER)

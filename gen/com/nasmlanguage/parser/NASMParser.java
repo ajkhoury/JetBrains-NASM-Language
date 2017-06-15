@@ -29,6 +29,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     else if (t == CODE_SECTION) {
       r = CodeSection(b, 0);
     }
+    else if (t == CONDITIONAL) {
+      r = Conditional(b, 0);
+    }
     else if (t == DATA) {
       r = Data(b, 0);
     }
@@ -304,6 +307,238 @@ public class NASMParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = Instruction(b, l + 1);
     if (!r) r = Directive(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (Expression EQUALEQUAL Expression)|Expression
+  static boolean Condition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Condition")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Condition_0(b, l + 1);
+    if (!r) r = Expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Expression EQUALEQUAL Expression
+  private static boolean Condition_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Condition_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Expression(b, l + 1);
+    r = r && consumeToken(b, EQUALEQUAL);
+    r = r && Expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
+  //                 | (IFMACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
+  public static boolean Conditional(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional")) return false;
+    if (!nextTokenIs(b, "<conditional>", IFMACRO_TAG, IF_TAG)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, CONDITIONAL, "<conditional>");
+    r = Conditional_0(b, l + 1);
+    if (!r) r = Conditional_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG
+  private static boolean Conditional_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IF_TAG);
+    r = r && Condition(b, l + 1);
+    r = r && Conditional_0_2(b, l + 1);
+    r = r && Conditional_0_3(b, l + 1);
+    r = r && Conditional_0_4(b, l + 1);
+    r = r && consumeToken(b, ENDIF_TAG);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean Conditional_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_0_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (Preprocessor|Directive|Data|Instruction)*
+  private static boolean Conditional_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_3")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!Conditional_0_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_0_3", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // Preprocessor|Directive|Data|Instruction
+  private static boolean Conditional_0_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Preprocessor(b, l + 1);
+    if (!r) r = Directive(b, l + 1);
+    if (!r) r = Data(b, l + 1);
+    if (!r) r = Instruction(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*
+  private static boolean Conditional_0_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_4")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!Conditional_0_4_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_0_4", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*
+  private static boolean Conditional_0_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_4_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Conditional_0_4_0_0(b, l + 1);
+    r = r && Conditional_0_4_0_1(b, l + 1);
+    r = r && Conditional_0_4_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ELIF_TAG Condition|ELSE_TAG
+  private static boolean Conditional_0_4_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_4_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Conditional_0_4_0_0_0(b, l + 1);
+    if (!r) r = consumeToken(b, ELSE_TAG);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ELIF_TAG Condition
+  private static boolean Conditional_0_4_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_4_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ELIF_TAG);
+    r = r && Condition(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean Conditional_0_4_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_4_0_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_0_4_0_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (Preprocessor|Directive|Data|Instruction)*
+  private static boolean Conditional_0_4_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_4_0_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!Conditional_0_4_0_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_0_4_0_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // Preprocessor|Directive|Data|Instruction
+  private static boolean Conditional_0_4_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_4_0_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Preprocessor(b, l + 1);
+    if (!r) r = Directive(b, l + 1);
+    if (!r) r = Data(b, l + 1);
+    if (!r) r = Instruction(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // IFMACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG
+  private static boolean Conditional_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, IFMACRO_TAG, IDENTIFIER);
+    r = r && MacroParams(b, l + 1);
+    r = r && Conditional_1_3(b, l + 1);
+    r = r && Conditional_1_4(b, l + 1);
+    r = r && Conditional_1_5(b, l + 1);
+    r = r && consumeToken(b, ENDIF_TAG);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // MacroDefaultParam?
+  private static boolean Conditional_1_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_1_3")) return false;
+    MacroDefaultParam(b, l + 1);
+    return true;
+  }
+
+  // CRLF*
+  private static boolean Conditional_1_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_1_4")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_1_4", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (Preprocessor|Directive|Data|Instruction)*
+  private static boolean Conditional_1_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_1_5")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!Conditional_1_5_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_1_5", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // Preprocessor|Directive|Data|Instruction
+  private static boolean Conditional_1_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_1_5_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Preprocessor(b, l + 1);
+    if (!r) r = Directive(b, l + 1);
+    if (!r) r = Data(b, l + 1);
+    if (!r) r = Instruction(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -895,7 +1130,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data | Instruction)* MACRO_END_TAG
+  // MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG
   public static boolean Macro(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro")) return false;
     if (!nextTokenIs(b, MACRO_TAG)) return false;
@@ -930,7 +1165,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (Data | Instruction)*
+  // (Data|Instruction)*
   private static boolean Macro_5(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_5")) return false;
     int c = current_position_(b);
@@ -942,7 +1177,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Data | Instruction
+  // Data|Instruction
   private static boolean Macro_5_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_5_0")) return false;
     boolean r;
@@ -1244,7 +1479,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Include | Define | Macro | PREPROCESSOR_OP
+  // Include | Define | Macro | Conditional | PREPROCESSOR_OP
   public static boolean Preprocessor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Preprocessor")) return false;
     boolean r;
@@ -1252,6 +1487,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = Include(b, l + 1);
     if (!r) r = Define(b, l + 1);
     if (!r) r = Macro(b, l + 1);
+    if (!r) r = Conditional(b, l + 1);
     if (!r) r = consumeToken(b, PREPROCESSOR_OP);
     exit_section_(b, l, m, r, false, null);
     return r;

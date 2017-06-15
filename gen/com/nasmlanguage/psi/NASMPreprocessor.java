@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMPreprocessor extends PsiElement {
 
   @Nullable
+  NASMConditional getConditional();
+
+  @Nullable
   NASMDefine getDefine();
 
   @Nullable

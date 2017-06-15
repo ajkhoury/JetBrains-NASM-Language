@@ -29,10 +29,16 @@ CRLF=\R|\n|\r\n
 COMMENT=;.*
 EQU=[eE][qQ][uU]
 SECTION_TAG=[sS][eE][cC][tT][iI][oO][nN]
-INCLUDE_TAG=\%[iI][nN][cC][lL][uU][dD][eE]
-DEFINE_TAG=\%([xX]?[iI]?[dD][eE][fF][iI][nN][eE])
-MACRO_TAG=\%([iI]?[mM][aA][cC][rR][oO])
-MACRO_END_TAG=\%([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
+INCLUDE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][nN][cC][lL][uU][dD][eE])
+DEFINE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])
+MACRO_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI]?[mM][aA][cC][rR][oO])
+MACRO_END_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
+IF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][nN]?([dD][eE][fF])?)
+IFMACRO_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][mM][aA][cC][rR][oO])
+IFCTX_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][cC][tT][xX])
+ELIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)
+ELSE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][sS][eE])
+ENDIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][nN][dD][iI][fF])
 CODE_SECTION_NAME=\.[tT][eE][xX][tT]
 DATA_SECTION_NAME=\.[dD][aA][tT][aA]
 BSS_SECTION_NAME=\.[bB][sS][sS]
@@ -115,6 +121,8 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   ")"                         { return ROUND_R; }
   ","                         { return SEPARATOR; }
   "."                         { return DOT; }
+  "="                         { return EQUAL; }
+  "=="                        { return EQUALEQUAL; }
   "+"                         { return PLUS; }
   "-"                         { return MINUS; }
   "*"                         { return TIMES; }
@@ -131,6 +139,12 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {DEFINE_TAG}                { return DEFINE_TAG; }
   {MACRO_TAG}                 { return MACRO_TAG; }
   {MACRO_END_TAG}             { return MACRO_END_TAG; }
+  {IF_TAG}                    { return IF_TAG; }
+  {IFMACRO_TAG}               { return IFMACRO_TAG; }
+  {IFCTX_TAG}                 { return IFCTX_TAG; }
+  {ELIF_TAG}                  { return ELIF_TAG; }
+  {ELSE_TAG}                  { return ELSE_TAG; }
+  {ENDIF_TAG}                 { return ENDIF_TAG; }
   {CODE_SECTION_NAME}         { return CODE_SECTION_NAME; }
   {DATA_SECTION_NAME}         { return DATA_SECTION_NAME; }
   {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }

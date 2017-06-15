@@ -28,6 +28,12 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
 
   @Override
   @Nullable
+  public NASMConditional getConditional() {
+    return findChildByClass(NASMConditional.class);
+  }
+
+  @Override
+  @Nullable
   public NASMDefine getDefine() {
     return findChildByClass(NASMDefine.class);
   }

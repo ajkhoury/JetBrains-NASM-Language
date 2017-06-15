@@ -10,6 +10,7 @@ public interface NASMTypes {
 
   IElementType ADDRESS = new NASMElementType("ADDRESS");
   IElementType CODE_SECTION = new NASMElementType("CODE_SECTION");
+  IElementType CONDITIONAL = new NASMElementType("CONDITIONAL");
   IElementType DATA = new NASMElementType("DATA");
   IElementType DATA_SECTION = new NASMElementType("DATA_SECTION");
   IElementType DATA_VALUE = new NASMElementType("DATA_VALUE");
@@ -35,10 +36,18 @@ public interface NASMTypes {
   IElementType DOLLARSIGN = new NASMTokenType("$");
   IElementType DOLLARSIGN2 = new NASMTokenType("$$");
   IElementType DOT = new NASMTokenType(".");
+  IElementType ELIF_TAG = new NASMTokenType("ELIF_TAG");
+  IElementType ELSE_TAG = new NASMTokenType("ELSE_TAG");
+  IElementType ENDIF_TAG = new NASMTokenType("ENDIF_TAG");
   IElementType EQU = new NASMTokenType("EQU");
+  IElementType EQUAL = new NASMTokenType("=");
+  IElementType EQUALEQUAL = new NASMTokenType("==");
   IElementType FPU_OP = new NASMTokenType("FPU_OP");
   IElementType GENERAL_OP = new NASMTokenType("GENERAL_OP");
   IElementType IDENTIFIER = new NASMTokenType("IDENTIFIER");
+  IElementType IFCTX_TAG = new NASMTokenType("IFCTX_TAG");
+  IElementType IFMACRO_TAG = new NASMTokenType("IFMACRO_TAG");
+  IElementType IF_TAG = new NASMTokenType("IF_TAG");
   IElementType INCLUDE_TAG = new NASMTokenType("INCLUDE_TAG");
   IElementType INS_64_BIT = new NASMTokenType("INS_64_BIT");
   IElementType INS_BINARY_ARITH = new NASMTokenType("INS_BINARY_ARITH");
@@ -123,6 +132,9 @@ public interface NASMTypes {
       }
       else if (type == CODE_SECTION) {
         return new NASMCodeSectionImpl(node);
+      }
+      else if (type == CONDITIONAL) {
+        return new NASMConditionalImpl(node);
       }
       else if (type == DATA) {
         return new NASMDataImpl(node);
