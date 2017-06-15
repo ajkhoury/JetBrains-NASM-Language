@@ -107,7 +107,7 @@
 
 
 
-        REGISTER            = 'regexp:[a-d][lh]|([er])?[a-d]x|([er])?[sb]p|([er])?[sd]i|[c-gs]s|st[0-7]|x?mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
+        REGISTER            = 'regexp:%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))'
         SIZE_TYPE           = 'regexp:byte|short|[dq]?word'
         NUMBER              = 'regexp:0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0d[0-9]+|[0-9]+'
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
