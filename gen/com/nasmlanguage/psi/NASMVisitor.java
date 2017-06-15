@@ -43,6 +43,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitError(@NotNull NASMError o) {
+    visitPsiElement(o);
+  }
+
   public void visitInclude(@NotNull NASMInclude o) {
     visitPsiElement(o);
   }

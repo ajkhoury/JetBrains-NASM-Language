@@ -31,6 +31,7 @@
         ELIF_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)'
         ELSE_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][sS][eE])'
         ENDIF_TAG           = 'regexp:((\s+)?[#%](\s+)?)([eE][nN][dD][iI][fF])'
+        ERROR_TAG           = 'regexp:((\s+)?[#%](\s+)?)([eE][rR][rR][oO][rR])'
         CODE_SECTION_NAME   = 'regexp:\.[tT][eE][xX][tT]'
         DATA_SECTION_NAME   = 'regexp:\.[dD][aA][tT][aA]'
         BSS_SECTION_NAME    = 'regexp:\.[bB][sS][sS]'
@@ -122,6 +123,7 @@
         // Make last!
         IDENTIFIER          = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
         LABEL               = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Label can have chars like '.', '?', '@', etc
+        PUNCTUATION         = "regexp:[-*,.():!\"']+"
 
         COLON               = ':'
         SQUARE_L            = '['
@@ -142,6 +144,9 @@
         DOLLARSIGN2         = '$$'
         PERCENT             = '%'
 
+        //BAD_CHARACTER       = 'regexp:[^]'
+        //ANYTHING_SINGLELINE = 'regexp:[^\n]+'
+        //ANYTHING_MULTILINE  = 'regexp:[\s\S]*'
     ]
 
 }
@@ -164,11 +169,12 @@ private Section ::= DataSection | CodeSection
 DataSection ::= (SECTION_TAG DATA_SECTION_NAME CRLF* (Data | Directive)*)
 CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction | Directive)*)
 
-Preprocessor ::= (Include | Define | Macro | Conditional | PREPROCESSOR_OP)
+Preprocessor ::= (Include | Define | Macro | Error | Conditional | PREPROCESSOR_OP)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG IDENTIFIER (NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)))
         | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression) {methods=[getDefineIdentifier]}
 Macro ::= (MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
+Error ::= (ERROR_TAG ((IDENTIFIER|PUNCTUATION) '\s+'?)*)
 Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
                 | (IFMACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 

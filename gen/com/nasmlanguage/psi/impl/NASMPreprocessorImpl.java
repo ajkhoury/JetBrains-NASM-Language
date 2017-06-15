@@ -40,6 +40,12 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
 
   @Override
   @Nullable
+  public NASMError getError() {
+    return findChildByClass(NASMError.class);
+  }
+
+  @Override
+  @Nullable
   public NASMInclude getInclude() {
     return findChildByClass(NASMInclude.class);
   }

@@ -39,6 +39,7 @@ IFCTX_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][cC][tT][xX])
 ELIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)
 ELSE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][sS][eE])
 ENDIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][nN][dD][iI][fF])
+ERROR_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][rR][rR][oO][rR])
 CODE_SECTION_NAME=\.[tT][eE][xX][tT]
 DATA_SECTION_NAME=\.[dD][aA][tT][aA]
 BSS_SECTION_NAME=\.[bB][sS][sS]
@@ -109,6 +110,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 LABEL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
 IDENTIFIER=[a-zA-Z_][a-zA-Z0-9_]*
 LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
+PUNCTUATION=[-*,.():!\"']+
 
 %%
 <YYINITIAL> {
@@ -145,6 +147,7 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {ELIF_TAG}                  { return ELIF_TAG; }
   {ELSE_TAG}                  { return ELSE_TAG; }
   {ENDIF_TAG}                 { return ENDIF_TAG; }
+  {ERROR_TAG}                 { return ERROR_TAG; }
   {CODE_SECTION_NAME}         { return CODE_SECTION_NAME; }
   {DATA_SECTION_NAME}         { return DATA_SECTION_NAME; }
   {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }
@@ -166,6 +169,7 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {LABEL_DEF}                 { return LABEL_DEF; }
   {IDENTIFIER}                { return IDENTIFIER; }
   {LABEL}                     { return LABEL; }
+  {PUNCTUATION}               { return PUNCTUATION; }
 
 }
 

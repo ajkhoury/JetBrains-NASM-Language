@@ -17,6 +17,7 @@ public interface NASMTypes {
   IElementType DEFINE = new NASMElementType("DEFINE");
   IElementType DIRECTIVE = new NASMElementType("DIRECTIVE");
   IElementType DIRECTIVE_ARG = new NASMElementType("DIRECTIVE_ARG");
+  IElementType ERROR = new NASMElementType("ERROR");
   IElementType INCLUDE = new NASMElementType("INCLUDE");
   IElementType INSTRUCTION = new NASMElementType("INSTRUCTION");
   IElementType MACRO = new NASMElementType("MACRO");
@@ -42,6 +43,7 @@ public interface NASMTypes {
   IElementType EQU = new NASMTokenType("EQU");
   IElementType EQUAL = new NASMTokenType("=");
   IElementType EQUALEQUAL = new NASMTokenType("==");
+  IElementType ERROR_TAG = new NASMTokenType("ERROR_TAG");
   IElementType FPU_OP = new NASMTokenType("FPU_OP");
   IElementType GENERAL_OP = new NASMTokenType("GENERAL_OP");
   IElementType IDENTIFIER = new NASMTokenType("IDENTIFIER");
@@ -110,6 +112,7 @@ public interface NASMTypes {
   IElementType PERCENT = new NASMTokenType("%");
   IElementType PLUS = new NASMTokenType("+");
   IElementType PREPROCESSOR_OP = new NASMTokenType("PREPROCESSOR_OP");
+  IElementType PUNCTUATION = new NASMTokenType("PUNCTUATION");
   IElementType REGISTER = new NASMTokenType("REGISTER");
   IElementType ROUND_L = new NASMTokenType("(");
   IElementType ROUND_R = new NASMTokenType(")");
@@ -153,6 +156,9 @@ public interface NASMTypes {
       }
       else if (type == DIRECTIVE_ARG) {
         return new NASMDirectiveArgImpl(node);
+      }
+      else if (type == ERROR) {
+        return new NASMErrorImpl(node);
       }
       else if (type == INCLUDE) {
         return new NASMIncludeImpl(node);
