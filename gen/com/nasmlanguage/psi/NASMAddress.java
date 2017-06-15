@@ -7,10 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMAddress extends PsiElement {
 
-  @Nullable
-  PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getLabel();
+  @NotNull
+  List<NASMMacroCall> getMacroCallList();
 
 }

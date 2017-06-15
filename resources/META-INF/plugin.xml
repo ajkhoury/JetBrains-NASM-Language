@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.nasmlanguage</id>
   <name>NASM Language</name>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
 
   <description><![CDATA[
@@ -9,10 +9,10 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      Version 0.0.1 pre-release<br>
+      Version 0.0.2 pre-release<br>
       <ul>
       <li>General, FPU, MMX, and SSE instruction support</li>
-      <li>Syntax highlighting/li>
+      <li>Syntax highlighting</li>
       <li>Single and multiline macro support</li>
       <li>Preprocessor directives support</li>
     ]]>

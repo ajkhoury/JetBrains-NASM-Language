@@ -2,6 +2,7 @@ package com.nasmlanguage;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -12,8 +13,8 @@ import java.util.*;
 
 public class NASMUtil {
 
-    public static List<NASMMacro> findPreprocessorMacros(Project project) {
-        List<NASMMacro> result = new ArrayList<>();
+    public static List<PsiElement> findPreprocessorMacros(Project project) {
+        List<PsiElement> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
             FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
         );
@@ -26,6 +27,10 @@ public class NASMUtil {
                         NASMMacro macro = nasmPreprocessor.getMacro();
                         if (macro != null) {
                             result.add(macro);
+                        } else {
+                            NASMDefine define = nasmPreprocessor.getDefine();
+                            if (define != null)
+                                result.add(define);
                         }
                     }
                 }

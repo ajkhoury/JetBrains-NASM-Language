@@ -95,102 +95,166 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (REGISTER (PLUS (NUMBER TIMES)? (NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?) | Identifier
+  // (REGISTER|MacroCall|Identifier) ((PLUS|MINUS|TIMES) (((NUMBER|MacroCall|Identifier) (PLUS|MINUS|TIMES))*)? (NUMBER|REGISTER|MacroCall|Identifier))? ((PLUS|MINUS|TIMES) (NUMBER|MacroCall|Identifier))?
   static boolean AddressInternal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddressInternal")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = AddressInternal_0(b, l + 1);
-    if (!r) r = Identifier(b, l + 1);
+    r = r && AddressInternal_1(b, l + 1);
+    r = r && AddressInternal_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // REGISTER (PLUS (NUMBER TIMES)? (NUMBER|REGISTER))? ((PLUS|MINUS|TIMES) NUMBER)?
+  // REGISTER|MacroCall|Identifier
   private static boolean AddressInternal_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddressInternal_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, REGISTER);
-    r = r && AddressInternal_0_1(b, l + 1);
-    r = r && AddressInternal_0_2(b, l + 1);
+    if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (PLUS (NUMBER TIMES)? (NUMBER|REGISTER))?
-  private static boolean AddressInternal_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_0_1")) return false;
-    AddressInternal_0_1_0(b, l + 1);
+  // ((PLUS|MINUS|TIMES) (((NUMBER|MacroCall|Identifier) (PLUS|MINUS|TIMES))*)? (NUMBER|REGISTER|MacroCall|Identifier))?
+  private static boolean AddressInternal_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1")) return false;
+    AddressInternal_1_0(b, l + 1);
     return true;
   }
 
-  // PLUS (NUMBER TIMES)? (NUMBER|REGISTER)
-  private static boolean AddressInternal_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_0_1_0")) return false;
+  // (PLUS|MINUS|TIMES) (((NUMBER|MacroCall|Identifier) (PLUS|MINUS|TIMES))*)? (NUMBER|REGISTER|MacroCall|Identifier)
+  private static boolean AddressInternal_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, PLUS);
-    r = r && AddressInternal_0_1_0_1(b, l + 1);
-    r = r && AddressInternal_0_1_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (NUMBER TIMES)?
-  private static boolean AddressInternal_0_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_0_1_0_1")) return false;
-    AddressInternal_0_1_0_1_0(b, l + 1);
-    return true;
-  }
-
-  // NUMBER TIMES
-  private static boolean AddressInternal_0_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_0_1_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, NUMBER, TIMES);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // NUMBER|REGISTER
-  private static boolean AddressInternal_0_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_0_1_0_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, NUMBER);
-    if (!r) r = consumeToken(b, REGISTER);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ((PLUS|MINUS|TIMES) NUMBER)?
-  private static boolean AddressInternal_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_0_2")) return false;
-    AddressInternal_0_2_0(b, l + 1);
-    return true;
-  }
-
-  // (PLUS|MINUS|TIMES) NUMBER
-  private static boolean AddressInternal_0_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_0_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = AddressInternal_0_2_0_0(b, l + 1);
-    r = r && consumeToken(b, NUMBER);
+    r = AddressInternal_1_0_0(b, l + 1);
+    r = r && AddressInternal_1_0_1(b, l + 1);
+    r = r && AddressInternal_1_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // PLUS|MINUS|TIMES
-  private static boolean AddressInternal_0_2_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_0_2_0_0")) return false;
+  private static boolean AddressInternal_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, PLUS);
     if (!r) r = consumeToken(b, MINUS);
     if (!r) r = consumeToken(b, TIMES);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (((NUMBER|MacroCall|Identifier) (PLUS|MINUS|TIMES))*)?
+  private static boolean AddressInternal_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_1")) return false;
+    AddressInternal_1_0_1_0(b, l + 1);
+    return true;
+  }
+
+  // ((NUMBER|MacroCall|Identifier) (PLUS|MINUS|TIMES))*
+  private static boolean AddressInternal_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_1_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!AddressInternal_1_0_1_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "AddressInternal_1_0_1_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (NUMBER|MacroCall|Identifier) (PLUS|MINUS|TIMES)
+  private static boolean AddressInternal_1_0_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = AddressInternal_1_0_1_0_0_0(b, l + 1);
+    r = r && AddressInternal_1_0_1_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NUMBER|MacroCall|Identifier
+  private static boolean AddressInternal_1_0_1_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_1_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NUMBER);
+    if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // PLUS|MINUS|TIMES
+  private static boolean AddressInternal_1_0_1_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_1_0_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, TIMES);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NUMBER|REGISTER|MacroCall|Identifier
+  private static boolean AddressInternal_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NUMBER);
+    if (!r) r = consumeToken(b, REGISTER);
+    if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ((PLUS|MINUS|TIMES) (NUMBER|MacroCall|Identifier))?
+  private static boolean AddressInternal_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_2")) return false;
+    AddressInternal_2_0(b, l + 1);
+    return true;
+  }
+
+  // (PLUS|MINUS|TIMES) (NUMBER|MacroCall|Identifier)
+  private static boolean AddressInternal_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = AddressInternal_2_0_0(b, l + 1);
+    r = r && AddressInternal_2_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // PLUS|MINUS|TIMES
+  private static boolean AddressInternal_2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_2_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, TIMES);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NUMBER|MacroCall|Identifier
+  private static boolean AddressInternal_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_2_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NUMBER);
+    if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1028,7 +1092,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // REGISTER | NUMBER | Address | Identifier | MacroCall
+  // REGISTER | NUMBER | Address | MacroCall | Identifier
   static boolean MnemonicOperationArg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MnemonicOperationArg")) return false;
     boolean r;
@@ -1036,8 +1100,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, REGISTER);
     if (!r) r = consumeToken(b, NUMBER);
     if (!r) r = Address(b, l + 1);
-    if (!r) r = Identifier(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

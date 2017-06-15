@@ -27,15 +27,9 @@ public class NASMAddressImpl extends ASTWrapperPsiElement implements NASMAddress
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLabel() {
-    return findChildByType(LABEL);
+  @NotNull
+  public List<NASMMacroCall> getMacroCallList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMMacroCall.class);
   }
 
 }

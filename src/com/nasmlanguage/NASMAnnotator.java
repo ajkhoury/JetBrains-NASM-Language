@@ -1,7 +1,7 @@
 package com.nasmlanguage;
 
 import com.intellij.lang.annotation.*;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -15,26 +15,23 @@ public class NASMAnnotator implements Annotator {
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof NASMMacroCall) {
             NASMMacroCall macroCall = (NASMMacroCall)element;
-            String value = macroCall.getText();
-            if (value != null && value.length() > 0) {
+            String macroCallText = macroCall.getText();
+            if (macroCallText != null && macroCallText.length() > 0) {
                 Project project = element.getProject();
-                int idxEnd = value.indexOf('(');
-                String macroIdentifier = value.substring(0, idxEnd);
-                System.out.println("macroIdentifier = \"" + macroIdentifier + "\"");
-                List<NASMMacro> macros = NASMUtil.findPreprocessorMacros(project);
-                for (NASMMacro macro : macros) {
-                    System.out.println("macro = \"" + macro.getText() + "\"");
+                int identifierLength = macroCallText.indexOf('(');
+                String macroIdentifier = macroCallText.substring(0, identifierLength);
+                List<PsiElement> macros = NASMUtil.findPreprocessorMacros(project);
+                for (PsiElement macro : macros) {
                     String macroText = macro.getText();
                     if (macroText != null) {
                         int identifierIdx = macroText.indexOf(macroIdentifier);
                         if (identifierIdx != -1) {
-                            System.out.println("start offset = \"" + element.getTextRange().getStartOffset() + "\"");
-                            TextRange range = new TextRange(
+                            highlightTextRange(
                                     element.getTextRange().getStartOffset(),
-                                    element.getTextRange().getStartOffset() + idxEnd
+                                    identifierLength,
+                                    NASMSyntaxHighlighter.MACRO_CALL,
+                                    holder
                             );
-                            Annotation annotation = holder.createInfoAnnotation(range, null);
-                            annotation.setTextAttributes(NASMSyntaxHighlighter.MACRO_CALL);
                         }
                     }
                 }
@@ -45,28 +42,40 @@ public class NASMAnnotator implements Annotator {
             if (macro != null) {
                 String macroIdentifier = macro.getMacroIdentifier();
                 if (macroIdentifier != null) {
-                    System.out.println("macroIdentifier = \"" + macroIdentifier + "\"");
                     int identifierIdx = macro.getText().indexOf(macroIdentifier);
                     if (identifierIdx != -1) {
-                        int startOffset = element.getTextRange().getStartOffset() + identifierIdx;
-                        TextRange range = new TextRange(
-                                startOffset,
-                                startOffset + macroIdentifier.length()
+                        highlightTextRange(
+                                element.getTextRange().getStartOffset() + identifierIdx,
+                                macroIdentifier.length(),
+                                NASMSyntaxHighlighter.MACRO_CALL,
+                                holder
                         );
-                        Annotation annotation = holder.createInfoAnnotation(range, null);
-                        annotation.setTextAttributes(NASMSyntaxHighlighter.MACRO_CALL);
                     }
                 }
             }
-            //else {
-            //    NASMDefine define = nasmPreprocessor.getDefine();
-            //    if (define != null) {
-            //        String defineIdentifier = define.getDefineIdentifier();
-            //        if (defineIdentifier != null) {
-            //            System.out.println("defineIdentifier = \"" + defineIdentifier + "\"");
-            //        }
-            //    }
-            //}
+            else {
+                NASMDefine define = nasmPreprocessor.getDefine();
+                if (define != null) {
+                    String defineIdentifier = define.getDefineIdentifier();
+                    if (defineIdentifier != null) {
+                        int identifierIdx = define.getText().indexOf(defineIdentifier);
+                        if (identifierIdx != -1) {
+                            highlightTextRange(
+                                    element.getTextRange().getStartOffset() + identifierIdx,
+                                    defineIdentifier.length(),
+                                    NASMSyntaxHighlighter.MACRO_CALL,
+                                    holder
+                            );
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    private void highlightTextRange(int startOffset, int length, @NotNull TextAttributesKey textAttributes, @NotNull AnnotationHolder holder) {
+        TextRange range = new TextRange(startOffset, startOffset + length);
+        Annotation annotation = holder.createInfoAnnotation(range, null);
+        annotation.setTextAttributes(NASMSyntaxHighlighter.MACRO_CALL);
     }
 }
