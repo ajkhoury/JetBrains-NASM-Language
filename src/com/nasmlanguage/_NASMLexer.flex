@@ -81,12 +81,21 @@ INS_SSE_STATE=((ld|st)mxcsr)
 INS_SSE_SIMD_INT=(p(avg[bw]|extrw|insrw|(max|min)(sw|ub)|sadbw|shufw|mulhuw|movmskb))
 INS_SSE_CACHE_CTRL=(maskmovq|movntps|sfence)
 INS_SSE_PREFETCH=(prefetch(nta|t[0-2]|w(t1)?))
+INS_SSE2_DATA_TRANS=(mov([auhl]|msk)pd)
+INS_SSE2_ARITH=((add|div|max|min|mul|sub|sqrt)[ps]d)
+INS_SSE2_LOGICAL=((andn?|x?or)pd)
+INS_SSE2_COMPARISON=((cmpp|u?comis)d)
+INS_SSE2_OTHER=((shuf|unpck[hl])pd)
+INS_SSE2_CONVERSION=(cvt(dq2pd|pi2pd|ps2pd|pd2ps|si2sd|sd2ss|ss2sd|t?(pd2dq|pd2pi|sd2si)))|(cvt(dq2ps|ps2dq|tps2dq))
+INS_SSE2_SIMD_INT=(mov(dq[au]|q2dq|dq2q))|(p((add|sub|(s[lr]l|mulu|unpck[hl]q)d)q|shuf(d|[hl]w)))
+INS_SSE2_CACHE_CTRL=(clflush|[lm]fence|pause|maskmovdqu|movnt(dq|i|pd))
 OP_PREFIX=((rep(n?[ez])|rep)|lock|[c-gs]s)
 GENERAL_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}
 X64_OP={INS_64_BIT}
 FPU_OP={INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}
 MMX_OP={INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}
 SSE_OP={INS_SSE_DATA_TRANS}|{INS_SSE_ARITH}|{INS_SSE_COMPARISON}|{INS_SSE_LOGICAL}|{INS_SSE_OTHER}|{INS_SSE_CONVERSION}|{INS_SSE_STATE}|{INS_SSE_SIMD_INT}|{INS_SSE_CACHE_CTRL}|{INS_SSE_PREFETCH}
+SSE2_OP={INS_SSE2_DATA_TRANS}|{INS_SSE2_ARITH}|{INS_SSE2_LOGICAL}|{INS_SSE2_COMPARISON}|{INS_SSE2_OTHER}|{INS_SSE2_CONVERSION}|{INS_SSE2_SIMD_INT}|{INS_SSE2_CACHE_CTRL}
 REGISTER=[a-d][lh]|([er])?[a-d]x|([er])?[sb]p|([er])?[sd]i|[c-gs]s|st[0-7]|x?mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]
 SIZE_TYPE=byte|short|[dq]?word
 NUMBER=0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0d[0-9]+|[0-9]+
@@ -135,6 +144,7 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {FPU_OP}                    { return FPU_OP; }
   {MMX_OP}                    { return MMX_OP; }
   {SSE_OP}                    { return SSE_OP; }
+  {SSE2_OP}                   { return SSE2_OP; }
   {REGISTER}                  { return REGISTER; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }
   {NUMBER}                    { return NUMBER; }

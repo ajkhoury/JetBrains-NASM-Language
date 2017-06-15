@@ -85,6 +85,15 @@
         INS_SSE_CACHE_CTRL  = 'regexp:(maskmovq|movntps|sfence)'
         INS_SSE_PREFETCH    = 'regexp:(prefetch(nta|t[0-2]|w(t1)?))'
 
+        // SSE2 instructions
+        INS_SSE2_DATA_TRANS = 'regexp:(mov([auhl]|msk)pd)'
+        INS_SSE2_ARITH      = 'regexp:((add|div|max|min|mul|sub|sqrt)[ps]d)'
+        INS_SSE2_LOGICAL    = 'regexp:((andn?|x?or)pd)'
+        INS_SSE2_COMPARISON = 'regexp:((cmpp|u?comis)d)'
+        INS_SSE2_OTHER      = 'regexp:((shuf|unpck[hl])pd)'
+        INS_SSE2_CONVERSION = 'regexp:(cvt(dq2pd|pi2pd|ps2pd|pd2ps|si2sd|sd2ss|ss2sd|t?(pd2dq|pd2pi|sd2si)))|(cvt(dq2ps|ps2dq|tps2dq))'
+        INS_SSE2_SIMD_INT   = 'regexp:(mov(dq[au]|q2dq|dq2q))|(p((add|sub|(s[lr]l|mulu|unpck[hl]q)d)q|shuf(d|[hl]w)))'
+        INS_SSE2_CACHE_CTRL = 'regexp:(clflush|[lm]fence|pause|maskmovdqu|movnt(dq|i|pd))'
 
 
         OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock|[c-gs]s)' // Instruction operation prefixes
@@ -93,6 +102,10 @@
         FPU_OP              = 'regexp:{INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}'
         MMX_OP              = 'regexp:{INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}'
         SSE_OP              = 'regexp:{INS_SSE_DATA_TRANS}|{INS_SSE_ARITH}|{INS_SSE_COMPARISON}|{INS_SSE_LOGICAL}|{INS_SSE_OTHER}|{INS_SSE_CONVERSION}|{INS_SSE_STATE}|{INS_SSE_SIMD_INT}|{INS_SSE_CACHE_CTRL}|{INS_SSE_PREFETCH}'
+        SSE2_OP             = 'regexp:{INS_SSE2_DATA_TRANS}|{INS_SSE2_ARITH}|{INS_SSE2_LOGICAL}|{INS_SSE2_COMPARISON}|{INS_SSE2_OTHER}|{INS_SSE2_CONVERSION}|{INS_SSE2_SIMD_INT}|{INS_SSE2_CACHE_CTRL}'
+
+
+
 
         REGISTER            = 'regexp:[a-d][lh]|([er])?[a-d]x|([er])?[sb]p|([er])?[sd]i|[c-gs]s|st[0-7]|x?mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]'
         SIZE_TYPE           = 'regexp:byte|short|[dq]?word'
@@ -156,7 +169,7 @@ Data ::= ((LABEL_DEF? DATA_OP DataValue?) | (Identifier EQU NumericExpression))
 DataValue ::= ((NumericLiteral|STRING) SEPARATOR?)*
 
 Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall))
-private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP))
+private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP))
 private MnemonicOperationArg ::= REGISTER | NumericLiteral | Address | MacroCall | Identifier
 
 Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R

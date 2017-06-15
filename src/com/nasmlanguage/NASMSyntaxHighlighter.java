@@ -68,6 +68,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType.equals(NASMTypes.FPU_OP)
                 || tokenType.equals(NASMTypes.MMX_OP)
                 || tokenType.equals(NASMTypes.SSE_OP)
+                || tokenType.equals(NASMTypes.SSE2_OP)
                 || tokenType.equals(NASMTypes.DATA_OP)) {
             return OPERATION_KEYS;
         } else if (tokenType.equals(NASMTypes.DIRECTIVE_OP) || tokenType.equals(NASMTypes.SECTION_TAG) || tokenType.equals(NASMTypes.EQU))  {
