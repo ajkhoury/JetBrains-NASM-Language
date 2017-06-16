@@ -20,10 +20,12 @@ public interface NASMTypes {
   IElementType ERROR = new NASMElementType("ERROR");
   IElementType INCLUDE = new NASMElementType("INCLUDE");
   IElementType INSTRUCTION = new NASMElementType("INSTRUCTION");
+  IElementType I_STRUC = new NASMElementType("I_STRUC");
   IElementType LABEL = new NASMElementType("LABEL");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
+  IElementType STRUC = new NASMElementType("STRUC");
 
   IElementType BINARY = new NASMTokenType("BINARY");
   IElementType BSS_SECTION_NAME = new NASMTokenType("BSS_SECTION_NAME");
@@ -43,6 +45,7 @@ public interface NASMTypes {
   IElementType ELIF_TAG = new NASMTokenType("ELIF_TAG");
   IElementType ELSE_TAG = new NASMTokenType("ELSE_TAG");
   IElementType ENDIF_TAG = new NASMTokenType("ENDIF_TAG");
+  IElementType ENDSTRUC_TAG = new NASMTokenType("ENDSTRUC_TAG");
   IElementType EQU = new NASMTokenType("EQU");
   IElementType EQUAL = new NASMTokenType("=");
   IElementType EQUALEQUAL = new NASMTokenType("==");
@@ -51,6 +54,7 @@ public interface NASMTypes {
   IElementType GENERAL_OP = new NASMTokenType("GENERAL_OP");
   IElementType HEXADECIMAL = new NASMTokenType("HEXADECIMAL");
   IElementType IDENTIFIER = new NASMTokenType("IDENTIFIER");
+  IElementType IEND_TAG = new NASMTokenType("IEND_TAG");
   IElementType IFCTX_TAG = new NASMTokenType("IFCTX_TAG");
   IElementType IFMACRO_TAG = new NASMTokenType("IFMACRO_TAG");
   IElementType IF_TAG = new NASMTokenType("IF_TAG");
@@ -116,6 +120,7 @@ public interface NASMTypes {
   IElementType INS_SSE_SIMD_INT = new NASMTokenType("INS_SSE_SIMD_INT");
   IElementType INS_SSE_STATE = new NASMTokenType("INS_SSE_STATE");
   IElementType INS_STRING_DATA = new NASMTokenType("INS_STRING_DATA");
+  IElementType ISTRUC_TAG = new NASMTokenType("ISTRUC_TAG");
   IElementType LBL = new NASMTokenType("LBL");
   IElementType LBL_DEF = new NASMTokenType("LBL_DEF");
   IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
@@ -140,6 +145,7 @@ public interface NASMTypes {
   IElementType SSE4_OP = new NASMTokenType("SSE4_OP");
   IElementType SSE_OP = new NASMTokenType("SSE_OP");
   IElementType STRING = new NASMTokenType("STRING");
+  IElementType STRUC_TAG = new NASMTokenType("STRUC_TAG");
   IElementType TIMES = new NASMTokenType("*");
   IElementType X64_OP = new NASMTokenType("X64_OP");
 
@@ -182,6 +188,9 @@ public interface NASMTypes {
       else if (type == INSTRUCTION) {
         return new NASMInstructionImpl(node);
       }
+      else if (type == I_STRUC) {
+        return new NASMIStrucImpl(node);
+      }
       else if (type == LABEL) {
         return new NASMLabelImpl(node);
       }
@@ -193,6 +202,9 @@ public interface NASMTypes {
       }
       else if (type == PREPROCESSOR) {
         return new NASMPreprocessorImpl(node);
+      }
+      else if (type == STRUC) {
+        return new NASMStrucImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

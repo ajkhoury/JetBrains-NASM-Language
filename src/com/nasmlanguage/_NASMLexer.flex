@@ -29,7 +29,10 @@ CRLF=\r|\n|\r\n
 WHITE_SPACE=[ \t\x0B\f]+
 COMMENT=(;.*?(\r|\n|\r\n)?)
 EQU=([eE][qQ][uU])
-SECTION_TAG=([sS][eE][cC][tT][iI][oO][nN])
+STRUC_TAG=([sS][tT][rR][uU][cC])
+ENDSTRUC_TAG=([eE][nN][dD][sS][tT][rR][uU][cC])
+ISTRUC_TAG=([iI][sS][tT][rR][uU][cC])
+IEND_TAG=([iI][eE][nN][dD])
 INCLUDE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])
 DEFINE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])
 MACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])
@@ -41,12 +44,13 @@ ELIF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][iI][fF][nN]?([dD][eE][f
 ELSE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][sS][eE])
 ENDIF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][nN][dD][iI][fF])
 ERROR_TAG=((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*
+SECTION_TAG=([sS][eE][cC][tT][iI][oO][nN])
 CODE_SECTION_NAME=(\.[tT][eE][xX][tT])
 DATA_SECTION_NAME=(\.[dD][aA][tT][aA])
 BSS_SECTION_NAME=(\.[bB][sS][sS])
 DIRECTIVE_OP=[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]
-PREPROCESSOR_OP=\%([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])
-DATA_OP=(res|d)[bwdqt]|[tT][iI][mM][eE][sS]
+PREPROCESSOR_OP=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])
+DATA_OP=(([rR][eE][sS])|[dD])[bBwWdDqQtT]|[tT][iI][mM][eE][sS]
 INS_DATA_TRANS_MOV=(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)
 INS_DATA_TRANS_XCHG=(xchg|bswap|xadd|cmpxchg(8b)?)
 INS_DATA_TRANS_OTHER=((push|pop)(ad?)?|cwde?|cdq|cbw)
@@ -153,7 +157,10 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {WHITE_SPACE}               { return WHITE_SPACE; }
   {COMMENT}                   { return COMMENT; }
   {EQU}                       { return EQU; }
-  {SECTION_TAG}               { return SECTION_TAG; }
+  {STRUC_TAG}                 { return STRUC_TAG; }
+  {ENDSTRUC_TAG}              { return ENDSTRUC_TAG; }
+  {ISTRUC_TAG}                { return ISTRUC_TAG; }
+  {IEND_TAG}                  { return IEND_TAG; }
   {INCLUDE_TAG}               { return INCLUDE_TAG; }
   {DEFINE_TAG}                { return DEFINE_TAG; }
   {MACRO_TAG}                 { return MACRO_TAG; }
@@ -165,6 +172,7 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {ELSE_TAG}                  { return ELSE_TAG; }
   {ENDIF_TAG}                 { return ENDIF_TAG; }
   {ERROR_TAG}                 { return ERROR_TAG; }
+  {SECTION_TAG}               { return SECTION_TAG; }
   {CODE_SECTION_NAME}         { return CODE_SECTION_NAME; }
   {DATA_SECTION_NAME}         { return DATA_SECTION_NAME; }
   {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }

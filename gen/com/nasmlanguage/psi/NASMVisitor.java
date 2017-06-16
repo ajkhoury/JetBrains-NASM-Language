@@ -47,6 +47,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitIStruc(@NotNull NASMIStruc o) {
+    visitPsiElement(o);
+  }
+
   public void visitInclude(@NotNull NASMInclude o) {
     visitPsiElement(o);
   }
@@ -68,6 +72,10 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitPreprocessor(@NotNull NASMPreprocessor o) {
+    visitPsiElement(o);
+  }
+
+  public void visitStruc(@NotNull NASMStruc o) {
     visitPsiElement(o);
   }
 
