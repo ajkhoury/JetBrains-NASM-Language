@@ -927,57 +927,15 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ERROR_TAG ((IDENTIFIER|PUNCTUATION) '\s+'?)*
+  // ERROR_TAG
   public static boolean Error(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Error")) return false;
     if (!nextTokenIs(b, ERROR_TAG)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ERROR_TAG);
-    r = r && Error_1(b, l + 1);
     exit_section_(b, m, ERROR, r);
     return r;
-  }
-
-  // ((IDENTIFIER|PUNCTUATION) '\s+'?)*
-  private static boolean Error_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Error_1")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!Error_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Error_1", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // (IDENTIFIER|PUNCTUATION) '\s+'?
-  private static boolean Error_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Error_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Error_1_0_0(b, l + 1);
-    r = r && Error_1_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // IDENTIFIER|PUNCTUATION
-  private static boolean Error_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Error_1_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    if (!r) r = consumeToken(b, PUNCTUATION);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // '\s+'?
-  private static boolean Error_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Error_1_0_1")) return false;
-    consumeToken(b, "\\s+");
-    return true;
   }
 
   /* ********************************************************** */
@@ -1301,7 +1259,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Instruction|STRING|REGISTER|NumericLiteral
+  // Instruction|STRING|REGISTER|NumericLiteral|MacroCall
   static boolean MacroDefaultParam(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroDefaultParam")) return false;
     boolean r;
@@ -1310,60 +1268,60 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, STRING);
     if (!r) r = consumeToken(b, REGISTER);
     if (!r) r = NumericLiteral(b, l + 1);
+    if (!r) r = MacroCall(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // (NumericLiteral MINUS ((NumericLiteral TIMES)|NumericLiteral|TIMES)) | NumericLiteral PLUS
+  // (NumericLiteral MINUS NumericLiteral TIMES?)
+  //                         | (NumericLiteral MINUS TIMES)
+  //                         | (NumericLiteral PLUS)
   static boolean MacroParams(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroParams")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = MacroParams_0(b, l + 1);
     if (!r) r = MacroParams_1(b, l + 1);
+    if (!r) r = MacroParams_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // NumericLiteral MINUS ((NumericLiteral TIMES)|NumericLiteral|TIMES)
+  // NumericLiteral MINUS NumericLiteral TIMES?
   private static boolean MacroParams_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroParams_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = NumericLiteral(b, l + 1);
     r = r && consumeToken(b, MINUS);
-    r = r && MacroParams_0_2(b, l + 1);
+    r = r && NumericLiteral(b, l + 1);
+    r = r && MacroParams_0_3(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (NumericLiteral TIMES)|NumericLiteral|TIMES
-  private static boolean MacroParams_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroParams_0_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = MacroParams_0_2_0(b, l + 1);
-    if (!r) r = NumericLiteral(b, l + 1);
-    if (!r) r = consumeToken(b, TIMES);
-    exit_section_(b, m, null, r);
-    return r;
+  // TIMES?
+  private static boolean MacroParams_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParams_0_3")) return false;
+    consumeToken(b, TIMES);
+    return true;
   }
 
-  // NumericLiteral TIMES
-  private static boolean MacroParams_0_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroParams_0_2_0")) return false;
+  // NumericLiteral MINUS TIMES
+  private static boolean MacroParams_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParams_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = NumericLiteral(b, l + 1);
-    r = r && consumeToken(b, TIMES);
+    r = r && consumeTokens(b, 0, MINUS, TIMES);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // NumericLiteral PLUS
-  private static boolean MacroParams_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroParams_1")) return false;
+  private static boolean MacroParams_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParams_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = NumericLiteral(b, l + 1);
@@ -1373,7 +1331,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP)
+  // OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP)
   static boolean MnemonicOperation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MnemonicOperation")) return false;
     boolean r;
@@ -1391,7 +1349,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP
+  // GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP
   private static boolean MnemonicOperation_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MnemonicOperation_1")) return false;
     boolean r;
@@ -1402,12 +1360,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, MMX_OP);
     if (!r) r = consumeToken(b, SSE_OP);
     if (!r) r = consumeToken(b, SSE2_OP);
+    if (!r) r = consumeToken(b, SSE3_OP);
+    if (!r) r = consumeToken(b, SSE4_OP);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // REGISTER | NumericLiteral | Address | MacroCall | Identifier
+  // REGISTER|NumericLiteral|Address|MacroCall|Identifier
   static boolean MnemonicOperationArg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MnemonicOperationArg")) return false;
     boolean r;
@@ -1536,7 +1496,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Include | Define | Macro | Error | Conditional | PREPROCESSOR_OP
+  // Include | Define | Macro | Conditional | Error | PREPROCESSOR_OP
   public static boolean Preprocessor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Preprocessor")) return false;
     boolean r;
@@ -1544,8 +1504,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = Include(b, l + 1);
     if (!r) r = Define(b, l + 1);
     if (!r) r = Macro(b, l + 1);
-    if (!r) r = Error(b, l + 1);
     if (!r) r = Conditional(b, l + 1);
+    if (!r) r = Error(b, l + 1);
     if (!r) r = consumeToken(b, PREPROCESSOR_OP);
     exit_section_(b, l, m, r, false, null);
     return r;

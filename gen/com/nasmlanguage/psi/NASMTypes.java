@@ -90,6 +90,17 @@ public interface NASMTypes {
   IElementType INS_SSE2_LOGICAL = new NASMTokenType("INS_SSE2_LOGICAL");
   IElementType INS_SSE2_OTHER = new NASMTokenType("INS_SSE2_OTHER");
   IElementType INS_SSE2_SIMD_INT = new NASMTokenType("INS_SSE2_SIMD_INT");
+  IElementType INS_SSE3_ARITH = new NASMTokenType("INS_SSE3_ARITH");
+  IElementType INS_SSE3_GENERAL = new NASMTokenType("INS_SSE3_GENERAL");
+  IElementType INS_SSE3_OTHER = new NASMTokenType("INS_SSE3_OTHER");
+  IElementType INS_SSE4_ARITH = new NASMTokenType("INS_SSE4_ARITH");
+  IElementType INS_SSE4_BLEND = new NASMTokenType("INS_SSE4_BLEND");
+  IElementType INS_SSE4_CONVERSION = new NASMTokenType("INS_SSE4_CONVERSION");
+  IElementType INS_SSE4_DATA_TRANS = new NASMTokenType("INS_SSE4_DATA_TRANS");
+  IElementType INS_SSE4_INS_EXT = new NASMTokenType("INS_SSE4_INS_EXT");
+  IElementType INS_SSE4_OTHER = new NASMTokenType("INS_SSE4_OTHER");
+  IElementType INS_SSE4_PACKED_FP = new NASMTokenType("INS_SSE4_PACKED_FP");
+  IElementType INS_SSE4_PACKED_INT = new NASMTokenType("INS_SSE4_PACKED_INT");
   IElementType INS_SSE_ARITH = new NASMTokenType("INS_SSE_ARITH");
   IElementType INS_SSE_CACHE_CTRL = new NASMTokenType("INS_SSE_CACHE_CTRL");
   IElementType INS_SSE_COMPARISON = new NASMTokenType("INS_SSE_COMPARISON");
@@ -112,7 +123,6 @@ public interface NASMTypes {
   IElementType PERCENT = new NASMTokenType("%");
   IElementType PLUS = new NASMTokenType("+");
   IElementType PREPROCESSOR_OP = new NASMTokenType("PREPROCESSOR_OP");
-  IElementType PUNCTUATION = new NASMTokenType("PUNCTUATION");
   IElementType REGISTER = new NASMTokenType("REGISTER");
   IElementType ROUND_L = new NASMTokenType("(");
   IElementType ROUND_R = new NASMTokenType(")");
@@ -122,6 +132,8 @@ public interface NASMTypes {
   IElementType SQUARE_L = new NASMTokenType("[");
   IElementType SQUARE_R = new NASMTokenType("]");
   IElementType SSE2_OP = new NASMTokenType("SSE2_OP");
+  IElementType SSE3_OP = new NASMTokenType("SSE3_OP");
+  IElementType SSE4_OP = new NASMTokenType("SSE4_OP");
   IElementType SSE_OP = new NASMTokenType("SSE_OP");
   IElementType STRING = new NASMTokenType("STRING");
   IElementType TIMES = new NASMTokenType("*");

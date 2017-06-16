@@ -88,6 +88,18 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
+  public PsiElement getSse3Op() {
+    return findChildByType(SSE3_OP);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSse4Op() {
+    return findChildByType(SSE4_OP);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getSseOp() {
     return findChildByType(SSE_OP);
   }

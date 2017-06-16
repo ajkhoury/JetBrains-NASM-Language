@@ -39,6 +39,12 @@ public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
   }
 
   @Override
+  @Nullable
+  public NASMMacroCall getMacroCall() {
+    return findChildByClass(NASMMacroCall.class);
+  }
+
+  @Override
   @NotNull
   public PsiElement getIdentifier() {
     return findNotNullChildByType(IDENTIFIER);

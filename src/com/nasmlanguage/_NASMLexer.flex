@@ -39,7 +39,7 @@ IFCTX_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][cC][tT][xX])
 ELIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)
 ELSE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][sS][eE])
 ENDIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][nN][dD][iI][fF])
-ERROR_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][rR][rR][oO][rR])
+ERROR_TAG=((([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][rR][rR][oO][rR])).*
 CODE_SECTION_NAME=\.[tT][eE][xX][tT]
 DATA_SECTION_NAME=\.[dD][aA][tT][aA]
 BSS_SECTION_NAME=\.[bB][sS][sS]
@@ -96,6 +96,17 @@ INS_SSE2_OTHER=((shuf|unpck[hl])pd)
 INS_SSE2_CONVERSION=(cvt(dq2pd|pi2pd|ps2pd|pd2ps|si2sd|sd2ss|ss2sd|t?(pd2dq|pd2pi|sd2si)))|(cvt(dq2ps|ps2dq|tps2dq))
 INS_SSE2_SIMD_INT=(mov(dq[au]|q2dq|dq2q))|(p((add|sub|(s[lr]l|mulu|unpck[hl]q)d)q|shuf(d|[hl]w)))
 INS_SSE2_CACHE_CTRL=(clflush|[lm]fence|pause|maskmovdqu|movnt(dq|i|pd))
+INS_SSE3_GENERAL=(fisttp|lddqu|(addsub|h(add|sub))p[sd]|mov(sh|sl|d)dup|monitor|mwait)
+INS_SSE3_ARITH=(ph(add|sub)(s?w|d))
+INS_SSE3_OTHER=(p((abs|sign)[bdw]|maddubsw|mulhrsw|shufb|alignr))
+INS_SSE4_ARITH=(pmul(ld|dq)|dpp[ds])
+INS_SSE4_DATA_TRANS=(movntdqa)
+INS_SSE4_BLEND=(blendv?p[ds]|pblend(vb|w))
+INS_SSE4_PACKED_INT=(p(min|max)(u[dw]|s[bd]))
+INS_SSE4_PACKED_FP=(round[ps][sd])
+INS_SSE4_INS_EXT=((extract|insert)ps|p((ins|ext)(r[bdq])))
+INS_SSE4_CONVERSION=(pmov([sz]x(b[dqw]|dq|wd|wq)))
+INS_SSE4_OTHER=(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))
 OP_PREFIX=((rep(n?[ez])|rep)|lock|[c-gs]s)
 GENERAL_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}
 X64_OP={INS_64_BIT}
@@ -103,6 +114,8 @@ FPU_OP={INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_
 MMX_OP={INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}
 SSE_OP={INS_SSE_DATA_TRANS}|{INS_SSE_ARITH}|{INS_SSE_COMPARISON}|{INS_SSE_LOGICAL}|{INS_SSE_OTHER}|{INS_SSE_CONVERSION}|{INS_SSE_STATE}|{INS_SSE_SIMD_INT}|{INS_SSE_CACHE_CTRL}|{INS_SSE_PREFETCH}
 SSE2_OP={INS_SSE2_DATA_TRANS}|{INS_SSE2_ARITH}|{INS_SSE2_LOGICAL}|{INS_SSE2_COMPARISON}|{INS_SSE2_OTHER}|{INS_SSE2_CONVERSION}|{INS_SSE2_SIMD_INT}|{INS_SSE2_CACHE_CTRL}
+SSE3_OP={INS_SSE3_GENERAL}|{INS_SSE3_ARITH}|{INS_SSE3_OTHER}
+SSE4_OP={INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED_INT}|{INS_SSE4_PACKED_FP}|{INS_SSE4_INS_EXT}|{INS_SSE4_CONVERSION}|{INS_SSE4_OTHER}
 REGISTER=%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))
 SIZE_TYPE=byte|short|[dq]?word
 NUMBER=0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0d[0-9]+|[0-9]+
@@ -110,7 +123,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 LABEL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
 IDENTIFIER=[a-zA-Z_][a-zA-Z0-9_]*
 LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
-PUNCTUATION=[-*,.():!\"']+
 
 %%
 <YYINITIAL> {
@@ -162,6 +174,8 @@ PUNCTUATION=[-*,.():!\"']+
   {MMX_OP}                    { return MMX_OP; }
   {SSE_OP}                    { return SSE_OP; }
   {SSE2_OP}                   { return SSE2_OP; }
+  {SSE3_OP}                   { return SSE3_OP; }
+  {SSE4_OP}                   { return SSE4_OP; }
   {REGISTER}                  { return REGISTER; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }
   {NUMBER}                    { return NUMBER; }
@@ -169,7 +183,6 @@ PUNCTUATION=[-*,.():!\"']+
   {LABEL_DEF}                 { return LABEL_DEF; }
   {IDENTIFIER}                { return IDENTIFIER; }
   {LABEL}                     { return LABEL; }
-  {PUNCTUATION}               { return PUNCTUATION; }
 
 }
 
