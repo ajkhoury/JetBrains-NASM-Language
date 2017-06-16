@@ -127,6 +127,7 @@ public interface NASMTypes {
   IElementType ROUND_L = new NASMTokenType("(");
   IElementType ROUND_R = new NASMTokenType(")");
   IElementType SECTION_TAG = new NASMTokenType("SECTION_TAG");
+  IElementType SEMICOLON = new NASMTokenType(";");
   IElementType SEPARATOR = new NASMTokenType(",");
   IElementType SIZE_TYPE = new NASMTokenType("SIZE_TYPE");
   IElementType SQUARE_L = new NASMTokenType("[");

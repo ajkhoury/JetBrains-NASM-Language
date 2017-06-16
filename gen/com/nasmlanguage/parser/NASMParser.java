@@ -547,7 +547,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (LABEL_DEF? DATA_OP DataValue?) | (Identifier EQU NumericExpression)
+  // ((IDENTIFIER COLON?) EQU ((DOLLARSIGN MINUS Identifier)|NumericExpression)) | (LABEL_DEF? DATA_OP DataValue?)
   public static boolean Data(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data")) return false;
     boolean r;
@@ -558,42 +558,82 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LABEL_DEF? DATA_OP DataValue?
+  // (IDENTIFIER COLON?) EQU ((DOLLARSIGN MINUS Identifier)|NumericExpression)
   private static boolean Data_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Data_0_0(b, l + 1);
-    r = r && consumeToken(b, DATA_OP);
+    r = r && consumeToken(b, EQU);
     r = r && Data_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // LABEL_DEF?
+  // IDENTIFIER COLON?
   private static boolean Data_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    r = r && Data_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COLON?
+  private static boolean Data_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Data_0_0_1")) return false;
+    consumeToken(b, COLON);
+    return true;
+  }
+
+  // (DOLLARSIGN MINUS Identifier)|NumericExpression
+  private static boolean Data_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Data_0_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Data_0_2_0(b, l + 1);
+    if (!r) r = NumericExpression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // DOLLARSIGN MINUS Identifier
+  private static boolean Data_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Data_0_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, DOLLARSIGN, MINUS);
+    r = r && Identifier(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LABEL_DEF? DATA_OP DataValue?
+  private static boolean Data_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Data_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Data_1_0(b, l + 1);
+    r = r && consumeToken(b, DATA_OP);
+    r = r && Data_1_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LABEL_DEF?
+  private static boolean Data_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Data_1_0")) return false;
     consumeToken(b, LABEL_DEF);
     return true;
   }
 
   // DataValue?
-  private static boolean Data_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Data_0_2")) return false;
+  private static boolean Data_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Data_1_2")) return false;
     DataValue(b, l + 1);
     return true;
-  }
-
-  // Identifier EQU NumericExpression
-  private static boolean Data_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Data_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Identifier(b, l + 1);
-    r = r && consumeToken(b, EQU);
-    r = r && NumericExpression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -1012,7 +1052,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SIZE_TYPE? (LABEL|IDENTIFIER)
+  // SIZE_TYPE? (IDENTIFIER|LABEL)
   static boolean Identifier(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Identifier")) return false;
     boolean r;
@@ -1030,13 +1070,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // LABEL|IDENTIFIER
+  // IDENTIFIER|LABEL
   private static boolean Identifier_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Identifier_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, LABEL);
-    if (!r) r = consumeToken(b, IDENTIFIER);
+    r = consumeToken(b, IDENTIFIER);
+    if (!r) r = consumeToken(b, LABEL);
     exit_section_(b, m, null, r);
     return r;
   }

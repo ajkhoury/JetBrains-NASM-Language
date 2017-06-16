@@ -118,7 +118,10 @@
         INS_SSE4_CONVERSION = 'regexp:(pmov([sz]x(b[dqw]|dq|wd|wq)))'
         INS_SSE4_OTHER      = 'regexp:(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))'
 
-        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock|[c-gs]s)' // Instruction operation prefixes
+        // Instruction operation prefixes
+        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock|[c-gs]s)'
+
+        // Instructions
         GENERAL_OP          = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}'
         X64_OP              = 'regexp:{INS_64_BIT}'
         FPU_OP              = 'regexp:{INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}'
@@ -128,11 +131,10 @@
         SSE3_OP             = 'regexp:{INS_SSE3_GENERAL}|{INS_SSE3_ARITH}|{INS_SSE3_OTHER}'
         SSE4_OP             = 'regexp:{INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED_INT}|{INS_SSE4_PACKED_FP}|{INS_SSE4_INS_EXT}|{INS_SSE4_CONVERSION}|{INS_SSE4_OTHER}'
 
-
-
+        // All kinds of registers
         REGISTER            = 'regexp:%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))'
-        SIZE_TYPE           = 'regexp:byte|short|[dq]?word'
-        NUMBER              = 'regexp:0b[0-1]+|0y[0-1]+|[0-1][0-1]*b|[0-1][0-1]*y|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0d[0-9]+|[0-9]+'
+        SIZE_TYPE           = 'regexp:[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[dDqQ]?[wW][oO][rR][dD]'
+        NUMBER              = 'regexp:0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY]|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+'
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
         LABEL_DEF           = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
 
@@ -141,6 +143,7 @@
         LABEL               = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Label can have chars like '.', '?', '@', etc
 
         COLON               = ':'
+        SEMICOLON           = ';'
         SQUARE_L            = '['
         SQUARE_R            = ']'
         ROUND_L             = '('
@@ -197,7 +200,7 @@ Error ::= ERROR_TAG
 Directive ::= (DIRECTIVE_OP (DirectiveArg)*)
 DirectiveArg ::= NumericLiteral | Address | Identifier
 
-Data ::= ((LABEL_DEF? DATA_OP DataValue?) | (Identifier EQU NumericExpression))
+Data ::= ((IDENTIFIER COLON?) EQU ((DOLLARSIGN MINUS Identifier)|NumericExpression)) | (LABEL_DEF? DATA_OP DataValue?)
 DataValue ::= ((NumericLiteral|STRING) SEPARATOR?)*
 
 Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall))
@@ -218,5 +221,5 @@ private Expression ::= (((NumericLiteral|REGISTER|MacroCall|IDENTIFIER)(PLUS|MIN
 
 private Condition ::= ((Expression EQUALEQUAL Expression)|Expression)
 
-private Identifier ::= (SIZE_TYPE? (LABEL|IDENTIFIER))
+private Identifier ::= (SIZE_TYPE? (IDENTIFIER|LABEL))
 private NumericLiteral ::= ((PLUS|MINUS)? NUMBER)
