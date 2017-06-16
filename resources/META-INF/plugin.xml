@@ -1,17 +1,15 @@
 <idea-plugin>
   <id>com.nasmlanguage</id>
   <name>NASM Language</name>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
 
   <description><![CDATA[
-      NASM language for JetBrains IDEs.<br>
-    ]]></description>
-
-  <change-notes><![CDATA[
-      <h1>Version 0.0.3 pre-release</h1>
+      <h1>NASM language for JetBrains IDEs</h1>
       <br>
-      <h2>Features</h2>
+      <h2>Version 0.0.4 pre-release</h2>
+      <br>
+      <h3>Features</h3>
       <ul>
         <li>FPU, MMX, SSE, SSE2, SSE3, SSE4, and general instruction support</li>
         <li>Syntax highlighting</li>
@@ -20,11 +18,19 @@
         <li>Other preprocessor directives support</li>
       </ul>
       <br>
-      <h2>Todo Planned Features</h2>
+      <h3>Todo Planned Features</h3>
       <ul>
         <li>Code completion</li>
         <li>Goto symbol</li>
         <li>Better highlighting</li>
+      </ul>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      <ul>
+        <li>Added macro syntax highlighting</li>
+        <li>Added support for conditional assembly directives</li>
+        <li>Fix for bug where blank comments would not match the comment regex</li>
       </ul>
     ]]>
   </change-notes>
