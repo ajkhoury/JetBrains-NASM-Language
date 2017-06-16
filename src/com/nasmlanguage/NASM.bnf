@@ -167,7 +167,7 @@
         PLUS                = '+'
         MINUS               = '-'
         TIMES               = '*'
-        DIVIDE              = '\'
+        DIVIDE              = '/'
 
         DOLLARSIGN          = '$'
         DOLLARSIGN2         = '$$'
@@ -216,7 +216,7 @@ IStruc ::= (ISTRUC_TAG IDENTIFIER CRLF* (('at'|'AT') LBL SEPARATOR DATA_OP DataV
 
 Instruction ::= (((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT? CRLF*) | Directive | MacroCall | LBL_DEF) CRLF*)
 private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP))
-private MnemonicOperationArg ::= REGISTER|NumericLiteral|Address|MacroCall|Identifier
+private MnemonicOperationArg ::= REGISTER|NumericLiteral|Address|MacroCall|Identifier|(ROUND_L Expression ROUND_R)|Expression
 
 Directive ::= (DIRECTIVE_OP DirectiveArg* CRLF*)
 DirectiveArg ::= NumericLiteral | Address | Identifier
@@ -231,8 +231,8 @@ private MacroParams ::= (NumericLiteral MINUS NumericLiteral TIMES?)
                         ;
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 
-private NumericExpression ::= (((NumericLiteral|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NumericLiteral|MacroCall|IDENTIFIER))
-private Expression ::= (((NumericLiteral|REGISTER|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NumericLiteral|REGISTER|MacroCall|IDENTIFIER))
+private NumericExpression ::= (((NumericLiteral|MacroCall|Identifier)(PLUS|MINUS|TIMES|DIVIDE))* (NumericLiteral|MacroCall|Identifier))
+private Expression ::= (((NumericLiteral|REGISTER|MacroCall|Identifier)(PLUS|MINUS|TIMES|DIVIDE))* (NumericLiteral|REGISTER|MacroCall|Identifier))
 
 private Condition ::= ((Expression EQUALEQUAL Expression)|Expression)
 

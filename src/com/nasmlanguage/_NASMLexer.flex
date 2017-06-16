@@ -148,7 +148,7 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   "+"                         { return PLUS; }
   "-"                         { return MINUS; }
   "*"                         { return TIMES; }
-  "\\"                        { return DIVIDE; }
+  "/"                         { return DIVIDE; }
   "$"                         { return DOLLARSIGN; }
   "$$"                        { return DOLLARSIGN2; }
   "%"                         { return PERCENT; }

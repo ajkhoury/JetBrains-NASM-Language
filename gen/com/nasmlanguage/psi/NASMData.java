@@ -26,12 +26,6 @@ public interface NASMData extends PsiElement {
   PsiElement getEqu();
 
   @Nullable
-  PsiElement getLbl();
-
-  @Nullable
   PsiElement getLblDef();
-
-  @Nullable
-  PsiElement getSizeType();
 
 }

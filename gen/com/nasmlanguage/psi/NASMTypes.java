@@ -38,7 +38,7 @@ public interface NASMTypes {
   IElementType DECIMAL = new NASMTokenType("DECIMAL");
   IElementType DEFINE_TAG = new NASMTokenType("DEFINE_TAG");
   IElementType DIRECTIVE_OP = new NASMTokenType("DIRECTIVE_OP");
-  IElementType DIVIDE = new NASMTokenType("\\");
+  IElementType DIVIDE = new NASMTokenType("/");
   IElementType DOLLARSIGN = new NASMTokenType("$");
   IElementType DOLLARSIGN2 = new NASMTokenType("$$");
   IElementType DOT = new NASMTokenType(".");
