@@ -25,21 +25,22 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 EOL=\R
 WHITE_SPACE=\s+
 
-CRLF=\R|\n|\r\n
-COMMENT=(;.*?(\r|\n|\r\n))
+CRLF=\r|\n|\r\n
+WHITE_SPACE=[ \t\x0B\f]+
+COMMENT=(;.*?(\r|\n|\r\n)?)
 EQU=([eE][qQ][uU])
 SECTION_TAG=([sS][eE][cC][tT][iI][oO][nN])
-INCLUDE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][nN][cC][lL][uU][dD][eE])
-DEFINE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])
-MACRO_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI]?[mM][aA][cC][rR][oO])
-MACRO_END_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
-IF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][nN]?([dD][eE][fF])?)
-IFMACRO_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][mM][aA][cC][rR][oO])
-IFCTX_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][cC][tT][xX])
-ELIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)
-ELSE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][sS][eE])
-ENDIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][nN][dD][iI][fF])
-ERROR_TAG=((([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][rR][rR][oO][rR])).*
+INCLUDE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])
+DEFINE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])
+MACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])
+MACRO_END_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
+IF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)
+IFMACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])
+IFCTX_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][cC][tT][xX])
+ELIF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)
+ELSE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][sS][eE])
+ENDIF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][nN][dD][iI][fF])
+ERROR_TAG=((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*
 CODE_SECTION_NAME=(\.[tT][eE][xX][tT])
 DATA_SECTION_NAME=(\.[dD][aA][tT][aA])
 BSS_SECTION_NAME=(\.[bB][sS][sS])
@@ -117,14 +118,14 @@ SSE2_OP={INS_SSE2_DATA_TRANS}|{INS_SSE2_ARITH}|{INS_SSE2_LOGICAL}|{INS_SSE2_COMP
 SSE3_OP={INS_SSE3_GENERAL}|{INS_SSE3_ARITH}|{INS_SSE3_OTHER}
 SSE4_OP={INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED_INT}|{INS_SSE4_PACKED_FP}|{INS_SSE4_INS_EXT}|{INS_SSE4_CONVERSION}|{INS_SSE4_OTHER}
 REGISTER=%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))
-SIZE_TYPE=[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[dDqQ]?[wW][oO][rR][dD]
+SIZE_TYPE=[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|([dDqQoO]|[xX][mM][mM])?[wW][oO][rR][dD]
 BINARY=(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])
 HEXADECIMAL=(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])
 DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
-LABEL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
+LBL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
 IDENTIFIER=[a-zA-Z_][a-zA-Z0-9_]*
-LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
+LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
 
 %%
 <YYINITIAL> {
@@ -149,6 +150,7 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   "%"                         { return PERCENT; }
 
   {CRLF}                      { return CRLF; }
+  {WHITE_SPACE}               { return WHITE_SPACE; }
   {COMMENT}                   { return COMMENT; }
   {EQU}                       { return EQU; }
   {SECTION_TAG}               { return SECTION_TAG; }
@@ -185,9 +187,9 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {HEXADECIMAL}               { return HEXADECIMAL; }
   {DECIMAL}                   { return DECIMAL; }
   {STRING}                    { return STRING; }
-  {LABEL_DEF}                 { return LABEL_DEF; }
+  {LBL_DEF}                   { return LBL_DEF; }
   {IDENTIFIER}                { return IDENTIFIER; }
-  {LABEL}                     { return LABEL; }
+  {LBL}                       { return LBL; }
 
 }
 

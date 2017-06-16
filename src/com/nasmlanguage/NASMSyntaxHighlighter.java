@@ -79,7 +79,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             return STRING_KEYS;
         } else if (tokenType.equals(NASMTypes.BINARY) || tokenType.equals(NASMTypes.HEXADECIMAL) || tokenType.equals(NASMTypes.DECIMAL)) {
             return NUMBER_KEYS;
-        } else if (tokenType.equals(NASMTypes.LABEL) || tokenType.equals(NASMTypes.LABEL_DEF)) {
+        } else if (tokenType.equals(NASMTypes.LABEL) || tokenType.equals(NASMTypes.LBL_DEF)) {
             return LABEL_KEYS;
         } else if (tokenType.equals(NASMTypes.IDENTIFIER)) {
             return IDENTIFIER_KEYS;

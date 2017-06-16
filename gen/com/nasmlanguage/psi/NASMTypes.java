@@ -20,6 +20,7 @@ public interface NASMTypes {
   IElementType ERROR = new NASMElementType("ERROR");
   IElementType INCLUDE = new NASMElementType("INCLUDE");
   IElementType INSTRUCTION = new NASMElementType("INSTRUCTION");
+  IElementType LABEL = new NASMElementType("LABEL");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
@@ -39,7 +40,6 @@ public interface NASMTypes {
   IElementType DOLLARSIGN = new NASMTokenType("$");
   IElementType DOLLARSIGN2 = new NASMTokenType("$$");
   IElementType DOT = new NASMTokenType(".");
-  IElementType ELEMENT_10_0 = new NASMTokenType("Element_10_0");
   IElementType ELIF_TAG = new NASMTokenType("ELIF_TAG");
   IElementType ELSE_TAG = new NASMTokenType("ELSE_TAG");
   IElementType ENDIF_TAG = new NASMTokenType("ENDIF_TAG");
@@ -116,8 +116,8 @@ public interface NASMTypes {
   IElementType INS_SSE_SIMD_INT = new NASMTokenType("INS_SSE_SIMD_INT");
   IElementType INS_SSE_STATE = new NASMTokenType("INS_SSE_STATE");
   IElementType INS_STRING_DATA = new NASMTokenType("INS_STRING_DATA");
-  IElementType LABEL = new NASMTokenType("LABEL");
-  IElementType LABEL_DEF = new NASMTokenType("LABEL_DEF");
+  IElementType LBL = new NASMTokenType("LBL");
+  IElementType LBL_DEF = new NASMTokenType("LBL_DEF");
   IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
   IElementType MINUS = new NASMTokenType("-");
@@ -181,6 +181,9 @@ public interface NASMTypes {
       }
       else if (type == INSTRUCTION) {
         return new NASMInstructionImpl(node);
+      }
+      else if (type == LABEL) {
+        return new NASMLabelImpl(node);
       }
       else if (type == MACRO) {
         return new NASMMacroImpl(node);

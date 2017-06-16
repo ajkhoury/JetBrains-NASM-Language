@@ -16,23 +16,23 @@
     psiImplUtilClass="com.nasmlanguage.psi.impl.NASMPsiImplUtil"
 
     tokens = [
-        CRLF                = 'regexp:\R|\n|\r\n'
-        //WHITE_SPACE         = 'regexp:\s+'
+        CRLF                = 'regexp:\r|\n|\r\n'
+        WHITE_SPACE         = 'regexp:[ \t\x0B\f]+'
 
-        COMMENT             = 'regexp:(;.*?(\r|\n|\r\n))'
+        COMMENT             = 'regexp:(;.*?(\r|\n|\r\n)?)'
         EQU                 = 'regexp:([eE][qQ][uU])'
         SECTION_TAG         = 'regexp:([sS][eE][cC][tT][iI][oO][nN])'
-        INCLUDE_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][nN][cC][lL][uU][dD][eE])'
-        DEFINE_TAG          = 'regexp:((\s+)?[#%](\s+)?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])'
-        MACRO_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI]?[mM][aA][cC][rR][oO])'
-        MACRO_END_TAG       = 'regexp:((\s+)?[#%](\s+)?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
-        IF_TAG              = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][nN]?([dD][eE][fF])?)'
-        IFMACRO_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][mM][aA][cC][rR][oO])'
-        IFCTX_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][cC][tT][xX])'
-        ELIF_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)'
-        ELSE_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][sS][eE])'
-        ENDIF_TAG           = 'regexp:((\s+)?[#%](\s+)?)([eE][nN][dD][iI][fF])'
-        ERROR_TAG           = 'regexp:(((\s+)?[#%](\s+)?)([eE][rR][rR][oO][rR])).*'
+        INCLUDE_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])'
+        DEFINE_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])'
+        MACRO_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])'
+        MACRO_END_TAG       = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
+        IF_TAG              = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)'
+        IFMACRO_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])'
+        IFCTX_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][cC][tT][xX])'
+        ELIF_TAG            = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)'
+        ELSE_TAG            = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][sS][eE])'
+        ENDIF_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][nN][dD][iI][fF])'
+        ERROR_TAG           = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*'
         CODE_SECTION_NAME   = 'regexp:(\.[tT][eE][xX][tT])'
         DATA_SECTION_NAME   = 'regexp:(\.[dD][aA][tT][aA])'
         BSS_SECTION_NAME    = 'regexp:(\.[bB][sS][sS])'
@@ -51,7 +51,7 @@
         INS_BINARY_ROTATE   = 'regexp:(s[ah][rl]|sh[rl]d|r[co][rl])'                                                                                    // Binary Rotation
         INS_BINARY_SET      = 'regexp:(set(n?[abceglopsz]|n?[abgl]e|p[eo]))'                                                                            // Binary Set
         INS_BINARY_OTHER    = 'regexp:(bt[crs]?|bs[fr]|test|crc32|popcnt)'                                                                              // Binary Other
-        INS_CONTROL_TRANS   = 'regexp:(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret|iret[dq]?|into?|bound|enter|leave)'     // Control Transfer
+        INS_CONTROL_TRANS   = 'regexp:(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|retn?|iret[dq]?|into?|bound|enter|leave)'     // Control Transfer
         INS_STRING_DATA     = 'regexp:((mov|cmp|sca|lod|sto)(s[bdw]?)|rep(n?[ez])?)'                                                                    // String Data
         INS_INPUT_OUTPUT    = 'regexp:((in|out)(s[bdw]?)?)'                                                                                             // I/O
         INS_FLAG_CONTROL    = 'regexp:((st|cl)[cdi]|cmc|[ls]ahf|(push|pop)f[dq]?)'                                                                      // Flag Control
@@ -133,16 +133,16 @@
 
         // All kinds of registers
         REGISTER            = 'regexp:%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))'
-        SIZE_TYPE           = 'regexp:[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[dDqQ]?[wW][oO][rR][dD]'
+        SIZE_TYPE           = 'regexp:[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|([dDqQoO]|[xX][mM][mM])?[wW][oO][rR][dD]'
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
         HEXADECIMAL         = 'regexp:(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])'
         DECIMAL             = 'regexp:((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)'
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
-        LABEL_DEF           = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
+        LBL_DEF             = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
 
         // Make last!
         IDENTIFIER          = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
-        LABEL               = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Label can have chars like '.', '?', '@', etc
+        LBL                 = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Lbl can have chars like '.', '?', '@', etc
 
         COLON               = ':'
         SEMICOLON           = ';'
@@ -163,10 +163,6 @@
         DOLLARSIGN          = '$'
         DOLLARSIGN2         = '$$'
         PERCENT             = '%'
-
-        //BAD_CHARACTER       = 'regexp:[^]'
-        //ANYTHING_SINGLELINE = 'regexp:[^\n]+'
-        //ANYTHING_MULTILINE  = 'regexp:[\s\S]*'
     ]
 
 }
@@ -176,14 +172,14 @@ NASMFile ::= Element*
 private Element ::= COMMENT
                 | CRLF
                 | COMMENT CRLF
-                | Section
+                | Label
+                | Data
+                | Instruction
                 | Preprocessor
+                | Section
                 | Directive
                 | SQUARE_L Section SQUARE_R
                 | SQUARE_L Directive SQUARE_R
-                | Data
-                | Instruction
-                |
                 ;
 
 private Section ::= DataSection | CodeSection
@@ -192,31 +188,35 @@ CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction|Directive)*)
 
 Preprocessor ::= (Include|Define|Macro|Conditional|Error|PREPROCESSOR_OP)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
-Define ::= (DEFINE_TAG IDENTIFIER (NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)))
-        | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression) {methods=[getDefineIdentifier]}
+Define ::= (DEFINE_TAG IDENTIFIER (NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) CRLF*)
+        | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression CRLF*) {methods=[getDefineIdentifier]}
 Macro ::= (MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
 Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
                 | (IFMACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
-Error ::= ERROR_TAG
+Error ::= ERROR_TAG CRLF*
 
+Label ::= (LBL_DEF (Instruction|Data|CRLF*))
 
-Directive ::= (DIRECTIVE_OP (DirectiveArg)*)
-DirectiveArg ::= NumericLiteral | Address | Identifier
-
-Data ::= (IDENTIFIER COLON? EQU ((DOLLARSIGN MINUS Identifier)|NumericExpression)) | (LABEL_DEF? DATA_OP DataValue?)
+Data ::= (IDENTIFIER EQU (NumericExpression|(DOLLARSIGN MINUS Identifier)))
+        | (LBL_DEF? DATA_OP DataValue?)
+        ;
 DataValue ::= ((NumericLiteral|STRING) SEPARATOR?)*
 
-Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall | LABEL_DEF))
+Instruction ::= (((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT? CRLF*) | Directive | MacroCall | LBL_DEF) CRLF*)
 private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP))
 private MnemonicOperationArg ::= REGISTER|NumericLiteral|Address|MacroCall|Identifier
+
+Directive ::= (DIRECTIVE_OP DirectiveArg* CRLF*)
+DirectiveArg ::= NumericLiteral | Address | Identifier
 
 Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R
 private AddressInternal ::= ((REGISTER|MacroCall|Identifier) ((PLUS|MINUS|TIMES) (((NumericLiteral|MacroCall|Identifier) (PLUS|MINUS|TIMES))*)? (NumericLiteral|REGISTER|MacroCall|Identifier))? ((PLUS|MINUS|TIMES) (NumericLiteral|MacroCall|Identifier))?)
 
-MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R)
+MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R CRLF*)
 private MacroParams ::= (NumericLiteral MINUS NumericLiteral TIMES?)
                         | (NumericLiteral MINUS TIMES)
                         | (NumericLiteral PLUS)
+                        ;
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 
 private NumericExpression ::= (((NumericLiteral|MacroCall|IDENTIFIER)(PLUS|MINUS|TIMES))* (NumericLiteral|MacroCall|IDENTIFIER))
@@ -224,5 +224,5 @@ private Expression ::= (((NumericLiteral|REGISTER|MacroCall|IDENTIFIER)(PLUS|MIN
 
 private Condition ::= ((Expression EQUALEQUAL Expression)|Expression)
 
-private Identifier ::= (SIZE_TYPE? (IDENTIFIER|LABEL))
+private Identifier ::= (SIZE_TYPE? (IDENTIFIER|LBL))
 private NumericLiteral ::= ((PLUS|MINUS)? (BINARY|HEXADECIMAL (COLON HEXADECIMAL)?|DECIMAL))

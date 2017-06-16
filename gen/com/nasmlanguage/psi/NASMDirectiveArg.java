@@ -20,7 +20,7 @@ public interface NASMDirectiveArg extends PsiElement {
   PsiElement getIdentifier();
 
   @Nullable
-  PsiElement getLabel();
+  PsiElement getLbl();
 
   @Nullable
   PsiElement getSizeType();
