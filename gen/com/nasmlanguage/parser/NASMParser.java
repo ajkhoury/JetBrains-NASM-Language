@@ -550,7 +550,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (IDENTIFIER EQU (NumericExpression|(DOLLARSIGN MINUS Identifier))) | (LBL_DEF? DATA_OP DataValue?)
+  // (IDENTIFIER EQU (NumericExpression|(DOLLARSIGN MINUS Identifier)))
+  //         | (LBL_DEF? DATA_OP DataValue?)
   public static boolean Data(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data")) return false;
     boolean r;
