@@ -200,7 +200,7 @@ Label ::= (LBL_DEF (Instruction|Data|CRLF*))
 Data ::= (IDENTIFIER EQU (NumericExpression|(DOLLARSIGN MINUS Identifier)))
         | (LBL_DEF? DATA_OP DataValue?)
         ;
-DataValue ::= ((NumericLiteral|STRING) SEPARATOR?)*
+DataValue ::= ((NumericLiteral|STRING|IDENTIFIER|LBL) SEPARATOR?)*
 
 Instruction ::= (((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT? CRLF*) | Directive | MacroCall | LBL_DEF) CRLF*)
 private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP))
@@ -210,7 +210,7 @@ Directive ::= (DIRECTIVE_OP DirectiveArg* CRLF*)
 DirectiveArg ::= NumericLiteral | Address | Identifier
 
 Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R
-private AddressInternal ::= ((REGISTER|MacroCall|Identifier) ((PLUS|MINUS|TIMES) (((NumericLiteral|MacroCall|Identifier) (PLUS|MINUS|TIMES))*)? (NumericLiteral|REGISTER|MacroCall|Identifier))? ((PLUS|MINUS|TIMES) (NumericLiteral|MacroCall|Identifier))?)
+private AddressInternal ::= ((REGISTER|MacroCall|NumericLiteral|Identifier) (((PLUS|MINUS|TIMES) (REGISTER|MacroCall|NumericLiteral|Identifier))*)?)
 
 MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R CRLF*)
 private MacroParams ::= (NumericLiteral MINUS NumericLiteral TIMES?)

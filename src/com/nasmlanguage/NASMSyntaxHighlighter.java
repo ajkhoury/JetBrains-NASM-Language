@@ -27,7 +27,6 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey STRING = createTextAttributesKey("NASM_STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("NASM_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
-
     private static final TextAttributesKey[] BAD_CHAR_KEYS = { BAD_CHARACTER };
     private static final TextAttributesKey[] SEPARATOR_KEYS = { SEPARATOR };
     private static final TextAttributesKey[] REGISTER_KEYS = { REGISTER };
