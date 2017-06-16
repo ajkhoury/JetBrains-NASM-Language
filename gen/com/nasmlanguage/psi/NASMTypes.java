@@ -24,6 +24,7 @@ public interface NASMTypes {
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
 
+  IElementType BINARY = new NASMTokenType("BINARY");
   IElementType BSS_SECTION_NAME = new NASMTokenType("BSS_SECTION_NAME");
   IElementType CODE_SECTION_NAME = new NASMTokenType("CODE_SECTION_NAME");
   IElementType COLON = new NASMTokenType(":");
@@ -31,12 +32,14 @@ public interface NASMTypes {
   IElementType CRLF = new NASMTokenType("CRLF");
   IElementType DATA_OP = new NASMTokenType("DATA_OP");
   IElementType DATA_SECTION_NAME = new NASMTokenType("DATA_SECTION_NAME");
+  IElementType DECIMAL = new NASMTokenType("DECIMAL");
   IElementType DEFINE_TAG = new NASMTokenType("DEFINE_TAG");
   IElementType DIRECTIVE_OP = new NASMTokenType("DIRECTIVE_OP");
   IElementType DIVIDE = new NASMTokenType("\\");
   IElementType DOLLARSIGN = new NASMTokenType("$");
   IElementType DOLLARSIGN2 = new NASMTokenType("$$");
   IElementType DOT = new NASMTokenType(".");
+  IElementType ELEMENT_10_0 = new NASMTokenType("Element_10_0");
   IElementType ELIF_TAG = new NASMTokenType("ELIF_TAG");
   IElementType ELSE_TAG = new NASMTokenType("ELSE_TAG");
   IElementType ENDIF_TAG = new NASMTokenType("ENDIF_TAG");
@@ -46,6 +49,7 @@ public interface NASMTypes {
   IElementType ERROR_TAG = new NASMTokenType("ERROR_TAG");
   IElementType FPU_OP = new NASMTokenType("FPU_OP");
   IElementType GENERAL_OP = new NASMTokenType("GENERAL_OP");
+  IElementType HEXADECIMAL = new NASMTokenType("HEXADECIMAL");
   IElementType IDENTIFIER = new NASMTokenType("IDENTIFIER");
   IElementType IFCTX_TAG = new NASMTokenType("IFCTX_TAG");
   IElementType IFMACRO_TAG = new NASMTokenType("IFMACRO_TAG");
@@ -118,7 +122,6 @@ public interface NASMTypes {
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
   IElementType MINUS = new NASMTokenType("-");
   IElementType MMX_OP = new NASMTokenType("MMX_OP");
-  IElementType NUMBER = new NASMTokenType("NUMBER");
   IElementType OP_PREFIX = new NASMTokenType("OP_PREFIX");
   IElementType PERCENT = new NASMTokenType("%");
   IElementType PLUS = new NASMTokenType("+");

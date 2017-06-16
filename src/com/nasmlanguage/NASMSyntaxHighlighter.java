@@ -77,7 +77,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             return DIRECTIVE_KEYS;
         } else if (tokenType.equals(NASMTypes.STRING)) {
             return STRING_KEYS;
-        } else if (tokenType.equals(NASMTypes.NUMBER)) {
+        } else if (tokenType.equals(NASMTypes.BINARY) || tokenType.equals(NASMTypes.HEXADECIMAL) || tokenType.equals(NASMTypes.DECIMAL)) {
             return NUMBER_KEYS;
         } else if (tokenType.equals(NASMTypes.LABEL) || tokenType.equals(NASMTypes.LABEL_DEF)) {
             return LABEL_KEYS;

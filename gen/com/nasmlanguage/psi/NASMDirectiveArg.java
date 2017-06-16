@@ -11,13 +11,16 @@ public interface NASMDirectiveArg extends PsiElement {
   NASMAddress getAddress();
 
   @Nullable
+  PsiElement getBinary();
+
+  @Nullable
+  PsiElement getDecimal();
+
+  @Nullable
   PsiElement getIdentifier();
 
   @Nullable
   PsiElement getLabel();
-
-  @Nullable
-  PsiElement getNumber();
 
   @Nullable
   PsiElement getSizeType();

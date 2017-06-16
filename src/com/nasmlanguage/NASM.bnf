@@ -134,7 +134,9 @@
         // All kinds of registers
         REGISTER            = 'regexp:%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))'
         SIZE_TYPE           = 'regexp:[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[dDqQ]?[wW][oO][rR][dD]'
-        NUMBER              = 'regexp:0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY]|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+'
+        BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
+        HEXADECIMAL         = 'regexp:(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])'
+        DECIMAL             = 'regexp:((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)'
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
         LABEL_DEF           = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
 
@@ -181,13 +183,14 @@ private Element ::= COMMENT
                 | SQUARE_L Directive SQUARE_R
                 | Data
                 | Instruction
+                |
                 ;
 
 private Section ::= DataSection | CodeSection
-DataSection ::= (SECTION_TAG DATA_SECTION_NAME CRLF* (Data | Directive)*)
-CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction | Directive)*)
+DataSection ::= (SECTION_TAG DATA_SECTION_NAME CRLF* (Data|Directive)*)
+CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction|Directive)*)
 
-Preprocessor ::= (Include | Define | Macro | Conditional | Error | PREPROCESSOR_OP)
+Preprocessor ::= (Include|Define|Macro|Conditional|Error|PREPROCESSOR_OP)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG IDENTIFIER (NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)))
         | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression) {methods=[getDefineIdentifier]}
@@ -200,10 +203,10 @@ Error ::= ERROR_TAG
 Directive ::= (DIRECTIVE_OP (DirectiveArg)*)
 DirectiveArg ::= NumericLiteral | Address | Identifier
 
-Data ::= ((IDENTIFIER COLON?) EQU ((DOLLARSIGN MINUS Identifier)|NumericExpression)) | (LABEL_DEF? DATA_OP DataValue?)
+Data ::= (IDENTIFIER COLON? EQU ((DOLLARSIGN MINUS Identifier)|NumericExpression)) | (LABEL_DEF? DATA_OP DataValue?)
 DataValue ::= ((NumericLiteral|STRING) SEPARATOR?)*
 
-Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall))
+Instruction ::= (LABEL_DEF? ((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT?) | Directive | MacroCall | LABEL_DEF))
 private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP))
 private MnemonicOperationArg ::= REGISTER|NumericLiteral|Address|MacroCall|Identifier
 
@@ -222,4 +225,4 @@ private Expression ::= (((NumericLiteral|REGISTER|MacroCall|IDENTIFIER)(PLUS|MIN
 private Condition ::= ((Expression EQUALEQUAL Expression)|Expression)
 
 private Identifier ::= (SIZE_TYPE? (IDENTIFIER|LABEL))
-private NumericLiteral ::= ((PLUS|MINUS)? NUMBER)
+private NumericLiteral ::= ((PLUS|MINUS)? (BINARY|HEXADECIMAL (COLON HEXADECIMAL)?|DECIMAL))

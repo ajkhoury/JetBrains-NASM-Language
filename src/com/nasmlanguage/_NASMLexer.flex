@@ -118,7 +118,9 @@ SSE3_OP={INS_SSE3_GENERAL}|{INS_SSE3_ARITH}|{INS_SSE3_OTHER}
 SSE4_OP={INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED_INT}|{INS_SSE4_PACKED_FP}|{INS_SSE4_INS_EXT}|{INS_SSE4_CONVERSION}|{INS_SSE4_OTHER}
 REGISTER=%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))
 SIZE_TYPE=[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[dDqQ]?[wW][oO][rR][dD]
-NUMBER=0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY]|0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*h|(([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+
+BINARY=(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])
+HEXADECIMAL=(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])
+DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 LABEL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
 IDENTIFIER=[a-zA-Z_][a-zA-Z0-9_]*
@@ -179,7 +181,9 @@ LABEL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {SSE4_OP}                   { return SSE4_OP; }
   {REGISTER}                  { return REGISTER; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }
-  {NUMBER}                    { return NUMBER; }
+  {BINARY}                    { return BINARY; }
+  {HEXADECIMAL}               { return HEXADECIMAL; }
+  {DECIMAL}                   { return DECIMAL; }
   {STRING}                    { return STRING; }
   {LABEL_DEF}                 { return LABEL_DEF; }
   {IDENTIFIER}                { return IDENTIFIER; }
