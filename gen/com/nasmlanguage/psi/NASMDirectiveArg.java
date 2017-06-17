@@ -14,6 +14,9 @@ public interface NASMDirectiveArg extends PsiElement {
   PsiElement getBinary();
 
   @Nullable
+  PsiElement getCharacter();
+
+  @Nullable
   PsiElement getDecimal();
 
   @Nullable

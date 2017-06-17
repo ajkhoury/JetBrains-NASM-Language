@@ -27,9 +27,9 @@ public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
   }
 
   @Override
-  @Nullable
-  public NASMAddress getAddress() {
-    return findChildByClass(NASMAddress.class);
+  @NotNull
+  public List<NASMAddress> getAddressList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMAddress.class);
   }
 
   @Override

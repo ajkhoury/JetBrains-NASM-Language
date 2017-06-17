@@ -74,7 +74,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             return OPERATION_KEYS;
         } else if (tokenType.equals(NASMTypes.DIRECTIVE_OP) || tokenType.equals(NASMTypes.SECTION_TAG) || tokenType.equals(NASMTypes.EQU))  {
             return DIRECTIVE_KEYS;
-        } else if (tokenType.equals(NASMTypes.STRING)) {
+        } else if (tokenType.equals(NASMTypes.STRING) || tokenType.equals(NASMTypes.CHARACTER)) {
             return STRING_KEYS;
         } else if (tokenType.equals(NASMTypes.BINARY) || tokenType.equals(NASMTypes.HEXADECIMAL) || tokenType.equals(NASMTypes.DECIMAL)) {
             return NUMBER_KEYS;

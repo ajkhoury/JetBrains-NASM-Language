@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMConditional extends PsiElement {
 
   @NotNull
+  List<NASMAddress> getAddressList();
+
+  @NotNull
   List<NASMData> getDataList();
 
   @NotNull

@@ -27,8 +27,10 @@ public interface NASMTypes {
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
   IElementType STRUC = new NASMElementType("STRUC");
 
+  IElementType AT_TAG = new NASMTokenType("AT_TAG");
   IElementType BINARY = new NASMTokenType("BINARY");
   IElementType BSS_SECTION_NAME = new NASMTokenType("BSS_SECTION_NAME");
+  IElementType CHARACTER = new NASMTokenType("CHARACTER");
   IElementType CODE_SECTION_NAME = new NASMTokenType("CODE_SECTION_NAME");
   IElementType COLON = new NASMTokenType(":");
   IElementType COMMENT = new NASMTokenType("COMMENT");
@@ -127,6 +129,7 @@ public interface NASMTypes {
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
   IElementType MINUS = new NASMTokenType("-");
   IElementType MMX_OP = new NASMTokenType("MMX_OP");
+  IElementType MNEMONICOPERATIONARG_7_0 = new NASMTokenType("MnemonicOperationArg_7_0");
   IElementType OP_PREFIX = new NASMTokenType("OP_PREFIX");
   IElementType PERCENT = new NASMTokenType("%");
   IElementType PLUS = new NASMTokenType("+");

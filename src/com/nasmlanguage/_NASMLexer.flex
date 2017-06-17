@@ -33,6 +33,7 @@ STRUC_TAG=([sS][tT][rR][uU][cC])
 ENDSTRUC_TAG=([eE][nN][dD][sS][tT][rR][uU][cC])
 ISTRUC_TAG=([iI][sS][tT][rR][uU][cC])
 IEND_TAG=([iI][eE][nN][dD])
+AT_TAG=([aA][tT])
 INCLUDE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])
 DEFINE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])
 MACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])
@@ -126,6 +127,7 @@ SIZE_TYPE=[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|([dDqQoO]|[xX][
 BINARY=(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])
 HEXADECIMAL=(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])
 DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
+CHARACTER=('([^'\\]|\\.)')
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 LBL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
 IDENTIFIER=[a-zA-Z_][a-zA-Z0-9_]*
@@ -161,6 +163,7 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {ENDSTRUC_TAG}              { return ENDSTRUC_TAG; }
   {ISTRUC_TAG}                { return ISTRUC_TAG; }
   {IEND_TAG}                  { return IEND_TAG; }
+  {AT_TAG}                    { return AT_TAG; }
   {INCLUDE_TAG}               { return INCLUDE_TAG; }
   {DEFINE_TAG}                { return DEFINE_TAG; }
   {MACRO_TAG}                 { return MACRO_TAG; }
@@ -194,6 +197,7 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {BINARY}                    { return BINARY; }
   {HEXADECIMAL}               { return HEXADECIMAL; }
   {DECIMAL}                   { return DECIMAL; }
+  {CHARACTER}                 { return CHARACTER; }
   {STRING}                    { return STRING; }
   {LBL_DEF}                   { return LBL_DEF; }
   {IDENTIFIER}                { return IDENTIFIER; }

@@ -26,6 +26,7 @@
         ENDSTRUC_TAG        = 'regexp:([eE][nN][dD][sS][tT][rR][uU][cC])'
         ISTRUC_TAG          = 'regexp:([iI][sS][tT][rR][uU][cC])'
         IEND_TAG            = 'regexp:([iI][eE][nN][dD])'
+        AT_TAG              = 'regexp:([aA][tT])'
 
 
         INCLUDE_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])'
@@ -146,6 +147,7 @@
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
         HEXADECIMAL         = 'regexp:(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])'
         DECIMAL             = 'regexp:((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)'
+        CHARACTER           = "regexp:('([^'\\]|\\.)')"
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
         LBL_DEF             = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
 
@@ -212,17 +214,15 @@ Data ::= (IDENTIFIER EQU (NumericExpression|(DOLLARSIGN MINUS Identifier)))
         ;
 DataValue ::= ((NumericLiteral|STRING|IDENTIFIER|LBL) SEPARATOR?)*
 Struc ::= (STRUC_TAG IDENTIFIER CRLF* ((LBL|LBL_DEF) DATA_OP? DataValue? CRLF*)* ENDSTRUC_TAG)
-IStruc ::= (ISTRUC_TAG IDENTIFIER CRLF* (('at'|'AT') LBL SEPARATOR DATA_OP DataValue? CRLF*)* IEND_TAG)
+IStruc ::= (ISTRUC_TAG IDENTIFIER CRLF* (AT_TAG LBL SEPARATOR DATA_OP DataValue? CRLF*)* IEND_TAG)
 
 Instruction ::= (((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT? CRLF*) | Directive | MacroCall | LBL_DEF) CRLF*)
 private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP))
-private MnemonicOperationArg ::= REGISTER|NumericLiteral|Address|MacroCall|Identifier|(ROUND_L Expression ROUND_R)|Expression
+private MnemonicOperationArg ::= (ROUND_L Expression ROUND_R)|Expression|REGISTER|NumericLiteral|Address|MacroCall|Identifier|
 
 Directive ::= (DIRECTIVE_OP DirectiveArg* CRLF*)
 DirectiveArg ::= (NumericLiteral|Address|Identifier)
 
-Address ::= (SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R)
-private AddressInternal ::= ((REGISTER|MacroCall|NumericLiteral|Identifier)((PLUS|MINUS|TIMES)(REGISTER|MacroCall|NumericLiteral|Identifier))*)
 
 MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R CRLF*)
 private MacroParams ::= (NumericLiteral MINUS NumericLiteral TIMES?)
@@ -231,10 +231,14 @@ private MacroParams ::= (NumericLiteral MINUS NumericLiteral TIMES?)
                         ;
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 
-private NumericExpression ::= (((NumericLiteral|MacroCall|Identifier)(PLUS|MINUS|TIMES|DIVIDE))* (NumericLiteral|MacroCall|Identifier))
-private Expression ::= (((NumericLiteral|REGISTER|MacroCall|Identifier)(PLUS|MINUS|TIMES|DIVIDE))* (NumericLiteral|REGISTER|MacroCall|Identifier))
+private NumericExpression ::= (((NumericLiteral|MacroCall|Identifier) ArithmeticOperation)* (NumericLiteral|MacroCall|Identifier))
+private Expression ::= (((NumericLiteral|REGISTER|Address|MacroCall|Identifier) ArithmeticOperation)* (NumericLiteral|REGISTER|Address|MacroCall|Identifier))
 
 private Condition ::= ((Expression EQUALEQUAL Expression)|Expression)
 
+Address ::= (SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R)
+private AddressInternal ::= ((REGISTER|MacroCall|NumericLiteral|Identifier)(ArithmeticOperation (REGISTER|MacroCall|NumericLiteral|Identifier))*)
+
 private Identifier ::= (SIZE_TYPE? (IDENTIFIER|LBL))
-private NumericLiteral ::= ((PLUS|MINUS)? (BINARY|HEXADECIMAL (COLON HEXADECIMAL)?|DECIMAL))
+private NumericLiteral ::= ((PLUS|MINUS)? (BINARY|(HEXADECIMAL (COLON HEXADECIMAL)?)|DECIMAL|CHARACTER))
+private ArithmeticOperation ::= (PLUS|MINUS|TIMES|DIVIDE)

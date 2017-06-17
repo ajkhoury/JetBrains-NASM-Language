@@ -28,6 +28,12 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
 
   @Override
   @NotNull
+  public List<NASMAddress> getAddressList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMAddress.class);
+  }
+
+  @Override
+  @NotNull
   public List<NASMData> getDataList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMData.class);
   }
