@@ -44,4 +44,8 @@ public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
     return findNotNullChildByType(LBL_DEF);
   }
 
+  public String getLabelIdentifier() {
+    return NASMPsiImplUtil.getLabelIdentifier(this);
+  }
+
 }

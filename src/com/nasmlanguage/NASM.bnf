@@ -206,7 +206,7 @@ Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction
                 | (IFMACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 Error ::= ERROR_TAG CRLF*
 
-Label ::= (LBL_DEF (Instruction|Data|CRLF*))
+Label ::= (LBL_DEF (Instruction|Data|CRLF*)) {methods=[getLabelIdentifier]}
 
 Data ::= (IDENTIFIER EQU (NumericExpression|(DOLLARSIGN MINUS Identifier)))
         | (LBL_DEF? DATA_OP DataValue?)
@@ -242,3 +242,4 @@ private AddressInternal ::= ((REGISTER|MacroCall|NumericLiteral|Identifier)(Arit
 private Identifier ::= (SIZE_TYPE? (IDENTIFIER|LBL))
 private NumericLiteral ::= ((PLUS|MINUS)? (BINARY|(HEXADECIMAL (COLON HEXADECIMAL)?)|DECIMAL|CHARACTER))
 private ArithmeticOperation ::= (PLUS|MINUS|TIMES|DIVIDE)
+

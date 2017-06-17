@@ -16,4 +16,6 @@ public interface NASMLabel extends PsiElement {
   @NotNull
   PsiElement getLblDef();
 
+  String getLabelIdentifier();
+
 }

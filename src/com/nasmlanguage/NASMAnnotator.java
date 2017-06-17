@@ -9,6 +9,7 @@ import com.nasmlanguage.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Arrays;
 
 public class NASMAnnotator implements Annotator {
     @Override
@@ -70,12 +71,39 @@ public class NASMAnnotator implements Annotator {
                     }
                 }
             }
+        } else if (element instanceof NASMInstruction) {
+            NASMInstruction nasmInstruction = (NASMInstruction)element;
+            String instructionText = nasmInstruction.getText();
+            if (instructionText != null && instructionText.length() > 0) {
+                List<NASMLabel> labels = NASMUtil.findLabels(element.getProject());
+                for (NASMLabel label : labels) {
+                    String labelIdentifier = label.getLabelIdentifier();
+                    if (labelIdentifier != null) {
+                        int identifierIdx = -1;
+                        for (String word : instructionText.split("\\s+")) {
+                            if (word.equals(labelIdentifier)) {
+                                identifierIdx = instructionText.indexOf(labelIdentifier);
+                                break;
+                            }
+                        }
+                        if (identifierIdx != -1) {
+                            highlightTextRange(
+                                    element.getTextRange().getStartOffset() + identifierIdx,
+                                    labelIdentifier.length(),
+                                    NASMSyntaxHighlighter.LABEL,
+                                    holder
+                            );
+                        }
+                    }
+                }
+            }
         }
     }
 
     private void highlightTextRange(int startOffset, int length, @NotNull TextAttributesKey textAttributes, @NotNull AnnotationHolder holder) {
         TextRange range = new TextRange(startOffset, startOffset + length);
         Annotation annotation = holder.createInfoAnnotation(range, null);
-        annotation.setTextAttributes(NASMSyntaxHighlighter.MACRO_CALL);
+        annotation.setTextAttributes(textAttributes);
     }
+
 }

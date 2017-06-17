@@ -32,6 +32,15 @@ public class NASMPsiImplUtil {
         return null;
     }
 
+    public static String getLabelIdentifier(NASMLabel element) {
+        ASTNode labelDef = element.getNode().findChildByType(NASMTypes.LBL_DEF);
+        if (labelDef != null) {
+            String labelDefString = labelDef.getText();
+            return labelDefString.substring(0, labelDefString.indexOf(':')).trim();
+        }
+        return null;
+    }
+
 
 
 }

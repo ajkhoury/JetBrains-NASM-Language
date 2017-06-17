@@ -39,4 +39,25 @@ public class NASMUtil {
         return result;
     }
 
+    public static List<NASMLabel> findLabels(Project project) {
+        List<NASMLabel> result = new ArrayList<>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
+                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
+        );
+        for (VirtualFile virtualFile : virtualFiles) {
+            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
+            if (assemblyFile != null) {
+                NASMLabel[] nasmLabels = PsiTreeUtil.getChildrenOfType(assemblyFile, NASMLabel.class);
+                if (nasmLabels != null) {
+                    for (NASMLabel nasmLabel : nasmLabels) {
+                        if (nasmLabel != null) {
+                            result.add(nasmLabel);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
 }
