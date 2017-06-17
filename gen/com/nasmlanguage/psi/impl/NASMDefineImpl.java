@@ -27,6 +27,12 @@ public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
   }
 
   @Override
+  @Nullable
+  public NASMAddress getAddress() {
+    return findChildByClass(NASMAddress.class);
+  }
+
+  @Override
   @NotNull
   public List<NASMMacroCall> getMacroCallList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMMacroCall.class);

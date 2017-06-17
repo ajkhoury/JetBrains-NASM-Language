@@ -110,7 +110,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (REGISTER|MacroCall|NumericLiteral|Identifier) (((PLUS|MINUS|TIMES) (REGISTER|MacroCall|NumericLiteral|Identifier))*)?
+  // (REGISTER|MacroCall|NumericLiteral|Identifier)((PLUS|MINUS|TIMES)(REGISTER|MacroCall|NumericLiteral|Identifier))*
   static boolean AddressInternal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddressInternal")) return false;
     boolean r;
@@ -134,39 +134,32 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (((PLUS|MINUS|TIMES) (REGISTER|MacroCall|NumericLiteral|Identifier))*)?
+  // ((PLUS|MINUS|TIMES)(REGISTER|MacroCall|NumericLiteral|Identifier))*
   private static boolean AddressInternal_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddressInternal_1")) return false;
-    AddressInternal_1_0(b, l + 1);
-    return true;
-  }
-
-  // ((PLUS|MINUS|TIMES) (REGISTER|MacroCall|NumericLiteral|Identifier))*
-  private static boolean AddressInternal_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_1_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!AddressInternal_1_0_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "AddressInternal_1_0", c)) break;
+      if (!AddressInternal_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "AddressInternal_1", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
-  // (PLUS|MINUS|TIMES) (REGISTER|MacroCall|NumericLiteral|Identifier)
-  private static boolean AddressInternal_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_1_0_0")) return false;
+  // (PLUS|MINUS|TIMES)(REGISTER|MacroCall|NumericLiteral|Identifier)
+  private static boolean AddressInternal_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = AddressInternal_1_0_0_0(b, l + 1);
-    r = r && AddressInternal_1_0_0_1(b, l + 1);
+    r = AddressInternal_1_0_0(b, l + 1);
+    r = r && AddressInternal_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // PLUS|MINUS|TIMES
-  private static boolean AddressInternal_1_0_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_1_0_0_0")) return false;
+  private static boolean AddressInternal_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, PLUS);
@@ -177,8 +170,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // REGISTER|MacroCall|NumericLiteral|Identifier
-  private static boolean AddressInternal_1_0_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AddressInternal_1_0_0_1")) return false;
+  private static boolean AddressInternal_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddressInternal_1_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, REGISTER);
@@ -682,7 +675,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (DEFINE_TAG IDENTIFIER (NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) CRLF*)
+  // (DEFINE_TAG IDENTIFIER (NumericLiteral|Address|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) CRLF*)
   //         | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression CRLF*)
   public static boolean Define(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define")) return false;
@@ -695,7 +688,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // DEFINE_TAG IDENTIFIER (NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) CRLF*
+  // DEFINE_TAG IDENTIFIER (NumericLiteral|Address|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) CRLF*
   private static boolean Define_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define_0")) return false;
     boolean r;
@@ -707,39 +700,40 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)
+  // NumericLiteral|Address|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)
   private static boolean Define_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Define_0_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = NumericLiteral(b, l + 1);
-    if (!r) r = Define_0_2_1(b, l + 1);
+    if (!r) r = Address(b, l + 1);
+    if (!r) r = Define_0_2_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?
-  private static boolean Define_0_2_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Define_0_2_1")) return false;
+  private static boolean Define_0_2_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Define_0_2_1_0(b, l + 1);
+    r = Define_0_2_2_0(b, l + 1);
     r = r && consumeToken(b, IDENTIFIER);
-    r = r && Define_0_2_1_2(b, l + 1);
+    r = r && Define_0_2_2_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (PERCENT SQUARE_L)?
-  private static boolean Define_0_2_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Define_0_2_1_0")) return false;
-    Define_0_2_1_0_0(b, l + 1);
+  private static boolean Define_0_2_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2_2_0")) return false;
+    Define_0_2_2_0_0(b, l + 1);
     return true;
   }
 
   // PERCENT SQUARE_L
-  private static boolean Define_0_2_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Define_0_2_1_0_0")) return false;
+  private static boolean Define_0_2_2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2_2_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, PERCENT, SQUARE_L);
@@ -748,8 +742,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // SQUARE_R?
-  private static boolean Define_0_2_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Define_0_2_1_2")) return false;
+  private static boolean Define_0_2_2_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Define_0_2_2_2")) return false;
     consumeToken(b, SQUARE_R);
     return true;
   }
@@ -882,7 +876,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NumericLiteral | Address | Identifier
+  // NumericLiteral|Address|Identifier
   public static boolean DirectiveArg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveArg")) return false;
     boolean r;

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
 public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
-    public static final TextAttributesKey REGISTER = createTextAttributesKey("NASM_REGISTER", DefaultLanguageHighlighterColors.CONSTANT);
+    public static final TextAttributesKey REGISTER = createTextAttributesKey("NASM_REGISTER", DefaultLanguageHighlighterColors.GLOBAL_VARIABLE);
     public static final TextAttributesKey OPERATION = createTextAttributesKey("NASM_OPERATION", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey SEPARATOR = createTextAttributesKey("NASM_SEPARATOR", DefaultLanguageHighlighterColors.COMMA);
     public static final TextAttributesKey BAD_OP = createTextAttributesKey("NASM_BAD_OP", HighlighterColors.BAD_CHARACTER);
@@ -22,7 +22,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey COMMENT = createTextAttributesKey("NASM_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey LABEL = createTextAttributesKey("NASM_LABEL", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
     public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("NASM_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
-    public static final TextAttributesKey MACRO_CALL = createTextAttributesKey("NASM_MACRO_CALL", DefaultLanguageHighlighterColors.FUNCTION_CALL);
+    public static final TextAttributesKey MACRO_CALL = createTextAttributesKey("NASM_MACRO_CALL", DefaultLanguageHighlighterColors.CONSTANT);
     public static final TextAttributesKey DIRECTIVE = createTextAttributesKey("NASM_DIRECTIVE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey STRING = createTextAttributesKey("NASM_STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("NASM_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);

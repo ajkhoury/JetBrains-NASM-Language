@@ -197,7 +197,7 @@ CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction|Directive)*)
 
 Preprocessor ::= (Include|Define|Macro|Conditional|Error|PREPROCESSOR_OP)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
-Define ::= (DEFINE_TAG IDENTIFIER (NumericLiteral|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) CRLF*)
+Define ::= (DEFINE_TAG IDENTIFIER (NumericLiteral|Address|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) CRLF*)
         | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression CRLF*) {methods=[getDefineIdentifier]}
 Macro ::= (MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
 Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
@@ -219,10 +219,10 @@ private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_O
 private MnemonicOperationArg ::= REGISTER|NumericLiteral|Address|MacroCall|Identifier|(ROUND_L Expression ROUND_R)|Expression
 
 Directive ::= (DIRECTIVE_OP DirectiveArg* CRLF*)
-DirectiveArg ::= NumericLiteral | Address | Identifier
+DirectiveArg ::= (NumericLiteral|Address|Identifier)
 
-Address ::= SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R
-private AddressInternal ::= ((REGISTER|MacroCall|NumericLiteral|Identifier) (((PLUS|MINUS|TIMES) (REGISTER|MacroCall|NumericLiteral|Identifier))*)?)
+Address ::= (SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R)
+private AddressInternal ::= ((REGISTER|MacroCall|NumericLiteral|Identifier)((PLUS|MINUS|TIMES)(REGISTER|MacroCall|NumericLiteral|Identifier))*)
 
 MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R CRLF*)
 private MacroParams ::= (NumericLiteral MINUS NumericLiteral TIMES?)
