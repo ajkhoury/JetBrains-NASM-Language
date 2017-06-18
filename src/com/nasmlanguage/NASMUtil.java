@@ -13,25 +13,68 @@ import java.util.*;
 
 public class NASMUtil {
 
-    public static List<PsiElement> findPreprocessorMacros(Project project) {
+    public static List<PsiElement> findPreprocessorMacrosAndDefines(Project project) {
         List<PsiElement> result = new ArrayList<>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
+                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
+        );
+        for (VirtualFile virtualFile : virtualFiles) {
+            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
+            if (assemblyFile != null) {
+                Collection<NASMPreprocessor> nasmPreprocessors = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMPreprocessor.class);
+                if (!nasmPreprocessors.isEmpty()) {
+                    for (NASMPreprocessor nasmPreprocessor : nasmPreprocessors) {
+                        NASMMacro macro = nasmPreprocessor.getMacro();
+                        if (macro != null) {
+                            result.add(macro);
+                            continue;
+                        }
+                        NASMDefine define = nasmPreprocessor.getDefine();
+                        if (define != null) {
+                            result.add(define);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public static List<NASMMacro> findPreprocessorMacros(Project project) {
+        List<NASMMacro> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
             FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
         );
         for (VirtualFile virtualFile : virtualFiles) {
             NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
             if (assemblyFile != null) {
-                NASMPreprocessor[] nasmPreprocessors = PsiTreeUtil.getChildrenOfType(assemblyFile, NASMPreprocessor.class);
-                if (nasmPreprocessors != null) {
+                Collection<NASMPreprocessor> nasmPreprocessors = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMPreprocessor.class);
+                if (!nasmPreprocessors.isEmpty()) {
                     for (NASMPreprocessor nasmPreprocessor : nasmPreprocessors) {
                         NASMMacro macro = nasmPreprocessor.getMacro();
-                        if (macro != null) {
+                        if (macro != null)
                             result.add(macro);
-                        } else {
-                            NASMDefine define = nasmPreprocessor.getDefine();
-                            if (define != null)
-                                result.add(define);
-                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public static List<NASMDefine> findPreprocessorDefines(Project project) {
+        List<NASMDefine> result = new ArrayList<>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
+                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
+        );
+        for (VirtualFile virtualFile : virtualFiles) {
+            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
+            if (assemblyFile != null) {
+                Collection<NASMPreprocessor> nasmPreprocessors = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMPreprocessor.class);
+                if (!nasmPreprocessors.isEmpty()) {
+                    for (NASMPreprocessor nasmPreprocessor : nasmPreprocessors) {
+                        NASMDefine define = nasmPreprocessor.getDefine();
+                        if (define != null)
+                            result.add(define);
                     }
                 }
             }
@@ -47,8 +90,8 @@ public class NASMUtil {
         for (VirtualFile virtualFile : virtualFiles) {
             NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
             if (assemblyFile != null) {
-                NASMLabel[] nasmLabels = PsiTreeUtil.getChildrenOfType(assemblyFile, NASMLabel.class);
-                if (nasmLabels != null) {
+                Collection<NASMLabel> nasmLabels = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMLabel.class);
+                if (!nasmLabels.isEmpty()) {
                     for (NASMLabel nasmLabel : nasmLabels) {
                         if (nasmLabel != null) {
                             result.add(nasmLabel);

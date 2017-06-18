@@ -9,7 +9,6 @@ import com.nasmlanguage.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Arrays;
 
 public class NASMAnnotator implements Annotator {
     @Override
@@ -18,10 +17,9 @@ public class NASMAnnotator implements Annotator {
             NASMMacroCall macroCall = (NASMMacroCall)element;
             String macroCallText = macroCall.getText();
             if (macroCallText != null && macroCallText.length() > 0) {
-                Project project = element.getProject();
                 int identifierLength = macroCallText.indexOf('(');
                 String macroIdentifier = macroCallText.substring(0, identifierLength);
-                List<PsiElement> macros = NASMUtil.findPreprocessorMacros(project);
+                List<PsiElement> macros = NASMUtil.findPreprocessorMacrosAndDefines(element.getProject());
                 for (PsiElement macro : macros) {
                     String macroText = macro.getText();
                     if (macroText != null) {
@@ -75,6 +73,7 @@ public class NASMAnnotator implements Annotator {
             NASMInstruction nasmInstruction = (NASMInstruction)element;
             String instructionText = nasmInstruction.getText();
             if (instructionText != null && instructionText.length() > 0) {
+                // Highlight label indentifiers
                 List<NASMLabel> labels = NASMUtil.findLabels(element.getProject());
                 for (NASMLabel label : labels) {
                     String labelIdentifier = label.getLabelIdentifier();
@@ -96,7 +95,31 @@ public class NASMAnnotator implements Annotator {
                         }
                     }
                 }
+                // Highlight macro identifiers
+                List<NASMDefine> defines = NASMUtil.findPreprocessorDefines(element.getProject());
+                for (NASMDefine define : defines) {
+                    String identifierText = define.getDefineIdentifier();
+                    if (identifierText != null) {
+                        int identifierIdx = -1;
+                        for (String word : instructionText.split("\\s+")) {
+                            if (word.equals(identifierText)) {
+                                identifierIdx = instructionText.indexOf(identifierText);
+                                break;
+                            }
+                        }
+                        if (identifierIdx != -1) {
+                            highlightTextRange(
+                                    element.getTextRange().getStartOffset() + identifierIdx,
+                                    identifierText.length(),
+                                    NASMSyntaxHighlighter.MACRO_CALL,
+                                    holder
+                            );
+                        }
+                    }
+                }
             }
+        } else if (element instanceof NASMDefine) {
+            element.getProject();
         }
     }
 
