@@ -21,7 +21,7 @@ public class NASMFile extends PsiFileBase {
 
     @Override
     public String toString() {
-        return "Assembly File";
+        return "Assembly";
     }
 
     @Override

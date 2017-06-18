@@ -21,7 +21,7 @@ public class NASMFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getDescription() {
-        return "Assembly language file";
+        return "Assembly Language";
     }
 
     @NotNull
