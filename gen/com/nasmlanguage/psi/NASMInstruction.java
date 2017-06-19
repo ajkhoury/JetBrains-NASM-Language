@@ -7,14 +7,11 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMInstruction extends PsiElement {
 
-  @NotNull
-  List<NASMAddress> getAddressList();
-
   @Nullable
   NASMDirective getDirective();
 
   @NotNull
-  List<NASMMacroCall> getMacroCallList();
+  List<NASMExpr> getExprList();
 
   @Nullable
   PsiElement getComment();

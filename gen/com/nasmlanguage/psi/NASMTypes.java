@@ -9,6 +9,7 @@ import com.nasmlanguage.psi.impl.*;
 public interface NASMTypes {
 
   IElementType ADDRESS = new NASMElementType("ADDRESS");
+  IElementType ASSIGN = new NASMElementType("ASSIGN");
   IElementType CODE_SECTION = new NASMElementType("CODE_SECTION");
   IElementType CONDITIONAL = new NASMElementType("CONDITIONAL");
   IElementType DATA = new NASMElementType("DATA");
@@ -17,16 +18,32 @@ public interface NASMTypes {
   IElementType DEFINE = new NASMElementType("DEFINE");
   IElementType DIRECTIVE = new NASMElementType("DIRECTIVE");
   IElementType DIRECTIVE_ARG = new NASMElementType("DIRECTIVE_ARG");
+  IElementType DIV_EXPR = new NASMElementType("DIV_EXPR");
   IElementType ERROR = new NASMElementType("ERROR");
+  IElementType EXPR = new NASMElementType("EXPR");
+  IElementType IDENTIFIER = new NASMElementType("IDENTIFIER");
   IElementType INCLUDE = new NASMElementType("INCLUDE");
   IElementType INSTRUCTION = new NASMElementType("INSTRUCTION");
   IElementType I_STRUC = new NASMElementType("I_STRUC");
   IElementType LABEL = new NASMElementType("LABEL");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
+  IElementType MAP_OPTION = new NASMElementType("MAP_OPTION");
+  IElementType MINUS_EXPR = new NASMElementType("MINUS_EXPR");
+  IElementType MUL_EXPR = new NASMElementType("MUL_EXPR");
+  IElementType NUMERIC_EXPR = new NASMElementType("NUMERIC_EXPR");
+  IElementType NUMERIC_LITERAL = new NASMElementType("NUMERIC_LITERAL");
+  IElementType PARENTHESIS_EXPR = new NASMElementType("PARENTHESIS_EXPR");
+  IElementType PARENTHESIS_NUMERIC_EXPR = new NASMElementType("PARENTHESIS_NUMERIC_EXPR");
+  IElementType PLUS_EXPR = new NASMElementType("PLUS_EXPR");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
+  IElementType REG = new NASMElementType("REG");
+  IElementType SEG = new NASMElementType("SEG");
+  IElementType STR = new NASMElementType("STR");
+  IElementType STRLEN = new NASMElementType("STRLEN");
   IElementType STRUC = new NASMElementType("STRUC");
 
+  IElementType ASSIGN_TAG = new NASMTokenType("ASSIGN_TAG");
   IElementType AT_TAG = new NASMTokenType("AT_TAG");
   IElementType BINARY = new NASMTokenType("BINARY");
   IElementType BSS_SECTION_NAME = new NASMTokenType("BSS_SECTION_NAME");
@@ -55,7 +72,7 @@ public interface NASMTypes {
   IElementType FPU_OP = new NASMTokenType("FPU_OP");
   IElementType GENERAL_OP = new NASMTokenType("GENERAL_OP");
   IElementType HEXADECIMAL = new NASMTokenType("HEXADECIMAL");
-  IElementType IDENTIFIER = new NASMTokenType("IDENTIFIER");
+  IElementType ID = new NASMTokenType("ID");
   IElementType IEND_TAG = new NASMTokenType("IEND_TAG");
   IElementType IFCTX_TAG = new NASMTokenType("IFCTX_TAG");
   IElementType IFMACRO_TAG = new NASMTokenType("IFMACRO_TAG");
@@ -127,17 +144,20 @@ public interface NASMTypes {
   IElementType LBL_DEF = new NASMTokenType("LBL_DEF");
   IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
+  IElementType MAP_FILE = new NASMTokenType("MAP_FILE");
+  IElementType MAP_OPTIONS = new NASMTokenType("MAP_OPTIONS");
   IElementType MINUS = new NASMTokenType("-");
   IElementType MMX_OP = new NASMTokenType("MMX_OP");
-  IElementType MNEMONICOPERATIONARG_7_0 = new NASMTokenType("MnemonicOperationArg_7_0");
   IElementType OP_PREFIX = new NASMTokenType("OP_PREFIX");
   IElementType PERCENT = new NASMTokenType("%");
   IElementType PLUS = new NASMTokenType("+");
   IElementType PREPROCESSOR_OP = new NASMTokenType("PREPROCESSOR_OP");
+  IElementType QUESTION = new NASMTokenType("?");
   IElementType REGISTER = new NASMTokenType("REGISTER");
   IElementType ROUND_L = new NASMTokenType("(");
   IElementType ROUND_R = new NASMTokenType(")");
   IElementType SECTION_TAG = new NASMTokenType("SECTION_TAG");
+  IElementType SEGMENT = new NASMTokenType("SEGMENT");
   IElementType SEMICOLON = new NASMTokenType(";");
   IElementType SEPARATOR = new NASMTokenType(",");
   IElementType SIZE_TYPE = new NASMTokenType("SIZE_TYPE");
@@ -148,6 +168,7 @@ public interface NASMTypes {
   IElementType SSE4_OP = new NASMTokenType("SSE4_OP");
   IElementType SSE_OP = new NASMTokenType("SSE_OP");
   IElementType STRING = new NASMTokenType("STRING");
+  IElementType STRLEN_TAG = new NASMTokenType("STRLEN_TAG");
   IElementType STRUC_TAG = new NASMTokenType("STRUC_TAG");
   IElementType TIMES = new NASMTokenType("*");
   IElementType X64_OP = new NASMTokenType("X64_OP");
@@ -157,6 +178,9 @@ public interface NASMTypes {
       IElementType type = node.getElementType();
        if (type == ADDRESS) {
         return new NASMAddressImpl(node);
+      }
+      else if (type == ASSIGN) {
+        return new NASMAssignImpl(node);
       }
       else if (type == CODE_SECTION) {
         return new NASMCodeSectionImpl(node);
@@ -182,8 +206,14 @@ public interface NASMTypes {
       else if (type == DIRECTIVE_ARG) {
         return new NASMDirectiveArgImpl(node);
       }
+      else if (type == DIV_EXPR) {
+        return new NASMDivExprImpl(node);
+      }
       else if (type == ERROR) {
         return new NASMErrorImpl(node);
+      }
+      else if (type == IDENTIFIER) {
+        return new NASMIdentifierImpl(node);
       }
       else if (type == INCLUDE) {
         return new NASMIncludeImpl(node);
@@ -203,8 +233,44 @@ public interface NASMTypes {
       else if (type == MACRO_CALL) {
         return new NASMMacroCallImpl(node);
       }
+      else if (type == MAP_OPTION) {
+        return new NASMMapOptionImpl(node);
+      }
+      else if (type == MINUS_EXPR) {
+        return new NASMMinusExprImpl(node);
+      }
+      else if (type == MUL_EXPR) {
+        return new NASMMulExprImpl(node);
+      }
+      else if (type == NUMERIC_EXPR) {
+        return new NASMNumericExprImpl(node);
+      }
+      else if (type == NUMERIC_LITERAL) {
+        return new NASMNumericLiteralImpl(node);
+      }
+      else if (type == PARENTHESIS_EXPR) {
+        return new NASMParenthesisExprImpl(node);
+      }
+      else if (type == PARENTHESIS_NUMERIC_EXPR) {
+        return new NASMParenthesisNumericExprImpl(node);
+      }
+      else if (type == PLUS_EXPR) {
+        return new NASMPlusExprImpl(node);
+      }
       else if (type == PREPROCESSOR) {
         return new NASMPreprocessorImpl(node);
+      }
+      else if (type == REG) {
+        return new NASMRegImpl(node);
+      }
+      else if (type == SEG) {
+        return new NASMSegImpl(node);
+      }
+      else if (type == STR) {
+        return new NASMStrImpl(node);
+      }
+      else if (type == STRLEN) {
+        return new NASMStrlenImpl(node);
       }
       else if (type == STRUC) {
         return new NASMStrucImpl(node);

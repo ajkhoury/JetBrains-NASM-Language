@@ -8,12 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface NASMDataSection extends PsiElement {
 
   @NotNull
-  List<NASMData> getDataList();
-
-  @NotNull
-  List<NASMDirective> getDirectiveList();
-
-  @NotNull
   PsiElement getDataSectionName();
 
   @NotNull

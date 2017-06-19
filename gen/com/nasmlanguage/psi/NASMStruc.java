@@ -8,13 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface NASMStruc extends PsiElement {
 
   @NotNull
-  List<NASMDataValue> getDataValueList();
+  List<NASMNumericLiteral> getNumericLiteralList();
 
   @NotNull
   PsiElement getEndstrucTag();
-
-  @NotNull
-  PsiElement getIdentifier();
 
   @NotNull
   PsiElement getStrucTag();

@@ -28,18 +28,6 @@ public class NASMDataSectionImpl extends ASTWrapperPsiElement implements NASMDat
 
   @Override
   @NotNull
-  public List<NASMData> getDataList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMData.class);
-  }
-
-  @Override
-  @NotNull
-  public List<NASMDirective> getDirectiveList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMDirective.class);
-  }
-
-  @Override
-  @NotNull
   public PsiElement getDataSectionName() {
     return findNotNullChildByType(DATA_SECTION_NAME);
   }

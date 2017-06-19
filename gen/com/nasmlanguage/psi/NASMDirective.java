@@ -10,7 +10,10 @@ public interface NASMDirective extends PsiElement {
   @NotNull
   List<NASMDirectiveArg> getDirectiveArgList();
 
-  @NotNull
+  @Nullable
+  NASMMapOption getMapOption();
+
+  @Nullable
   PsiElement getDirectiveOp();
 
 }

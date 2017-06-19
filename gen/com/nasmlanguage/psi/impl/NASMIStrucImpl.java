@@ -34,12 +34,6 @@ public class NASMIStrucImpl extends ASTWrapperPsiElement implements NASMIStruc {
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @NotNull
   public PsiElement getIendTag() {
     return findNotNullChildByType(IEND_TAG);
   }

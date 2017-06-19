@@ -28,12 +28,6 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
 
   @Override
   @NotNull
-  public List<NASMAddress> getAddressList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMAddress.class);
-  }
-
-  @Override
-  @NotNull
   public List<NASMData> getDataList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMData.class);
   }
@@ -46,14 +40,14 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
 
   @Override
   @NotNull
-  public List<NASMInstruction> getInstructionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMInstruction.class);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override
   @NotNull
-  public List<NASMMacroCall> getMacroCallList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMMacroCall.class);
+  public List<NASMInstruction> getInstructionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMInstruction.class);
   }
 
   @Override
@@ -70,6 +64,12 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
 
   @Override
   @Nullable
+  public PsiElement getId() {
+    return findChildByType(ID);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIfmacroTag() {
     return findChildByType(IFMACRO_TAG);
   }
@@ -78,6 +78,12 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
   @Nullable
   public PsiElement getIfTag() {
     return findChildByType(IF_TAG);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRegister() {
+    return findChildByType(REGISTER);
   }
 
   @Override

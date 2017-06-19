@@ -8,6 +8,10 @@ import com.intellij.psi.PsiElement;
 public class NASMVisitor extends PsiElementVisitor {
 
   public void visitAddress(@NotNull NASMAddress o) {
+    visitExpr(o);
+  }
+
+  public void visitAssign(@NotNull NASMAssign o) {
     visitPsiElement(o);
   }
 
@@ -43,12 +47,24 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDivExpr(@NotNull NASMDivExpr o) {
+    visitExpr(o);
+  }
+
   public void visitError(@NotNull NASMError o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExpr(@NotNull NASMExpr o) {
     visitPsiElement(o);
   }
 
   public void visitIStruc(@NotNull NASMIStruc o) {
     visitPsiElement(o);
+  }
+
+  public void visitIdentifier(@NotNull NASMIdentifier o) {
+    visitExpr(o);
   }
 
   public void visitInclude(@NotNull NASMInclude o) {
@@ -68,10 +84,58 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitMacroCall(@NotNull NASMMacroCall o) {
+    visitExpr(o);
+  }
+
+  public void visitMapOption(@NotNull NASMMapOption o) {
     visitPsiElement(o);
   }
 
+  public void visitMinusExpr(@NotNull NASMMinusExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitMulExpr(@NotNull NASMMulExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitNumericExpr(@NotNull NASMNumericExpr o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNumericLiteral(@NotNull NASMNumericLiteral o) {
+    visitExpr(o);
+  }
+
+  public void visitParenthesisExpr(@NotNull NASMParenthesisExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitParenthesisNumericExpr(@NotNull NASMParenthesisNumericExpr o) {
+    visitNumericExpr(o);
+  }
+
+  public void visitPlusExpr(@NotNull NASMPlusExpr o) {
+    visitExpr(o);
+  }
+
   public void visitPreprocessor(@NotNull NASMPreprocessor o) {
+    visitPsiElement(o);
+  }
+
+  public void visitReg(@NotNull NASMReg o) {
+    visitExpr(o);
+  }
+
+  public void visitSeg(@NotNull NASMSeg o) {
+    visitExpr(o);
+  }
+
+  public void visitStr(@NotNull NASMStr o) {
+    visitExpr(o);
+  }
+
+  public void visitStrlen(@NotNull NASMStrlen o) {
     visitPsiElement(o);
   }
 

@@ -35,7 +35,8 @@ ISTRUC_TAG=([iI][sS][tT][rR][uU][cC])
 IEND_TAG=([iI][eE][nN][dD])
 AT_TAG=([aA][tT])
 INCLUDE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])
-DEFINE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])
+DEFINE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])
+ASSIGN_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[aA][sS][sS][iI][gG][nN])
 MACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])
 MACRO_END_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
 IF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)
@@ -44,14 +45,17 @@ IFCTX_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][cC][tT][xX])
 ELIF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)
 ELSE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][sS][eE])
 ENDIF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][nN][dD][iI][fF])
+STRLEN_TAG=((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([sS][tT][rR][lL][eE][nN]))
 ERROR_TAG=((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*
 SECTION_TAG=([sS][eE][cC][tT][iI][oO][nN])
 CODE_SECTION_NAME=(\.[tT][eE][xX][tT])
 DATA_SECTION_NAME=(\.[dD][aA][tT][aA])
 BSS_SECTION_NAME=(\.[bB][sS][sS])
+MAP_OPTIONS=(all|brief|sections|segments|symbols)
+MAP_FILE=(([a-zA-Z_][a-zA-Z0-9_.]*).[mM][aA][pP])
 DIRECTIVE_OP=[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]
 PREPROCESSOR_OP=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])
-DATA_OP=(([rR][eE][sS])|[dD])[bBwWdDqQtT]|[tT][iI][mM][eE][sS]
+DATA_OP=([rR][eE][sS][bBwWdDqQtToOyYzZ]|[dD][bBwWdDqQtToOyYzZ]|[tT][iI][mM][eE][sS])
 INS_DATA_TRANS_MOV=(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)
 INS_DATA_TRANS_XCHG=(xchg|bswap|xadd|cmpxchg(8b)?)
 INS_DATA_TRANS_OTHER=((push|pop)(ad?)?|cwde?|cdq|cbw)
@@ -113,7 +117,7 @@ INS_SSE4_PACKED_FP=(round[ps][sd])
 INS_SSE4_INS_EXT=((extract|insert)ps|p((ins|ext)(r[bdq])))
 INS_SSE4_CONVERSION=(pmov([sz]x(b[dqw]|dq|wd|wq)))
 INS_SSE4_OTHER=(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))
-OP_PREFIX=((rep(n?[ez])|rep)|lock|[c-gs]s)
+OP_PREFIX=((rep(n?[ez])|rep)|lock)
 GENERAL_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}
 X64_OP={INS_64_BIT}
 FPU_OP={INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}
@@ -122,15 +126,16 @@ SSE_OP={INS_SSE_DATA_TRANS}|{INS_SSE_ARITH}|{INS_SSE_COMPARISON}|{INS_SSE_LOGICA
 SSE2_OP={INS_SSE2_DATA_TRANS}|{INS_SSE2_ARITH}|{INS_SSE2_LOGICAL}|{INS_SSE2_COMPARISON}|{INS_SSE2_OTHER}|{INS_SSE2_CONVERSION}|{INS_SSE2_SIMD_INT}|{INS_SSE2_CACHE_CTRL}
 SSE3_OP={INS_SSE3_GENERAL}|{INS_SSE3_ARITH}|{INS_SSE3_OTHER}
 SSE4_OP={INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED_INT}|{INS_SSE4_PACKED_FP}|{INS_SSE4_INS_EXT}|{INS_SSE4_CONVERSION}|{INS_SSE4_OTHER}
-REGISTER=%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))
+REGISTER=%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))
+SEGMENT=([c-gs]s)
 SIZE_TYPE=[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|([dDqQoO]|[xX][mM][mM])?[wW][oO][rR][dD]
 BINARY=(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])
 HEXADECIMAL=(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])
 DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
 CHARACTER=('([^'\\]|\\.)')
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
+ID=[a-zA-Z_][a-zA-Z0-9_]*
 LBL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
-IDENTIFIER=[a-zA-Z_][a-zA-Z0-9_]*
 LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
 
 %%
@@ -145,6 +150,7 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   ")"                         { return ROUND_R; }
   ","                         { return SEPARATOR; }
   "."                         { return DOT; }
+  "?"                         { return QUESTION; }
   "="                         { return EQUAL; }
   "=="                        { return EQUALEQUAL; }
   "+"                         { return PLUS; }
@@ -166,6 +172,7 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {AT_TAG}                    { return AT_TAG; }
   {INCLUDE_TAG}               { return INCLUDE_TAG; }
   {DEFINE_TAG}                { return DEFINE_TAG; }
+  {ASSIGN_TAG}                { return ASSIGN_TAG; }
   {MACRO_TAG}                 { return MACRO_TAG; }
   {MACRO_END_TAG}             { return MACRO_END_TAG; }
   {IF_TAG}                    { return IF_TAG; }
@@ -174,11 +181,14 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {ELIF_TAG}                  { return ELIF_TAG; }
   {ELSE_TAG}                  { return ELSE_TAG; }
   {ENDIF_TAG}                 { return ENDIF_TAG; }
+  {STRLEN_TAG}                { return STRLEN_TAG; }
   {ERROR_TAG}                 { return ERROR_TAG; }
   {SECTION_TAG}               { return SECTION_TAG; }
   {CODE_SECTION_NAME}         { return CODE_SECTION_NAME; }
   {DATA_SECTION_NAME}         { return DATA_SECTION_NAME; }
   {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }
+  {MAP_OPTIONS}               { return MAP_OPTIONS; }
+  {MAP_FILE}                  { return MAP_FILE; }
   {DIRECTIVE_OP}              { return DIRECTIVE_OP; }
   {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
   {DATA_OP}                   { return DATA_OP; }
@@ -193,14 +203,15 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {SSE3_OP}                   { return SSE3_OP; }
   {SSE4_OP}                   { return SSE4_OP; }
   {REGISTER}                  { return REGISTER; }
+  {SEGMENT}                   { return SEGMENT; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }
   {BINARY}                    { return BINARY; }
   {HEXADECIMAL}               { return HEXADECIMAL; }
   {DECIMAL}                   { return DECIMAL; }
   {CHARACTER}                 { return CHARACTER; }
   {STRING}                    { return STRING; }
+  {ID}                        { return ID; }
   {LBL_DEF}                   { return LBL_DEF; }
-  {IDENTIFIER}                { return IDENTIFIER; }
   {LBL}                       { return LBL; }
 
 }

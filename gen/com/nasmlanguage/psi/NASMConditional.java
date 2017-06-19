@@ -8,19 +8,16 @@ import com.intellij.psi.PsiElement;
 public interface NASMConditional extends PsiElement {
 
   @NotNull
-  List<NASMAddress> getAddressList();
-
-  @NotNull
   List<NASMData> getDataList();
 
   @NotNull
   List<NASMDirective> getDirectiveList();
 
   @NotNull
-  List<NASMInstruction> getInstructionList();
+  List<NASMExpr> getExprList();
 
   @NotNull
-  List<NASMMacroCall> getMacroCallList();
+  List<NASMInstruction> getInstructionList();
 
   @NotNull
   List<NASMPreprocessor> getPreprocessorList();
@@ -29,10 +26,16 @@ public interface NASMConditional extends PsiElement {
   PsiElement getEndifTag();
 
   @Nullable
+  PsiElement getId();
+
+  @Nullable
   PsiElement getIfmacroTag();
 
   @Nullable
   PsiElement getIfTag();
+
+  @Nullable
+  PsiElement getRegister();
 
   @Nullable
   PsiElement getString();

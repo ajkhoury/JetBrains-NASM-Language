@@ -11,9 +11,6 @@ public interface NASMIStruc extends PsiElement {
   List<NASMDataValue> getDataValueList();
 
   @NotNull
-  PsiElement getIdentifier();
-
-  @NotNull
   PsiElement getIendTag();
 
   @NotNull

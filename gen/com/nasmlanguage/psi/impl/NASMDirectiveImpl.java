@@ -33,9 +33,15 @@ public class NASMDirectiveImpl extends ASTWrapperPsiElement implements NASMDirec
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public NASMMapOption getMapOption() {
+    return findChildByClass(NASMMapOption.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getDirectiveOp() {
-    return findNotNullChildByType(DIRECTIVE_OP);
+    return findChildByType(DIRECTIVE_OP);
   }
 
 }

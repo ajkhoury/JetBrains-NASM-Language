@@ -26,4 +26,16 @@ public class NASMDataValueImpl extends ASTWrapperPsiElement implements NASMDataV
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<NASMNumericExpr> getNumericExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getComment() {
+    return findChildByType(COMMENT);
+  }
+
 }

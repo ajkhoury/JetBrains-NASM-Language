@@ -11,13 +11,13 @@ public interface NASMMacro extends PsiElement {
   List<NASMData> getDataList();
 
   @NotNull
-  List<NASMInstruction> getInstructionList();
-
-  @Nullable
-  NASMMacroCall getMacroCall();
+  List<NASMExpr> getExprList();
 
   @NotNull
-  PsiElement getIdentifier();
+  List<NASMInstruction> getInstructionList();
+
+  @NotNull
+  PsiElement getId();
 
   @NotNull
   PsiElement getMacroEndTag();

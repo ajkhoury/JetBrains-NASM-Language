@@ -73,13 +73,16 @@ public class NASMAnnotator implements Annotator {
             NASMInstruction nasmInstruction = (NASMInstruction)element;
             String instructionText = nasmInstruction.getText();
             if (instructionText != null && instructionText.length() > 0) {
+
+                String[] instructionWords = instructionText.split("\\s+");
+
                 // Highlight label indentifiers
                 List<NASMLabel> labels = NASMUtil.findLabels(element.getProject());
                 for (NASMLabel label : labels) {
                     String labelIdentifier = label.getLabelIdentifier();
                     if (labelIdentifier != null) {
                         int identifierIdx = -1;
-                        for (String word : instructionText.split("\\s+")) {
+                        for (String word : instructionWords) {
                             if (word.equals(labelIdentifier)) {
                                 identifierIdx = instructionText.indexOf(labelIdentifier);
                                 break;
@@ -95,13 +98,14 @@ public class NASMAnnotator implements Annotator {
                         }
                     }
                 }
+
                 // Highlight macro identifiers
                 List<NASMDefine> defines = NASMUtil.findPreprocessorDefines(element.getProject());
                 for (NASMDefine define : defines) {
                     String identifierText = define.getDefineIdentifier();
                     if (identifierText != null) {
                         int identifierIdx = -1;
-                        for (String word : instructionText.split("\\s+")) {
+                        for (String word : instructionWords) {
                             if (word.equals(identifierText)) {
                                 identifierIdx = instructionText.indexOf(identifierText);
                                 break;
@@ -119,7 +123,7 @@ public class NASMAnnotator implements Annotator {
                 }
             }
         } else if (element instanceof NASMDefine) {
-            element.getProject();
+
         }
     }
 

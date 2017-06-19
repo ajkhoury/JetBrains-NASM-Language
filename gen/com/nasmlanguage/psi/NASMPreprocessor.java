@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMPreprocessor extends PsiElement {
 
   @Nullable
+  NASMAssign getAssign();
+
+  @Nullable
   NASMConditional getConditional();
 
   @Nullable
@@ -17,10 +20,19 @@ public interface NASMPreprocessor extends PsiElement {
   NASMError getError();
 
   @Nullable
+  NASMExpr getExpr();
+
+  @Nullable
   NASMInclude getInclude();
 
   @Nullable
   NASMMacro getMacro();
+
+  @Nullable
+  NASMStrlen getStrlen();
+
+  @Nullable
+  PsiElement getId();
 
   @Nullable
   PsiElement getPreprocessorOp();

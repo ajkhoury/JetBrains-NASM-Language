@@ -34,20 +34,20 @@ public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
 
   @Override
   @NotNull
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
+  }
+
+  @Override
+  @NotNull
   public List<NASMInstruction> getInstructionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMInstruction.class);
   }
 
   @Override
-  @Nullable
-  public NASMMacroCall getMacroCall() {
-    return findChildByClass(NASMMacroCall.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
   @Override

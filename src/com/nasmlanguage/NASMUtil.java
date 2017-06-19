@@ -11,9 +11,9 @@ import com.nasmlanguage.psi.*;
 
 import java.util.*;
 
-public class NASMUtil {
+class NASMUtil {
 
-    public static List<PsiElement> findPreprocessorMacrosAndDefines(Project project) {
+    static List<PsiElement> findPreprocessorMacrosAndDefines(Project project) {
         List<PsiElement> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
                 FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
@@ -40,7 +40,7 @@ public class NASMUtil {
         return result;
     }
 
-    public static List<NASMMacro> findPreprocessorMacros(Project project) {
+    static List<NASMMacro> findPreprocessorMacros(Project project) {
         List<NASMMacro> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
             FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
@@ -61,7 +61,7 @@ public class NASMUtil {
         return result;
     }
 
-    public static List<NASMDefine> findPreprocessorDefines(Project project) {
+    static List<NASMDefine> findPreprocessorDefines(Project project) {
         List<NASMDefine> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
                 FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
@@ -82,7 +82,7 @@ public class NASMUtil {
         return result;
     }
 
-    public static List<NASMLabel> findLabels(Project project) {
+    static List<NASMLabel> findLabels(Project project) {
         List<NASMLabel> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
                 FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
@@ -93,9 +93,8 @@ public class NASMUtil {
                 Collection<NASMLabel> nasmLabels = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMLabel.class);
                 if (!nasmLabels.isEmpty()) {
                     for (NASMLabel nasmLabel : nasmLabels) {
-                        if (nasmLabel != null) {
+                        if (nasmLabel != null)
                             result.add(nasmLabel);
-                        }
                     }
                 }
             }

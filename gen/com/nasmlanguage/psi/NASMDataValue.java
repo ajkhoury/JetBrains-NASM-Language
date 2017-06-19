@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMDataValue extends PsiElement {
 
+  @NotNull
+  List<NASMNumericExpr> getNumericExprList();
+
+  @Nullable
+  PsiElement getComment();
+
 }

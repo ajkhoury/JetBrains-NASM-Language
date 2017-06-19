@@ -28,6 +28,12 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
 
   @Override
   @Nullable
+  public NASMAssign getAssign() {
+    return findChildByClass(NASMAssign.class);
+  }
+
+  @Override
+  @Nullable
   public NASMConditional getConditional() {
     return findChildByClass(NASMConditional.class);
   }
@@ -46,6 +52,12 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
 
   @Override
   @Nullable
+  public NASMExpr getExpr() {
+    return findChildByClass(NASMExpr.class);
+  }
+
+  @Override
+  @Nullable
   public NASMInclude getInclude() {
     return findChildByClass(NASMInclude.class);
   }
@@ -54,6 +66,18 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
   @Nullable
   public NASMMacro getMacro() {
     return findChildByClass(NASMMacro.class);
+  }
+
+  @Override
+  @Nullable
+  public NASMStrlen getStrlen() {
+    return findChildByClass(NASMStrlen.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getId() {
+    return findChildByType(ID);
   }
 
   @Override

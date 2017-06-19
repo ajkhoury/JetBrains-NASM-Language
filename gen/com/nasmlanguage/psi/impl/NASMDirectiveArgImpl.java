@@ -27,45 +27,9 @@ public class NASMDirectiveArgImpl extends ASTWrapperPsiElement implements NASMDi
   }
 
   @Override
-  @Nullable
-  public NASMAddress getAddress() {
-    return findChildByClass(NASMAddress.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getBinary() {
-    return findChildByType(BINARY);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getCharacter() {
-    return findChildByType(CHARACTER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getDecimal() {
-    return findChildByType(DECIMAL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLbl() {
-    return findChildByType(LBL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSizeType() {
-    return findChildByType(SIZE_TYPE);
+  @NotNull
+  public NASMExpr getExpr() {
+    return findNotNullChildByClass(NASMExpr.class);
   }
 
 }

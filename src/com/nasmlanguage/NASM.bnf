@@ -30,7 +30,9 @@
 
 
         INCLUDE_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])'
-        DEFINE_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE])'
+        DEFINE_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])'
+        ASSIGN_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[aA][sS][sS][iI][gG][nN])'
+
         MACRO_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])'
         MACRO_END_TAG       = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
         IF_TAG              = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)'
@@ -39,17 +41,22 @@
         ELIF_TAG            = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)'
         ELSE_TAG            = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][sS][eE])'
         ENDIF_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][nN][dD][iI][fF])'
+
+        STRLEN_TAG          = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([sS][tT][rR][lL][eE][nN]))'
         ERROR_TAG           = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*'
+
 
         SECTION_TAG         = 'regexp:([sS][eE][cC][tT][iI][oO][nN])'
         CODE_SECTION_NAME   = 'regexp:(\.[tT][eE][xX][tT])'
         DATA_SECTION_NAME   = 'regexp:(\.[dD][aA][tT][aA])'
         BSS_SECTION_NAME    = 'regexp:(\.[bB][sS][sS])'
 
+        MAP_OPTIONS         = 'regexp:(all|brief|sections|segments|symbols)'
+        MAP_FILE            = 'regexp:(([a-zA-Z_][a-zA-Z0-9_.]*).[mM][aA][pP])'
 
         DIRECTIVE_OP        = 'regexp:[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]'
         PREPROCESSOR_OP     = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])'
-        DATA_OP             = 'regexp:(([rR][eE][sS])|[dD])[bBwWdDqQtT]|[tT][iI][mM][eE][sS]'
+        DATA_OP             = 'regexp:([rR][eE][sS][bBwWdDqQtToOyYzZ]|[dD][bBwWdDqQtToOyYzZ]|[tT][iI][mM][eE][sS])'
 
         // General purpose instructions
         INS_DATA_TRANS_MOV  = 'regexp:(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)'                                // Data Transfer MOV
@@ -129,7 +136,7 @@
         INS_SSE4_OTHER      = 'regexp:(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))'
 
         // Instruction operation prefixes
-        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock|[c-gs]s)'
+        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock)'
 
         // Instructions
         GENERAL_OP          = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}'
@@ -142,18 +149,21 @@
         SSE4_OP             = 'regexp:{INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED_INT}|{INS_SSE4_PACKED_FP}|{INS_SSE4_INS_EXT}|{INS_SSE4_CONVERSION}|{INS_SSE4_OTHER}'
 
         // All kinds of registers
-        REGISTER            = 'regexp:%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([cdefgs]s)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))'
+        REGISTER            = 'regexp:%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))'
+        SEGMENT             = 'regexp:([c-gs]s)'
         SIZE_TYPE           = 'regexp:[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|([dDqQoO]|[xX][mM][mM])?[wW][oO][rR][dD]'
+
+        // Literals
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
         HEXADECIMAL         = 'regexp:(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])'
         DECIMAL             = 'regexp:((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)'
         CHARACTER           = "regexp:('([^'\\]|\\.)')"
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
-        LBL_DEF             = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:'
 
         // Make last!
-        IDENTIFIER          = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
-        LBL                 = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Lbl can have chars like '.', '?', '@', etc
+        ID                  = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*' // Some identifier
+        LBL_DEF             = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:' // Label definition
+        LBL                 = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Label can have chars like '.', '?', '@', etc
 
         COLON               = ':'
         SEMICOLON           = ';'
@@ -163,6 +173,7 @@
         ROUND_R             = ')'
         SEPARATOR           = ','
         DOT                 = '.'
+        QUESTION            = '?'
 
         EQUAL               = '='
         EQUALEQUAL          = '=='
@@ -175,7 +186,6 @@
         DOLLARSIGN2         = '$$'
         PERCENT             = '%'
     ]
-
 }
 
 NASMFile ::= Element*
@@ -189,57 +199,62 @@ private Element ::= COMMENT
                 | Preprocessor
                 | Section
                 | Directive
-                | SQUARE_L Section SQUARE_R
-                | SQUARE_L Directive SQUARE_R
+                | MapOption
                 ;
 
 private Section ::= DataSection | CodeSection
-DataSection ::= (SECTION_TAG DATA_SECTION_NAME CRLF* (Data|Directive)*)
-CodeSection ::= (SECTION_TAG CODE_SECTION_NAME CRLF* (Instruction|Directive)*)
+DataSection ::= (((SQUARE_L SECTION_TAG DATA_SECTION_NAME SQUARE_R)|(SECTION_TAG DATA_SECTION_NAME)) CRLF*)
+CodeSection ::= (((SQUARE_L SECTION_TAG CODE_SECTION_NAME SQUARE_R)|(SECTION_TAG CODE_SECTION_NAME)) CRLF*)
 
-Preprocessor ::= (Include|Define|Macro|Conditional|Error|PREPROCESSOR_OP)
+Preprocessor ::= Include | Define | Assign | Macro | Strlen | Error | Conditional | (PREPROCESSOR_OP ID Expr)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
-Define ::= (DEFINE_TAG IDENTIFIER (NumericLiteral|Address|((PERCENT SQUARE_L)? IDENTIFIER SQUARE_R?)) CRLF*)
-        | (DEFINE_TAG (IDENTIFIER ROUND_L ((IDENTIFIER SEPARATOR)* IDENTIFIER)? ROUND_R) Expression CRLF*) {methods=[getDefineIdentifier]}
-Macro ::= (MACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
-Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
-                | (IFMACRO_TAG IDENTIFIER MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
-Error ::= ERROR_TAG CRLF*
-
-Label ::= (LBL_DEF (Instruction|Data|CRLF*)) {methods=[getLabelIdentifier]}
-
-Data ::= (IDENTIFIER EQU (NumericExpression|(DOLLARSIGN MINUS Identifier)))
-        | (LBL_DEF? DATA_OP DataValue?)
-        | (LBL_DEF? (IStruc|Struc) CRLF*)
-        ;
-DataValue ::= ((NumericLiteral|STRING|IDENTIFIER|LBL) SEPARATOR?)*
-Struc ::= (STRUC_TAG IDENTIFIER CRLF* ((LBL|LBL_DEF) DATA_OP? DataValue? CRLF*)* ENDSTRUC_TAG)
-IStruc ::= (ISTRUC_TAG IDENTIFIER CRLF* (AT_TAG LBL SEPARATOR DATA_OP DataValue? CRLF*)* IEND_TAG)
-
-Instruction ::= (((MnemonicOperation ((MnemonicOperationArg SEPARATOR)* MnemonicOperationArg)? COMMENT? CRLF*) | Directive | MacroCall | LBL_DEF) CRLF*)
-private MnemonicOperation ::= (OP_PREFIX? (GENERAL_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP))
-private MnemonicOperationArg ::= (ROUND_L Expression ROUND_R)|Expression|REGISTER|NumericLiteral|Address|MacroCall|Identifier|
-
-Directive ::= (DIRECTIVE_OP DirectiveArg* CRLF*)
-DirectiveArg ::= (NumericLiteral|Address|Identifier)
-
-
-MacroCall ::= (IDENTIFIER ROUND_L ((NumericExpression SEPARATOR)* NumericExpression)? ROUND_R CRLF*)
-private MacroParams ::= (NumericLiteral MINUS NumericLiteral TIMES?)
-                        | (NumericLiteral MINUS TIMES)
-                        | (NumericLiteral PLUS)
-                        ;
+Define ::= (DEFINE_TAG ID (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*)
+        | (DEFINE_TAG (ID ROUND_L ((ID SEPARATOR)* ID)? ROUND_R) Expr CRLF*) {methods=[getDefineIdentifier]}
+Assign ::= (ASSIGN_TAG ID Expr)
+Macro ::= (MACRO_TAG ID MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
+private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
+Strlen ::= STRLEN_TAG ID (STRING|ID) CRLF*
+Error ::= ERROR_TAG CRLF*
+Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
+            | (IFMACRO_TAG ID MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
+            ;
+private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
-private NumericExpression ::= (((NumericLiteral|MacroCall|Identifier) ArithmeticOperation)* (NumericLiteral|MacroCall|Identifier))
-private Expression ::= (((NumericLiteral|REGISTER|Address|MacroCall|Identifier) ArithmeticOperation)* (NumericLiteral|REGISTER|Address|MacroCall|Identifier))
+Label ::= (LBL_DEF (Instruction|Data)? CRLF*) {methods=[getLabelIdentifier]}
 
-private Condition ::= ((Expression EQUALEQUAL Expression)|Expression)
+Data ::= (ID EQU (NumericExpr|(DOLLARSIGN MINUS Identifier)))
+        | (LBL_DEF? DATA_OP DataValue?)
+        | (LBL_DEF? CRLF* Struc CRLF*)
+        | (LBL_DEF? CRLF* IStruc CRLF*)
+        ;
+DataValue ::= (((NumericExpr|STRING|LBL|ID) SEPARATOR?)* COMMENT?)
+Struc ::= (STRUC_TAG ID CRLF* ((LBL_DEF|LBL|ID) DATA_OP NumericLiteral CRLF*)* ENDSTRUC_TAG)
+IStruc ::= (ISTRUC_TAG ID CRLF* (AT_TAG (LBL|ID) SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
-Address ::= (SIZE_TYPE? SQUARE_L AddressInternal SQUARE_R)
-private AddressInternal ::= ((REGISTER|MacroCall|NumericLiteral|Identifier)(ArithmeticOperation (REGISTER|MacroCall|NumericLiteral|Identifier))*)
+Instruction ::= (((((OP_PREFIX MnemonicOperation)|MnemonicOperation) ((Expr SEPARATOR)* Expr)? COMMENT? CRLF*) | Directive | MacroCall | LBL_DEF) CRLF*)
+private MnemonicOperation ::= GENERAL_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP | SSE2_OP | SSE3_OP | SSE4_OP
 
-private Identifier ::= (SIZE_TYPE? (IDENTIFIER|LBL))
-private NumericLiteral ::= ((PLUS|MINUS)? (BINARY|(HEXADECIMAL (COLON HEXADECIMAL)?)|DECIMAL|CHARACTER))
-private ArithmeticOperation ::= (PLUS|MINUS|TIMES|DIVIDE)
+Directive ::= (((DIRECTIVE_OP DirectiveArg*)|(SQUARE_L DIRECTIVE_OP DirectiveArg* SQUARE_R)|MapOption) CRLF*)
+DirectiveArg ::= (NumericLiteral|Address|Identifier)
+MapOption ::= (SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MAP_FILE SQUARE_R)
+
+// Root expression rules
+Expr ::= ParenthesisExpr | MulExpr | DivExpr | PlusExpr | MinusExpr | NumericLiteral | MacroCall | Str | Address | Reg | Seg | Identifier
+NumericExpr ::= ParenthesisNumericExpr | MulExpr | DivExpr | PlusExpr | MinusExpr | NumericLiteral | MacroCall | Identifier
+
+PlusExpr ::= Expr '+' Expr { extends = Expr }
+MinusExpr ::= Expr '-' Expr { extends = Expr }
+MulExpr ::= Expr '*' Expr { extends = Expr }
+DivExpr ::= Expr '/' Expr { extends = Expr }
+ParenthesisExpr ::= '(' Expr ')' { extends = Expr }
+ParenthesisNumericExpr ::= '(' NumericExpr ')' { extends = NumericExpr }
+
+NumericLiteral ::= (((HEXADECIMAL|ID)':'(HEXADECIMAL|ID))|BINARY|HEXADECIMAL|DECIMAL|CHARACTER) { extends = Expr }
+Identifier ::= (SIZE_TYPE? (ID|LBL)) { extends = Expr }
+Reg ::= REGISTER { extends = Expr }
+Seg ::= SEGMENT { extends = Expr }
+Str ::= STRING { extends = Expr }
+Address ::= ((SIZE_TYPE? SQUARE_L Expr SQUARE_R)|'$'|'$$') { extends = Expr }
+MacroCall ::= (ID ROUND_L ((NumericExpr SEPARATOR)* NumericExpr)? ROUND_R) { extends = Expr }
 

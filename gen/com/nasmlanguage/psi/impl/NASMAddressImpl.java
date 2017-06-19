@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMAddressImpl extends ASTWrapperPsiElement implements NASMAddress {
+public class NASMAddressImpl extends NASMExprImpl implements NASMAddress {
 
   public NASMAddressImpl(ASTNode node) {
     super(node);
@@ -27,9 +26,15 @@ public class NASMAddressImpl extends ASTWrapperPsiElement implements NASMAddress
   }
 
   @Override
-  @NotNull
-  public List<NASMMacroCall> getMacroCallList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMMacroCall.class);
+  @Nullable
+  public NASMExpr getExpr() {
+    return findChildByClass(NASMExpr.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSizeType() {
+    return findChildByType(SIZE_TYPE);
   }
 
 }

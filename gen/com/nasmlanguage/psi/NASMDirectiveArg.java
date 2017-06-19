@@ -7,25 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMDirectiveArg extends PsiElement {
 
-  @Nullable
-  NASMAddress getAddress();
-
-  @Nullable
-  PsiElement getBinary();
-
-  @Nullable
-  PsiElement getCharacter();
-
-  @Nullable
-  PsiElement getDecimal();
-
-  @Nullable
-  PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getLbl();
-
-  @Nullable
-  PsiElement getSizeType();
+  @NotNull
+  NASMExpr getExpr();
 
 }

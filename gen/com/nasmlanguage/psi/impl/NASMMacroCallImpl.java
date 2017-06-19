@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMMacroCallImpl extends ASTWrapperPsiElement implements NASMMacroCall {
+public class NASMMacroCallImpl extends NASMExprImpl implements NASMMacroCall {
 
   public NASMMacroCallImpl(ASTNode node) {
     super(node);
@@ -28,8 +27,14 @@ public class NASMMacroCallImpl extends ASTWrapperPsiElement implements NASMMacro
 
   @Override
   @NotNull
-  public List<NASMMacroCall> getMacroCallList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMMacroCall.class);
+  public List<NASMNumericExpr> getNumericExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
 }

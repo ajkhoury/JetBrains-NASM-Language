@@ -8,10 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface NASMDefine extends PsiElement {
 
   @NotNull
-  List<NASMAddress> getAddressList();
-
-  @NotNull
-  List<NASMMacroCall> getMacroCallList();
+  NASMExpr getExpr();
 
   @NotNull
   PsiElement getDefineTag();
