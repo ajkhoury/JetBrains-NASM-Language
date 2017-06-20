@@ -11,14 +11,14 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
+public class NASMStructureImpl extends ASTWrapperPsiElement implements NASMStructure {
 
-  public NASMLabelImpl(ASTNode node) {
+  public NASMStructureImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitLabel(this);
+    visitor.visitStructure(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,30 +28,14 @@ public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
 
   @Override
   @Nullable
-  public NASMData getData() {
-    return findChildByClass(NASMData.class);
+  public NASMIStruc getIStruc() {
+    return findChildByClass(NASMIStruc.class);
   }
 
   @Override
   @Nullable
-  public NASMInstruction getInstruction() {
-    return findChildByClass(NASMInstruction.class);
-  }
-
-  @Override
-  @Nullable
-  public NASMStructure getStructure() {
-    return findChildByClass(NASMStructure.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLblDef() {
-    return findNotNullChildByType(LBL_DEF);
-  }
-
-  public String getLabelIdentifierString() {
-    return NASMPsiImplUtil.getLabelIdentifierString(this);
+  public NASMStruc getStruc() {
+    return findChildByClass(NASMStruc.class);
   }
 
 }

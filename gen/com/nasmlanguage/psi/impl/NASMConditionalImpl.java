@@ -64,12 +64,6 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
 
   @Override
   @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getIfmacroTag() {
     return findChildByType(IFMACRO_TAG);
   }

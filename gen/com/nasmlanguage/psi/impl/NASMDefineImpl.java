@@ -28,8 +28,8 @@ public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
 
   @Override
   @NotNull
-  public NASMExpr getExpr() {
-    return findNotNullChildByClass(NASMExpr.class);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override

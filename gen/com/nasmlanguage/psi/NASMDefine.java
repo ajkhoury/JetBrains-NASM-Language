@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface NASMDefine extends PsiElement {
 
   @NotNull
-  NASMExpr getExpr();
+  List<NASMExpr> getExprList();
 
   @NotNull
   PsiElement getDefineTag();

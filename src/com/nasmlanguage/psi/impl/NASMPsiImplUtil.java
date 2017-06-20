@@ -32,7 +32,7 @@ public class NASMPsiImplUtil {
         return null;
     }
 
-    public static String getLabelIdentifier(NASMLabel element) {
+    public static String getLabelIdentifierString(NASMLabel element) {
         ASTNode labelDef = element.getNode().findChildByType(NASMTypes.LBL_DEF);
         if (labelDef != null) {
             String labelDefString = labelDef.getText();

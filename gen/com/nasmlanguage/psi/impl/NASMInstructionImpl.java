@@ -58,12 +58,6 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
-  public PsiElement getLblDef() {
-    return findChildByType(LBL_DEF);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getMmxOp() {
     return findChildByType(MMX_OP);
   }

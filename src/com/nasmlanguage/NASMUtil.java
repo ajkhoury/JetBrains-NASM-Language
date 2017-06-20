@@ -91,10 +91,52 @@ class NASMUtil {
             NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
             if (assemblyFile != null) {
                 Collection<NASMLabel> nasmLabels = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMLabel.class);
-                if (!nasmLabels.isEmpty()) {
-                    for (NASMLabel nasmLabel : nasmLabels) {
-                        if (nasmLabel != null)
-                            result.add(nasmLabel);
+                if (!nasmLabels.isEmpty())
+                    result.addAll(nasmLabels);
+            }
+        }
+        return result;
+    }
+
+    static List<NASMStructure> findStructures(Project project) {
+        List<NASMStructure> result = new ArrayList<>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
+                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
+        );
+        for (VirtualFile virtualFile : virtualFiles) {
+            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
+            if (assemblyFile != null) {
+                Collection<NASMStructure> nasmStructs = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMStructure.class);
+                if (!nasmStructs.isEmpty()) {
+                    result.addAll(nasmStructs);
+                }
+            }
+        }
+        return result;
+    }
+
+    static List<NASMIdentifier> findIdentifierReferences(Project project, NASMIdentifier identifier) {
+        List<NASMIdentifier> result = new ArrayList<>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
+                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
+        );
+        PsiElement targetIdentifierId = identifier.getId();
+        if (targetIdentifierId != null) {
+            for (VirtualFile virtualFile : virtualFiles) {
+                NASMFile assemblyFile = (NASMFile) PsiManager.getInstance(project).findFile(virtualFile);
+                if (assemblyFile != null) {
+                    Collection<NASMIdentifier> nasmIdentifiers = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMIdentifier.class);
+                    if (!nasmIdentifiers.isEmpty()) {
+                        for (NASMIdentifier nasmIdentifier : nasmIdentifiers) {
+                            if (nasmIdentifier == identifier)
+                                continue;
+                            PsiElement nasmIdentifierId = nasmIdentifier.getId();
+                            if (nasmIdentifierId != null) {
+                                if (nasmIdentifierId.getText().equals(targetIdentifierId.getText())) {
+                                    result.add(nasmIdentifier);
+                                }
+                            }
+                        }
                     }
                 }
             }

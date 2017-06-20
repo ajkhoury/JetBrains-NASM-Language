@@ -12,9 +12,9 @@ public interface NASMTypes {
   IElementType ASSIGN = new NASMElementType("ASSIGN");
   IElementType CODE_SECTION = new NASMElementType("CODE_SECTION");
   IElementType CONDITIONAL = new NASMElementType("CONDITIONAL");
+  IElementType CONSTANT = new NASMElementType("CONSTANT");
   IElementType DATA = new NASMElementType("DATA");
   IElementType DATA_SECTION = new NASMElementType("DATA_SECTION");
-  IElementType DATA_VALUE = new NASMElementType("DATA_VALUE");
   IElementType DEFINE = new NASMElementType("DEFINE");
   IElementType DIRECTIVE = new NASMElementType("DIRECTIVE");
   IElementType DIRECTIVE_ARG = new NASMElementType("DIRECTIVE_ARG");
@@ -26,6 +26,7 @@ public interface NASMTypes {
   IElementType INSTRUCTION = new NASMElementType("INSTRUCTION");
   IElementType I_STRUC = new NASMElementType("I_STRUC");
   IElementType LABEL = new NASMElementType("LABEL");
+  IElementType LABEL_IDENTIFIER = new NASMElementType("LABEL_IDENTIFIER");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType MAP_OPTION = new NASMElementType("MAP_OPTION");
@@ -42,6 +43,7 @@ public interface NASMTypes {
   IElementType STR = new NASMElementType("STR");
   IElementType STRLEN = new NASMElementType("STRLEN");
   IElementType STRUC = new NASMElementType("STRUC");
+  IElementType STRUCTURE = new NASMElementType("STRUCTURE");
 
   IElementType ASSIGN_TAG = new NASMTokenType("ASSIGN_TAG");
   IElementType AT_TAG = new NASMTokenType("AT_TAG");
@@ -188,14 +190,14 @@ public interface NASMTypes {
       else if (type == CONDITIONAL) {
         return new NASMConditionalImpl(node);
       }
+      else if (type == CONSTANT) {
+        return new NASMConstantImpl(node);
+      }
       else if (type == DATA) {
         return new NASMDataImpl(node);
       }
       else if (type == DATA_SECTION) {
         return new NASMDataSectionImpl(node);
-      }
-      else if (type == DATA_VALUE) {
-        return new NASMDataValueImpl(node);
       }
       else if (type == DEFINE) {
         return new NASMDefineImpl(node);
@@ -226,6 +228,9 @@ public interface NASMTypes {
       }
       else if (type == LABEL) {
         return new NASMLabelImpl(node);
+      }
+      else if (type == LABEL_IDENTIFIER) {
+        return new NASMLabelIdentifierImpl(node);
       }
       else if (type == MACRO) {
         return new NASMMacroImpl(node);
@@ -274,6 +279,9 @@ public interface NASMTypes {
       }
       else if (type == STRUC) {
         return new NASMStrucImpl(node);
+      }
+      else if (type == STRUCTURE) {
+        return new NASMStructureImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

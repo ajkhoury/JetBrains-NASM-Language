@@ -26,9 +26,6 @@ public interface NASMConditional extends PsiElement {
   PsiElement getEndifTag();
 
   @Nullable
-  PsiElement getId();
-
-  @Nullable
   PsiElement getIfmacroTag();
 
   @Nullable

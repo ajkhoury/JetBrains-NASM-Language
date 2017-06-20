@@ -129,14 +129,14 @@ SSE4_OP={INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED
 REGISTER=%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))
 SEGMENT=([c-gs]s)
 SIZE_TYPE=[bB][yY][tT][eE]|[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|([dDqQoO]|[xX][mM][mM])?[wW][oO][rR][dD]
+ID=[a-zA-Z_][a-zA-Z0-9_]*
+LBL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
+LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
 BINARY=(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])
 HEXADECIMAL=(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])
 DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
 CHARACTER=('([^'\\]|\\.)')
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
-ID=[a-zA-Z_][a-zA-Z0-9_]*
-LBL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
-LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
 
 %%
 <YYINITIAL> {
@@ -205,14 +205,14 @@ LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
   {REGISTER}                  { return REGISTER; }
   {SEGMENT}                   { return SEGMENT; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }
+  {ID}                        { return ID; }
+  {LBL_DEF}                   { return LBL_DEF; }
+  {LBL}                       { return LBL; }
   {BINARY}                    { return BINARY; }
   {HEXADECIMAL}               { return HEXADECIMAL; }
   {DECIMAL}                   { return DECIMAL; }
   {CHARACTER}                 { return CHARACTER; }
   {STRING}                    { return STRING; }
-  {ID}                        { return ID; }
-  {LBL_DEF}                   { return LBL_DEF; }
-  {LBL}                       { return LBL; }
 
 }
 

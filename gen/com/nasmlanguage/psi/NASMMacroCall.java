@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMMacroCall extends NASMExpr {
 
   @NotNull
-  List<NASMNumericExpr> getNumericExprList();
+  NASMIdentifier getIdentifier();
 
   @NotNull
-  PsiElement getId();
+  List<NASMNumericExpr> getNumericExprList();
 
 }

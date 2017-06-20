@@ -13,9 +13,12 @@ public interface NASMLabel extends PsiElement {
   @Nullable
   NASMInstruction getInstruction();
 
+  @Nullable
+  NASMStructure getStructure();
+
   @NotNull
   PsiElement getLblDef();
 
-  String getLabelIdentifier();
+  String getLabelIdentifierString();
 
 }

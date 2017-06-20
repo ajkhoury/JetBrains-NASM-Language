@@ -27,6 +27,12 @@ public class NASMStrlenImpl extends ASTWrapperPsiElement implements NASMStrlen {
   }
 
   @Override
+  @NotNull
+  public List<NASMIdentifier> getIdentifierList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMIdentifier.class);
+  }
+
+  @Override
   @Nullable
   public PsiElement getString() {
     return findChildByType(STRING);

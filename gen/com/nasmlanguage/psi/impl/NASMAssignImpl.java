@@ -28,20 +28,14 @@ public class NASMAssignImpl extends ASTWrapperPsiElement implements NASMAssign {
 
   @Override
   @NotNull
-  public NASMExpr getExpr() {
-    return findNotNullChildByClass(NASMExpr.class);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override
   @NotNull
   public PsiElement getAssignTag() {
     return findNotNullChildByType(ASSIGN_TAG);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getId() {
-    return findNotNullChildByType(ID);
   }
 
 }

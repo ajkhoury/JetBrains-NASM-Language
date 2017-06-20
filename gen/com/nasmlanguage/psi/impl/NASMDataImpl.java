@@ -27,57 +27,27 @@ public class NASMDataImpl extends ASTWrapperPsiElement implements NASMData {
   }
 
   @Override
-  @Nullable
-  public NASMDataValue getDataValue() {
-    return findChildByClass(NASMDataValue.class);
+  @NotNull
+  public List<NASMLabelIdentifier> getLabelIdentifierList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMLabelIdentifier.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NASMNumericExpr> getNumericExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
   }
 
   @Override
   @Nullable
-  public NASMIStruc getIStruc() {
-    return findChildByClass(NASMIStruc.class);
+  public PsiElement getComment() {
+    return findChildByType(COMMENT);
   }
 
   @Override
-  @Nullable
-  public NASMIdentifier getIdentifier() {
-    return findChildByClass(NASMIdentifier.class);
-  }
-
-  @Override
-  @Nullable
-  public NASMNumericExpr getNumericExpr() {
-    return findChildByClass(NASMNumericExpr.class);
-  }
-
-  @Override
-  @Nullable
-  public NASMStruc getStruc() {
-    return findChildByClass(NASMStruc.class);
-  }
-
-  @Override
-  @Nullable
+  @NotNull
   public PsiElement getDataOp() {
-    return findChildByType(DATA_OP);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getEqu() {
-    return findChildByType(EQU);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLblDef() {
-    return findChildByType(LBL_DEF);
+    return findNotNullChildByType(DATA_OP);
   }
 
 }

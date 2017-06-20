@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMStrlen extends PsiElement {
 
+  @NotNull
+  List<NASMIdentifier> getIdentifierList();
+
   @Nullable
   PsiElement getString();
 

@@ -11,15 +11,16 @@ import java.util.Map;
 public class NASMColorSettingsPage implements ColorSettingsPage {
 
     private static final AttributesDescriptor[] NASM_DESCRIPTORS = new AttributesDescriptor[] {
-            new AttributesDescriptor("Number", NASMSyntaxHighlighter.NUMBER),
-            new AttributesDescriptor("Separator", NASMSyntaxHighlighter.SEPARATOR),
-            new AttributesDescriptor("Register", NASMSyntaxHighlighter.REGISTER),
-            new AttributesDescriptor("Operation", NASMSyntaxHighlighter.OPERATION),
-            new AttributesDescriptor("String", NASMSyntaxHighlighter.STRING),
-            new AttributesDescriptor("Macro", NASMSyntaxHighlighter.MACRO_CALL),
-            new AttributesDescriptor("Label", NASMSyntaxHighlighter.LABEL),
-            new AttributesDescriptor("Size Type", NASMSyntaxHighlighter.SIZE_TYPE),
-            new AttributesDescriptor("Instruction Prefix", NASMSyntaxHighlighter.OP_PREFIX),
+            new AttributesDescriptor("Number", NASMSyntaxHighlighter.NASM_NUMBER),
+            new AttributesDescriptor("Separator", NASMSyntaxHighlighter.NASM_SEPARATOR),
+            new AttributesDescriptor("Register", NASMSyntaxHighlighter.NASM_REGISTER),
+            new AttributesDescriptor("Operation", NASMSyntaxHighlighter.NASM_OPERATION),
+            new AttributesDescriptor("String", NASMSyntaxHighlighter.NASM_STRING),
+            new AttributesDescriptor("Macro", NASMSyntaxHighlighter.NASM_MACRO),
+            new AttributesDescriptor("Label", NASMSyntaxHighlighter.NASM_LABEL),
+            new AttributesDescriptor("Structure", NASMSyntaxHighlighter.NASM_STRUCTURE),
+            new AttributesDescriptor("Size Type", NASMSyntaxHighlighter.NASM_SIZE_TYPE),
+            new AttributesDescriptor("Instruction Prefix", NASMSyntaxHighlighter.NASM_OP_PREFIX),
     };
 
     @Nullable
@@ -37,7 +38,7 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
     @NotNull
     @Override
     public String getDemoText() {
-        return "; sample NASM File\n" +
+        return "; Sample NASM File\n" +
                 "\n" +
                 "global\tfunc\n" +
                 "\n" +
@@ -46,10 +47,11 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
                 "floatval\tdd 3.14159\n" +
                 "byteval1\tdb 0xFF\n" +
                 "byteval2\tdb 0A1h\n" +
+                "byteval2\tdb 0A1h\n" +
                 "\n" +
                 "section .text\n" +
                 "\n" +
-                "%macro text_macro 0-* \"example macro\"\n" +
+                "%macro text_macro 0\n" +
                 "    mov\teax, ebx\n" +
                 "%endmacro\n" +
                 "\n" +

@@ -23,15 +23,15 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitConstant(@NotNull NASMConstant o) {
+    visitPsiElement(o);
+  }
+
   public void visitData(@NotNull NASMData o) {
     visitPsiElement(o);
   }
 
   public void visitDataSection(@NotNull NASMDataSection o) {
-    visitPsiElement(o);
-  }
-
-  public void visitDataValue(@NotNull NASMDataValue o) {
     visitPsiElement(o);
   }
 
@@ -77,6 +77,10 @@ public class NASMVisitor extends PsiElementVisitor {
 
   public void visitLabel(@NotNull NASMLabel o) {
     visitPsiElement(o);
+  }
+
+  public void visitLabelIdentifier(@NotNull NASMLabelIdentifier o) {
+    visitExpr(o);
   }
 
   public void visitMacro(@NotNull NASMMacro o) {
@@ -140,6 +144,10 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitStruc(@NotNull NASMStruc o) {
+    visitPsiElement(o);
+  }
+
+  public void visitStructure(@NotNull NASMStructure o) {
     visitPsiElement(o);
   }
 

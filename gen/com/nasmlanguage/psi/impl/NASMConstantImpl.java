@@ -11,14 +11,14 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
+public class NASMConstantImpl extends ASTWrapperPsiElement implements NASMConstant {
 
-  public NASMLabelImpl(ASTNode node) {
+  public NASMConstantImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitLabel(this);
+    visitor.visitConstant(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,31 +27,21 @@ public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
   }
 
   @Override
-  @Nullable
-  public NASMData getData() {
-    return findChildByClass(NASMData.class);
-  }
-
-  @Override
-  @Nullable
-  public NASMInstruction getInstruction() {
-    return findChildByClass(NASMInstruction.class);
-  }
-
-  @Override
-  @Nullable
-  public NASMStructure getStructure() {
-    return findChildByClass(NASMStructure.class);
+  @NotNull
+  public NASMIdentifier getIdentifier() {
+    return findNotNullChildByClass(NASMIdentifier.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getLblDef() {
-    return findNotNullChildByType(LBL_DEF);
+  public NASMNumericExpr getNumericExpr() {
+    return findNotNullChildByClass(NASMNumericExpr.class);
   }
 
-  public String getLabelIdentifierString() {
-    return NASMPsiImplUtil.getLabelIdentifierString(this);
+  @Override
+  @NotNull
+  public PsiElement getEqu() {
+    return findNotNullChildByType(EQU);
   }
 
 }

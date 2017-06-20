@@ -26,21 +26,9 @@ public class NASMIdentifierImpl extends NASMExprImpl implements NASMIdentifier {
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getId() {
-    return findChildByType(ID);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLbl() {
-    return findChildByType(LBL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSizeType() {
-    return findChildByType(SIZE_TYPE);
+    return findNotNullChildByType(ID);
   }
 
 }

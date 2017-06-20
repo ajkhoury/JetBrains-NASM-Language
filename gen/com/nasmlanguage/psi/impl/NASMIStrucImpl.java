@@ -28,8 +28,20 @@ public class NASMIStrucImpl extends ASTWrapperPsiElement implements NASMIStruc {
 
   @Override
   @NotNull
-  public List<NASMDataValue> getDataValueList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMDataValue.class);
+  public NASMIdentifier getIdentifier() {
+    return findNotNullChildByClass(NASMIdentifier.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NASMLabelIdentifier> getLabelIdentifierList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMLabelIdentifier.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NASMNumericExpr> getNumericExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
   }
 
   @Override

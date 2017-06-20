@@ -51,9 +51,9 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
   }
 
   @Override
-  @Nullable
-  public NASMExpr getExpr() {
-    return findChildByClass(NASMExpr.class);
+  @NotNull
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override
@@ -72,12 +72,6 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
   @Nullable
   public NASMStrlen getStrlen() {
     return findChildByClass(NASMStrlen.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
   }
 
   @Override

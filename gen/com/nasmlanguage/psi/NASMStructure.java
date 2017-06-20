@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMAssign extends PsiElement {
+public interface NASMStructure extends PsiElement {
 
-  @NotNull
-  List<NASMExpr> getExprList();
+  @Nullable
+  NASMIStruc getIStruc();
 
-  @NotNull
-  PsiElement getAssignTag();
+  @Nullable
+  NASMStruc getStruc();
 
 }

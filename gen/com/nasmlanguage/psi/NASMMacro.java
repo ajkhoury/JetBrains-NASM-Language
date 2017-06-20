@@ -17,9 +17,6 @@ public interface NASMMacro extends PsiElement {
   List<NASMInstruction> getInstructionList();
 
   @NotNull
-  PsiElement getId();
-
-  @NotNull
   PsiElement getMacroEndTag();
 
   @NotNull

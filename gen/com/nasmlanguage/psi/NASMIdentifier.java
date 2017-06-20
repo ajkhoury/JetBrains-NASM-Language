@@ -7,13 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMIdentifier extends NASMExpr {
 
-  @Nullable
+  @NotNull
   PsiElement getId();
-
-  @Nullable
-  PsiElement getLbl();
-
-  @Nullable
-  PsiElement getSizeType();
 
 }
