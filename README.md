@@ -8,11 +8,13 @@ There is a plugin in development [here](https://plugins.jetbrains.com/plugin/938
 
 # Changes
 
-Version 0.0.2 pre-release
-- General, FPU, MMX, and SSE instruction support
+Version 0.0.7 pre-release
+- FPU, MMX, SSE, SSE2, SSE3, SSE4, and general instruction support
 - Syntax highlighting
 - Single and multiline macro support
+- Conditional assembly directives support
 - Preprocessor directives support
+- Structure support
 
 # License
 
