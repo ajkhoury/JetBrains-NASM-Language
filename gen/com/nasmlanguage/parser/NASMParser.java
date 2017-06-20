@@ -431,22 +431,23 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DATA_OP DataValue?
+  // Identifier? DATA_OP DataValue
   public static boolean Data(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Data")) return false;
-    if (!nextTokenIs(b, DATA_OP)) return false;
+    if (!nextTokenIs(b, "<data>", DATA_OP, ID)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, DATA_OP);
-    r = r && Data_1(b, l + 1);
-    exit_section_(b, m, DATA, r);
+    Marker m = enter_section_(b, l, _NONE_, DATA, "<data>");
+    r = Data_0(b, l + 1);
+    r = r && consumeToken(b, DATA_OP);
+    r = r && DataValue(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // DataValue?
-  private static boolean Data_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Data_1")) return false;
-    DataValue(b, l + 1);
+  // Identifier?
+  private static boolean Data_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Data_0")) return false;
+    Identifier(b, l + 1);
     return true;
   }
 

@@ -227,7 +227,7 @@ private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
 Label ::= (LBL_DEF (Instruction|Data|Structure)? CRLF*) {methods=[getLabelIdentifierString]}
 Constant ::= (Identifier EQU NumericExpr)
-Data ::= (DATA_OP DataValue?)
+Data ::= (Identifier? DATA_OP DataValue)
 private DataValue ::= ((NumericExpr|STRING|LabelIdentifier) (SEPARATOR (NumericExpr|STRING|LabelIdentifier))* COMMENT?)
 
 Structure ::= ((Struc|IStruc) CRLF*)

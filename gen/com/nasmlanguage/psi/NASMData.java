@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMData extends PsiElement {
 
+  @Nullable
+  NASMIdentifier getIdentifier();
+
   @NotNull
   List<NASMLabelIdentifier> getLabelIdentifierList();
 

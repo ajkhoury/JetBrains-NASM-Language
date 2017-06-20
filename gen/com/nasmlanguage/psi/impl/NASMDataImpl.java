@@ -27,6 +27,12 @@ public class NASMDataImpl extends ASTWrapperPsiElement implements NASMData {
   }
 
   @Override
+  @Nullable
+  public NASMIdentifier getIdentifier() {
+    return findChildByClass(NASMIdentifier.class);
+  }
+
+  @Override
   @NotNull
   public List<NASMLabelIdentifier> getLabelIdentifierList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMLabelIdentifier.class);
