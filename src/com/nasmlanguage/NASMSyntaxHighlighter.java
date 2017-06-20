@@ -16,6 +16,10 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
 
     public static final TextAttributesKey NASM_REGISTER = TextAttributesKey.createTextAttributesKey(
             "NASM_REGISTER",
+            DefaultLanguageHighlighterColors.LOCAL_VARIABLE
+    );
+    public static final TextAttributesKey NASM_SEGMENT = TextAttributesKey.createTextAttributesKey(
+            "NASM_SEGMENT",
             DefaultLanguageHighlighterColors.GLOBAL_VARIABLE
     );
     public static final TextAttributesKey NASM_OPERATION = TextAttributesKey.createTextAttributesKey(
@@ -54,6 +58,14 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             "NASM_MACRO",
             DefaultLanguageHighlighterColors.CONSTANT
     );
+    public static final TextAttributesKey NASM_MACRO_PARAM_REF = TextAttributesKey.createTextAttributesKey(
+            "NASM_MACRO_PARAM_REF",
+            DefaultLanguageHighlighterColors.PARAMETER
+    );
+    public static final TextAttributesKey NASM_MACRO_LABEL = TextAttributesKey.createTextAttributesKey(
+            "NASM_MACRO_LABEL",
+            DefaultLanguageHighlighterColors.FUNCTION_DECLARATION
+    );
     public static final TextAttributesKey NASM_DIRECTIVE = TextAttributesKey.createTextAttributesKey(
             "NASM_DIRECTIVE",
             DefaultLanguageHighlighterColors.KEYWORD
@@ -83,12 +95,16 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
 
         keys1.put(NASMTypes.REGISTER, NASM_REGISTER);
 
+        keys1.put(NASMTypes.SEGMENT, NASM_SEGMENT);
+
         keys1.put(NASMTypes.SEPARATOR, NASM_SEPARATOR);
 
         keys1.put(NASMTypes.SIZE_TYPE, NASM_SIZE_TYPE);
 
         keys1.put(NASMTypes.MACRO, NASM_MACRO);
         keys1.put(NASMTypes.MACRO_CALL, NASM_MACRO);
+        keys1.put(NASMTypes.MACRO_PARAM_REF, NASM_MACRO_PARAM_REF);
+        keys1.put(NASMTypes.MACRO_LBL_DEF, NASM_MACRO_LABEL);
 
         keys1.put(NASMTypes.OP_PREFIX, NASM_OP_PREFIX);
 

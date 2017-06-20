@@ -71,6 +71,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     else if (t == MACRO) {
       r = Macro(b, 0);
     }
+    else if (t == MACRO_LABEL) {
+      r = MacroLabel(b, 0);
+    }
     else if (t == MAP_OPTION) {
       r = MapOption(b, 0);
     }
@@ -105,9 +108,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(NUMERIC_EXPR, PARENTHESIS_NUMERIC_EXPR),
     create_token_set_(ADDRESS, DIV_EXPR, EXPR, IDENTIFIER,
-      LABEL_IDENTIFIER, MACRO_CALL, MINUS_EXPR, MUL_EXPR,
-      NUMERIC_LITERAL, PARENTHESIS_EXPR, PLUS_EXPR, REG,
-      SEG, STR),
+      LABEL_IDENTIFIER, MACRO_CALL, MACRO_PARAM_REFERENCE, MINUS_EXPR,
+      MUL_EXPR, NUMERIC_LITERAL, PARENTHESIS_EXPR, PLUS_EXPR,
+      REG, SEG, STR),
   };
 
   /* ********************************************************** */
@@ -1109,7 +1112,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG
+  // MACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction)* MACRO_END_TAG
   public static boolean Macro(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro")) return false;
     if (!nextTokenIs(b, MACRO_TAG)) return false;
@@ -1145,7 +1148,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (Data|Instruction)*
+  // (MacroLabel|Data|Instruction)*
   private static boolean Macro_5(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_5")) return false;
     int c = current_position_(b);
@@ -1157,12 +1160,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Data|Instruction
+  // MacroLabel|Data|Instruction
   private static boolean Macro_5_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_5_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Data(b, l + 1);
+    r = MacroLabel(b, l + 1);
+    if (!r) r = Data(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1181,6 +1185,50 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = MacroCall(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // MACRO_LBL_DEF (Instruction|Data)? CRLF*
+  public static boolean MacroLabel(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroLabel")) return false;
+    if (!nextTokenIs(b, MACRO_LBL_DEF)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, MACRO_LBL_DEF);
+    r = r && MacroLabel_1(b, l + 1);
+    r = r && MacroLabel_2(b, l + 1);
+    exit_section_(b, m, MACRO_LABEL, r);
+    return r;
+  }
+
+  // (Instruction|Data)?
+  private static boolean MacroLabel_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroLabel_1")) return false;
+    MacroLabel_1_0(b, l + 1);
+    return true;
+  }
+
+  // Instruction|Data
+  private static boolean MacroLabel_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroLabel_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Instruction(b, l + 1);
+    if (!r) r = Data(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean MacroLabel_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroLabel_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "MacroLabel_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -1321,6 +1369,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //         | NumericLiteral
   //         | Str
   //         | MacroCall
+  //         | MacroParamReference
   //         | Address
   //         | Identifier
   //         | LabelIdentifier
@@ -1336,6 +1385,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = NumericLiteral(b, l + 1);
     if (!r) r = Str(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = MacroParamReference(b, l + 1);
     if (!r) r = Address(b, l + 1);
     if (!r) r = Identifier(b, l + 1);
     if (!r) r = LabelIdentifier(b, l + 1);
@@ -1561,11 +1611,12 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // 5: ATOM(NumericLiteral)
   // 6: ATOM(Str)
   // 7: ATOM(MacroCall)
-  // 8: ATOM(Address)
-  // 9: ATOM(Reg)
-  // 10: ATOM(Seg)
-  // 11: ATOM(Identifier)
-  // 12: ATOM(LabelIdentifier)
+  // 8: ATOM(MacroParamReference)
+  // 9: ATOM(Address)
+  // 10: ATOM(Reg)
+  // 11: ATOM(Seg)
+  // 12: ATOM(Identifier)
+  // 13: ATOM(LabelIdentifier)
   public static boolean Expr(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expr")) return false;
     addVariant(b, "<expr>");
@@ -1575,6 +1626,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = NumericLiteral(b, l + 1);
     if (!r) r = Str(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
+    if (!r) r = MacroParamReference(b, l + 1);
     if (!r) r = Address(b, l + 1);
     if (!r) r = Reg(b, l + 1);
     if (!r) r = Seg(b, l + 1);
@@ -1739,6 +1791,17 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = NumericExpr(b, l + 1);
     r = r && consumeToken(b, SEPARATOR);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (MACRO_PARAM_REF)
+  public static boolean MacroParamReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParamReference")) return false;
+    if (!nextTokenIsSmart(b, MACRO_PARAM_REF)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, MACRO_PARAM_REF);
+    exit_section_(b, m, MACRO_PARAM_REFERENCE, r);
     return r;
   }
 

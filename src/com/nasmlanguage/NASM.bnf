@@ -34,6 +34,8 @@
 
         MACRO_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])'
         MACRO_END_TAG       = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
+        MACRO_PARAM_REF     = 'regexp:((%|%%)([1-9][0-9]*))'
+        MACRO_LBL_DEF       = 'regexp:((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*):)'
         IF_TAG              = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)'
         IFMACRO_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])'
         IFCTX_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][cC][tT][xX])'
@@ -184,6 +186,7 @@
         DOLLARSIGN          = '$'
         DOLLARSIGN2         = '$$'
         PERCENT             = '%'
+        PERCENT2            = '%%'
     ]
 }
 
@@ -211,7 +214,8 @@ Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG Identifier ROUND_L (Identifier (SEPARATOR Identifier)*)? ROUND_R Expr CRLF*)
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*) {methods=[getDefineIdentifier]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
-Macro ::= (MACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
+Macro ::= (MACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
+MacroLabel ::= (MACRO_LBL_DEF (Instruction|Data)? CRLF*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 Strlen ::= STRLEN_TAG Identifier (STRING|Identifier) CRLF*
@@ -245,6 +249,7 @@ Expr ::= ParenthesisExpr
         | NumericLiteral
         | Str
         | MacroCall
+        | MacroParamReference
         | Address
         | Reg
         | Seg
@@ -259,6 +264,7 @@ NumericExpr ::= ParenthesisNumericExpr
         | NumericLiteral
         | Str
         | MacroCall
+        | MacroParamReference
         | Address
         | Identifier
         | LabelIdentifier
@@ -279,4 +285,5 @@ Seg ::= SEGMENT { extends = Expr }
 Str ::= STRING { extends = Expr }
 Address ::= ((SIZE_TYPE? SQUARE_L Expr SQUARE_R)|DOLLARSIGN|DOLLARSIGN2) { extends = Expr }
 MacroCall ::= (Identifier ROUND_L ((NumericExpr SEPARATOR)* NumericExpr)? ROUND_R) { extends = Expr }
+MacroParamReference ::= (MACRO_PARAM_REF) { extends = Expr }
 

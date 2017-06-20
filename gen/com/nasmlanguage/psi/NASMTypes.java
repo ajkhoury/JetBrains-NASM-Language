@@ -29,6 +29,8 @@ public interface NASMTypes {
   IElementType LABEL_IDENTIFIER = new NASMElementType("LABEL_IDENTIFIER");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
+  IElementType MACRO_LABEL = new NASMElementType("MACRO_LABEL");
+  IElementType MACRO_PARAM_REFERENCE = new NASMElementType("MACRO_PARAM_REFERENCE");
   IElementType MAP_OPTION = new NASMElementType("MAP_OPTION");
   IElementType MINUS_EXPR = new NASMElementType("MINUS_EXPR");
   IElementType MUL_EXPR = new NASMElementType("MUL_EXPR");
@@ -145,6 +147,8 @@ public interface NASMTypes {
   IElementType LBL = new NASMTokenType("LBL");
   IElementType LBL_DEF = new NASMTokenType("LBL_DEF");
   IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
+  IElementType MACRO_LBL_DEF = new NASMTokenType("MACRO_LBL_DEF");
+  IElementType MACRO_PARAM_REF = new NASMTokenType("MACRO_PARAM_REF");
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
   IElementType MAP_FILE = new NASMTokenType("MAP_FILE");
   IElementType MAP_OPTIONS = new NASMTokenType("MAP_OPTIONS");
@@ -152,6 +156,7 @@ public interface NASMTypes {
   IElementType MMX_OP = new NASMTokenType("MMX_OP");
   IElementType OP_PREFIX = new NASMTokenType("OP_PREFIX");
   IElementType PERCENT = new NASMTokenType("%");
+  IElementType PERCENT2 = new NASMTokenType("%%");
   IElementType PLUS = new NASMTokenType("+");
   IElementType PREPROCESSOR_OP = new NASMTokenType("PREPROCESSOR_OP");
   IElementType QUESTION = new NASMTokenType("?");
@@ -237,6 +242,12 @@ public interface NASMTypes {
       }
       else if (type == MACRO_CALL) {
         return new NASMMacroCallImpl(node);
+      }
+      else if (type == MACRO_LABEL) {
+        return new NASMMacroLabelImpl(node);
+      }
+      else if (type == MACRO_PARAM_REFERENCE) {
+        return new NASMMacroParamReferenceImpl(node);
       }
       else if (type == MAP_OPTION) {
         return new NASMMapOptionImpl(node);
