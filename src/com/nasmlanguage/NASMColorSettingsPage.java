@@ -20,6 +20,7 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("String", NASMSyntaxHighlighter.NASM_STRING),
             new AttributesDescriptor("Macro Identifier", NASMSyntaxHighlighter.NASM_MACRO),
             new AttributesDescriptor("Macro Parameter Reference", NASMSyntaxHighlighter.NASM_MACRO_PARAM_REF),
+            new AttributesDescriptor("Macro Variable Reference", NASMSyntaxHighlighter.NASM_MACRO_VAR_REF),
             new AttributesDescriptor("Macro Label", NASMSyntaxHighlighter.NASM_MACRO_LABEL),
             new AttributesDescriptor("Label", NASMSyntaxHighlighter.NASM_LABEL),
             new AttributesDescriptor("Structure", NASMSyntaxHighlighter.NASM_STRUCTURE),
@@ -62,6 +63,11 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
                 "%endmacro\n" +
                 "%macro silly 2\n" +
                 "    %2: db %1\n" +
+                "%endmacro\n" +
+                "%macro retz 0 \n" +
+                "        jnz %%skip \n" +
+                "        ret \n" +
+                "    %%skip: \n" +
                 "%endmacro\n" +
                 "\n" +
                 "%define\tsingle_line_macro(x)\t(x+5)\n" +

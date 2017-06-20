@@ -36,6 +36,7 @@
         MACRO_END_TAG       = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
         MACRO_PARAM_REF     = 'regexp:((%|%%)([1-9][0-9]*))'
         MACRO_LBL_DEF       = 'regexp:((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*):)'
+        MACRO_VAR_REF       = 'regexp:((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*))'
         IF_TAG              = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)'
         IFMACRO_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])'
         IFCTX_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][cC][tT][xX])'
@@ -250,6 +251,7 @@ Expr ::= ParenthesisExpr
         | Str
         | MacroCall
         | MacroParamReference
+        | MacroVarReference
         | Address
         | Reg
         | Seg
@@ -265,6 +267,7 @@ NumericExpr ::= ParenthesisNumericExpr
         | Str
         | MacroCall
         | MacroParamReference
+        | MacroVarReference
         | Address
         | Identifier
         | LabelIdentifier
@@ -286,4 +289,5 @@ Str ::= STRING { extends = Expr }
 Address ::= ((SIZE_TYPE? SQUARE_L Expr SQUARE_R)|DOLLARSIGN|DOLLARSIGN2) { extends = Expr }
 MacroCall ::= (Identifier ROUND_L ((NumericExpr SEPARATOR)* NumericExpr)? ROUND_R) { extends = Expr }
 MacroParamReference ::= (MACRO_PARAM_REF) { extends = Expr }
+MacroVarReference ::= (MACRO_VAR_REF) { extends = Expr }
 

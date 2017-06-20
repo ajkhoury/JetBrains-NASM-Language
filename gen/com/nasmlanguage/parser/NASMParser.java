@@ -108,9 +108,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(NUMERIC_EXPR, PARENTHESIS_NUMERIC_EXPR),
     create_token_set_(ADDRESS, DIV_EXPR, EXPR, IDENTIFIER,
-      LABEL_IDENTIFIER, MACRO_CALL, MACRO_PARAM_REFERENCE, MINUS_EXPR,
-      MUL_EXPR, NUMERIC_LITERAL, PARENTHESIS_EXPR, PLUS_EXPR,
-      REG, SEG, STR),
+      LABEL_IDENTIFIER, MACRO_CALL, MACRO_PARAM_REFERENCE, MACRO_VAR_REFERENCE,
+      MINUS_EXPR, MUL_EXPR, NUMERIC_LITERAL, PARENTHESIS_EXPR,
+      PLUS_EXPR, REG, SEG, STR),
   };
 
   /* ********************************************************** */
@@ -1370,6 +1370,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //         | Str
   //         | MacroCall
   //         | MacroParamReference
+  //         | MacroVarReference
   //         | Address
   //         | Identifier
   //         | LabelIdentifier
@@ -1386,6 +1387,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Str(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
     if (!r) r = MacroParamReference(b, l + 1);
+    if (!r) r = MacroVarReference(b, l + 1);
     if (!r) r = Address(b, l + 1);
     if (!r) r = Identifier(b, l + 1);
     if (!r) r = LabelIdentifier(b, l + 1);
@@ -1612,11 +1614,12 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // 6: ATOM(Str)
   // 7: ATOM(MacroCall)
   // 8: ATOM(MacroParamReference)
-  // 9: ATOM(Address)
-  // 10: ATOM(Reg)
-  // 11: ATOM(Seg)
-  // 12: ATOM(Identifier)
-  // 13: ATOM(LabelIdentifier)
+  // 9: ATOM(MacroVarReference)
+  // 10: ATOM(Address)
+  // 11: ATOM(Reg)
+  // 12: ATOM(Seg)
+  // 13: ATOM(Identifier)
+  // 14: ATOM(LabelIdentifier)
   public static boolean Expr(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expr")) return false;
     addVariant(b, "<expr>");
@@ -1627,6 +1630,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Str(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
     if (!r) r = MacroParamReference(b, l + 1);
+    if (!r) r = MacroVarReference(b, l + 1);
     if (!r) r = Address(b, l + 1);
     if (!r) r = Reg(b, l + 1);
     if (!r) r = Seg(b, l + 1);
@@ -1802,6 +1806,17 @@ public class NASMParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, MACRO_PARAM_REF);
     exit_section_(b, m, MACRO_PARAM_REFERENCE, r);
+    return r;
+  }
+
+  // (MACRO_VAR_REF)
+  public static boolean MacroVarReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroVarReference")) return false;
+    if (!nextTokenIsSmart(b, MACRO_VAR_REF)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, MACRO_VAR_REF);
+    exit_section_(b, m, MACRO_VAR_REFERENCE, r);
     return r;
   }
 

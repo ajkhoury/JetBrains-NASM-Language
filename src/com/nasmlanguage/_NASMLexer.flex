@@ -41,6 +41,7 @@ MACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])
 MACRO_END_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
 MACRO_PARAM_REF=((%|%%)([1-9][0-9]*))
 MACRO_LBL_DEF=((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*):)
+MACRO_VAR_REF=((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*))
 IF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)
 IFMACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])
 IFCTX_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][cC][tT][xX])
@@ -180,6 +181,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {MACRO_END_TAG}             { return MACRO_END_TAG; }
   {MACRO_PARAM_REF}           { return MACRO_PARAM_REF; }
   {MACRO_LBL_DEF}             { return MACRO_LBL_DEF; }
+  {MACRO_VAR_REF}             { return MACRO_VAR_REF; }
   {IF_TAG}                    { return IF_TAG; }
   {IFMACRO_TAG}               { return IFMACRO_TAG; }
   {IFCTX_TAG}                 { return IFCTX_TAG; }

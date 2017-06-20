@@ -31,6 +31,7 @@ public interface NASMTypes {
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType MACRO_LABEL = new NASMElementType("MACRO_LABEL");
   IElementType MACRO_PARAM_REFERENCE = new NASMElementType("MACRO_PARAM_REFERENCE");
+  IElementType MACRO_VAR_REFERENCE = new NASMElementType("MACRO_VAR_REFERENCE");
   IElementType MAP_OPTION = new NASMElementType("MAP_OPTION");
   IElementType MINUS_EXPR = new NASMElementType("MINUS_EXPR");
   IElementType MUL_EXPR = new NASMElementType("MUL_EXPR");
@@ -150,6 +151,7 @@ public interface NASMTypes {
   IElementType MACRO_LBL_DEF = new NASMTokenType("MACRO_LBL_DEF");
   IElementType MACRO_PARAM_REF = new NASMTokenType("MACRO_PARAM_REF");
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
+  IElementType MACRO_VAR_REF = new NASMTokenType("MACRO_VAR_REF");
   IElementType MAP_FILE = new NASMTokenType("MAP_FILE");
   IElementType MAP_OPTIONS = new NASMTokenType("MAP_OPTIONS");
   IElementType MINUS = new NASMTokenType("-");
@@ -248,6 +250,9 @@ public interface NASMTypes {
       }
       else if (type == MACRO_PARAM_REFERENCE) {
         return new NASMMacroParamReferenceImpl(node);
+      }
+      else if (type == MACRO_VAR_REFERENCE) {
+        return new NASMMacroVarReferenceImpl(node);
       }
       else if (type == MAP_OPTION) {
         return new NASMMapOptionImpl(node);

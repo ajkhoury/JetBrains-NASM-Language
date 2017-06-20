@@ -62,6 +62,10 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             "NASM_MACRO_PARAM_REF",
             DefaultLanguageHighlighterColors.PARAMETER
     );
+    public static final TextAttributesKey NASM_MACRO_VAR_REF = TextAttributesKey.createTextAttributesKey(
+            "NASM_MACRO_VAR_REF",
+            NASMSyntaxHighlighter.NASM_MACRO_PARAM_REF
+    );
     public static final TextAttributesKey NASM_MACRO_LABEL = TextAttributesKey.createTextAttributesKey(
             "NASM_MACRO_LABEL",
             DefaultLanguageHighlighterColors.FUNCTION_DECLARATION
@@ -104,6 +108,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(NASMTypes.MACRO, NASM_MACRO);
         keys1.put(NASMTypes.MACRO_CALL, NASM_MACRO);
         keys1.put(NASMTypes.MACRO_PARAM_REF, NASM_MACRO_PARAM_REF);
+        keys1.put(NASMTypes.MACRO_VAR_REF, NASM_MACRO_VAR_REF);
         keys1.put(NASMTypes.MACRO_LBL_DEF, NASM_MACRO_LABEL);
 
         keys1.put(NASMTypes.OP_PREFIX, NASM_OP_PREFIX);
