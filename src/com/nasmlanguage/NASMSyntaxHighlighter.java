@@ -68,7 +68,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     );
     public static final TextAttributesKey NASM_MACRO_LABEL = TextAttributesKey.createTextAttributesKey(
             "NASM_MACRO_LABEL",
-            DefaultLanguageHighlighterColors.FUNCTION_DECLARATION
+            NASMSyntaxHighlighter.NASM_LABEL
     );
     public static final TextAttributesKey NASM_DIRECTIVE = TextAttributesKey.createTextAttributesKey(
             "NASM_DIRECTIVE",
