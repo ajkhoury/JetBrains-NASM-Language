@@ -218,7 +218,6 @@ Strlen ::= STRLEN_TAG Identifier (STRING|Identifier) CRLF*
 Error ::= ERROR_TAG CRLF*
 Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
             | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
-            ;
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
 Label ::= (LBL_DEF (Instruction|Data|Structure)? CRLF*) {methods=[getLabelIdentifierString]}
@@ -238,8 +237,32 @@ DirectiveArg ::= (NumericLiteral|Address|Identifier)
 MapOption ::= (SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MAP_FILE SQUARE_R)
 
 // Root expression rules
-Expr ::= ParenthesisExpr | MulExpr | DivExpr | PlusExpr | MinusExpr | NumericLiteral | Str | MacroCall | Address | Reg | Seg | Identifier | LabelIdentifier
-NumericExpr ::= ParenthesisNumericExpr | MulExpr | DivExpr | PlusExpr | MinusExpr | NumericLiteral | Str | MacroCall | Address | Identifier | LabelIdentifier
+Expr ::= ParenthesisExpr
+        | MulExpr
+        | DivExpr
+        | PlusExpr
+        | MinusExpr
+        | NumericLiteral
+        | Str
+        | MacroCall
+        | Address
+        | Reg
+        | Seg
+        | Identifier
+        | LabelIdentifier
+        ;
+NumericExpr ::= ParenthesisNumericExpr
+        | MulExpr
+        | DivExpr
+        | PlusExpr
+        | MinusExpr
+        | NumericLiteral
+        | Str
+        | MacroCall
+        | Address
+        | Identifier
+        | LabelIdentifier
+        ;
 
 PlusExpr ::= Expr PLUS Expr { extends = Expr }
 MinusExpr ::= Expr MINUS Expr { extends = Expr }
