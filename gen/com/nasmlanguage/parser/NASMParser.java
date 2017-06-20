@@ -1313,7 +1313,17 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ParenthesisNumericExpr | MulExpr | DivExpr | PlusExpr | MinusExpr | NumericLiteral | Str | MacroCall | Address | Identifier | LabelIdentifier
+  // ParenthesisNumericExpr
+  //         | MulExpr
+  //         | DivExpr
+  //         | PlusExpr
+  //         | MinusExpr
+  //         | NumericLiteral
+  //         | Str
+  //         | MacroCall
+  //         | Address
+  //         | Identifier
+  //         | LabelIdentifier
   public static boolean NumericExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumericExpr")) return false;
     boolean r;
