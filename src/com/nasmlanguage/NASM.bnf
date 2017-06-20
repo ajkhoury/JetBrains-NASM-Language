@@ -200,7 +200,6 @@ private Element ::= COMMENT
                 | Preprocessor
                 | Section
                 | Directive
-                | MapOption
                 ;
 
 private Section ::= DataSection | CodeSection
