@@ -806,14 +806,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // COMMENT
   //                 | CRLF
   //                 | COMMENT CRLF
+  //                 | Section
+  //                 | Preprocessor
+  //                 | Directive
   //                 | Constant
   //                 | Structure
   //                 | Data
   //                 | Instruction
   //                 | Label
-  //                 | Preprocessor
-  //                 | Section
-  //                 | Directive
   static boolean Element(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Element")) return false;
     boolean r;
@@ -821,14 +821,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, COMMENT);
     if (!r) r = consumeToken(b, CRLF);
     if (!r) r = parseTokens(b, 0, COMMENT, CRLF);
+    if (!r) r = Section(b, l + 1);
+    if (!r) r = Preprocessor(b, l + 1);
+    if (!r) r = Directive(b, l + 1);
     if (!r) r = Constant(b, l + 1);
     if (!r) r = Structure(b, l + 1);
     if (!r) r = Data(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
     if (!r) r = Label(b, l + 1);
-    if (!r) r = Preprocessor(b, l + 1);
-    if (!r) r = Section(b, l + 1);
-    if (!r) r = Directive(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1744,57 +1744,79 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Identifier ROUND_L ((NumericExpr SEPARATOR)* NumericExpr)? ROUND_R
+  // (Identifier ROUND_L ((NumericExpr SEPARATOR)* NumericExpr)? ROUND_R)|(Identifier NumericExpr)
   public static boolean MacroCall(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroCall")) return false;
     if (!nextTokenIsSmart(b, ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Identifier(b, l + 1);
-    r = r && consumeToken(b, ROUND_L);
-    r = r && MacroCall_2(b, l + 1);
-    r = r && consumeToken(b, ROUND_R);
+    r = MacroCall_0(b, l + 1);
+    if (!r) r = MacroCall_1(b, l + 1);
     exit_section_(b, m, MACRO_CALL, r);
     return r;
   }
 
+  // Identifier ROUND_L ((NumericExpr SEPARATOR)* NumericExpr)? ROUND_R
+  private static boolean MacroCall_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Identifier(b, l + 1);
+    r = r && consumeToken(b, ROUND_L);
+    r = r && MacroCall_0_2(b, l + 1);
+    r = r && consumeToken(b, ROUND_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   // ((NumericExpr SEPARATOR)* NumericExpr)?
-  private static boolean MacroCall_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_2")) return false;
-    MacroCall_2_0(b, l + 1);
+  private static boolean MacroCall_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_0_2")) return false;
+    MacroCall_0_2_0(b, l + 1);
     return true;
   }
 
   // (NumericExpr SEPARATOR)* NumericExpr
-  private static boolean MacroCall_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_2_0")) return false;
+  private static boolean MacroCall_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_0_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = MacroCall_2_0_0(b, l + 1);
+    r = MacroCall_0_2_0_0(b, l + 1);
     r = r && NumericExpr(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (NumericExpr SEPARATOR)*
-  private static boolean MacroCall_2_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_2_0_0")) return false;
+  private static boolean MacroCall_0_2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_0_2_0_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!MacroCall_2_0_0_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MacroCall_2_0_0", c)) break;
+      if (!MacroCall_0_2_0_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MacroCall_0_2_0_0", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // NumericExpr SEPARATOR
-  private static boolean MacroCall_2_0_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_2_0_0_0")) return false;
+  private static boolean MacroCall_0_2_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_0_2_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = NumericExpr(b, l + 1);
     r = r && consumeToken(b, SEPARATOR);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Identifier NumericExpr
+  private static boolean MacroCall_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Identifier(b, l + 1);
+    r = r && NumericExpr(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
