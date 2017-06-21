@@ -208,7 +208,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG)
+  // (IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*)*  ENDIF_TAG)
   //             | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
   public static boolean Conditional(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional")) return false;
@@ -221,7 +221,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // IF_TAG Condition CRLF* (Preprocessor|Directive|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*  ENDIF_TAG
+  // IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*)*  ENDIF_TAG
   private static boolean Conditional_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0")) return false;
     boolean r;
@@ -248,7 +248,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (Preprocessor|Directive|Data|Instruction)*
+  // (Preprocessor|Directive|Label|Structure|Data|Instruction)*
   private static boolean Conditional_0_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_3")) return false;
     int c = current_position_(b);
@@ -260,20 +260,22 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Preprocessor|Directive|Data|Instruction
+  // Preprocessor|Directive|Label|Structure|Data|Instruction
   private static boolean Conditional_0_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Preprocessor(b, l + 1);
     if (!r) r = Directive(b, l + 1);
+    if (!r) r = Label(b, l + 1);
+    if (!r) r = Structure(b, l + 1);
     if (!r) r = Data(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*)*
+  // ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*)*
   private static boolean Conditional_0_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_4")) return false;
     int c = current_position_(b);
@@ -285,7 +287,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Data|Instruction)*
+  // (ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*
   private static boolean Conditional_0_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_4_0")) return false;
     boolean r;
@@ -331,7 +333,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (Preprocessor|Directive|Data|Instruction)*
+  // (Preprocessor|Directive|Label|Structure|Data|Instruction)*
   private static boolean Conditional_0_4_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_4_0_2")) return false;
     int c = current_position_(b);
@@ -343,13 +345,15 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Preprocessor|Directive|Data|Instruction
+  // Preprocessor|Directive|Label|Structure|Data|Instruction
   private static boolean Conditional_0_4_0_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_4_0_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Preprocessor(b, l + 1);
     if (!r) r = Directive(b, l + 1);
+    if (!r) r = Label(b, l + 1);
+    if (!r) r = Structure(b, l + 1);
     if (!r) r = Data(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
     exit_section_(b, m, null, r);
@@ -810,10 +814,10 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //                 | Preprocessor
   //                 | Directive
   //                 | Constant
+  //                 | Label
   //                 | Structure
   //                 | Data
   //                 | Instruction
-  //                 | Label
   static boolean Element(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Element")) return false;
     boolean r;
@@ -825,10 +829,10 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Preprocessor(b, l + 1);
     if (!r) r = Directive(b, l + 1);
     if (!r) r = Constant(b, l + 1);
+    if (!r) r = Label(b, l + 1);
     if (!r) r = Structure(b, l + 1);
     if (!r) r = Data(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
-    if (!r) r = Label(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

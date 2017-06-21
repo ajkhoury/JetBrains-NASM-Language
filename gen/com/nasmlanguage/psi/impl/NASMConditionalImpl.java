@@ -52,8 +52,20 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
 
   @Override
   @NotNull
+  public List<NASMLabel> getLabelList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMLabel.class);
+  }
+
+  @Override
+  @NotNull
   public List<NASMPreprocessor> getPreprocessorList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMPreprocessor.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NASMStructure> getStructureList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMStructure.class);
   }
 
   @Override

@@ -20,7 +20,13 @@ public interface NASMConditional extends PsiElement {
   List<NASMInstruction> getInstructionList();
 
   @NotNull
+  List<NASMLabel> getLabelList();
+
+  @NotNull
   List<NASMPreprocessor> getPreprocessorList();
+
+  @NotNull
+  List<NASMStructure> getStructureList();
 
   @NotNull
   PsiElement getEndifTag();
