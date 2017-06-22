@@ -153,7 +153,7 @@
         // All kinds of registers
         REGISTER            = 'regexp:%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))'
         SEGMENT             = 'regexp:([c-gs]s)'
-        SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
+        SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[fF][aA][rR]|[lL][oO][nN][gG]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
 
         // Make last!
         ID                  = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*' // Some identifier
@@ -192,7 +192,6 @@
 }
 
 NASMFile ::= Element*
-
 private Element ::= COMMENT
                 | CRLF
                 | COMMENT CRLF
