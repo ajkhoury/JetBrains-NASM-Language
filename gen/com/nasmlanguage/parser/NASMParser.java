@@ -224,7 +224,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*)*  ENDIF_TAG)
+  // (IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*)* ENDIF_TAG CRLF*)
   //             | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
   public static boolean Conditional(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional")) return false;
@@ -237,7 +237,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*)*  ENDIF_TAG
+  // IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*)* ENDIF_TAG CRLF*
   private static boolean Conditional_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0")) return false;
     boolean r;
@@ -248,6 +248,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = r && Conditional_0_3(b, l + 1);
     r = r && Conditional_0_4(b, l + 1);
     r = r && consumeToken(b, ENDIF_TAG);
+    r = r && Conditional_0_6(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -374,6 +375,18 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Instruction(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // CRLF*
+  private static boolean Conditional_0_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_6")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_0_6", c)) break;
+      c = current_position_(b);
+    }
+    return true;
   }
 
   // IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG
