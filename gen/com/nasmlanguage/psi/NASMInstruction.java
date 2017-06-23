@@ -38,6 +38,9 @@ public interface NASMInstruction extends PsiElement {
   PsiElement getSseOp();
 
   @Nullable
+  PsiElement getSystemOp();
+
+  @Nullable
   PsiElement getX64Op();
 
 }

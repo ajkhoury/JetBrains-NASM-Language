@@ -1369,12 +1369,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // GENERAL_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP | SSE2_OP | SSE3_OP | SSE4_OP
+  // GENERAL_OP | SYSTEM_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP | SSE2_OP | SSE3_OP | SSE4_OP
   static boolean Mnemonic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Mnemonic")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, GENERAL_OP);
+    if (!r) r = consumeToken(b, SYSTEM_OP);
     if (!r) r = consumeToken(b, X64_OP);
     if (!r) r = consumeToken(b, FPU_OP);
     if (!r) r = consumeToken(b, MMX_OP);

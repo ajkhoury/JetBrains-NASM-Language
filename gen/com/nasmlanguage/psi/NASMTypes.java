@@ -148,6 +148,7 @@ public interface NASMTypes {
   IElementType INS_SSE_SIMD_INT = new NASMTokenType("INS_SSE_SIMD_INT");
   IElementType INS_SSE_STATE = new NASMTokenType("INS_SSE_STATE");
   IElementType INS_STRING_DATA = new NASMTokenType("INS_STRING_DATA");
+  IElementType INS_SYSTEM = new NASMTokenType("INS_SYSTEM");
   IElementType ISTRUC_TAG = new NASMTokenType("ISTRUC_TAG");
   IElementType LBL = new NASMTokenType("LBL");
   IElementType LBL_DEF = new NASMTokenType("LBL_DEF");
@@ -186,6 +187,7 @@ public interface NASMTypes {
   IElementType STRING = new NASMTokenType("STRING");
   IElementType STRLEN_TAG = new NASMTokenType("STRLEN_TAG");
   IElementType STRUC_TAG = new NASMTokenType("STRUC_TAG");
+  IElementType SYSTEM_OP = new NASMTokenType("SYSTEM_OP");
   IElementType TIMES = new NASMTokenType("*");
   IElementType X64_OP = new NASMTokenType("X64_OP");
   IElementType ZEROES = new NASMTokenType("ZEROES");

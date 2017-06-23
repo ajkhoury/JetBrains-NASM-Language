@@ -120,8 +120,10 @@ INS_SSE4_PACKED_FP=(round[ps][sd])
 INS_SSE4_INS_EXT=((extract|insert)ps|p((ins|ext)(r[bdq])))
 INS_SSE4_CONVERSION=(pmov([sz]x(b[dqw]|dq|wd|wq)))
 INS_SSE4_OTHER=(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))
+INS_SYSTEM=((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpg|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv))
 OP_PREFIX=((rep(n?[ez])|rep)|lock)
 GENERAL_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}
+SYSTEM_OP={INS_SYSTEM}
 X64_OP={INS_64_BIT}
 FPU_OP={INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}
 MMX_OP={INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}
@@ -206,6 +208,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 
   {OP_PREFIX}                 { return OP_PREFIX; }
   {GENERAL_OP}                { return GENERAL_OP; }
+  {SYSTEM_OP}                 { return SYSTEM_OP; }
   {X64_OP}                    { return X64_OP; }
   {FPU_OP}                    { return FPU_OP; }
   {MMX_OP}                    { return MMX_OP; }

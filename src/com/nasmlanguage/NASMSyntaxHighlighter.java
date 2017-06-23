@@ -114,6 +114,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(NASMTypes.OP_PREFIX, NASM_OP_PREFIX);
 
         keys1.put(NASMTypes.GENERAL_OP, NASM_OPERATION);
+        keys1.put(NASMTypes.SYSTEM_OP, NASM_OPERATION);
         keys1.put(NASMTypes.X64_OP, NASM_OPERATION);
         keys1.put(NASMTypes.FPU_OP, NASM_OPERATION);
         keys1.put(NASMTypes.MMX_OP, NASM_OPERATION);

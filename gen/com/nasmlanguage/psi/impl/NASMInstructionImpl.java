@@ -88,6 +88,12 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
+  public PsiElement getSystemOp() {
+    return findChildByType(SYSTEM_OP);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getX64Op() {
     return findChildByType(X64_OP);
   }
