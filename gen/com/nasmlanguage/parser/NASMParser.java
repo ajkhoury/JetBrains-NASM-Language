@@ -452,7 +452,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Identifier EQU NumericExpr
+  // Identifier EQU NumericExpr CRLF*
   public static boolean Constant(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Constant")) return false;
     if (!nextTokenIs(b, ID)) return false;
@@ -461,8 +461,21 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = Identifier(b, l + 1);
     r = r && consumeToken(b, EQU);
     r = r && NumericExpr(b, l + 1);
+    r = r && Constant_3(b, l + 1);
     exit_section_(b, m, CONSTANT, r);
     return r;
+  }
+
+  // CRLF*
+  private static boolean Constant_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Constant_3")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Constant_3", c)) break;
+      c = current_position_(b);
+    }
+    return true;
   }
 
   /* ********************************************************** */
