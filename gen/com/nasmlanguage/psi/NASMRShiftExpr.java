@@ -5,17 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMLabelInstruction extends PsiElement {
-
-  @Nullable
-  NASMDirective getDirective();
+public interface NASMRShiftExpr extends NASMExpr {
 
   @NotNull
   List<NASMExpr> getExprList();
-
-  @Nullable
-  PsiElement getLblIns();
-
-  String getLabelIdentifierString();
 
 }

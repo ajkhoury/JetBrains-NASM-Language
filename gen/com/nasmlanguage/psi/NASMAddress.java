@@ -11,9 +11,6 @@ public interface NASMAddress extends NASMExpr {
   NASMExpr getExpr();
 
   @Nullable
-  PsiElement getSegmentAddr();
-
-  @Nullable
   PsiElement getSizeType();
 
 }

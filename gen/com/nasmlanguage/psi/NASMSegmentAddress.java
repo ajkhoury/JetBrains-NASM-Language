@@ -5,22 +5,19 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMNumericLiteral extends NASMExpr {
-
-  @Nullable
-  PsiElement getBinary();
-
-  @Nullable
-  PsiElement getCharacter();
-
-  @Nullable
-  PsiElement getDecimal();
+public interface NASMSegmentAddress extends NASMExpr {
 
   @Nullable
   PsiElement getHexadecimal();
 
   @Nullable
-  PsiElement getSizeType();
+  PsiElement getId();
+
+  @Nullable
+  PsiElement getLblDef();
+
+  @Nullable
+  PsiElement getSegmentAddrL();
 
   @Nullable
   PsiElement getZeroes();

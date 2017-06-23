@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMParenthesisNumericExpr extends NASMNumericExpr {
+public interface NASMLShiftExpr extends NASMExpr {
 
-  @Nullable
-  NASMNumericExpr getNumericExpr();
+  @NotNull
+  List<NASMExpr> getExprList();
 
 }

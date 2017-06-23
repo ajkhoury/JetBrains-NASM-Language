@@ -159,13 +159,16 @@
         ID                  = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*' // Some identifier
         LBL_DEF             = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:' // Label definition
         LBL                 = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Label can have chars like '.', '?', '@', etc
-        LBL_INS             = 'regexp:({LBL_DEF}({OP_PREFIX}|{GENERAL_OP}|{X64_OP}|{FPU_OP}|{MMX_OP}|{SSE_OP}|{SSE2_OP}|{SSE3_OP}|{SSE4_OP}))'
+        //LBL_INS             = 'regexp:({LBL_DEF}({OP_PREFIX}|{GENERAL_OP}|{X64_OP}|{FPU_OP}|{MMX_OP}|{SSE_OP}|{SSE2_OP}|{SSE3_OP}|{SSE4_OP}))'
+        //LBL_DATA            = 'regexp:({LBL_DEF}({DATA_OP}))'
 
         // Literals
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
         HEXADECIMAL         = 'regexp:(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])'
+        ZEROES              = 'regexp:[0]+'
         DECIMAL             = 'regexp:((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)'
-        SEGMENT_ADDR        = 'regexp:(((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+):((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+))'
+        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
+        //SEGMENT_ADDR        = 'regexp:(((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]+):((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+))'
         CHARACTER           = "regexp:('([^'\\]|\\.)')"
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 
@@ -185,6 +188,8 @@
         MINUS               = '-'
         TIMES               = '*'
         DIVIDE              = '/'
+        SHIFT_L             = '<<'
+        SHIFT_R             = '>>'
 
         DOLLARSIGN          = '$'
         DOLLARSIGN2         = '$$'
@@ -216,7 +221,7 @@ Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG Identifier ROUND_L (Identifier (SEPARATOR Identifier)*)? ROUND_R Expr CRLF*)
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*) {methods=[getDefineIdentifier]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
-Macro ::= (MACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction)* MACRO_END_TAG) {methods=[getMacroIdentifier]}
+Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifier]}
 MacroLabel ::= (MACRO_LBL_DEF (Instruction|Data)? CRLF*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
@@ -226,8 +231,10 @@ Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|
             | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
-Label ::= (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction) CRLF*) {methods=[getLabelIdentifierString]}
+Label ::= (((LBL_DEF (Instruction|Data|Structure)?)) CRLF*) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
 Constant ::= (Identifier EQU NumericExpr)
+
+//LabelData ::= (LBL_DATA DataValue CRLF*) {methods=[getLabelIdentifierString]}
 Data ::= (Identifier? DATA_OP DataValue)
 private DataValue ::= ((NumericExpr|STRING|LabelIdentifier) (SEPARATOR (NumericExpr|STRING|LabelIdentifier))* COMMENT?)
 
@@ -235,13 +242,16 @@ Structure ::= ((Struc|IStruc) CRLF*)
 Struc ::= (STRUC_TAG Identifier CRLF* ((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)* ENDSTRUC_TAG)
 IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG LabelIdentifier SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
-LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}
-Instruction ::= (((OP_PREFIX? MnemonicOperation ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*)
-private MnemonicOperation ::= GENERAL_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP | SSE2_OP | SSE3_OP | SSE4_OP
+//LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}
+Instruction ::= (((OP_PREFIX? Mnemonic ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*)
+private Mnemonic ::= GENERAL_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP | SSE2_OP | SSE3_OP | SSE4_OP
 
-Directive ::= (((DIRECTIVE_OP DirectiveArg*)|(SQUARE_L DIRECTIVE_OP DirectiveArg* SQUARE_R)|MapOption) CRLF*)
+MapOption ::= SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MAP_FILE SQUARE_R
+
+Directive ::= (DirectiveDecl|DirectiveDeclBrackets|MapOption) CRLF*
+private DirectiveDecl ::= DIRECTIVE_OP DirectiveArg*
+private DirectiveDeclBrackets ::= SQUARE_L DirectiveDecl SQUARE_R
 DirectiveArg ::= (NumericLiteral|Address|Identifier)
-MapOption ::= (SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MAP_FILE SQUARE_R)
 
 // Root expression rules
 Expr ::= ParenthesisExpr
@@ -249,7 +259,11 @@ Expr ::= ParenthesisExpr
         | DivExpr
         | PlusExpr
         | MinusExpr
+        | ModulusExpr
+        | LShiftExpr
+        | RShiftExpr
         | NumericLiteral
+        | SegmentAddress
         | Str
         | MacroCall
         | MacroParamReference
@@ -265,7 +279,11 @@ NumericExpr ::= ParenthesisNumericExpr
         | DivExpr
         | PlusExpr
         | MinusExpr
+        | ModulusExpr
+        | LShiftExpr
+        | RShiftExpr
         | NumericLiteral
+        | SegmentAddress
         | Str
         | MacroCall
         | MacroParamReference
@@ -275,21 +293,27 @@ NumericExpr ::= ParenthesisNumericExpr
         | LabelIdentifier
         ;
 
-PlusExpr ::= Expr PLUS Expr { extends = Expr }
-MinusExpr ::= Expr MINUS Expr { extends = Expr }
-MulExpr ::= Expr TIMES Expr { extends = Expr }
-DivExpr ::= Expr DIVIDE Expr { extends = Expr }
-ParenthesisExpr ::= ROUND_L Expr ROUND_R { extends = Expr }
-ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { extends = NumericExpr }
+MulExpr ::= Expr TIMES Expr { extends=Expr }
+DivExpr ::= Expr DIVIDE Expr { extends=Expr }
+PlusExpr ::= Expr PLUS Expr { extends=Expr }
+MinusExpr ::= Expr MINUS Expr { extends=Expr }
+ModulusExpr ::= Expr PERCENT Expr { extends=Expr }
+LShiftExpr ::= Expr SHIFT_L Expr { extends=Expr }
+RShiftExpr ::= Expr SHIFT_R Expr { extends=Expr }
+ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
+ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends = NumericExpr }
 
-NumericLiteral ::= (SIZE_TYPE? (BINARY|HEXADECIMAL|DECIMAL|CHARACTER)) { extends = Expr }
-Identifier ::= ID { extends = Expr }
-LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends = Expr }
-Reg ::= REGISTER { extends = Expr }
-Seg ::= SEGMENT { extends = Expr }
-Str ::= STRING { extends = Expr }
-Address ::= (((SIZE_TYPE? SQUARE_L Expr SQUARE_R)|DOLLARSIGN|DOLLARSIGN2)|SEGMENT_ADDR) { extends = Expr }
-MacroCall ::= ((Identifier ROUND_L ((NumericExpr SEPARATOR)* NumericExpr)? ROUND_R)|(Identifier NumericExpr)) { extends = Expr }
-MacroParamReference ::= (MACRO_PARAM_REF) { extends = Expr }
-MacroVarReference ::= (MACRO_VAR_REF) { extends = Expr }
+NumericLiteral ::= (SIZE_TYPE? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
+Identifier ::= ID { extends=Expr }
+LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
+Reg ::= REGISTER { extends=Expr }
+Seg ::= SEGMENT { extends=Expr }
+Str ::= STRING { extends=Expr }
+SegmentAddress ::= (SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID))|(LBL_DEF (HEXADECIMAL|ZEROES|ID)) { extends=Expr }
+Address ::= (((SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2)) { extends=Expr }
+private AddressInternal ::= SQUARE_L Expr SQUARE_R { pin(".*")=1 }
+MacroCall ::= (Identifier MacroStart)|(Identifier NumericExpr) { extends=Expr }
+private MacroStart ::= ROUND_L NumericExpr (SEPARATOR NumericExpr)* ROUND_R { pin(".*")=1 }
+MacroParamReference ::= (MACRO_PARAM_REF) { extends=Expr }
+MacroVarReference ::= (MACRO_VAR_REF) { extends=Expr }
 

@@ -8,17 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
+public class NASMSegmentAddressImpl extends NASMExprImpl implements NASMSegmentAddress {
 
-  public NASMLabelImpl(ASTNode node) {
+  public NASMSegmentAddressImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitLabel(this);
+    visitor.visitSegmentAddress(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,30 +27,32 @@ public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
 
   @Override
   @Nullable
-  public NASMData getData() {
-    return findChildByClass(NASMData.class);
+  public PsiElement getHexadecimal() {
+    return findChildByType(HEXADECIMAL);
   }
 
   @Override
   @Nullable
-  public NASMInstruction getInstruction() {
-    return findChildByClass(NASMInstruction.class);
+  public PsiElement getId() {
+    return findChildByType(ID);
   }
 
   @Override
   @Nullable
-  public NASMStructure getStructure() {
-    return findChildByClass(NASMStructure.class);
-  }
-
-  @Override
-  @NotNull
   public PsiElement getLblDef() {
-    return findNotNullChildByType(LBL_DEF);
+    return findChildByType(LBL_DEF);
   }
 
-  public String getLabelIdentifierString() {
-    return NASMPsiImplUtil.getLabelIdentifierString(this);
+  @Override
+  @Nullable
+  public PsiElement getSegmentAddrL() {
+    return findChildByType(SEGMENT_ADDR_L);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getZeroes() {
+    return findChildByType(ZEROES);
   }
 
 }

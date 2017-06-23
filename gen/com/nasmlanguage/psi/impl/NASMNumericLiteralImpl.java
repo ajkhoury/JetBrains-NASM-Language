@@ -55,4 +55,10 @@ public class NASMNumericLiteralImpl extends NASMExprImpl implements NASMNumericL
     return findChildByType(SIZE_TYPE);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getZeroes() {
+    return findChildByType(ZEROES);
+  }
+
 }

@@ -19,7 +19,7 @@ public interface NASMMacro extends PsiElement {
   @NotNull
   List<NASMMacroLabel> getMacroLabelList();
 
-  @NotNull
+  @Nullable
   PsiElement getMacroEndTag();
 
   @NotNull

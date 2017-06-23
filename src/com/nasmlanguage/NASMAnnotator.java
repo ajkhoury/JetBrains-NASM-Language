@@ -47,8 +47,7 @@ public class NASMAnnotator implements Annotator {
                             highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_STRUCTURE, holder);
                         }
                     }
-                }
-                else if (parentElement instanceof NASMConstant) {
+                } else if (parentElement instanceof NASMConstant) {
                     TextRange tr = nasmIdentifier.getTextRange();
                     highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
                     List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferences(parentElement.getProject(), nasmIdentifier);
@@ -56,8 +55,7 @@ public class NASMAnnotator implements Annotator {
                         tr = identifierRef.getTextRange();
                         highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
                     }
-                }
-                else if ((parentElement instanceof NASMMacro)
+                } else if ((parentElement instanceof NASMMacro)
                         || (parentElement instanceof NASMMacroCall)
                         || (parentElement instanceof NASMDefine)
                         || (parentElement instanceof NASMAssign)
@@ -67,8 +65,7 @@ public class NASMAnnotator implements Annotator {
                         TextRange tr = identifierNode.getTextRange();
                         highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_MACRO, holder);
                     }
-                }
-                else if (parentElement instanceof NASMInstruction) {
+                } else if (parentElement instanceof NASMInstruction) {
                     List<NASMLabel> labels = NASMUtil.findLabels(parentElement.getProject());
                     for (NASMLabel label : labels) {
                         String labelIdentifierText = label.getLabelIdentifierString();
@@ -77,35 +74,43 @@ public class NASMAnnotator implements Annotator {
                             highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_LABEL, holder);
                         }
                     }
-                    List<NASMLabelInstruction> labelInstructions = NASMUtil.findLabelInstructions(parentElement.getProject());
-                    for (NASMLabelInstruction labelIns : labelInstructions) {
-                        String labelIdentifierText = labelIns.getLabelIdentifierString();
-                        if (labelIdentifierText != null && labelIdentifierText.equals(nasmIdentifier.getText())) {
-                            TextRange tr = nasmIdentifier.getTextRange();
-                            highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_LABEL, holder);
-                        }
-                    }
+                    //List<NASMLabelInstruction> labelInstructions = NASMUtil.findLabelInstructions(parentElement.getProject());
+                    //for (NASMLabelInstruction labelIns : labelInstructions) {
+                    //    String labelIdentifierText = labelIns.getLabelIdentifierString();
+                    //    if (labelIdentifierText != null && labelIdentifierText.equals(nasmIdentifier.getText())) {
+                    //        TextRange tr = nasmIdentifier.getTextRange();
+                    //        highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_LABEL, holder);
+                    //    }
+                    //}
+                    //List<NASMLabelData> labelDatas = NASMUtil.findLabelDatas(parentElement.getProject());
+                    //for (NASMLabelData labelData : labelDatas) {
+                    //    String labelIdentifierText = labelData.getLabelIdentifierString();
+                    //    if (labelIdentifierText != null && labelIdentifierText.equals(nasmIdentifier.getText())) {
+                    //        TextRange tr = nasmIdentifier.getTextRange();
+                    //        highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_LABEL, holder);
+                    //    }
+                    //}
                 }
 
             }
         }
 
-        if (element instanceof NASMLabelInstruction) {
-            NASMLabelInstruction nasmLabelInstruction = (NASMLabelInstruction)element;
-            PsiElement labelInstruction = nasmLabelInstruction.getLblIns();
-            if (labelInstruction != null ) {
-                String labelInstructionText = labelInstruction.getText();
-                if (labelInstructionText != null) {
-                    int labelIdx = labelInstructionText.indexOf(':');
-                    if (labelIdx != -1) {
-                        String instruction = labelInstructionText.substring(labelIdx);
-                        TextRange tr = labelInstruction.getTextRange();
-                        highlightTextRange(tr.getStartOffset(), labelIdx + 1, NASMSyntaxHighlighter.NASM_LABEL, holder);
-                        highlightTextRange(tr.getStartOffset() + labelIdx + 1, instruction.length(), NASMSyntaxHighlighter.NASM_OPERATION, holder);
-                    }
-                }
-            }
-        }
+        //if (element instanceof NASMLabelInstruction) {
+        //    NASMLabelInstruction nasmLabelInstruction = (NASMLabelInstruction)element;
+        //    PsiElement labelInstruction = nasmLabelInstruction.getLblIns();
+        //    if (labelInstruction != null ) {
+        //        String labelInstructionText = labelInstruction.getText();
+        //        if (labelInstructionText != null) {
+        //            int labelIdx = labelInstructionText.indexOf(':');
+        //            if (labelIdx != -1) {
+        //                String instruction = labelInstructionText.substring(labelIdx);
+        //                TextRange tr = labelInstruction.getTextRange();
+        //                highlightTextRange(tr.getStartOffset(), labelIdx + 1, NASMSyntaxHighlighter.NASM_LABEL, holder);
+        //                highlightTextRange(tr.getStartOffset() + labelIdx + 1, instruction.length(), NASMSyntaxHighlighter.NASM_OPERATION, holder);
+        //            }
+        //        }
+        //    }
+        //}
 
         if (element instanceof NASMLabelIdentifier) {
             NASMLabelIdentifier nasmLabelIdentifier = (NASMLabelIdentifier)element;

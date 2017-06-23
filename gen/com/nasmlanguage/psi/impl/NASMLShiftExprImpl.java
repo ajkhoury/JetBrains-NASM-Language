@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
 import com.nasmlanguage.psi.*;
 
-public class NASMParenthesisNumericExprImpl extends NASMNumericExprImpl implements NASMParenthesisNumericExpr {
+public class NASMLShiftExprImpl extends NASMExprImpl implements NASMLShiftExpr {
 
-  public NASMParenthesisNumericExprImpl(ASTNode node) {
+  public NASMLShiftExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitParenthesisNumericExpr(this);
+    visitor.visitLShiftExpr(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -26,9 +26,9 @@ public class NASMParenthesisNumericExprImpl extends NASMNumericExprImpl implemen
   }
 
   @Override
-  @Nullable
-  public NASMNumericExpr getNumericExpr() {
-    return findChildByClass(NASMNumericExpr.class);
+  @NotNull
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
 }
