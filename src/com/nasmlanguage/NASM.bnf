@@ -236,7 +236,7 @@ Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Constant|Directive|Label|S
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
 Label ::= (((LBL_DEF (Instruction|Data|Structure)?)) CRLF*) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
-Constant ::= (Identifier EQU NumericExpr)
+Constant ::= (Identifier EQU NumericExpr CRLF*)
 
 //LabelData ::= (LBL_DATA DataValue CRLF*) {methods=[getLabelIdentifierString]}
 Data ::= (Identifier? DATA_OP DataValue)
