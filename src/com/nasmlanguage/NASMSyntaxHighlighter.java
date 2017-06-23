@@ -141,6 +141,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
 
         keys1.put(NASMTypes.LBL, NASM_LABEL);
         keys1.put(NASMTypes.LBL_DEF, NASM_LABEL);
+        keys1.put(NASMTypes.LBL_INS, NASM_LABEL);
 
         keys1.put(NASMTypes.IDENTIFIER, NASM_IDENTIFIER);
 

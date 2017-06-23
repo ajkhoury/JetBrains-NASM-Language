@@ -135,9 +135,11 @@ SIZE_TYPE=[sS][hH][oO][rR][tT]|[fF][aA][rR]|[lL][oO][nN][gG]|(((([dDqQoOtTyYzZ]|
 ID=[a-zA-Z_][a-zA-Z0-9_]*
 LBL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
 LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
+LBL_INS=({LBL_DEF}({OP_PREFIX}|{GENERAL_OP}|{X64_OP}|{FPU_OP}|{MMX_OP}|{SSE_OP}|{SSE2_OP}|{SSE3_OP}|{SSE4_OP}))
 BINARY=(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])
 HEXADECIMAL=(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])
 DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
+SEGMENT_ADDR=(((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+):((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+))
 CHARACTER=('([^'\\]|\\.)')
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 
@@ -215,9 +217,11 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {ID}                        { return ID; }
   {LBL_DEF}                   { return LBL_DEF; }
   {LBL}                       { return LBL; }
+  {LBL_INS}                   { return LBL_INS; }
   {BINARY}                    { return BINARY; }
   {HEXADECIMAL}               { return HEXADECIMAL; }
   {DECIMAL}                   { return DECIMAL; }
+  {SEGMENT_ADDR}              { return SEGMENT_ADDR; }
   {CHARACTER}                 { return CHARACTER; }
   {STRING}                    { return STRING; }
 

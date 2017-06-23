@@ -98,6 +98,22 @@ class NASMUtil {
         return result;
     }
 
+    static List<NASMLabelInstruction> findLabelInstructions(Project project) {
+        List<NASMLabelInstruction> result = new ArrayList<>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
+                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
+        );
+        for (VirtualFile virtualFile : virtualFiles) {
+            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
+            if (assemblyFile != null) {
+                Collection<NASMLabelInstruction> nasmLabelInstructions = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMLabelInstruction.class);
+                if (!nasmLabelInstructions.isEmpty())
+                    result.addAll(nasmLabelInstructions);
+            }
+        }
+        return result;
+    }
+
     static List<NASMStructure> findStructures(Project project) {
         List<NASMStructure> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(

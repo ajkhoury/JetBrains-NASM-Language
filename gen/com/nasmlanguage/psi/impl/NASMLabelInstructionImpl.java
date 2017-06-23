@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMNumericLiteralImpl extends NASMExprImpl implements NASMNumericLiteral {
+public class NASMLabelInstructionImpl extends ASTWrapperPsiElement implements NASMLabelInstruction {
 
-  public NASMNumericLiteralImpl(ASTNode node) {
+  public NASMLabelInstructionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitNumericLiteral(this);
+    visitor.visitLabelInstruction(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,32 +28,24 @@ public class NASMNumericLiteralImpl extends NASMExprImpl implements NASMNumericL
 
   @Override
   @Nullable
-  public PsiElement getBinary() {
-    return findChildByType(BINARY);
+  public NASMDirective getDirective() {
+    return findChildByClass(NASMDirective.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getCharacter() {
-    return findChildByType(CHARACTER);
+  public PsiElement getLblIns() {
+    return findChildByType(LBL_INS);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getDecimal() {
-    return findChildByType(DECIMAL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getHexadecimal() {
-    return findChildByType(HEXADECIMAL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSizeType() {
-    return findChildByType(SIZE_TYPE);
+  public String getLabelIdentifierString() {
+    return NASMPsiImplUtil.getLabelIdentifierString(this);
   }
 
 }

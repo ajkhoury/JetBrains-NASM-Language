@@ -159,11 +159,13 @@
         ID                  = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*' // Some identifier
         LBL_DEF             = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:' // Label definition
         LBL                 = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Label can have chars like '.', '?', '@', etc
+        LBL_INS             = 'regexp:({LBL_DEF}({OP_PREFIX}|{GENERAL_OP}|{X64_OP}|{FPU_OP}|{MMX_OP}|{SSE_OP}|{SSE2_OP}|{SSE3_OP}|{SSE4_OP}))'
 
         // Literals
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
         HEXADECIMAL         = 'regexp:(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])'
         DECIMAL             = 'regexp:((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)'
+        SEGMENT_ADDR        = 'regexp:(((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+):((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+))'
         CHARACTER           = "regexp:('([^'\\]|\\.)')"
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 
@@ -224,7 +226,7 @@ Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|
             | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
-Label ::= (LBL_DEF (Instruction|Data|Structure)? CRLF*) {methods=[getLabelIdentifierString]}
+Label ::= (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction) CRLF*) {methods=[getLabelIdentifierString]}
 Constant ::= (Identifier EQU NumericExpr)
 Data ::= (Identifier? DATA_OP DataValue)
 private DataValue ::= ((NumericExpr|STRING|LabelIdentifier) (SEPARATOR (NumericExpr|STRING|LabelIdentifier))* COMMENT?)
@@ -233,7 +235,8 @@ Structure ::= ((Struc|IStruc) CRLF*)
 Struc ::= (STRUC_TAG Identifier CRLF* ((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)* ENDSTRUC_TAG)
 IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG LabelIdentifier SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
-Instruction ::= (((((OP_PREFIX MnemonicOperation)|MnemonicOperation) ((Expr SEPARATOR)* Expr)? COMMENT? CRLF*) | Directive | MacroCall) CRLF*)
+LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}
+Instruction ::= (((OP_PREFIX? MnemonicOperation ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*)
 private MnemonicOperation ::= GENERAL_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP | SSE2_OP | SSE3_OP | SSE4_OP
 
 Directive ::= (((DIRECTIVE_OP DirectiveArg*)|(SQUARE_L DIRECTIVE_OP DirectiveArg* SQUARE_R)|MapOption) CRLF*)
@@ -279,13 +282,13 @@ DivExpr ::= Expr DIVIDE Expr { extends = Expr }
 ParenthesisExpr ::= ROUND_L Expr ROUND_R { extends = Expr }
 ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { extends = NumericExpr }
 
-NumericLiteral ::= (((HEXADECIMAL|ID) COLON (HEXADECIMAL|ID))|BINARY|HEXADECIMAL|DECIMAL|CHARACTER) { extends = Expr }
+NumericLiteral ::= (SIZE_TYPE? (BINARY|HEXADECIMAL|DECIMAL|CHARACTER)) { extends = Expr }
 Identifier ::= ID { extends = Expr }
 LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends = Expr }
 Reg ::= REGISTER { extends = Expr }
 Seg ::= SEGMENT { extends = Expr }
 Str ::= STRING { extends = Expr }
-Address ::= ((SIZE_TYPE? SQUARE_L Expr SQUARE_R)|DOLLARSIGN|DOLLARSIGN2) { extends = Expr }
+Address ::= (((SIZE_TYPE? SQUARE_L Expr SQUARE_R)|DOLLARSIGN|DOLLARSIGN2)|SEGMENT_ADDR) { extends = Expr }
 MacroCall ::= ((Identifier ROUND_L ((NumericExpr SEPARATOR)* NumericExpr)? ROUND_R)|(Identifier NumericExpr)) { extends = Expr }
 MacroParamReference ::= (MACRO_PARAM_REF) { extends = Expr }
 MacroVarReference ::= (MACRO_VAR_REF) { extends = Expr }

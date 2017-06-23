@@ -33,7 +33,7 @@ public class NASMPsiImplUtil {
     }
 
     public static String getLabelIdentifierString(NASMLabel element) {
-        ASTNode labelDef = element.getNode().findChildByType(NASMTypes.LBL_DEF);
+        PsiElement labelDef = element.getLblDef();
         if (labelDef != null) {
             String labelDefString = labelDef.getText();
             return labelDefString.substring(0, labelDefString.indexOf(':')).trim();
@@ -41,6 +41,14 @@ public class NASMPsiImplUtil {
         return null;
     }
 
+    public static String getLabelIdentifierString(NASMLabelInstruction element) {
+        PsiElement labelIns = element.getLblIns();
+        if (labelIns != null) {
+            String labelInsString = labelIns.getText();
+            return labelInsString.substring(0, labelInsString.indexOf(':')).trim();
+        }
+        return null;
+    }
 
 
 }

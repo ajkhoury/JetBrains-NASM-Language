@@ -83,6 +83,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitLabelInstruction(@NotNull NASMLabelInstruction o) {
+    visitPsiElement(o);
+  }
+
   public void visitMacro(@NotNull NASMMacro o) {
     visitPsiElement(o);
   }

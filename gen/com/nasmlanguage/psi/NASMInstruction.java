@@ -14,9 +14,6 @@ public interface NASMInstruction extends PsiElement {
   List<NASMExpr> getExprList();
 
   @Nullable
-  PsiElement getComment();
-
-  @Nullable
   PsiElement getFpuOp();
 
   @Nullable

@@ -33,6 +33,12 @@ public class NASMAddressImpl extends NASMExprImpl implements NASMAddress {
 
   @Override
   @Nullable
+  public PsiElement getSegmentAddr() {
+    return findChildByType(SEGMENT_ADDR);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getSizeType() {
     return findChildByType(SIZE_TYPE);
   }

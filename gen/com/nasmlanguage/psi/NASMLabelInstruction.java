@@ -5,22 +5,16 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMLabel extends PsiElement {
+public interface NASMLabelInstruction extends PsiElement {
 
   @Nullable
-  NASMData getData();
+  NASMDirective getDirective();
+
+  @NotNull
+  List<NASMExpr> getExprList();
 
   @Nullable
-  NASMInstruction getInstruction();
-
-  @Nullable
-  NASMLabelInstruction getLabelInstruction();
-
-  @Nullable
-  NASMStructure getStructure();
-
-  @Nullable
-  PsiElement getLblDef();
+  PsiElement getLblIns();
 
   String getLabelIdentifierString();
 

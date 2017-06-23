@@ -77,8 +77,33 @@ public class NASMAnnotator implements Annotator {
                             highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_LABEL, holder);
                         }
                     }
+                    List<NASMLabelInstruction> labelInstructions = NASMUtil.findLabelInstructions(parentElement.getProject());
+                    for (NASMLabelInstruction labelIns : labelInstructions) {
+                        String labelIdentifierText = labelIns.getLabelIdentifierString();
+                        if (labelIdentifierText != null && labelIdentifierText.equals(nasmIdentifier.getText())) {
+                            TextRange tr = nasmIdentifier.getTextRange();
+                            highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_LABEL, holder);
+                        }
+                    }
                 }
 
+            }
+        }
+
+        if (element instanceof NASMLabelInstruction) {
+            NASMLabelInstruction nasmLabelInstruction = (NASMLabelInstruction)element;
+            PsiElement labelInstruction = nasmLabelInstruction.getLblIns();
+            if (labelInstruction != null ) {
+                String labelInstructionText = labelInstruction.getText();
+                if (labelInstructionText != null) {
+                    int labelIdx = labelInstructionText.indexOf(':');
+                    if (labelIdx != -1) {
+                        String instruction = labelInstructionText.substring(labelIdx);
+                        TextRange tr = labelInstruction.getTextRange();
+                        highlightTextRange(tr.getStartOffset(), labelIdx + 1, NASMSyntaxHighlighter.NASM_LABEL, holder);
+                        highlightTextRange(tr.getStartOffset() + labelIdx + 1, instruction.length(), NASMSyntaxHighlighter.NASM_OPERATION, holder);
+                    }
+                }
             }
         }
 

@@ -40,12 +40,6 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
-  public PsiElement getComment() {
-    return findChildByType(COMMENT);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getFpuOp() {
     return findChildByType(FPU_OP);
   }

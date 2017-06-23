@@ -27,6 +27,7 @@ public interface NASMTypes {
   IElementType I_STRUC = new NASMElementType("I_STRUC");
   IElementType LABEL = new NASMElementType("LABEL");
   IElementType LABEL_IDENTIFIER = new NASMElementType("LABEL_IDENTIFIER");
+  IElementType LABEL_INSTRUCTION = new NASMElementType("LABEL_INSTRUCTION");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType MACRO_LABEL = new NASMElementType("MACRO_LABEL");
@@ -147,6 +148,7 @@ public interface NASMTypes {
   IElementType ISTRUC_TAG = new NASMTokenType("ISTRUC_TAG");
   IElementType LBL = new NASMTokenType("LBL");
   IElementType LBL_DEF = new NASMTokenType("LBL_DEF");
+  IElementType LBL_INS = new NASMTokenType("LBL_INS");
   IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
   IElementType MACRO_LBL_DEF = new NASMTokenType("MACRO_LBL_DEF");
   IElementType MACRO_PARAM_REF = new NASMTokenType("MACRO_PARAM_REF");
@@ -167,6 +169,7 @@ public interface NASMTypes {
   IElementType ROUND_R = new NASMTokenType(")");
   IElementType SECTION_TAG = new NASMTokenType("SECTION_TAG");
   IElementType SEGMENT = new NASMTokenType("SEGMENT");
+  IElementType SEGMENT_ADDR = new NASMTokenType("SEGMENT_ADDR");
   IElementType SEMICOLON = new NASMTokenType(";");
   IElementType SEPARATOR = new NASMTokenType(",");
   IElementType SIZE_TYPE = new NASMTokenType("SIZE_TYPE");
@@ -238,6 +241,9 @@ public interface NASMTypes {
       }
       else if (type == LABEL_IDENTIFIER) {
         return new NASMLabelIdentifierImpl(node);
+      }
+      else if (type == LABEL_INSTRUCTION) {
+        return new NASMLabelInstructionImpl(node);
       }
       else if (type == MACRO) {
         return new NASMMacroImpl(node);
