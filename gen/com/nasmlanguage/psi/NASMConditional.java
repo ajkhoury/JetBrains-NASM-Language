@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMConditional extends PsiElement {
 
   @NotNull
+  List<NASMConstant> getConstantList();
+
+  @NotNull
   List<NASMData> getDataList();
 
   @NotNull

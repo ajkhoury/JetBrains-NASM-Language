@@ -231,7 +231,7 @@ private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLi
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 Strlen ::= STRLEN_TAG Identifier (STRING|Identifier) CRLF*
 Error ::= ERROR_TAG CRLF*
-Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Directive|Label|Structure|Data|Instruction)*)* ENDIF_TAG CRLF*)
+Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Constant|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Constant|Directive|Label|Structure|Data|Instruction)*)* ENDIF_TAG CRLF*)
             | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 

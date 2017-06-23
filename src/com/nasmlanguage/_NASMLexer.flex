@@ -206,6 +206,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
   {DATA_OP}                   { return DATA_OP; }
 
+  {INS_SYSTEM}                { return INS_SYSTEM; }
   {OP_PREFIX}                 { return OP_PREFIX; }
   {GENERAL_OP}                { return GENERAL_OP; }
   {SYSTEM_OP}                 { return SYSTEM_OP; }
