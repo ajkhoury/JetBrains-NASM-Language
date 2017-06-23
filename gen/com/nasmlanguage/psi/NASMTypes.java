@@ -51,6 +51,7 @@ public interface NASMTypes {
   IElementType STRLEN = new NASMElementType("STRLEN");
   IElementType STRUC = new NASMElementType("STRUC");
   IElementType STRUCTURE = new NASMElementType("STRUCTURE");
+  IElementType STRUCTURE_FIELD = new NASMElementType("STRUCTURE_FIELD");
 
   IElementType ASSIGN_TAG = new NASMTokenType("ASSIGN_TAG");
   IElementType AT_TAG = new NASMTokenType("AT_TAG");
@@ -186,6 +187,7 @@ public interface NASMTypes {
   IElementType SSE_OP = new NASMTokenType("SSE_OP");
   IElementType STRING = new NASMTokenType("STRING");
   IElementType STRLEN_TAG = new NASMTokenType("STRLEN_TAG");
+  IElementType STRUCT_FIELD = new NASMTokenType("STRUCT_FIELD");
   IElementType STRUC_TAG = new NASMTokenType("STRUC_TAG");
   IElementType SYSTEM_OP = new NASMTokenType("SYSTEM_OP");
   IElementType TIMES = new NASMTokenType("*");
@@ -320,6 +322,9 @@ public interface NASMTypes {
       }
       else if (type == STRUCTURE) {
         return new NASMStructureImpl(node);
+      }
+      else if (type == STRUCTURE_FIELD) {
+        return new NASMStructureFieldImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

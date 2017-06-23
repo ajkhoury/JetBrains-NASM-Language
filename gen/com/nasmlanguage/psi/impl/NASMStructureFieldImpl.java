@@ -8,17 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMConstantImpl extends ASTWrapperPsiElement implements NASMConstant {
+public class NASMStructureFieldImpl extends NASMExprImpl implements NASMStructureField {
 
-  public NASMConstantImpl(ASTNode node) {
+  public NASMStructureFieldImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitConstant(this);
+    visitor.visitStructureField(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,24 +27,8 @@ public class NASMConstantImpl extends ASTWrapperPsiElement implements NASMConsta
 
   @Override
   @NotNull
-  public NASMIdentifier getIdentifier() {
-    return findNotNullChildByClass(NASMIdentifier.class);
-  }
-
-  @Override
-  @NotNull
-  public NASMNumericExpr getNumericExpr() {
-    return findNotNullChildByClass(NASMNumericExpr.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getEqu() {
-    return findNotNullChildByType(EQU);
-  }
-
-  public String getConstantIdentifierString() {
-    return NASMPsiImplUtil.getConstantIdentifierString(this);
+  public PsiElement getStructField() {
+    return findNotNullChildByType(STRUCT_FIELD);
   }
 
 }

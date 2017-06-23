@@ -16,4 +16,6 @@ public interface NASMConstant extends PsiElement {
   @NotNull
   PsiElement getEqu();
 
+  String getConstantIdentifierString();
+
 }

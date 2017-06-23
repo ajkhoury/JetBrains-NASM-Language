@@ -22,12 +22,6 @@
         COMMENT             = 'regexp:(;.*?(\r|\n|\r\n)?)'
         EQU                 = 'regexp:([eE][qQ][uU])'
 
-        STRUC_TAG           = 'regexp:([sS][tT][rR][uU][cC])'
-        ENDSTRUC_TAG        = 'regexp:([eE][nN][dD][sS][tT][rR][uU][cC])'
-        ISTRUC_TAG          = 'regexp:([iI][sS][tT][rR][uU][cC])'
-        IEND_TAG            = 'regexp:([iI][eE][nN][dD])'
-        AT_TAG              = 'regexp:([aA][tT])'
-
         INCLUDE_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])'
         DEFINE_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])'
         ASSIGN_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[aA][sS][sS][iI][gG][nN])'
@@ -47,14 +41,21 @@
         STRLEN_TAG          = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([sS][tT][rR][lL][eE][nN]))'
         ERROR_TAG           = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*'
 
-
         SECTION_TAG         = 'regexp:([sS][eE][cC][tT][iI][oO][nN])'
         CODE_SECTION_NAME   = 'regexp:(\.[tT][eE][xX][tT])'
         DATA_SECTION_NAME   = 'regexp:(\.[dD][aA][tT][aA])'
         BSS_SECTION_NAME    = 'regexp:(\.[bB][sS][sS])'
 
         MAP_OPTIONS         = 'regexp:(all|brief|sections|segments|symbols)'
-        MAP_FILE            = 'regexp:(([a-zA-Z_][a-zA-Z0-9_.]*).[mM][aA][pP])'
+        MAP_FILE            = 'regexp:(([a-zA-Z0-9_.]+)(\.)[mM][aA][pP])'
+
+        STRUC_TAG           = 'regexp:([sS][tT][rR][uU][cC])'
+        ENDSTRUC_TAG        = 'regexp:([eE][nN][dD][sS][tT][rR][uU][cC])'
+        ISTRUC_TAG          = 'regexp:([iI][sS][tT][rR][uU][cC])'
+        IEND_TAG            = 'regexp:([iI][eE][nN][dD])'
+        AT_TAG              = 'regexp:([aA][tT])'
+        STRUCT_FIELD        = 'regexp:(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))'
+        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
 
         DIRECTIVE_OP        = 'regexp:[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]|[eE][nN][dD]'
         PREPROCESSOR_OP     = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])'
@@ -78,6 +79,9 @@
         INS_MISC_OTHER      = 'regexp:(lea|nop|ud2|xlatb?|cpuid|movbe)'                                                                                 // Misc/Other
         INS_RNG_RAND        = 'regexp:(rdrand|rdseed)'                                                                                                  // Random Number Generation (RNG)
         INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)'                                         // Bit Manipulation (BMI)
+
+        // System instructions
+        INS_SYSTEM          = 'regexp:((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpg|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv))'
 
         // 64 bit instructions
         INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))'                                // 64 bit Instructions
@@ -137,9 +141,6 @@
         INS_SSE4_CONVERSION = 'regexp:(pmov([sz]x(b[dqw]|dq|wd|wq)))'
         INS_SSE4_OTHER      = 'regexp:(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))'
 
-        // System instructions
-        INS_SYSTEM          = 'regexp:((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpg|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv))'
-
         // Instruction operation prefixes
         OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock)'
 
@@ -160,18 +161,16 @@
         SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
 
         // Make last!
-        ID                  = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*' // Some identifier
-        LBL_DEF             = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:' // Label definition
-        LBL                 = 'regexp:[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*' // Label can have chars like '.', '?', '@', etc
-        //LBL_INS             = 'regexp:({LBL_DEF}({OP_PREFIX}|{GENERAL_OP}|{SYSTEM_OP}|{X64_OP}|{FPU_OP}|{MMX_OP}|{SSE_OP}|{SSE2_OP}|{SSE3_OP}|{SSE4_OP}))'
-        //LBL_DATA            = 'regexp:({LBL_DEF}({DATA_OP}))'
+        ID                  = 'regexp:([a-zA-Z_]+[a-zA-Z0-9_]*)' // Some identifier
+        LBL_DEF             = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*):' // Label definition
+        LBL                 = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*)' // Label can have chars like '.', '?', '@', etc
+        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
 
         // Literals
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
         HEXADECIMAL         = 'regexp:(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])'
         ZEROES              = 'regexp:[0]+'
         DECIMAL             = 'regexp:((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)'
-        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
         //SEGMENT_ADDR        = 'regexp:(((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]+):((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+))'
         CHARACTER           = "regexp:('([^'\\]|\\.)')"
         STRING              = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
@@ -236,7 +235,7 @@ Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Constant|Directive|Label|S
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
 Label ::= (((LBL_DEF (Instruction|Data|Structure)?)) CRLF*) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
-Constant ::= (Identifier EQU NumericExpr CRLF*)
+Constant ::= (Identifier EQU NumericExpr CRLF*) {methods=[getConstantIdentifierString]}
 
 //LabelData ::= (LBL_DATA DataValue CRLF*) {methods=[getLabelIdentifierString]}
 Data ::= (Identifier? DATA_OP DataValue)
@@ -269,6 +268,7 @@ Expr ::= ParenthesisExpr
         | NumericLiteral
         | SegmentAddress
         | Str
+        | StructureField
         | MacroCall
         | MacroParamReference
         | MacroVarReference
@@ -289,6 +289,7 @@ NumericExpr ::= ParenthesisNumericExpr
         | NumericLiteral
         | SegmentAddress
         | Str
+        | StructureField
         | MacroCall
         | MacroParamReference
         | MacroVarReference
@@ -313,8 +314,9 @@ LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
 Reg ::= REGISTER { extends=Expr }
 Seg ::= SEGMENT { extends=Expr }
 Str ::= STRING { extends=Expr }
+StructureField ::= STRUCT_FIELD { extends=Expr }
 SegmentAddress ::= (SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID))|(LBL_DEF (HEXADECIMAL|ZEROES|ID)) { extends=Expr }
-Address ::= (((SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2)) { extends=Expr }
+Address ::= (SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2 { extends=Expr }
 private AddressInternal ::= SQUARE_L Expr SQUARE_R { pin(".*")=1 }
 MacroCall ::= (Identifier MacroStart)|(Identifier NumericExpr) { extends=Expr }
 private MacroStart ::= ROUND_L NumericExpr (SEPARATOR NumericExpr)* ROUND_R { pin(".*")=1 }

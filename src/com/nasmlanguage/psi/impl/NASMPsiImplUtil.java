@@ -13,8 +13,11 @@ public class NASMPsiImplUtil {
 
     public static String getIncludeString(NASMInclude element) {
         ASTNode includeString = element.getNode().findChildByType(NASMTypes.STRING);
-        if (includeString != null)
-            return includeString.getText();
+        if (includeString != null) {
+            return includeString.getText()
+                    .replace("\"", "")
+                    .replace("'", "");
+        }
         return null;
     }
 
@@ -32,12 +35,21 @@ public class NASMPsiImplUtil {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static String getLabelIdentifierString(NASMLabel element) {
         PsiElement labelDef = element.getLblDef();
         if (labelDef != null) {
             String labelDefString = labelDef.getText();
             return labelDefString.substring(0, labelDefString.indexOf(':')).trim();
         }
+        return null;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static String getConstantIdentifierString(NASMConstant element) {
+        PsiElement identifier = element.getIdentifier().getId();
+        if (identifier != null)
+            return identifier.getText();
         return null;
     }
 

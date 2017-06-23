@@ -86,6 +86,10 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             "NASM_STRUCTURE",
             DefaultLanguageHighlighterColors.CLASS_NAME
     );
+    public static final TextAttributesKey NASM_STRUCTURE_FIELD = TextAttributesKey.createTextAttributesKey(
+            "NASM_STRUCTURE_FIELD",
+            NASMSyntaxHighlighter.NASM_STRUCTURE
+    );
     public static final TextAttributesKey NASM_BAD_CHARACTER = TextAttributesKey.createTextAttributesKey(
             "NASM_BAD_CHARACTER",
             HighlighterColors.BAD_CHARACTER
@@ -132,6 +136,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(NASMTypes.CHARACTER, NASM_STRING);
 
         keys1.put(NASMTypes.STRUCTURE, NASM_STRUCTURE);
+        keys1.put(NASMTypes.STRUCT_FIELD, NASM_STRUCTURE_FIELD);
 
         keys1.put(NASMTypes.CONSTANT, NASM_CONSTANT);
 

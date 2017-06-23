@@ -111,7 +111,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
       LABEL_IDENTIFIER, L_SHIFT_EXPR, MACRO_CALL, MACRO_PARAM_REFERENCE,
       MACRO_VAR_REFERENCE, MINUS_EXPR, MODULUS_EXPR, MUL_EXPR,
       NUMERIC_LITERAL, PARENTHESIS_EXPR, PLUS_EXPR, REG,
-      R_SHIFT_EXPR, SEG, SEGMENT_ADDRESS, STR),
+      R_SHIFT_EXPR, SEG, SEGMENT_ADDRESS, STR,
+      STRUCTURE_FIELD),
   };
 
   /* ********************************************************** */
@@ -1440,6 +1441,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //         | NumericLiteral
   //         | SegmentAddress
   //         | Str
+  //         | StructureField
   //         | MacroCall
   //         | MacroParamReference
   //         | MacroVarReference
@@ -1461,6 +1463,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = NumericLiteral(b, l + 1);
     if (!r) r = SegmentAddress(b, l + 1);
     if (!r) r = Str(b, l + 1);
+    if (!r) r = StructureField(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
     if (!r) r = MacroParamReference(b, l + 1);
     if (!r) r = MacroVarReference(b, l + 1);
@@ -1693,14 +1696,15 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // 8: ATOM(NumericLiteral)
   // 9: ATOM(SegmentAddress)
   // 10: ATOM(Str)
-  // 11: ATOM(MacroCall)
-  // 12: ATOM(MacroParamReference)
-  // 13: ATOM(MacroVarReference)
-  // 14: ATOM(Address)
-  // 15: ATOM(Reg)
-  // 16: ATOM(Seg)
-  // 17: ATOM(Identifier)
-  // 18: ATOM(LabelIdentifier)
+  // 11: ATOM(StructureField)
+  // 12: ATOM(MacroCall)
+  // 13: ATOM(MacroParamReference)
+  // 14: ATOM(MacroVarReference)
+  // 15: ATOM(Address)
+  // 16: ATOM(Reg)
+  // 17: ATOM(Seg)
+  // 18: ATOM(Identifier)
+  // 19: ATOM(LabelIdentifier)
   public static boolean Expr(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expr")) return false;
     addVariant(b, "<expr>");
@@ -1710,6 +1714,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = NumericLiteral(b, l + 1);
     if (!r) r = SegmentAddress(b, l + 1);
     if (!r) r = Str(b, l + 1);
+    if (!r) r = StructureField(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
     if (!r) r = MacroParamReference(b, l + 1);
     if (!r) r = MacroVarReference(b, l + 1);
@@ -1877,6 +1882,17 @@ public class NASMParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, STRING);
     exit_section_(b, m, STR, r);
+    return r;
+  }
+
+  // STRUCT_FIELD
+  public static boolean StructureField(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StructureField")) return false;
+    if (!nextTokenIsSmart(b, STRUCT_FIELD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, STRUCT_FIELD);
+    exit_section_(b, m, STRUCTURE_FIELD, r);
     return r;
   }
 

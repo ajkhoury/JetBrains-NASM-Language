@@ -179,6 +179,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitStructureField(@NotNull NASMStructureField o) {
+    visitExpr(o);
+  }
+
   public void visitPsiElement(@NotNull PsiElement o) {
     visitElement(o);
   }

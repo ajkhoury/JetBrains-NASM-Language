@@ -29,11 +29,6 @@ CRLF=\r|\n|\r\n
 WHITE_SPACE=[ \t\x0B\f]+
 COMMENT=(;.*?(\r|\n|\r\n)?)
 EQU=([eE][qQ][uU])
-STRUC_TAG=([sS][tT][rR][uU][cC])
-ENDSTRUC_TAG=([eE][nN][dD][sS][tT][rR][uU][cC])
-ISTRUC_TAG=([iI][sS][tT][rR][uU][cC])
-IEND_TAG=([iI][eE][nN][dD])
-AT_TAG=([aA][tT])
 INCLUDE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])
 DEFINE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])
 ASSIGN_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[aA][sS][sS][iI][gG][nN])
@@ -55,7 +50,14 @@ CODE_SECTION_NAME=(\.[tT][eE][xX][tT])
 DATA_SECTION_NAME=(\.[dD][aA][tT][aA])
 BSS_SECTION_NAME=(\.[bB][sS][sS])
 MAP_OPTIONS=(all|brief|sections|segments|symbols)
-MAP_FILE=(([a-zA-Z_][a-zA-Z0-9_.]*).[mM][aA][pP])
+MAP_FILE=(([a-zA-Z0-9_.]+)(\.)[mM][aA][pP])
+STRUC_TAG=([sS][tT][rR][uU][cC])
+ENDSTRUC_TAG=([eE][nN][dD][sS][tT][rR][uU][cC])
+ISTRUC_TAG=([iI][sS][tT][rR][uU][cC])
+IEND_TAG=([iI][eE][nN][dD])
+AT_TAG=([aA][tT])
+STRUCT_FIELD=(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))
+SEGMENT_ADDR_L=((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):
 DIRECTIVE_OP=[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]|[eE][nN][dD]
 PREPROCESSOR_OP=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])
 DATA_OP=([rR][eE][sS][bBwWdDqQtToOyYzZ]|[dD][bBwWdDqQtToOyYzZ]|[tT][iI][mM][eE][sS])
@@ -76,6 +78,7 @@ INS_SEG_REGS=(l[defgs]s)
 INS_MISC_OTHER=(lea|nop|ud2|xlatb?|cpuid|movbe)
 INS_RNG_RAND=(rdrand|rdseed)
 INS_BIT_MANIPULATION=(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)
+INS_SYSTEM=((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpg|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv))
 INS_64_BIT=(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))
 INS_FPU_DATA_TRANS=(fcmov(n?([beu]|be)))|(f(i?(ld|stp?)|b(ld|stp)|xch))
 INS_FPU_BASIC_ARITH=(f((add|div|mul|sub)p?|i(add|div|mul|sub)|(div|sub)rp?|i(div|sub)r))|(f(prem1?|abs|chs|rndint|scale|sqrt|xtract))
@@ -120,7 +123,6 @@ INS_SSE4_PACKED_FP=(round[ps][sd])
 INS_SSE4_INS_EXT=((extract|insert)ps|p((ins|ext)(r[bdq])))
 INS_SSE4_CONVERSION=(pmov([sz]x(b[dqw]|dq|wd|wq)))
 INS_SSE4_OTHER=(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))
-INS_SYSTEM=((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpg|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv))
 OP_PREFIX=((rep(n?[ez])|rep)|lock)
 GENERAL_OP={INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}
 SYSTEM_OP={INS_SYSTEM}
@@ -134,14 +136,13 @@ SSE4_OP={INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED
 REGISTER=%?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))
 SEGMENT=([c-gs]s)
 SIZE_TYPE=[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)
-ID=[a-zA-Z_][a-zA-Z0-9_]*
-LBL_DEF=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*:
-LBL=[a-zA-Z$._?][a-zA-Z0-9$._?#@\126]*
+ID=([a-zA-Z_]+[a-zA-Z0-9_]*)
+LBL_DEF=([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*):
+LBL=([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*)
 BINARY=(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])
 HEXADECIMAL=(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])
 ZEROES=[0]+
 DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
-SEGMENT_ADDR_L=((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):
 CHARACTER=('([^'\\]|\\.)')
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 
@@ -175,11 +176,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {WHITE_SPACE}               { return WHITE_SPACE; }
   {COMMENT}                   { return COMMENT; }
   {EQU}                       { return EQU; }
-  {STRUC_TAG}                 { return STRUC_TAG; }
-  {ENDSTRUC_TAG}              { return ENDSTRUC_TAG; }
-  {ISTRUC_TAG}                { return ISTRUC_TAG; }
-  {IEND_TAG}                  { return IEND_TAG; }
-  {AT_TAG}                    { return AT_TAG; }
   {INCLUDE_TAG}               { return INCLUDE_TAG; }
   {DEFINE_TAG}                { return DEFINE_TAG; }
   {ASSIGN_TAG}                { return ASSIGN_TAG; }
@@ -202,6 +198,13 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }
   {MAP_OPTIONS}               { return MAP_OPTIONS; }
   {MAP_FILE}                  { return MAP_FILE; }
+  {STRUC_TAG}                 { return STRUC_TAG; }
+  {ENDSTRUC_TAG}              { return ENDSTRUC_TAG; }
+  {ISTRUC_TAG}                { return ISTRUC_TAG; }
+  {IEND_TAG}                  { return IEND_TAG; }
+  {AT_TAG}                    { return AT_TAG; }
+  {STRUCT_FIELD}              { return STRUCT_FIELD; }
+  {SEGMENT_ADDR_L}            { return SEGMENT_ADDR_L; }
   {DIRECTIVE_OP}              { return DIRECTIVE_OP; }
   {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
   {DATA_OP}                   { return DATA_OP; }
@@ -226,7 +229,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {HEXADECIMAL}               { return HEXADECIMAL; }
   {ZEROES}                    { return ZEROES; }
   {DECIMAL}                   { return DECIMAL; }
-  {SEGMENT_ADDR_L}            { return SEGMENT_ADDR_L; }
   {CHARACTER}                 { return CHARACTER; }
   {STRING}                    { return STRING; }
 
