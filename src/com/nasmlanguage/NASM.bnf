@@ -242,7 +242,7 @@ Data ::= (Identifier? DATA_OP DataValue)
 private DataValue ::= ((NumericExpr|STRING|LabelIdentifier) (SEPARATOR (NumericExpr|STRING|LabelIdentifier))* COMMENT?)
 
 Structure ::= ((Struc|IStruc) CRLF*)
-Struc ::= (STRUC_TAG Identifier CRLF* ((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)* ENDSTRUC_TAG)
+Struc ::= (STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG)
 IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG LabelIdentifier SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
 //LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}
@@ -306,7 +306,7 @@ ModulusExpr ::= Expr PERCENT Expr { extends=Expr }
 LShiftExpr ::= Expr SHIFT_L Expr { extends=Expr }
 RShiftExpr ::= Expr SHIFT_R Expr { extends=Expr }
 ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
-ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends = NumericExpr }
+ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
 
 NumericLiteral ::= (SIZE_TYPE? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
 Identifier ::= ID { extends=Expr }

@@ -41,6 +41,7 @@
         <li>Added pinning for some repeating rules</li>
         <li>Added system instructions</li>
         <li>Added highlighting for segment addresses, and structure references</li>
+        <li>Fix for blank labels in structs</li>
       </ul>
     ]]>
   </change-notes>

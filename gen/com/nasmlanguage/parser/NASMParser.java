@@ -1571,7 +1571,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // STRUC_TAG Identifier CRLF* ((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)* ENDSTRUC_TAG
+  // STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG
   public static boolean Struc(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc")) return false;
     if (!nextTokenIs(b, STRUC_TAG)) return false;
@@ -1598,7 +1598,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)*
+  // (((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))*
   private static boolean Struc_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3")) return false;
     int c = current_position_(b);
@@ -1610,22 +1610,33 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*
+  // ((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*)
   private static boolean Struc_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Struc_3_0_0(b, l + 1);
+    if (!r) r = Struc_3_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*
+  private static boolean Struc_3_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Struc_3_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Struc_3_0_0_0(b, l + 1);
     r = r && consumeToken(b, DATA_OP);
     r = r && NumericLiteral(b, l + 1);
-    r = r && Struc_3_0_3(b, l + 1);
+    r = r && Struc_3_0_0_3(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // LBL_DEF|LabelIdentifier
-  private static boolean Struc_3_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Struc_3_0_0")) return false;
+  private static boolean Struc_3_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Struc_3_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LBL_DEF);
@@ -1635,12 +1646,46 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // CRLF*
-  private static boolean Struc_3_0_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Struc_3_0_3")) return false;
+  private static boolean Struc_3_0_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Struc_3_0_0_3")) return false;
     int c = current_position_(b);
     while (true) {
       if (!consumeToken(b, CRLF)) break;
-      if (!empty_element_parsed_guard_(b, "Struc_3_0_3", c)) break;
+      if (!empty_element_parsed_guard_(b, "Struc_3_0_0_3", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (LabelIdentifier|LBL_DEF) CRLF*
+  private static boolean Struc_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Struc_3_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Struc_3_0_1_0(b, l + 1);
+    r = r && Struc_3_0_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LabelIdentifier|LBL_DEF
+  private static boolean Struc_3_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Struc_3_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = LabelIdentifier(b, l + 1);
+    if (!r) r = consumeToken(b, LBL_DEF);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean Struc_3_0_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Struc_3_0_1_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Struc_3_0_1_1", c)) break;
       c = current_position_(b);
     }
     return true;
