@@ -6,15 +6,29 @@ There is a plugin in development [here](https://plugins.jetbrains.com/plugin/938
 
 ![NASM Language](http://i.imgur.com/0BW2jL7.png "NASM Language Preview")
 
-# Changes
+# Features
 
-Version 0.0.7 pre-release
+Version 0.1.5 pre-release
 - FPU, MMX, SSE, SSE2, SSE3, SSE4, and general instruction support
 - Syntax highlighting
 - Single and multiline macro support
 - Conditional assembly directives support
 - Preprocessor directives support
 - Structure support
+
+# Changes
+
+- Added macro syntax highlighting
+- Added support for conditional assembly directives
+- Fix for bug where blank comments would not match the comment regex
+- Added support for structures and improved highlighting
+- Fixed conditional assembly problems
+- Fixed number size prefixes, segment addresses, data/instruction labels
+- Added new operator expressions
+- Added pinning for some repeating rules
+- Added system instructions
+- Added highlighting for segment addresses, and structure references
+- Fix for blank labels in structs
 
 # License
 
