@@ -16,6 +16,11 @@ Version 0.1.5 pre-release
 - Preprocessor directives support
 - Structure support
 
+## Todo
+- Code completion
+- Goto symbol
+- ~Improved highlighting~
+
 # Changes
 
 - Added macro syntax highlighting
