@@ -4,7 +4,7 @@ Plugin that adds NASM support to the beautiful JetBrains IDEs such a Clion and I
 
 There is a plugin in development [here](https://plugins.jetbrains.com/plugin/9386-nasm-assembly-support), however it is not open source and is lacking full NASM support.
 
-![NASM Language](https://github.com/dude719/JetBrains-NASM-Language/blob/master/resources/nasm.png "NASM Language Preview")
+![NASM Language](http://i.imgur.com/0BW2jL7.png "NASM Language Preview")
 
 # Changes
 
