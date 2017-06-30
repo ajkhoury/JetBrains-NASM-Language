@@ -8,10 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface NASMIStruc extends PsiElement {
 
   @NotNull
-  NASMIdentifier getIdentifier();
-
-  @NotNull
-  List<NASMLabelIdentifier> getLabelIdentifierList();
+  List<NASMExpr> getExprList();
 
   @NotNull
   List<NASMNumericExpr> getNumericExprList();

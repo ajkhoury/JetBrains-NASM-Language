@@ -900,7 +900,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ISTRUC_TAG Identifier CRLF* (AT_TAG LabelIdentifier SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG
+  // ISTRUC_TAG Identifier CRLF* (AT_TAG StructureField SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG
   public static boolean IStruc(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc")) return false;
     if (!nextTokenIs(b, ISTRUC_TAG)) return false;
@@ -927,7 +927,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (AT_TAG LabelIdentifier SEPARATOR DATA_OP DataValue CRLF*)*
+  // (AT_TAG StructureField SEPARATOR DATA_OP DataValue CRLF*)*
   private static boolean IStruc_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc_3")) return false;
     int c = current_position_(b);
@@ -939,13 +939,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // AT_TAG LabelIdentifier SEPARATOR DATA_OP DataValue CRLF*
+  // AT_TAG StructureField SEPARATOR DATA_OP DataValue CRLF*
   private static boolean IStruc_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, AT_TAG);
-    r = r && LabelIdentifier(b, l + 1);
+    r = r && StructureField(b, l + 1);
     r = r && consumeTokens(b, 0, SEPARATOR, DATA_OP);
     r = r && DataValue(b, l + 1);
     r = r && IStruc_3_0_5(b, l + 1);
@@ -1322,36 +1322,54 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ROUND_L NumericExpr (SEPARATOR NumericExpr)* ROUND_R
-  static boolean MacroStart(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroStart")) return false;
+  // ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R
+  static boolean MacroParenthesis(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParenthesis")) return false;
     if (!nextTokenIs(b, ROUND_L)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, ROUND_L);
     p = r; // pin = 1
-    r = r && report_error_(b, NumericExpr(b, l + 1));
-    r = p && report_error_(b, MacroStart_2(b, l + 1)) && r;
+    r = r && report_error_(b, MacroParenthesis_1(b, l + 1));
     r = p && consumeToken(b, ROUND_R) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
+  // (NumericExpr (SEPARATOR NumericExpr)*)?
+  private static boolean MacroParenthesis_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParenthesis_1")) return false;
+    MacroParenthesis_1_0(b, l + 1);
+    return true;
+  }
+
+  // NumericExpr (SEPARATOR NumericExpr)*
+  private static boolean MacroParenthesis_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParenthesis_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = NumericExpr(b, l + 1);
+    p = r; // pin = 1
+    r = r && MacroParenthesis_1_0_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
   // (SEPARATOR NumericExpr)*
-  private static boolean MacroStart_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroStart_2")) return false;
+  private static boolean MacroParenthesis_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParenthesis_1_0_1")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!MacroStart_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MacroStart_2", c)) break;
+      if (!MacroParenthesis_1_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MacroParenthesis_1_0_1", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // SEPARATOR NumericExpr
-  private static boolean MacroStart_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroStart_2_0")) return false;
+  private static boolean MacroParenthesis_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParenthesis_1_0_1_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, SEPARATOR);
@@ -1861,32 +1879,49 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID))|(LBL_DEF (HEXADECIMAL|ZEROES|ID))
+  // SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID))|(LBL_DEF (HEXADECIMAL|ZEROES|ID)))
   public static boolean SegmentAddress(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress")) return false;
-    if (!nextTokenIsSmart(b, LBL_DEF, SEGMENT_ADDR_L)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SEGMENT_ADDRESS, "<segment address>");
     r = SegmentAddress_0(b, l + 1);
-    if (!r) r = SegmentAddress_1(b, l + 1);
+    r = r && SegmentAddress_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID)
+  // SIZE_TYPE?
   private static boolean SegmentAddress_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_0")) return false;
+    consumeTokenSmart(b, SIZE_TYPE);
+    return true;
+  }
+
+  // (SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID))|(LBL_DEF (HEXADECIMAL|ZEROES|ID))
+  private static boolean SegmentAddress_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SegmentAddress_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SegmentAddress_1_0(b, l + 1);
+    if (!r) r = SegmentAddress_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID)
+  private static boolean SegmentAddress_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SegmentAddress_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, SEGMENT_ADDR_L);
-    r = r && SegmentAddress_0_1(b, l + 1);
+    r = r && SegmentAddress_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // HEXADECIMAL|ZEROES|ID
-  private static boolean SegmentAddress_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SegmentAddress_0_1")) return false;
+  private static boolean SegmentAddress_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SegmentAddress_1_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, HEXADECIMAL);
@@ -1897,19 +1932,19 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // LBL_DEF (HEXADECIMAL|ZEROES|ID)
-  private static boolean SegmentAddress_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SegmentAddress_1")) return false;
+  private static boolean SegmentAddress_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SegmentAddress_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, LBL_DEF);
-    r = r && SegmentAddress_1_1(b, l + 1);
+    r = r && SegmentAddress_1_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // HEXADECIMAL|ZEROES|ID
-  private static boolean SegmentAddress_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SegmentAddress_1_1")) return false;
+  private static boolean SegmentAddress_1_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SegmentAddress_1_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, HEXADECIMAL);
@@ -1941,7 +1976,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (Identifier MacroStart)|(Identifier NumericExpr)
+  // (Identifier MacroParenthesis)|(Identifier NumericExpr)
   public static boolean MacroCall(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroCall")) return false;
     if (!nextTokenIsSmart(b, ID)) return false;
@@ -1953,13 +1988,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Identifier MacroStart
+  // Identifier MacroParenthesis
   private static boolean MacroCall_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroCall_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Identifier(b, l + 1);
-    r = r && MacroStart(b, l + 1);
+    r = r && MacroParenthesis(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

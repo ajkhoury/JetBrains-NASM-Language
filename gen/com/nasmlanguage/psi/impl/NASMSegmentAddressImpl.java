@@ -51,6 +51,12 @@ public class NASMSegmentAddressImpl extends NASMExprImpl implements NASMSegmentA
 
   @Override
   @Nullable
+  public PsiElement getSizeType() {
+    return findChildByType(SIZE_TYPE);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getZeroes() {
     return findChildByType(ZEROES);
   }

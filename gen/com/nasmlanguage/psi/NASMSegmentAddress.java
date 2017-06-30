@@ -20,6 +20,9 @@ public interface NASMSegmentAddress extends NASMExpr {
   PsiElement getSegmentAddrL();
 
   @Nullable
+  PsiElement getSizeType();
+
+  @Nullable
   PsiElement getZeroes();
 
 }
