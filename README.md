@@ -8,7 +8,7 @@ There is a plugin in development [here](https://plugins.jetbrains.com/plugin/938
 
 # Features
 
-Version 0.1.5 pre-release
+Version 0.1.6 pre-release
 - FPU, MMX, SSE, SSE2, SSE3, SSE4, and general instruction support
 - Syntax highlighting
 - Single and multiline macro support
@@ -34,6 +34,7 @@ Version 0.1.5 pre-release
 - Added system instructions
 - Added highlighting for segment addresses, and structure references
 - Fix for blank labels in structs
+- Fixed istruc structure parsing
 
 # License
 

@@ -40,7 +40,7 @@
             <li>Added system instructions</li>
             <li>Added highlighting for segment addresses, and structure references</li>
             <li>Fix for blank labels in structs</li>
-            <li>Fix for istruc structures</li>
+            <li>Fixed istruc structure parsing</li>
         </ul>
     ]]>
     </change-notes>
