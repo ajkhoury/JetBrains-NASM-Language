@@ -22,6 +22,8 @@
         COMMENT             = 'regexp:(;.*?(\r|\n|\r\n)?)'
         EQU                 = 'regexp:([eE][qQ][uU])'
 
+        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
+
         INCLUDE_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])'
         DEFINE_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])'
         ASSIGN_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[aA][sS][sS][iI][gG][nN])'
@@ -29,7 +31,7 @@
         MACRO_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])'
         MACRO_END_TAG       = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
         MACRO_PARAM_REF     = 'regexp:((%|%%)([1-9][0-9]*))'
-        MACRO_LBL_DEF       = 'regexp:((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*):)'
+        MACRO_LBL_DEF       = 'regexp:((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)):)'
         MACRO_VAR_REF       = 'regexp:((%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*))'
         IF_TAG              = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)'
         IFMACRO_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])'
@@ -71,7 +73,7 @@
         INS_BINARY_ROTATE   = 'regexp:(s[ah][rl]|sh[rl]d|r[co][rl])'                                                                                    // Binary Rotation
         INS_BINARY_SET      = 'regexp:(set(n?[abceglopsz]|n?[abgl]e|p[eo]))'                                                                            // Binary Set
         INS_BINARY_OTHER    = 'regexp:(bt[crs]?|bs[fr]|test|crc32|popcnt)'                                                                              // Binary Other
-        INS_CONTROL_TRANS   = 'regexp:(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret|retn|iret[dq]?|into?|bound|enter|leave)'     // Control Transfer
+        INS_CONTROL_TRANS   = 'regexp:(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret[fn]?|iret[dq]?|into?|bound|enter|leave)'// Control Transfer
         INS_STRING_DATA     = 'regexp:((mov|cmp|sca|lod|sto)(s[bdw]?)|rep(n?[ez])?)'                                                                    // String Data
         INS_INPUT_OUTPUT    = 'regexp:((in|out)(s[bdw]?)?)'                                                                                             // I/O
         INS_FLAG_CONTROL    = 'regexp:((st|cl)[cdi]|cmc|[ls]ahf|(push|pop)f[dq]?)'                                                                      // Flag Control
@@ -163,8 +165,7 @@
         // Make last!
         ID                  = 'regexp:([a-zA-Z_]+[a-zA-Z0-9_]*)' // Some identifier
         LBL_DEF             = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*):' // Label definition
-        LBL                 = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*)' // Label can have chars like '.', '?', '@', etc
-        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
+        LBL                 = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*)' // Label can have chars like '%', '.', '?', '@', etc
 
         // Literals
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
@@ -191,8 +192,11 @@
         MINUS               = '-'
         TIMES               = '*'
         DIVIDE              = '/'
-        SHIFT_L             = '<<'
-        SHIFT_R             = '>>'
+        BITSHIFT_L          = '<<'
+        BITSHIFT_R          = '>>'
+        BITWISE_AND         = '&'
+        BITWISE_OR          = '|'
+        BITWISE_XOR         = '^'
 
         DOLLARSIGN          = '$'
         DOLLARSIGN2         = '$$'
@@ -263,8 +267,11 @@ Expr ::= ParenthesisExpr
         | PlusExpr
         | MinusExpr
         | ModulusExpr
-        | LShiftExpr
-        | RShiftExpr
+        | BitShiftLExpr
+        | BitShiftRExpr
+        | BitwiseANDExpr
+        | BitwiseORExpr
+        | BitwiseXORExpr
         | NumericLiteral
         | SegmentAddress
         | Str
@@ -284,8 +291,11 @@ NumericExpr ::= ParenthesisNumericExpr
         | PlusExpr
         | MinusExpr
         | ModulusExpr
-        | LShiftExpr
-        | RShiftExpr
+        | BitShiftLExpr
+        | BitShiftRExpr
+        | BitwiseANDExpr
+        | BitwiseORExpr
+        | BitwiseXORExpr
         | NumericLiteral
         | SegmentAddress
         | Str
@@ -303,8 +313,11 @@ DivExpr ::= Expr DIVIDE Expr { extends=Expr }
 PlusExpr ::= Expr PLUS Expr { extends=Expr }
 MinusExpr ::= Expr MINUS Expr { extends=Expr }
 ModulusExpr ::= Expr PERCENT Expr { extends=Expr }
-LShiftExpr ::= Expr SHIFT_L Expr { extends=Expr }
-RShiftExpr ::= Expr SHIFT_R Expr { extends=Expr }
+BitShiftLExpr ::= Expr BITSHIFT_L Expr { extends=Expr }
+BitShiftRExpr ::= Expr BITSHIFT_R Expr { extends=Expr }
+BitwiseANDExpr ::= Expr BITWISE_AND Expr { extends=Expr }
+BitwiseORExpr ::= Expr BITWISE_OR Expr { extends=Expr }
+BitwiseXORExpr ::= Expr BITWISE_XOR Expr { extends=Expr }
 ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
 

@@ -107,12 +107,12 @@ public class NASMParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(NUMERIC_EXPR, PARENTHESIS_NUMERIC_EXPR),
-    create_token_set_(ADDRESS, DIV_EXPR, EXPR, IDENTIFIER,
-      LABEL_IDENTIFIER, L_SHIFT_EXPR, MACRO_CALL, MACRO_PARAM_REFERENCE,
+    create_token_set_(ADDRESS, BITWISE_AND_EXPR, BITWISE_OR_EXPR, BITWISE_XOR_EXPR,
+      BIT_SHIFT_L_EXPR, BIT_SHIFT_R_EXPR, DIV_EXPR, EXPR,
+      IDENTIFIER, LABEL_IDENTIFIER, MACRO_CALL, MACRO_PARAM_REFERENCE,
       MACRO_VAR_REFERENCE, MINUS_EXPR, MODULUS_EXPR, MUL_EXPR,
       NUMERIC_LITERAL, PARENTHESIS_EXPR, PLUS_EXPR, REG,
-      R_SHIFT_EXPR, SEG, SEGMENT_ADDRESS, STR,
-      STRUCTURE_FIELD),
+      SEG, SEGMENT_ADDRESS, STR, STRUCTURE_FIELD),
   };
 
   /* ********************************************************** */
@@ -1454,8 +1454,11 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //         | PlusExpr
   //         | MinusExpr
   //         | ModulusExpr
-  //         | LShiftExpr
-  //         | RShiftExpr
+  //         | BitShiftLExpr
+  //         | BitShiftRExpr
+  //         | BitwiseANDExpr
+  //         | BitwiseORExpr
+  //         | BitwiseXORExpr
   //         | NumericLiteral
   //         | SegmentAddress
   //         | Str
@@ -1478,6 +1481,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Expr(b, l + 1, 4);
     if (!r) r = Expr(b, l + 1, 5);
     if (!r) r = Expr(b, l + 1, 6);
+    if (!r) r = Expr(b, l + 1, 7);
+    if (!r) r = Expr(b, l + 1, 8);
+    if (!r) r = Expr(b, l + 1, 9);
     if (!r) r = NumericLiteral(b, l + 1);
     if (!r) r = SegmentAddress(b, l + 1);
     if (!r) r = Str(b, l + 1);
@@ -1754,20 +1760,23 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // 3: BINARY(PlusExpr)
   // 4: BINARY(MinusExpr)
   // 5: BINARY(ModulusExpr)
-  // 6: BINARY(LShiftExpr)
-  // 7: BINARY(RShiftExpr)
-  // 8: ATOM(NumericLiteral)
-  // 9: ATOM(SegmentAddress)
-  // 10: ATOM(Str)
-  // 11: ATOM(StructureField)
-  // 12: ATOM(MacroCall)
-  // 13: ATOM(MacroParamReference)
-  // 14: ATOM(MacroVarReference)
-  // 15: ATOM(Address)
-  // 16: ATOM(Reg)
-  // 17: ATOM(Seg)
-  // 18: ATOM(Identifier)
-  // 19: ATOM(LabelIdentifier)
+  // 6: BINARY(BitShiftLExpr)
+  // 7: BINARY(BitShiftRExpr)
+  // 8: BINARY(BitwiseANDExpr)
+  // 9: BINARY(BitwiseORExpr)
+  // 10: BINARY(BitwiseXORExpr)
+  // 11: ATOM(NumericLiteral)
+  // 12: ATOM(SegmentAddress)
+  // 13: ATOM(Str)
+  // 14: ATOM(StructureField)
+  // 15: ATOM(MacroCall)
+  // 16: ATOM(MacroParamReference)
+  // 17: ATOM(MacroVarReference)
+  // 18: ATOM(Address)
+  // 19: ATOM(Reg)
+  // 20: ATOM(Seg)
+  // 21: ATOM(Identifier)
+  // 22: ATOM(LabelIdentifier)
   public static boolean Expr(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expr")) return false;
     addVariant(b, "<expr>");
@@ -1817,13 +1826,25 @@ public class NASMParser implements PsiParser, LightPsiParser {
         r = Expr(b, l, 5);
         exit_section_(b, l, m, MODULUS_EXPR, r, true, null);
       }
-      else if (g < 6 && consumeTokenSmart(b, SHIFT_L)) {
+      else if (g < 6 && consumeTokenSmart(b, BITSHIFT_L)) {
         r = Expr(b, l, 6);
-        exit_section_(b, l, m, L_SHIFT_EXPR, r, true, null);
+        exit_section_(b, l, m, BIT_SHIFT_L_EXPR, r, true, null);
       }
-      else if (g < 7 && consumeTokenSmart(b, SHIFT_R)) {
+      else if (g < 7 && consumeTokenSmart(b, BITSHIFT_R)) {
         r = Expr(b, l, 7);
-        exit_section_(b, l, m, R_SHIFT_EXPR, r, true, null);
+        exit_section_(b, l, m, BIT_SHIFT_R_EXPR, r, true, null);
+      }
+      else if (g < 8 && consumeTokenSmart(b, BITWISE_AND)) {
+        r = Expr(b, l, 8);
+        exit_section_(b, l, m, BITWISE_AND_EXPR, r, true, null);
+      }
+      else if (g < 9 && consumeTokenSmart(b, BITWISE_OR)) {
+        r = Expr(b, l, 9);
+        exit_section_(b, l, m, BITWISE_OR_EXPR, r, true, null);
+      }
+      else if (g < 10 && consumeTokenSmart(b, BITWISE_XOR)) {
+        r = Expr(b, l, 10);
+        exit_section_(b, l, m, BITWISE_XOR_EXPR, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);

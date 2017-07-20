@@ -15,6 +15,26 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBitShiftLExpr(@NotNull NASMBitShiftLExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitBitShiftRExpr(@NotNull NASMBitShiftRExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitBitwiseANDExpr(@NotNull NASMBitwiseANDExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitBitwiseORExpr(@NotNull NASMBitwiseORExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitBitwiseXORExpr(@NotNull NASMBitwiseXORExpr o) {
+    visitExpr(o);
+  }
+
   public void visitCodeSection(@NotNull NASMCodeSection o) {
     visitPsiElement(o);
   }
@@ -73,10 +93,6 @@ public class NASMVisitor extends PsiElementVisitor {
 
   public void visitInstruction(@NotNull NASMInstruction o) {
     visitPsiElement(o);
-  }
-
-  public void visitLShiftExpr(@NotNull NASMLShiftExpr o) {
-    visitExpr(o);
   }
 
   public void visitLabel(@NotNull NASMLabel o) {
@@ -145,10 +161,6 @@ public class NASMVisitor extends PsiElementVisitor {
 
   public void visitPreprocessor(@NotNull NASMPreprocessor o) {
     visitPsiElement(o);
-  }
-
-  public void visitRShiftExpr(@NotNull NASMRShiftExpr o) {
-    visitExpr(o);
   }
 
   public void visitReg(@NotNull NASMReg o) {

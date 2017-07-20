@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMLShiftExpr extends NASMExpr {
+public interface NASMBitShiftLExpr extends NASMExpr {
 
   @NotNull
   List<NASMExpr> getExprList();

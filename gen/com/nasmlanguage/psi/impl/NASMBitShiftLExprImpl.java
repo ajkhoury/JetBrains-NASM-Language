@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
 import com.nasmlanguage.psi.*;
 
-public class NASMRShiftExprImpl extends NASMExprImpl implements NASMRShiftExpr {
+public class NASMBitShiftLExprImpl extends NASMExprImpl implements NASMBitShiftLExpr {
 
-  public NASMRShiftExprImpl(ASTNode node) {
+  public NASMBitShiftLExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitRShiftExpr(this);
+    visitor.visitBitShiftLExpr(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -10,6 +10,11 @@ public interface NASMTypes {
 
   IElementType ADDRESS = new NASMElementType("ADDRESS");
   IElementType ASSIGN = new NASMElementType("ASSIGN");
+  IElementType BITWISE_AND_EXPR = new NASMElementType("BITWISE_AND_EXPR");
+  IElementType BITWISE_OR_EXPR = new NASMElementType("BITWISE_OR_EXPR");
+  IElementType BITWISE_XOR_EXPR = new NASMElementType("BITWISE_XOR_EXPR");
+  IElementType BIT_SHIFT_L_EXPR = new NASMElementType("BIT_SHIFT_L_EXPR");
+  IElementType BIT_SHIFT_R_EXPR = new NASMElementType("BIT_SHIFT_R_EXPR");
   IElementType CODE_SECTION = new NASMElementType("CODE_SECTION");
   IElementType CONDITIONAL = new NASMElementType("CONDITIONAL");
   IElementType CONSTANT = new NASMElementType("CONSTANT");
@@ -27,7 +32,6 @@ public interface NASMTypes {
   IElementType I_STRUC = new NASMElementType("I_STRUC");
   IElementType LABEL = new NASMElementType("LABEL");
   IElementType LABEL_IDENTIFIER = new NASMElementType("LABEL_IDENTIFIER");
-  IElementType L_SHIFT_EXPR = new NASMElementType("L_SHIFT_EXPR");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType MACRO_LABEL = new NASMElementType("MACRO_LABEL");
@@ -44,7 +48,6 @@ public interface NASMTypes {
   IElementType PLUS_EXPR = new NASMElementType("PLUS_EXPR");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
   IElementType REG = new NASMElementType("REG");
-  IElementType R_SHIFT_EXPR = new NASMElementType("R_SHIFT_EXPR");
   IElementType SEG = new NASMElementType("SEG");
   IElementType SEGMENT_ADDRESS = new NASMElementType("SEGMENT_ADDRESS");
   IElementType STR = new NASMElementType("STR");
@@ -56,6 +59,11 @@ public interface NASMTypes {
   IElementType ASSIGN_TAG = new NASMTokenType("ASSIGN_TAG");
   IElementType AT_TAG = new NASMTokenType("AT_TAG");
   IElementType BINARY = new NASMTokenType("BINARY");
+  IElementType BITSHIFT_L = new NASMTokenType("<<");
+  IElementType BITSHIFT_R = new NASMTokenType(">>");
+  IElementType BITWISE_AND = new NASMTokenType("&");
+  IElementType BITWISE_OR = new NASMTokenType("|");
+  IElementType BITWISE_XOR = new NASMTokenType("^");
   IElementType BSS_SECTION_NAME = new NASMTokenType("BSS_SECTION_NAME");
   IElementType CHARACTER = new NASMTokenType("CHARACTER");
   IElementType CODE_SECTION_NAME = new NASMTokenType("CODE_SECTION_NAME");
@@ -176,8 +184,6 @@ public interface NASMTypes {
   IElementType SEGMENT_ADDR_L = new NASMTokenType("SEGMENT_ADDR_L");
   IElementType SEMICOLON = new NASMTokenType(";");
   IElementType SEPARATOR = new NASMTokenType(",");
-  IElementType SHIFT_L = new NASMTokenType("<<");
-  IElementType SHIFT_R = new NASMTokenType(">>");
   IElementType SIZE_TYPE = new NASMTokenType("SIZE_TYPE");
   IElementType SQUARE_L = new NASMTokenType("[");
   IElementType SQUARE_R = new NASMTokenType("]");
@@ -202,6 +208,21 @@ public interface NASMTypes {
       }
       else if (type == ASSIGN) {
         return new NASMAssignImpl(node);
+      }
+      else if (type == BITWISE_AND_EXPR) {
+        return new NASMBitwiseANDExprImpl(node);
+      }
+      else if (type == BITWISE_OR_EXPR) {
+        return new NASMBitwiseORExprImpl(node);
+      }
+      else if (type == BITWISE_XOR_EXPR) {
+        return new NASMBitwiseXORExprImpl(node);
+      }
+      else if (type == BIT_SHIFT_L_EXPR) {
+        return new NASMBitShiftLExprImpl(node);
+      }
+      else if (type == BIT_SHIFT_R_EXPR) {
+        return new NASMBitShiftRExprImpl(node);
       }
       else if (type == CODE_SECTION) {
         return new NASMCodeSectionImpl(node);
@@ -251,9 +272,6 @@ public interface NASMTypes {
       else if (type == LABEL_IDENTIFIER) {
         return new NASMLabelIdentifierImpl(node);
       }
-      else if (type == L_SHIFT_EXPR) {
-        return new NASMLShiftExprImpl(node);
-      }
       else if (type == MACRO) {
         return new NASMMacroImpl(node);
       }
@@ -301,9 +319,6 @@ public interface NASMTypes {
       }
       else if (type == REG) {
         return new NASMRegImpl(node);
-      }
-      else if (type == R_SHIFT_EXPR) {
-        return new NASMRShiftExprImpl(node);
       }
       else if (type == SEG) {
         return new NASMSegImpl(node);

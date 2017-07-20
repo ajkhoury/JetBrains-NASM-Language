@@ -29,13 +29,14 @@ CRLF=\r|\n|\r\n
 WHITE_SPACE=[ \t\x0B\f]+
 COMMENT=(;.*?(\r|\n|\r\n)?)
 EQU=([eE][qQ][uU])
+SEGMENT_ADDR_L=((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):
 INCLUDE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])
 DEFINE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])
 ASSIGN_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[aA][sS][sS][iI][gG][nN])
 MACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])
 MACRO_END_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
 MACRO_PARAM_REF=((%|%%)([1-9][0-9]*))
-MACRO_LBL_DEF=((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*):)
+MACRO_LBL_DEF=((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)):)
 MACRO_VAR_REF=((%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*))
 IF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)
 IFMACRO_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])
@@ -57,7 +58,6 @@ ISTRUC_TAG=([iI][sS][tT][rR][uU][cC])
 IEND_TAG=([iI][eE][nN][dD])
 AT_TAG=([aA][tT])
 STRUCT_FIELD=(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))
-SEGMENT_ADDR_L=((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):
 DIRECTIVE_OP=[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]|[eE][nN][dD]
 PREPROCESSOR_OP=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])
 DATA_OP=([rR][eE][sS][bBwWdDqQtToOyYzZ]|[dD][bBwWdDqQtToOyYzZ]|[tT][iI][mM][eE][sS])
@@ -70,7 +70,7 @@ INS_BINARY_LOGICAL=(and|x?or|not)
 INS_BINARY_ROTATE=(s[ah][rl]|sh[rl]d|r[co][rl])
 INS_BINARY_SET=(set(n?[abceglopsz]|n?[abgl]e|p[eo]))
 INS_BINARY_OTHER=(bt[crs]?|bs[fr]|test|crc32|popcnt)
-INS_CONTROL_TRANS=(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret|retn|iret[dq]?|into?|bound|enter|leave)
+INS_CONTROL_TRANS=(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret[fn]?|iret[dq]?|into?|bound|enter|leave)
 INS_STRING_DATA=((mov|cmp|sca|lod|sto)(s[bdw]?)|rep(n?[ez])?)
 INS_INPUT_OUTPUT=((in|out)(s[bdw]?)?)
 INS_FLAG_CONTROL=((st|cl)[cdi]|cmc|[ls]ahf|(push|pop)f[dq]?)
@@ -165,8 +165,11 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   "-"                         { return MINUS; }
   "*"                         { return TIMES; }
   "/"                         { return DIVIDE; }
-  "<<"                        { return SHIFT_L; }
-  ">>"                        { return SHIFT_R; }
+  "<<"                        { return BITSHIFT_L; }
+  ">>"                        { return BITSHIFT_R; }
+  "&"                         { return BITWISE_AND; }
+  "|"                         { return BITWISE_OR; }
+  "^"                         { return BITWISE_XOR; }
   "$"                         { return DOLLARSIGN; }
   "$$"                        { return DOLLARSIGN2; }
   "%"                         { return PERCENT; }
@@ -176,6 +179,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {WHITE_SPACE}               { return WHITE_SPACE; }
   {COMMENT}                   { return COMMENT; }
   {EQU}                       { return EQU; }
+  {SEGMENT_ADDR_L}            { return SEGMENT_ADDR_L; }
   {INCLUDE_TAG}               { return INCLUDE_TAG; }
   {DEFINE_TAG}                { return DEFINE_TAG; }
   {ASSIGN_TAG}                { return ASSIGN_TAG; }
@@ -204,7 +208,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {IEND_TAG}                  { return IEND_TAG; }
   {AT_TAG}                    { return AT_TAG; }
   {STRUCT_FIELD}              { return STRUCT_FIELD; }
-  {SEGMENT_ADDR_L}            { return SEGMENT_ADDR_L; }
   {DIRECTIVE_OP}              { return DIRECTIVE_OP; }
   {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
   {DATA_OP}                   { return DATA_OP; }
