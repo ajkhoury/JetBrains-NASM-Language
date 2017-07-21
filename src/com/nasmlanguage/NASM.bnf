@@ -163,7 +163,7 @@
         SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
 
         // Make last!
-        ID                  = 'regexp:([a-zA-Z_]+[a-zA-Z0-9_]*)' // Some identifier
+        ID                  = 'regexp:([a-zA-Z_]+[a-zA-Z0-9_%]*)' // Some identifier
         LBL_DEF             = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*):' // Label definition
         LBL                 = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*)' // Label can have chars like '%', '.', '?', '@', etc
 
