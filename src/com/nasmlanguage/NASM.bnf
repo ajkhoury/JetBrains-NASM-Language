@@ -219,9 +219,10 @@ private Element ::= COMMENT
                 | Instruction
                 ;
 
-private Section ::= DataSection | CodeSection
+private Section ::= DataSection | CodeSection | BssSection
 DataSection ::= (((SQUARE_L SECTION_TAG DATA_SECTION_NAME SQUARE_R)|(SECTION_TAG DATA_SECTION_NAME)) CRLF*)
 CodeSection ::= (((SQUARE_L SECTION_TAG CODE_SECTION_NAME SQUARE_R)|(SECTION_TAG CODE_SECTION_NAME)) CRLF*)
+BssSection  ::= (((SQUARE_L SECTION_TAG BSS_SECTION_NAME SQUARE_R)|(SECTION_TAG BSS_SECTION_NAME)) CRLF*)
 
 Preprocessor ::= Include | Define | Assign | Macro | Strlen | Error | Conditional | (PREPROCESSOR_OP Identifier Expr)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}

@@ -26,6 +26,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (t == ASSIGN) {
       r = Assign(b, 0);
     }
+    else if (t == BSS_SECTION) {
+      r = BssSection(b, 0);
+    }
     else if (t == CODE_SECTION) {
       r = CodeSection(b, 0);
     }
@@ -142,6 +145,62 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = r && Expr(b, l + 1, -1);
     exit_section_(b, m, ASSIGN, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // ((SQUARE_L SECTION_TAG BSS_SECTION_NAME SQUARE_R)|(SECTION_TAG BSS_SECTION_NAME)) CRLF*
+  public static boolean BssSection(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BssSection")) return false;
+    if (!nextTokenIs(b, "<bss section>", SECTION_TAG, SQUARE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, BSS_SECTION, "<bss section>");
+    r = BssSection_0(b, l + 1);
+    r = r && BssSection_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (SQUARE_L SECTION_TAG BSS_SECTION_NAME SQUARE_R)|(SECTION_TAG BSS_SECTION_NAME)
+  private static boolean BssSection_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BssSection_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = BssSection_0_0(b, l + 1);
+    if (!r) r = BssSection_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SQUARE_L SECTION_TAG BSS_SECTION_NAME SQUARE_R
+  private static boolean BssSection_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BssSection_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, SQUARE_L, SECTION_TAG, BSS_SECTION_NAME, SQUARE_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SECTION_TAG BSS_SECTION_NAME
+  private static boolean BssSection_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BssSection_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, SECTION_TAG, BSS_SECTION_NAME);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean BssSection_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BssSection_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "BssSection_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -1544,7 +1603,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DataSection | CodeSection
+  // DataSection | CodeSection | BssSection
   static boolean Section(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Section")) return false;
     if (!nextTokenIs(b, "", SECTION_TAG, SQUARE_L)) return false;
@@ -1552,6 +1611,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = DataSection(b, l + 1);
     if (!r) r = CodeSection(b, l + 1);
+    if (!r) r = BssSection(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

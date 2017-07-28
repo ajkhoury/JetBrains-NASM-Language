@@ -15,6 +15,7 @@ public interface NASMTypes {
   IElementType BITWISE_XOR_EXPR = new NASMElementType("BITWISE_XOR_EXPR");
   IElementType BIT_SHIFT_L_EXPR = new NASMElementType("BIT_SHIFT_L_EXPR");
   IElementType BIT_SHIFT_R_EXPR = new NASMElementType("BIT_SHIFT_R_EXPR");
+  IElementType BSS_SECTION = new NASMElementType("BSS_SECTION");
   IElementType CODE_SECTION = new NASMElementType("CODE_SECTION");
   IElementType CONDITIONAL = new NASMElementType("CONDITIONAL");
   IElementType CONSTANT = new NASMElementType("CONSTANT");
@@ -223,6 +224,9 @@ public interface NASMTypes {
       }
       else if (type == BIT_SHIFT_R_EXPR) {
         return new NASMBitShiftRExprImpl(node);
+      }
+      else if (type == BSS_SECTION) {
+        return new NASMBssSectionImpl(node);
       }
       else if (type == CODE_SECTION) {
         return new NASMCodeSectionImpl(node);

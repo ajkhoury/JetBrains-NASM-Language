@@ -35,6 +35,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitBssSection(@NotNull NASMBssSection o) {
+    visitPsiElement(o);
+  }
+
   public void visitCodeSection(@NotNull NASMCodeSection o) {
     visitPsiElement(o);
   }
