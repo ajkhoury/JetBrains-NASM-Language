@@ -1,6 +1,6 @@
 # JetBrains-NASM-Language
 
-A plugin that adds NASM support to various JetBrains IDEs, such a CLion,  Gogland, and IntelliJ.
+A plugin that adds NASM support to various JetBrains IDEs, such as CLion,  Gogland, and IntelliJ.
 
 There is a plugin in development [here](https://plugins.jetbrains.com/plugin/9386-nasm-assembly-support), however it is not open source and is lacking full NASM support.
 
