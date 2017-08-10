@@ -1655,7 +1655,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG
+  // STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP (NumericLiteral|StructureField|Identifier) CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG
   public static boolean Struc(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc")) return false;
     if (!nextTokenIs(b, STRUC_TAG)) return false;
@@ -1682,7 +1682,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))*
+  // (((LBL_DEF|LabelIdentifier) DATA_OP (NumericLiteral|StructureField|Identifier) CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))*
   private static boolean Struc_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3")) return false;
     int c = current_position_(b);
@@ -1694,7 +1694,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*)
+  // ((LBL_DEF|LabelIdentifier) DATA_OP (NumericLiteral|StructureField|Identifier) CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*)
   private static boolean Struc_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0")) return false;
     boolean r;
@@ -1705,14 +1705,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*
+  // (LBL_DEF|LabelIdentifier) DATA_OP (NumericLiteral|StructureField|Identifier) CRLF*
   private static boolean Struc_3_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Struc_3_0_0_0(b, l + 1);
     r = r && consumeToken(b, DATA_OP);
-    r = r && NumericLiteral(b, l + 1);
+    r = r && Struc_3_0_0_2(b, l + 1);
     r = r && Struc_3_0_0_3(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1725,6 +1725,18 @@ public class NASMParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, LBL_DEF);
     if (!r) r = LabelIdentifier(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NumericLiteral|StructureField|Identifier
+  private static boolean Struc_3_0_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Struc_3_0_0_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = NumericLiteral(b, l + 1);
+    if (!r) r = StructureField(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

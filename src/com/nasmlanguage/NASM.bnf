@@ -247,7 +247,7 @@ Data ::= (Identifier? DATA_OP DataValue)
 private DataValue ::= ((NumericExpr|STRING|LabelIdentifier) (SEPARATOR (NumericExpr|STRING|LabelIdentifier))* COMMENT?)
 
 Structure ::= ((Struc|IStruc) CRLF*)
-Struc ::= (STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP NumericLiteral CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG)
+Struc ::= (STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP (NumericLiteral|StructureField|Identifier) CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG)
 IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG StructureField SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
 //LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}

@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Language</name>
-    <version>0.1.9</version>
+    <version>0.1.10</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM language for JetBrains IDEs</h1>
         <br>
-        <h2>Version 0.1.9 pre-release</h2>
+        <h2>Version 0.1.10 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -43,6 +43,7 @@
             <li>Added support for the RETF instruction</li>
             <li>Added bitwise operations and fixed macro label definitions</li>
             <li>Added BSS section</li>
+            <li>Now allow structs to have macros and identifiers</li>
         </ul>
     ]]>
     </change-notes>
