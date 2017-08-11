@@ -31,4 +31,10 @@ public class NASMMacroVarReferenceImpl extends NASMExprImpl implements NASMMacro
     return findNotNullChildByType(MACRO_VAR_REF);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSizeType() {
+    return findChildByType(SIZE_TYPE);
+  }
+
 }

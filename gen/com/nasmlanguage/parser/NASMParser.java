@@ -2103,26 +2103,42 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (MACRO_PARAM_REF)
+  // SIZE_TYPE? MACRO_PARAM_REF
   public static boolean MacroParamReference(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroParamReference")) return false;
-    if (!nextTokenIsSmart(b, MACRO_PARAM_REF)) return false;
+    if (!nextTokenIsSmart(b, MACRO_PARAM_REF, SIZE_TYPE)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, MACRO_PARAM_REF);
-    exit_section_(b, m, MACRO_PARAM_REFERENCE, r);
+    Marker m = enter_section_(b, l, _NONE_, MACRO_PARAM_REFERENCE, "<macro param reference>");
+    r = MacroParamReference_0(b, l + 1);
+    r = r && consumeToken(b, MACRO_PARAM_REF);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // (MACRO_VAR_REF)
+  // SIZE_TYPE?
+  private static boolean MacroParamReference_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroParamReference_0")) return false;
+    consumeTokenSmart(b, SIZE_TYPE);
+    return true;
+  }
+
+  // SIZE_TYPE? MACRO_VAR_REF
   public static boolean MacroVarReference(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroVarReference")) return false;
-    if (!nextTokenIsSmart(b, MACRO_VAR_REF)) return false;
+    if (!nextTokenIsSmart(b, MACRO_VAR_REF, SIZE_TYPE)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, MACRO_VAR_REF);
-    exit_section_(b, m, MACRO_VAR_REFERENCE, r);
+    Marker m = enter_section_(b, l, _NONE_, MACRO_VAR_REFERENCE, "<macro var reference>");
+    r = MacroVarReference_0(b, l + 1);
+    r = r && consumeToken(b, MACRO_VAR_REF);
+    exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // SIZE_TYPE?
+  private static boolean MacroVarReference_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroVarReference_0")) return false;
+    consumeTokenSmart(b, SIZE_TYPE);
+    return true;
   }
 
   // (SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2

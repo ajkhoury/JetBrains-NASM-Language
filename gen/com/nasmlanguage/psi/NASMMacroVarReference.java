@@ -10,4 +10,7 @@ public interface NASMMacroVarReference extends NASMExpr {
   @NotNull
   PsiElement getMacroVarRef();
 
+  @Nullable
+  PsiElement getSizeType();
+
 }

@@ -334,6 +334,6 @@ Address ::= (SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2 { extends=Expr }
 private AddressInternal ::= SQUARE_L Expr SQUARE_R { pin(".*")=1 }
 MacroCall ::= (Identifier MacroParenthesis)|(Identifier NumericExpr) { extends=Expr }
 private MacroParenthesis ::= ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R { pin(".*")=1 }
-MacroParamReference ::= (MACRO_PARAM_REF) { extends=Expr }
-MacroVarReference ::= (MACRO_VAR_REF) { extends=Expr }
+MacroParamReference ::= (SIZE_TYPE? MACRO_PARAM_REF) { extends=Expr }
+MacroVarReference ::= (SIZE_TYPE? MACRO_VAR_REF) { extends=Expr }
 
