@@ -114,8 +114,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
       BIT_SHIFT_L_EXPR, BIT_SHIFT_R_EXPR, DIV_EXPR, EXPR,
       IDENTIFIER, LABEL_IDENTIFIER, MACRO_CALL, MACRO_PARAM_REFERENCE,
       MACRO_VAR_REFERENCE, MINUS_EXPR, MODULUS_EXPR, MUL_EXPR,
-      NUMERIC_LITERAL, PARENTHESIS_EXPR, PLUS_EXPR, REG,
-      SEG, SEGMENT_ADDRESS, STR, STRUCTURE_FIELD),
+      NUMERIC_LITERAL, PARENTHESIS_EXPR, PLUS_EXPR, PREFIX_BITWISE_NOT_EXPR,
+      PREFIX_MINUS_EXPR, PREFIX_PLUS_EXPR, REG, SEG,
+      SEGMENT_ADDRESS, STR, STRUCTURE_FIELD),
   };
 
   /* ********************************************************** */
@@ -1518,6 +1519,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //         | BitwiseANDExpr
   //         | BitwiseORExpr
   //         | BitwiseXORExpr
+  //         | PrefixBitwiseNotExpr
+  //         | PrefixMinusExpr
+  //         | PrefixPlusExpr
   //         | NumericLiteral
   //         | SegmentAddress
   //         | Str
@@ -1543,6 +1547,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Expr(b, l + 1, 7);
     if (!r) r = Expr(b, l + 1, 8);
     if (!r) r = Expr(b, l + 1, 9);
+    if (!r) r = PrefixBitwiseNotExpr(b, l + 1);
+    if (!r) r = PrefixMinusExpr(b, l + 1);
+    if (!r) r = PrefixPlusExpr(b, l + 1);
     if (!r) r = NumericLiteral(b, l + 1);
     if (!r) r = SegmentAddress(b, l + 1);
     if (!r) r = Str(b, l + 1);
@@ -1836,24 +1843,30 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // 8: BINARY(BitwiseANDExpr)
   // 9: BINARY(BitwiseORExpr)
   // 10: BINARY(BitwiseXORExpr)
-  // 11: ATOM(NumericLiteral)
-  // 12: ATOM(SegmentAddress)
-  // 13: ATOM(Str)
-  // 14: ATOM(StructureField)
-  // 15: ATOM(MacroCall)
-  // 16: ATOM(MacroParamReference)
-  // 17: ATOM(MacroVarReference)
-  // 18: ATOM(Address)
-  // 19: ATOM(Reg)
-  // 20: ATOM(Seg)
-  // 21: ATOM(Identifier)
-  // 22: ATOM(LabelIdentifier)
+  // 11: PREFIX(PrefixBitwiseNotExpr)
+  // 12: PREFIX(PrefixMinusExpr)
+  // 13: PREFIX(PrefixPlusExpr)
+  // 14: ATOM(NumericLiteral)
+  // 15: ATOM(SegmentAddress)
+  // 16: ATOM(Str)
+  // 17: ATOM(StructureField)
+  // 18: ATOM(MacroCall)
+  // 19: ATOM(MacroParamReference)
+  // 20: ATOM(MacroVarReference)
+  // 21: ATOM(Address)
+  // 22: ATOM(Reg)
+  // 23: ATOM(Seg)
+  // 24: ATOM(Identifier)
+  // 25: ATOM(LabelIdentifier)
   public static boolean Expr(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expr")) return false;
     addVariant(b, "<expr>");
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<expr>");
     r = ParenthesisExpr(b, l + 1);
+    if (!r) r = PrefixPlusExpr(b, l + 1);
+    if (!r) r = PrefixMinusExpr(b, l + 1);
+    if (!r) r = PrefixBitwiseNotExpr(b, l + 1);
     if (!r) r = NumericLiteral(b, l + 1);
     if (!r) r = SegmentAddress(b, l + 1);
     if (!r) r = Str(b, l + 1);
@@ -1936,6 +1949,42 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = r && report_error_(b, Expr(b, l + 1, -1));
     r = p && consumeToken(b, ROUND_R) && r;
     exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  public static boolean PrefixPlusExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrefixPlusExpr")) return false;
+    if (!nextTokenIsSmart(b, PLUS)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, PLUS);
+    p = r;
+    r = p && Expr(b, l, 13);
+    exit_section_(b, l, m, PREFIX_PLUS_EXPR, r, p, null);
+    return r || p;
+  }
+
+  public static boolean PrefixMinusExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrefixMinusExpr")) return false;
+    if (!nextTokenIsSmart(b, MINUS)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, MINUS);
+    p = r;
+    r = p && Expr(b, l, 12);
+    exit_section_(b, l, m, PREFIX_MINUS_EXPR, r, p, null);
+    return r || p;
+  }
+
+  public static boolean PrefixBitwiseNotExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrefixBitwiseNotExpr")) return false;
+    if (!nextTokenIsSmart(b, BITWISE_NOT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, BITWISE_NOT);
+    p = r;
+    r = p && Expr(b, l, 11);
+    exit_section_(b, l, m, PREFIX_BITWISE_NOT_EXPR, r, p, null);
     return r || p;
   }
 

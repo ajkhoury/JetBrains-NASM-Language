@@ -170,6 +170,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   "&"                         { return BITWISE_AND; }
   "|"                         { return BITWISE_OR; }
   "^"                         { return BITWISE_XOR; }
+  "~"                         { return BITWISE_NOT; }
   "$"                         { return DOLLARSIGN; }
   "$$"                        { return DOLLARSIGN2; }
   "%"                         { return PERCENT; }
@@ -211,7 +212,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {DIRECTIVE_OP}              { return DIRECTIVE_OP; }
   {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
   {DATA_OP}                   { return DATA_OP; }
-
   {OP_PREFIX}                 { return OP_PREFIX; }
   {GENERAL_OP}                { return GENERAL_OP; }
   {SYSTEM_OP}                 { return SYSTEM_OP; }

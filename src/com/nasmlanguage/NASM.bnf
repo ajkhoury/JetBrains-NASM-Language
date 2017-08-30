@@ -197,6 +197,7 @@
         BITWISE_AND         = '&'
         BITWISE_OR          = '|'
         BITWISE_XOR         = '^'
+        BITWISE_NOT         = '~'
 
         DOLLARSIGN          = '$'
         DOLLARSIGN2         = '$$'
@@ -273,6 +274,9 @@ Expr ::= ParenthesisExpr
         | BitwiseANDExpr
         | BitwiseORExpr
         | BitwiseXORExpr
+        | PrefixBitwiseNotExpr
+        | PrefixMinusExpr
+        | PrefixPlusExpr
         | NumericLiteral
         | SegmentAddress
         | Str
@@ -297,6 +301,9 @@ NumericExpr ::= ParenthesisNumericExpr
         | BitwiseANDExpr
         | BitwiseORExpr
         | BitwiseXORExpr
+        | PrefixBitwiseNotExpr
+        | PrefixMinusExpr
+        | PrefixPlusExpr
         | NumericLiteral
         | SegmentAddress
         | Str
@@ -321,6 +328,9 @@ BitwiseORExpr ::= Expr BITWISE_OR Expr { extends=Expr }
 BitwiseXORExpr ::= Expr BITWISE_XOR Expr { extends=Expr }
 ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
+PrefixBitwiseNotExpr ::= BITWISE_NOT Expr { extends=Expr }
+PrefixMinusExpr ::= MINUS Expr { extends=Expr }
+PrefixPlusExpr ::= PLUS Expr { extends=Expr }
 
 NumericLiteral ::= (SIZE_TYPE? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
 Identifier ::= ID { extends=Expr }
