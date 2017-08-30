@@ -27,6 +27,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitBitwiseNOTExpr(@NotNull NASMBitwiseNOTExpr o) {
+    visitExpr(o);
+  }
+
   public void visitBitwiseORExpr(@NotNull NASMBitwiseORExpr o) {
     visitExpr(o);
   }
@@ -160,18 +164,6 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitPlusExpr(@NotNull NASMPlusExpr o) {
-    visitExpr(o);
-  }
-
-  public void visitPrefixBitwiseNotExpr(@NotNull NASMPrefixBitwiseNotExpr o) {
-    visitExpr(o);
-  }
-
-  public void visitPrefixMinusExpr(@NotNull NASMPrefixMinusExpr o) {
-    visitExpr(o);
-  }
-
-  public void visitPrefixPlusExpr(@NotNull NASMPrefixPlusExpr o) {
     visitExpr(o);
   }
 

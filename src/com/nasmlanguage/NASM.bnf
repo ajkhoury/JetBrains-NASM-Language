@@ -241,26 +241,26 @@ Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Constant|Directive|Label|S
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
 Label ::= (((LBL_DEF (Instruction|Data|Structure)?)) CRLF*) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
-Constant ::= (Identifier EQU NumericExpr CRLF*) {methods=[getConstantIdentifierString]}
+Constant ::= (Identifier EQU ((MINUS|PLUS)? NumericExpr) CRLF*) {methods=[getConstantIdentifierString]}
 
 //LabelData ::= (LBL_DATA DataValue CRLF*) {methods=[getLabelIdentifierString]}
 Data ::= (Identifier? DATA_OP DataValue)
-private DataValue ::= ((NumericExpr|STRING|LabelIdentifier) (SEPARATOR (NumericExpr|STRING|LabelIdentifier))* COMMENT?)
+private DataValue ::= ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier) (SEPARATOR ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier)))* COMMENT?)
 
 Structure ::= ((Struc|IStruc) CRLF*)
-Struc ::= (STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP (NumericExpr|Identifier) CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG)
+Struc ::= (STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier)) CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG)
 IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG StructureField SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
 //LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}
-Instruction ::= (((OP_PREFIX? Mnemonic ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*)
-private Mnemonic ::= GENERAL_OP | SYSTEM_OP | X64_OP | FPU_OP | MMX_OP | SSE_OP | SSE2_OP | SSE3_OP | SSE4_OP
+Instruction ::= (((OP_PREFIX? Mnemonic ((((MINUS|PLUS)? Expr) SEPARATOR)* ((MINUS|PLUS)? Expr))?)|Directive|MacroCall) CRLF*)
+private Mnemonic ::= (GENERAL_OP|SYSTEM_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP)
 
 MapOption ::= SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MAP_FILE SQUARE_R
 
 Directive ::= (DirectiveDecl|DirectiveDeclBrackets|MapOption) CRLF*
 private DirectiveDecl ::= DIRECTIVE_OP DirectiveArg*
 private DirectiveDeclBrackets ::= SQUARE_L DirectiveDecl SQUARE_R
-DirectiveArg ::= (NumericLiteral|Address|Identifier)
+DirectiveArg ::= ((MINUS|PLUS)? (NumericLiteral|Address|Identifier))
 
 // Root expression rules
 Expr ::= ParenthesisExpr
@@ -274,9 +274,7 @@ Expr ::= ParenthesisExpr
         | BitwiseANDExpr
         | BitwiseORExpr
         | BitwiseXORExpr
-        | PrefixBitwiseNotExpr
-        | PrefixMinusExpr
-        | PrefixPlusExpr
+        | BitwiseNOTExpr
         | NumericLiteral
         | SegmentAddress
         | Str
@@ -301,9 +299,7 @@ NumericExpr ::= ParenthesisNumericExpr
         | BitwiseANDExpr
         | BitwiseORExpr
         | BitwiseXORExpr
-        | PrefixBitwiseNotExpr
-        | PrefixMinusExpr
-        | PrefixPlusExpr
+        | BitwiseNOTExpr
         | NumericLiteral
         | SegmentAddress
         | Str
@@ -326,13 +322,11 @@ BitShiftRExpr ::= Expr BITSHIFT_R Expr { extends=Expr }
 BitwiseANDExpr ::= Expr BITWISE_AND Expr { extends=Expr }
 BitwiseORExpr ::= Expr BITWISE_OR Expr { extends=Expr }
 BitwiseXORExpr ::= Expr BITWISE_XOR Expr { extends=Expr }
+BitwiseNOTExpr ::= BITWISE_NOT NumericExpr { extends=Expr }
 ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
-PrefixBitwiseNotExpr ::= BITWISE_NOT Expr { extends=Expr }
-PrefixMinusExpr ::= MINUS Expr { extends=Expr }
-PrefixPlusExpr ::= PLUS Expr { extends=Expr }
 
-NumericLiteral ::= (SIZE_TYPE? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
+NumericLiteral ::= ((SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)?)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
 Identifier ::= ID { extends=Expr }
 LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
 Reg ::= REGISTER { extends=Expr }
@@ -341,9 +335,11 @@ Str ::= STRING { extends=Expr }
 StructureField ::= STRUCT_FIELD { extends=Expr }
 SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID))|(LBL_DEF (HEXADECIMAL|ZEROES|ID)))) { extends=Expr }
 Address ::= (SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2 { extends=Expr }
-private AddressInternal ::= SQUARE_L Expr SQUARE_R { pin(".*")=1 }
+private AddressInternal ::= SQUARE_L MINUS? Expr SQUARE_R { pin(".*")=1 }
 MacroCall ::= (Identifier MacroParenthesis)|(Identifier NumericExpr) { extends=Expr }
 private MacroParenthesis ::= ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R { pin(".*")=1 }
 MacroParamReference ::= (SIZE_TYPE? MACRO_PARAM_REF) { extends=Expr }
 MacroVarReference ::= (SIZE_TYPE? MACRO_VAR_REF) { extends=Expr }
 
+//private PrefixedExpr ::= (MINUS|PLUS)? Expr
+//private PrefixedNumericExpr ::= (MINUS|PLUS)? NumericExpr

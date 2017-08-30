@@ -11,6 +11,7 @@ public interface NASMTypes {
   IElementType ADDRESS = new NASMElementType("ADDRESS");
   IElementType ASSIGN = new NASMElementType("ASSIGN");
   IElementType BITWISE_AND_EXPR = new NASMElementType("BITWISE_AND_EXPR");
+  IElementType BITWISE_NOT_EXPR = new NASMElementType("BITWISE_NOT_EXPR");
   IElementType BITWISE_OR_EXPR = new NASMElementType("BITWISE_OR_EXPR");
   IElementType BITWISE_XOR_EXPR = new NASMElementType("BITWISE_XOR_EXPR");
   IElementType BIT_SHIFT_L_EXPR = new NASMElementType("BIT_SHIFT_L_EXPR");
@@ -47,9 +48,6 @@ public interface NASMTypes {
   IElementType PARENTHESIS_EXPR = new NASMElementType("PARENTHESIS_EXPR");
   IElementType PARENTHESIS_NUMERIC_EXPR = new NASMElementType("PARENTHESIS_NUMERIC_EXPR");
   IElementType PLUS_EXPR = new NASMElementType("PLUS_EXPR");
-  IElementType PREFIX_BITWISE_NOT_EXPR = new NASMElementType("PREFIX_BITWISE_NOT_EXPR");
-  IElementType PREFIX_MINUS_EXPR = new NASMElementType("PREFIX_MINUS_EXPR");
-  IElementType PREFIX_PLUS_EXPR = new NASMElementType("PREFIX_PLUS_EXPR");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
   IElementType REG = new NASMElementType("REG");
   IElementType SEG = new NASMElementType("SEG");
@@ -217,6 +215,9 @@ public interface NASMTypes {
       else if (type == BITWISE_AND_EXPR) {
         return new NASMBitwiseANDExprImpl(node);
       }
+      else if (type == BITWISE_NOT_EXPR) {
+        return new NASMBitwiseNOTExprImpl(node);
+      }
       else if (type == BITWISE_OR_EXPR) {
         return new NASMBitwiseORExprImpl(node);
       }
@@ -321,15 +322,6 @@ public interface NASMTypes {
       }
       else if (type == PLUS_EXPR) {
         return new NASMPlusExprImpl(node);
-      }
-      else if (type == PREFIX_BITWISE_NOT_EXPR) {
-        return new NASMPrefixBitwiseNotExprImpl(node);
-      }
-      else if (type == PREFIX_MINUS_EXPR) {
-        return new NASMPrefixMinusExprImpl(node);
-      }
-      else if (type == PREFIX_PLUS_EXPR) {
-        return new NASMPrefixPlusExprImpl(node);
       }
       else if (type == PREPROCESSOR) {
         return new NASMPreprocessorImpl(node);
