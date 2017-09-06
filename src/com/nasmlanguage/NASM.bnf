@@ -83,7 +83,11 @@
         INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)'                                         // Bit Manipulation (BMI)
 
         // System instructions
-        INS_SYSTEM          = 'regexp:((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpg|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv))'
+        INS_SYSTEM          = 'regexp:((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpga?|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv))'
+
+        // Virtualization instructions
+        INS_INTEL_VMX       = 'regexp:(vm(ptr(ld|st)|clear|read|write|launch|resume|xo(ff|n)|call|func)|inv(ept|vpid))'
+        INS_AMD_SVM         = 'regexp:(vm(run|load|save|mcall)|stgi|clgi|skinit)'
 
         // 64 bit instructions
         INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))'                                // 64 bit Instructions
@@ -143,12 +147,47 @@
         INS_SSE4_CONVERSION = 'regexp:(pmov([sz]x(b[dqw]|dq|wd|wq)))'
         INS_SSE4_OTHER      = 'regexp:(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))'
 
+        // AVX instructons
+        INS_AVX_GENERAL     = 'regexp:(v((test|permil|maskmov)p[ds]|zero(all|upper)|(perm2|insert|extract|broadcast)f128|broadcasts[ds]))'
+        INS_AVX_AES         = 'regexp:(vaes((dec|enc)(last)?|imc|keygenassist)|vpclmulqdq)'
+        INS_AVX_COMPARISON  = 'regexp:(v((cmp[ps]|u?comis)[ds]|pcmp([ei]str[im]|(eq|gt)[bdqw])))'
+        INS_AVX_CONVERSION  = 'regexp:((v(cvt(dq2pd|dq2ps|pd2ps|ps2pd|sd2ss|si2sd|si2ss|ss2sd|t?(pd2dq|ps2dq|sd2si|ss2si))))|(vcvt(ph2ps|ps2ph)))'
+        INS_AVX_LOGICAL     = 'regexp:((v((andn?|x?or)p[ds]))|(vp(andn?|x?or)))'
+        INS_AVX_MOV         = 'regexp:((v(mov(([ahl]|msk|nt|u)p[ds]|(hl|lh)ps|s([ds]|[hl]dup)|q)))|(vpmov(mskb|[sz]x(b[dqw]|w[dq]|dq)))|(vmov(d(dup|qa|qu)?)))'
+        INS_AVX_ARITH       = 'regexp:((v((add|div|mul|sub|max|min|round|sqrt)[ps][ds]|(addsub|dp)p[ds]|(rcp|rsqrt)[ps]s))|(vh((add|sub)p[ds])|vph((add|sub)([dw]|sw)|minposuw)))'
+        INS_AVX_PACKED      = 'regexp:((v(pack[su]s(dw|wb)|punpck[hl](bw|dq|wd|qdq)|unpck[hl]p[ds]))|(vp(shuf([bd]|[hl]w))|vshufp[ds])|(vp((abs|sign|(max|min)[su])[bdw]|(add|sub)([bdqw]|u?s[bw])|avg[bw]|extr[bdqw]|madd(wd|ubsw)|mul(hu?w|hrsw|l[dw]|u?dq)|sadbw)))'
+        INS_AVX_BLEND       = 'regexp:((vpblend(vb|w))|(vblendv?p[ds]))'
+        INS_AVX_CACHE       = 'regexp:(v(maskmovdqu|movntdqa?))'
+        INS_AVX_FMA3        = 'regexp:(vfn?m((add|sub)(132|213|231)[ps][ds])|vfm((addsub|subadd)(132|213|231)p[ds]))'
+        INS_AVX_OTHER       = 'regexp:((vp(test|alignr))|(v((extract|insert)ps|lddqu|(ld|st)mxcsr|mpsadbw)))'
+
+        // AVX2 instructions
+        INS_AVX2_SIMD       = 'regexp:(v((extract|insert|perm2)i128|pmaskmov[dq]|perm([dsq]|p[sd])))'
+        INS_AVX2_BROADCAST  = 'regexp:(vpbroadcast[qwbd]|vbroadcast(sd|ss)|vbroadcasti128)'
+        INS_AVX2_BLEND      = 'regexp:(vp(blendd|s[lr]lv[dq]|sravd))'
+        INS_AVX2_GATHER     = 'regexp:(vp?gather[dq][dq]|vgather([dq]|dq)p[ds])'
+
+        // AVX512 instructions
+        INS_AVX512_BLEND    = 'regexp:(vblendm(pd|ps)|vpblendm[bdqw])'
+        INS_AVX512_BROADCAST= 'regexp:(vbroadcast[fi](32x[248]|64x[24])|vpbroadcastm(b2q|w2d))'
+        INS_AVX512_MOV      = 'regexp:(vmovdq(a(32|64)|u(8|16|32|64))|v(extract|insert)[fi](32x[48]|64x[24])|vshuf[fi](32x4|64x2))'
+        INS_AVX512_COMPRESS = 'regexp:(v(compress|expand)p[ds]|vp(compress|expand|conflict)[dq])'
+        INS_AVX512_CONV     = 'regexp:(vcvt(t?p[sd]2(udq|u?qq)|(udq|u?qq)2p[ds]|t?s[ds]2usi|usi2s[ds]))'
+        INS_AVX512_MATH     = 'regexp:((v(fixupimm|fpclass|get(exp|mant)|range|(rcp|rsqrt)(14|28)|reduce|rndscale|scalef)([ps][ds]))|(v(exp2p[ds]|(scatter|(gather|scatter)pf[01])[dq]p[ds])))'
+        INS_AVX512_LOGICAL  = 'regexp:(vp(andn?|x?or)[dq])'
+        INS_AVX512_COMPARE  = 'regexp:(vpcmpu?[dqw])'
+        INS_AVX512_PACKED   = 'regexp:((vp(absq|(lzcnt|ternlog)[dq]|madd52[lh]uq|(max|min)[su]q|mullq))|(vpmov(m2[bdqw]|[bdqw]2m|(u?s)?([qd][bw]|qd|wb)))|(vp(ro[rl]v?[dq]|scatter[dq][dq]))|(vptestn?m[bdqw]))'
+        INS_AVX512_PERM     = 'regexp:(vperm([bdw]|[it]2([bdwq]|p[ds])))'
+        INS_AVX512_OTHER    = 'regexp:(valign[dq]|vdbpsadbw|vpmultishiftqb|vpsrav[dqw])'
+
+
         // Instruction operation prefixes
         OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock)'
 
         // Instructions
         GENERAL_OP          = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}'
         SYSTEM_OP           = 'regexp:{INS_SYSTEM}'
+        VIRTUALIZATION_OP   = 'regexp:{INS_INTEL_VMX}|{INS_AMD_SVM}'
         X64_OP              = 'regexp:{INS_64_BIT}'
         FPU_OP              = 'regexp:{INS_FPU_DATA_TRANS}|{INS_FPU_BASIC_ARITH}|{INS_FPU_COMPARISON}|{INS_FPU_TRANSCEND}|{INS_FPU_LOAD}|{INS_FPU_CONTROL}|{INS_FPU_STATE}'
         MMX_OP              = 'regexp:{INS_MMX_DATA_TRANS}|{INS_MMX_CONVERSION}|{INS_MMX_ARITH}|{INS_MMX_COMPARISON}|{INS_MMX_LOGICAL}|{INS_MMX_ROTATE}|{INS_MMX_STATE}'
@@ -156,9 +195,13 @@
         SSE2_OP             = 'regexp:{INS_SSE2_DATA_TRANS}|{INS_SSE2_ARITH}|{INS_SSE2_LOGICAL}|{INS_SSE2_COMPARISON}|{INS_SSE2_OTHER}|{INS_SSE2_CONVERSION}|{INS_SSE2_SIMD_INT}|{INS_SSE2_CACHE_CTRL}'
         SSE3_OP             = 'regexp:{INS_SSE3_GENERAL}|{INS_SSE3_ARITH}|{INS_SSE3_OTHER}'
         SSE4_OP             = 'regexp:{INS_SSE4_ARITH}|{INS_SSE4_DATA_TRANS}|{INS_SSE4_BLEND}|{INS_SSE4_PACKED_INT}|{INS_SSE4_PACKED_FP}|{INS_SSE4_INS_EXT}|{INS_SSE4_CONVERSION}|{INS_SSE4_OTHER}'
+        AVX_OP              = 'regexp:{INS_AVX_GENERAL}|{INS_AVX_AES}|{INS_AVX_COMPARISON}|{INS_AVX_CONVERSION}|{INS_AVX_LOGICAL}|{INS_AVX_MOV}|{INS_AVX_ARITH}|{INS_AVX_PACKED}|{INS_AVX_BLEND}|{INS_AVX_CACHE}|{INS_AVX_FMA3}|{INS_AVX_OTHER}'
+        AVX2_OP             = 'regexp:{INS_AVX2_SIMD}|{INS_AVX2_BROADCAST}|{INS_AVX2_BLEND}|{INS_AVX2_GATHER}'
+        AVX512_OP           = 'regexp:{INS_AVX512_BLEND}|{INS_AVX512_BROADCAST}|{INS_AVX512_MOV}|{INS_AVX512_COMPRESS}|{INS_AVX512_CONV}|{INS_AVX512_MATH}|{INS_AVX512_LOGICAL}|{INS_AVX512_COMPARE}|{INS_AVX512_PACKED}|{INS_AVX512_PERM}|{INS_AVX512_OTHER}'
+
 
         // All kinds of registers
-        REGISTER            = 'regexp:(%)?(([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[02348])|(dr[012367])|(tr[34567])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr))'
+        REGISTER            = 'regexp:(%)?(([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[0-8])|(d[rb][0-367]|dr([89]|1[0-5]))|(tr[3-7])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|(efer|tpr|syscfg)|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr)|(zmm([12]?[0-9]|30|31)))'
         SEGMENT             = 'regexp:([c-gs]s)'
         SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
 
@@ -253,7 +296,7 @@ IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG StructureField SEPARATOR DATA_OP
 
 //LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}
 Instruction ::= (((OP_PREFIX? Mnemonic ((((MINUS|PLUS)? Expr) SEPARATOR)* ((MINUS|PLUS)? Expr))?)|Directive|MacroCall) CRLF*)
-private Mnemonic ::= (GENERAL_OP|SYSTEM_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP)
+private Mnemonic ::= (GENERAL_OP|SYSTEM_OP|VIRTUALIZATION_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP|AVX_OP|AVX2_OP|AVX512_OP)
 
 MapOption ::= SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MAP_FILE SQUARE_R
 

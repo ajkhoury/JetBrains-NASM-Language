@@ -40,6 +40,24 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
+  public PsiElement getAvx2Op() {
+    return findChildByType(AVX2_OP);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAvx512Op() {
+    return findChildByType(AVX512_OP);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAvxOp() {
+    return findChildByType(AVX_OP);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getFpuOp() {
     return findChildByType(FPU_OP);
   }
@@ -90,6 +108,12 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
   @Nullable
   public PsiElement getSystemOp() {
     return findChildByType(SYSTEM_OP);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getVirtualizationOp() {
+    return findChildByType(VIRTUALIZATION_OP);
   }
 
   @Override

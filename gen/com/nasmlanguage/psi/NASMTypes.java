@@ -60,6 +60,9 @@ public interface NASMTypes {
 
   IElementType ASSIGN_TAG = new NASMTokenType("ASSIGN_TAG");
   IElementType AT_TAG = new NASMTokenType("AT_TAG");
+  IElementType AVX2_OP = new NASMTokenType("AVX2_OP");
+  IElementType AVX512_OP = new NASMTokenType("AVX512_OP");
+  IElementType AVX_OP = new NASMTokenType("AVX_OP");
   IElementType BINARY = new NASMTokenType("BINARY");
   IElementType BITSHIFT_L = new NASMTokenType("<<");
   IElementType BITSHIFT_R = new NASMTokenType(">>");
@@ -100,6 +103,34 @@ public interface NASMTypes {
   IElementType IF_TAG = new NASMTokenType("IF_TAG");
   IElementType INCLUDE_TAG = new NASMTokenType("INCLUDE_TAG");
   IElementType INS_64_BIT = new NASMTokenType("INS_64_BIT");
+  IElementType INS_AMD_SVM = new NASMTokenType("INS_AMD_SVM");
+  IElementType INS_AVX2_BLEND = new NASMTokenType("INS_AVX2_BLEND");
+  IElementType INS_AVX2_BROADCAST = new NASMTokenType("INS_AVX2_BROADCAST");
+  IElementType INS_AVX2_GATHER = new NASMTokenType("INS_AVX2_GATHER");
+  IElementType INS_AVX2_SIMD = new NASMTokenType("INS_AVX2_SIMD");
+  IElementType INS_AVX512_BLEND = new NASMTokenType("INS_AVX512_BLEND");
+  IElementType INS_AVX512_BROADCAST = new NASMTokenType("INS_AVX512_BROADCAST");
+  IElementType INS_AVX512_COMPARE = new NASMTokenType("INS_AVX512_COMPARE");
+  IElementType INS_AVX512_COMPRESS = new NASMTokenType("INS_AVX512_COMPRESS");
+  IElementType INS_AVX512_CONV = new NASMTokenType("INS_AVX512_CONV");
+  IElementType INS_AVX512_LOGICAL = new NASMTokenType("INS_AVX512_LOGICAL");
+  IElementType INS_AVX512_MATH = new NASMTokenType("INS_AVX512_MATH");
+  IElementType INS_AVX512_MOV = new NASMTokenType("INS_AVX512_MOV");
+  IElementType INS_AVX512_OTHER = new NASMTokenType("INS_AVX512_OTHER");
+  IElementType INS_AVX512_PACKED = new NASMTokenType("INS_AVX512_PACKED");
+  IElementType INS_AVX512_PERM = new NASMTokenType("INS_AVX512_PERM");
+  IElementType INS_AVX_AES = new NASMTokenType("INS_AVX_AES");
+  IElementType INS_AVX_ARITH = new NASMTokenType("INS_AVX_ARITH");
+  IElementType INS_AVX_BLEND = new NASMTokenType("INS_AVX_BLEND");
+  IElementType INS_AVX_CACHE = new NASMTokenType("INS_AVX_CACHE");
+  IElementType INS_AVX_COMPARISON = new NASMTokenType("INS_AVX_COMPARISON");
+  IElementType INS_AVX_CONVERSION = new NASMTokenType("INS_AVX_CONVERSION");
+  IElementType INS_AVX_FMA3 = new NASMTokenType("INS_AVX_FMA3");
+  IElementType INS_AVX_GENERAL = new NASMTokenType("INS_AVX_GENERAL");
+  IElementType INS_AVX_LOGICAL = new NASMTokenType("INS_AVX_LOGICAL");
+  IElementType INS_AVX_MOV = new NASMTokenType("INS_AVX_MOV");
+  IElementType INS_AVX_OTHER = new NASMTokenType("INS_AVX_OTHER");
+  IElementType INS_AVX_PACKED = new NASMTokenType("INS_AVX_PACKED");
   IElementType INS_BINARY_ARITH = new NASMTokenType("INS_BINARY_ARITH");
   IElementType INS_BINARY_LOGICAL = new NASMTokenType("INS_BINARY_LOGICAL");
   IElementType INS_BINARY_OTHER = new NASMTokenType("INS_BINARY_OTHER");
@@ -120,6 +151,7 @@ public interface NASMTypes {
   IElementType INS_FPU_STATE = new NASMTokenType("INS_FPU_STATE");
   IElementType INS_FPU_TRANSCEND = new NASMTokenType("INS_FPU_TRANSCEND");
   IElementType INS_INPUT_OUTPUT = new NASMTokenType("INS_INPUT_OUTPUT");
+  IElementType INS_INTEL_VMX = new NASMTokenType("INS_INTEL_VMX");
   IElementType INS_MISC_OTHER = new NASMTokenType("INS_MISC_OTHER");
   IElementType INS_MMX_ARITH = new NASMTokenType("INS_MMX_ARITH");
   IElementType INS_MMX_COMPARISON = new NASMTokenType("INS_MMX_COMPARISON");
@@ -200,6 +232,7 @@ public interface NASMTypes {
   IElementType STRUC_TAG = new NASMTokenType("STRUC_TAG");
   IElementType SYSTEM_OP = new NASMTokenType("SYSTEM_OP");
   IElementType TIMES = new NASMTokenType("*");
+  IElementType VIRTUALIZATION_OP = new NASMTokenType("VIRTUALIZATION_OP");
   IElementType X64_OP = new NASMTokenType("X64_OP");
   IElementType ZEROES = new NASMTokenType("ZEROES");
 

@@ -1648,13 +1648,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // GENERAL_OP|SYSTEM_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP
+  // GENERAL_OP|SYSTEM_OP|VIRTUALIZATION_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP|AVX_OP|AVX2_OP|AVX512_OP
   static boolean Mnemonic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Mnemonic")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, GENERAL_OP);
     if (!r) r = consumeToken(b, SYSTEM_OP);
+    if (!r) r = consumeToken(b, VIRTUALIZATION_OP);
     if (!r) r = consumeToken(b, X64_OP);
     if (!r) r = consumeToken(b, FPU_OP);
     if (!r) r = consumeToken(b, MMX_OP);
@@ -1662,6 +1663,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, SSE2_OP);
     if (!r) r = consumeToken(b, SSE3_OP);
     if (!r) r = consumeToken(b, SSE4_OP);
+    if (!r) r = consumeToken(b, AVX_OP);
+    if (!r) r = consumeToken(b, AVX2_OP);
+    if (!r) r = consumeToken(b, AVX512_OP);
     exit_section_(b, m, null, r);
     return r;
   }

@@ -14,6 +14,15 @@ public interface NASMInstruction extends PsiElement {
   List<NASMExpr> getExprList();
 
   @Nullable
+  PsiElement getAvx2Op();
+
+  @Nullable
+  PsiElement getAvx512Op();
+
+  @Nullable
+  PsiElement getAvxOp();
+
+  @Nullable
   PsiElement getFpuOp();
 
   @Nullable
@@ -39,6 +48,9 @@ public interface NASMInstruction extends PsiElement {
 
   @Nullable
   PsiElement getSystemOp();
+
+  @Nullable
+  PsiElement getVirtualizationOp();
 
   @Nullable
   PsiElement getX64Op();

@@ -119,6 +119,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
 
         keys1.put(NASMTypes.GENERAL_OP, NASM_OPERATION);
         keys1.put(NASMTypes.SYSTEM_OP, NASM_OPERATION);
+        keys1.put(NASMTypes.VIRTUALIZATION_OP, NASM_OPERATION);
         keys1.put(NASMTypes.X64_OP, NASM_OPERATION);
         keys1.put(NASMTypes.FPU_OP, NASM_OPERATION);
         keys1.put(NASMTypes.MMX_OP, NASM_OPERATION);
@@ -126,6 +127,10 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(NASMTypes.SSE2_OP, NASM_OPERATION);
         keys1.put(NASMTypes.SSE3_OP, NASM_OPERATION);
         keys1.put(NASMTypes.SSE4_OP, NASM_OPERATION);
+        keys1.put(NASMTypes.AVX_OP, NASM_OPERATION);
+        keys1.put(NASMTypes.AVX2_OP, NASM_OPERATION);
+        keys1.put(NASMTypes.AVX512_OP, NASM_OPERATION);
+
         keys1.put(NASMTypes.DATA_OP, NASM_OPERATION);
 
         keys1.put(NASMTypes.DIRECTIVE_OP, NASM_DIRECTIVE);
