@@ -2,13 +2,12 @@
 
 A plugin that adds NASM support to various JetBrains IDEs, such as CLion,  Gogland, and IntelliJ.
 
-There is a plugin in development [here](https://plugins.jetbrains.com/plugin/9386-nasm-assembly-support), however it is not open source and is lacking full NASM support.
 
 ![NASM Language](http://i.imgur.com/0BW2jL7.png "NASM Language Preview")
 
 # Features
 
-Version 0.1.6 pre-release
+Version 0.1.14 pre-release
 - FPU, MMX, SSE, SSE2, SSE3, SSE4, and general instruction support
 - Syntax highlighting
 - Single and multiline macro support
@@ -17,9 +16,10 @@ Version 0.1.6 pre-release
 - Structure support
 
 ## Todo
+- ~Improved highlighting~
 - Code completion
 - Goto symbol
-- ~Improved highlighting~
+- Debugger support
 
 # Changes
 
@@ -35,6 +35,14 @@ Version 0.1.6 pre-release
 - Added highlighting for segment addresses, and structure references
 - Fix for blank labels in structs
 - Fixed istruc structure parsing
+- Added support for the RETF instruction
+- Added bitwise operations and fixed macro label definitions
+- Added BSS section
+- Now allow structs to have macros and identifiers
+- Fixed macro labels
+- Allow expressions in struc fields
+- Can now prefix expressions with bitwise NOT, minus, or plus symbol
+- Fixed segment addresses
 
 # License
 
