@@ -39,6 +39,12 @@ public class NASMSegmentAddressImpl extends NASMExprImpl implements NASMSegmentA
 
   @Override
   @Nullable
+  public PsiElement getLbl() {
+    return findChildByType(LBL);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLblDef() {
     return findChildByType(LBL_DEF);
   }
@@ -47,12 +53,6 @@ public class NASMSegmentAddressImpl extends NASMExprImpl implements NASMSegmentA
   @Nullable
   public PsiElement getSegmentAddrL() {
     return findChildByType(SEGMENT_ADDR_L);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSizeType() {
-    return findChildByType(SIZE_TYPE);
   }
 
   @Override

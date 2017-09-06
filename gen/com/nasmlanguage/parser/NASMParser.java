@@ -2219,7 +2219,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID))|(LBL_DEF (HEXADECIMAL|ZEROES|ID)))
+  // SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL))))
   public static boolean SegmentAddress(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress")) return false;
     boolean r;
@@ -2237,7 +2237,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID))|(LBL_DEF (HEXADECIMAL|ZEROES|ID))
+  // (SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL)))
   private static boolean SegmentAddress_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1")) return false;
     boolean r;
@@ -2248,7 +2248,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID)
+  // SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID|LBL)
   private static boolean SegmentAddress_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_0")) return false;
     boolean r;
@@ -2259,7 +2259,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // HEXADECIMAL|ZEROES|ID
+  // HEXADECIMAL|ZEROES|ID|LBL
   private static boolean SegmentAddress_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_0_1")) return false;
     boolean r;
@@ -2267,11 +2267,12 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = consumeTokenSmart(b, HEXADECIMAL);
     if (!r) r = consumeTokenSmart(b, ZEROES);
     if (!r) r = consumeTokenSmart(b, ID);
+    if (!r) r = consumeTokenSmart(b, LBL);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // LBL_DEF (HEXADECIMAL|ZEROES|ID)
+  // LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL))
   private static boolean SegmentAddress_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_1")) return false;
     boolean r;
@@ -2282,14 +2283,33 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // HEXADECIMAL|ZEROES|ID
+  // SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL)
   private static boolean SegmentAddress_1_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SegmentAddress_1_1_1_0(b, l + 1);
+    r = r && SegmentAddress_1_1_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SIZE_TYPE?
+  private static boolean SegmentAddress_1_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SegmentAddress_1_1_1_0")) return false;
+    consumeTokenSmart(b, SIZE_TYPE);
+    return true;
+  }
+
+  // HEXADECIMAL|ZEROES|ID|LBL
+  private static boolean SegmentAddress_1_1_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SegmentAddress_1_1_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, HEXADECIMAL);
     if (!r) r = consumeTokenSmart(b, ZEROES);
     if (!r) r = consumeTokenSmart(b, ID);
+    if (!r) r = consumeTokenSmart(b, LBL);
     exit_section_(b, m, null, r);
     return r;
   }

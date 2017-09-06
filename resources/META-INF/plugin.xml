@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Language</name>
-    <version>0.1.13</version>
+    <version>0.1.14</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM language for JetBrains IDEs</h1>
         <br>
-        <h2>Version 0.1.13 pre-release</h2>
+        <h2>Version 0.1.14 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -23,6 +23,7 @@
         <ul>
             <li>Goto symbol</li>
             <li>Code completion</li>
+            <li>Debugger support</li>
         </ul>
     ]]></description>
 
@@ -47,6 +48,7 @@
             <li>Fixed macro labels</li>
             <li>Allow expressions in struc fields</li>
             <li>Can now prefix expressions with bitwise NOT, minus, or plus symbol</li>
+            <li>Fixed segment addresses</li>
         </ul>
     ]]>
     </change-notes>
