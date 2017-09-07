@@ -1,14 +1,13 @@
 # JetBrains-NASM-Language
 
-A plugin that adds NASM support to various JetBrains IDEs, such as CLion,  Gogland, and IntelliJ.
-
+A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 ![NASM Language](http://i.imgur.com/0BW2jL7.png "NASM Language Preview")
 
 # Features
 
-Version 0.1.14 pre-release
-- FPU, MMX, SSE, SSE2, SSE3, SSE4, and general instruction support
+Version 0.2.0 pre-release
+- FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support
 - Syntax highlighting
 - Single and multiline macro support
 - Conditional assembly directives support
@@ -43,10 +42,11 @@ Version 0.1.14 pre-release
 - Allow expressions in struc fields
 - Can now prefix expressions with bitwise NOT, minus, or plus symbol
 - Fixed segment addresses
+- Added AVX, AVX2, AVX512, and Virtualization instruction sets
 
 # License
 
-Copyright (C) 2016 Aidan Khoury (dude719)
+Copyright (C) 2017 Aidan Khoury (dude719)
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
