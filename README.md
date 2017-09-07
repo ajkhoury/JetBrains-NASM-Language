@@ -1,4 +1,4 @@
-# JetBrains-NASM-Language
+# JetBrains NASM Language Support
 
 A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
