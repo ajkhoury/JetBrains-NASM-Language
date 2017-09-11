@@ -2223,11 +2223,11 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL))))
+  // SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))
   public static boolean SegmentAddress(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SEGMENT_ADDRESS, "<segment address>");
+    Marker m = enter_section_(b, l, _COLLAPSE_, SEGMENT_ADDRESS, "<segment address>");
     r = SegmentAddress_0(b, l + 1);
     r = r && SegmentAddress_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -2241,7 +2241,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL)))
+  // (SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL)))
   private static boolean SegmentAddress_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1")) return false;
     boolean r;
@@ -2252,7 +2252,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID|LBL)
+  // SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID|LBL)
   private static boolean SegmentAddress_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_0")) return false;
     boolean r;
@@ -2263,20 +2263,21 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // HEXADECIMAL|ZEROES|ID|LBL
+  // HEXADECIMAL|ZEROES|MacroCall|ID|LBL
   private static boolean SegmentAddress_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, HEXADECIMAL);
     if (!r) r = consumeTokenSmart(b, ZEROES);
+    if (!r) r = MacroCall(b, l + 1);
     if (!r) r = consumeTokenSmart(b, ID);
     if (!r) r = consumeTokenSmart(b, LBL);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL))
+  // LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))
   private static boolean SegmentAddress_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_1")) return false;
     boolean r;
@@ -2287,7 +2288,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL)
+  // SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL)
   private static boolean SegmentAddress_1_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_1_1")) return false;
     boolean r;
@@ -2305,13 +2306,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // HEXADECIMAL|ZEROES|ID|LBL
+  // HEXADECIMAL|ZEROES|MacroCall|ID|LBL
   private static boolean SegmentAddress_1_1_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SegmentAddress_1_1_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, HEXADECIMAL);
     if (!r) r = consumeTokenSmart(b, ZEROES);
+    if (!r) r = MacroCall(b, l + 1);
     if (!r) r = consumeTokenSmart(b, ID);
     if (!r) r = consumeTokenSmart(b, LBL);
     exit_section_(b, m, null, r);

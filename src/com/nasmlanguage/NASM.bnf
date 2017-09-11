@@ -376,7 +376,7 @@ Reg ::= REGISTER { extends=Expr }
 Seg ::= SEGMENT { extends=Expr }
 Str ::= STRING { extends=Expr }
 StructureField ::= STRUCT_FIELD { extends=Expr }
-SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|ID|LBL))))) { extends=Expr }
+SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))) { extends=Expr }
 Address ::= (SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2 { extends=Expr }
 private AddressInternal ::= SQUARE_L MINUS? Expr SQUARE_R { pin(".*")=1 }
 MacroCall ::= (Identifier MacroParenthesis)|(Identifier NumericExpr) { extends=Expr }

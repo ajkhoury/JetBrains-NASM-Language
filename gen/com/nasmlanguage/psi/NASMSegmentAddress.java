@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMSegmentAddress extends NASMExpr {
 
   @Nullable
+  NASMMacroCall getMacroCall();
+
+  @Nullable
   PsiElement getHexadecimal();
 
   @Nullable

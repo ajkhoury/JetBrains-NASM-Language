@@ -27,6 +27,12 @@ public class NASMSegmentAddressImpl extends NASMExprImpl implements NASMSegmentA
 
   @Override
   @Nullable
+  public NASMMacroCall getMacroCall() {
+    return findChildByClass(NASMMacroCall.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getHexadecimal() {
     return findChildByType(HEXADECIMAL);
   }
