@@ -70,6 +70,7 @@
         <lang.syntaxHighlighterFactory key="NASM" implementationClass="com.nasmlanguage.NASMSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.nasmlanguage.NASMColorSettingsPage"/>
         <annotator language="NASM" implementationClass="com.nasmlanguage.NASMAnnotator"/>
+        <spellchecker.support language="NASM" implementationClass="com.intellij.spellchecker.tokenizer.SpellcheckingStrategy"/>
     </extensions>
 
     <actions>
