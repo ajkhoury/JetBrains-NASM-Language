@@ -937,7 +937,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (MINUS|PLUS)? (NumericLiteral|Address|Identifier)
+  // (MINUS|PLUS)? (NumericLiteral|Address|SegmentAddress|Identifier)
   public static boolean DirectiveArg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveArg")) return false;
     boolean r;
@@ -966,13 +966,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NumericLiteral|Address|Identifier
+  // NumericLiteral|Address|SegmentAddress|Identifier
   private static boolean DirectiveArg_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveArg_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = NumericLiteral(b, l + 1);
     if (!r) r = Address(b, l + 1);
+    if (!r) r = SegmentAddress(b, l + 1);
     if (!r) r = Identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;

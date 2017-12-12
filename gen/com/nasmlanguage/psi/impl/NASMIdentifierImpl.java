@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
 import com.nasmlanguage.psi.*;
 
-public class NASMIdentifierImpl extends NASMExprImpl implements NASMIdentifier {
+public class NASMIdentifierImpl extends NASMNamedElementImpl implements NASMIdentifier {
 
   public NASMIdentifierImpl(ASTNode node) {
     super(node);
@@ -29,6 +29,18 @@ public class NASMIdentifierImpl extends NASMExprImpl implements NASMIdentifier {
   @NotNull
   public PsiElement getId() {
     return findNotNullChildByType(ID);
+  }
+
+  public String getName() {
+    return NASMPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return NASMPsiImplUtil.setName(this, newName);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return NASMPsiImplUtil.getNameIdentifier(this);
   }
 
 }

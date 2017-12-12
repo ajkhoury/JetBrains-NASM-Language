@@ -303,7 +303,7 @@ MapOption ::= SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MA
 Directive ::= (DirectiveDecl|DirectiveDeclBrackets|MapOption) CRLF*
 private DirectiveDecl ::= DIRECTIVE_OP DirectiveArg*
 private DirectiveDeclBrackets ::= SQUARE_L DirectiveDecl SQUARE_R
-DirectiveArg ::= ((MINUS|PLUS)? (NumericLiteral|Address|Identifier))
+DirectiveArg ::= ((MINUS|PLUS)? (NumericLiteral|Address|SegmentAddress|Identifier))
 
 // Root expression rules
 Expr ::= ParenthesisExpr
@@ -370,7 +370,7 @@ ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
 
 NumericLiteral ::= ((SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)?)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
-Identifier ::= ID { extends=Expr }
+Identifier ::= ID { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
 LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
 Reg ::= REGISTER { extends=Expr }
 Seg ::= SEGMENT { extends=Expr }

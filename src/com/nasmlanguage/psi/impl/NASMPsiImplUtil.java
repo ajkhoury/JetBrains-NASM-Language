@@ -53,6 +53,24 @@ public class NASMPsiImplUtil {
         return null;
     }
 
+    public static String getName(NASMIdentifier element) {
+        return element.getId().getText();
+    }
+
+    public static PsiElement setName(NASMIdentifier element, String newName) {
+        ASTNode keyNode = element.getId().getNode();
+        if (keyNode != null) {
+            NASMIdentifier property = NASMElementFactory.createIdentifier(element.getProject(), newName);
+            ASTNode newKeyNode = property.getFirstChild().getNode();
+            element.getNode().replaceChild(keyNode, newKeyNode);
+        }
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(NASMIdentifier element) {
+        return element.getId();
+    }
+
     //public static String getLabelIdentifierString(NASMLabelInstruction element) {
     //    PsiElement labelIns = element.getLblIns();
     //    if (labelIns != null) {

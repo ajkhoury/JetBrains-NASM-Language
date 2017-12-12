@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Language</name>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM language for JetBrains IDEs</h1>
         <br>
-        <h2>Version 0.2.1 pre-release</h2>
+        <h2>Version 0.2.2 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -17,6 +17,7 @@
             <li>Conditional assembly directives support</li>
             <li>Preprocessor directives support</li>
             <li>Structure support</li>
+            <li>Brace matching for braces, macros, preprocessor, and structs</li>
         </ul>
         <br>
         <h3>Planned Features</h3>
@@ -51,6 +52,7 @@
             <li>Fixed segment addresses</li>
             <li>Added AVX, AVX2, AVX512, and Virtualization instruction sets</li>
             <li>Can now use macros in segment addresses</li>
+            <li>Added brace matching for braces, macros, preprocessor, and structs.</li>
         </ul>
     ]]>
     </change-notes>
@@ -67,10 +69,13 @@
         <!-- Add your extensions here -->
         <fileTypeFactory implementation="com.nasmlanguage.NASMFileTypeFactory"/>
         <lang.parserDefinition language="NASM" implementationClass="com.nasmlanguage.NASMParserDefinition"/>
-        <lang.syntaxHighlighterFactory key="NASM" implementationClass="com.nasmlanguage.NASMSyntaxHighlighterFactory"/>
+        <lang.syntaxHighlighterFactory key="NASM" language="NASM" implementationClass="com.nasmlanguage.NASMSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.nasmlanguage.NASMColorSettingsPage"/>
-        <annotator language="NASM" implementationClass="com.nasmlanguage.NASMAnnotator"/>
+        <lang.braceMatcher language="NASM" implementationClass="com.nasmlanguage.NASMPairedBraceMatcher"/>
+        <completion.contributor language="NASM" implementationClass="com.nasmlanguage.NASMCompletionContributor"/>
+        <lang.findUsagesProvider language="NASM" implementationClass="com.nasmlanguage.NASMFindUsagesProvider"/>
         <spellchecker.support language="NASM" implementationClass="com.intellij.spellchecker.tokenizer.SpellcheckingStrategy"/>
+        <annotator language="NASM" implementationClass="com.nasmlanguage.NASMAnnotator"/>
     </extensions>
 
     <actions>

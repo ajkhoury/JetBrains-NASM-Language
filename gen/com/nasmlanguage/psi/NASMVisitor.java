@@ -93,6 +93,7 @@ public class NASMVisitor extends PsiElementVisitor {
 
   public void visitIdentifier(@NotNull NASMIdentifier o) {
     visitExpr(o);
+    // visitNamedElement(o);
   }
 
   public void visitInclude(@NotNull NASMInclude o) {

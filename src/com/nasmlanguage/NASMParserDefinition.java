@@ -10,9 +10,9 @@ import com.nasmlanguage.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 public class NASMParserDefinition implements ParserDefinition {
-    public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(NASMTypes.COMMENT);
-    public static final IFileElementType FILE = new IFileElementType(NASMLanguage.INSTANCE);
+    private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
+    private static final TokenSet COMMENTS = TokenSet.create(NASMTypes.COMMENT);
+    private static final IFileElementType FILE = new IFileElementType(NASMLanguage.INSTANCE);
 
     @NotNull
     @Override
