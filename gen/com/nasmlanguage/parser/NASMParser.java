@@ -1153,7 +1153,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ((OP_PREFIX? Mnemonic ((((MINUS|PLUS)? Expr) SEPARATOR)* ((MINUS|PLUS)? Expr))?)|Directive|MacroCall) CRLF*
+  // ((OP_PREFIX? Mnemonic (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?)|Directive|MacroCall) CRLF*
   public static boolean Instruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction")) return false;
     boolean r;
@@ -1164,7 +1164,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (OP_PREFIX? Mnemonic ((((MINUS|PLUS)? Expr) SEPARATOR)* ((MINUS|PLUS)? Expr))?)|Directive|MacroCall
+  // (OP_PREFIX? Mnemonic (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?)|Directive|MacroCall
   private static boolean Instruction_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0")) return false;
     boolean r;
@@ -1176,7 +1176,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // OP_PREFIX? Mnemonic ((((MINUS|PLUS)? Expr) SEPARATOR)* ((MINUS|PLUS)? Expr))?
+  // OP_PREFIX? Mnemonic (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?
   private static boolean Instruction_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0_0")) return false;
     boolean r;
@@ -1195,100 +1195,146 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((((MINUS|PLUS)? Expr) SEPARATOR)* ((MINUS|PLUS)? Expr))?
+  // (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?
   private static boolean Instruction_0_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0_0_2")) return false;
     Instruction_0_0_2_0(b, l + 1);
     return true;
   }
 
-  // (((MINUS|PLUS)? Expr) SEPARATOR)* ((MINUS|PLUS)? Expr)
+  // ((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R)
   private static boolean Instruction_0_0_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0_0_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Instruction_0_0_2_0_0(b, l + 1);
-    r = r && Instruction_0_0_2_0_1(b, l + 1);
+    if (!r) r = Instruction_0_0_2_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (((MINUS|PLUS)? Expr) SEPARATOR)*
+  // (((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr)
   private static boolean Instruction_0_0_2_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Instruction_0_0_2_0_0_0(b, l + 1);
+    r = r && Instruction_0_0_2_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)*
+  private static boolean Instruction_0_0_2_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!Instruction_0_0_2_0_0_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Instruction_0_0_2_0_0", c)) break;
+      if (!Instruction_0_0_2_0_0_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Instruction_0_0_2_0_0_0", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
-  // ((MINUS|PLUS)? Expr) SEPARATOR
-  private static boolean Instruction_0_0_2_0_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Instruction_0_0_2_0_0_0_0(b, l + 1);
-    r = r && consumeToken(b, SEPARATOR);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (MINUS|PLUS)? Expr
+  // ((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR
   private static boolean Instruction_0_0_2_0_0_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Instruction_0_0_2_0_0_0_0_0(b, l + 1);
+    r = r && consumeToken(b, SEPARATOR);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (BITWISE_NOT|MINUS|PLUS)? Expr
+  private static boolean Instruction_0_0_2_0_0_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Instruction_0_0_2_0_0_0_0_0_0(b, l + 1);
     r = r && Expr(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (MINUS|PLUS)?
-  private static boolean Instruction_0_0_2_0_0_0_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_0_0_0")) return false;
-    Instruction_0_0_2_0_0_0_0_0_0(b, l + 1);
+  // (BITWISE_NOT|MINUS|PLUS)?
+  private static boolean Instruction_0_0_2_0_0_0_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_0_0_0_0")) return false;
+    Instruction_0_0_2_0_0_0_0_0_0_0(b, l + 1);
     return true;
   }
 
-  // MINUS|PLUS
-  private static boolean Instruction_0_0_2_0_0_0_0_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_0_0_0_0")) return false;
+  // BITWISE_NOT|MINUS|PLUS
+  private static boolean Instruction_0_0_2_0_0_0_0_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_0_0_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, MINUS);
+    r = consumeToken(b, BITWISE_NOT);
+    if (!r) r = consumeToken(b, MINUS);
     if (!r) r = consumeToken(b, PLUS);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (MINUS|PLUS)? Expr
-  private static boolean Instruction_0_0_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_1")) return false;
+  // (BITWISE_NOT|MINUS|PLUS)? Expr
+  private static boolean Instruction_0_0_2_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Instruction_0_0_2_0_1_0(b, l + 1);
+    r = Instruction_0_0_2_0_0_1_0(b, l + 1);
     r = r && Expr(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (MINUS|PLUS)?
-  private static boolean Instruction_0_0_2_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_1_0")) return false;
-    Instruction_0_0_2_0_1_0_0(b, l + 1);
+  // (BITWISE_NOT|MINUS|PLUS)?
+  private static boolean Instruction_0_0_2_0_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_1_0")) return false;
+    Instruction_0_0_2_0_0_1_0_0(b, l + 1);
     return true;
   }
 
-  // MINUS|PLUS
-  private static boolean Instruction_0_0_2_0_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_1_0_0")) return false;
+  // BITWISE_NOT|MINUS|PLUS
+  private static boolean Instruction_0_0_2_0_0_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_0_1_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, MINUS);
+    r = consumeToken(b, BITWISE_NOT);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, PLUS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R
+  private static boolean Instruction_0_0_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, SIZE_TYPE);
+    r = r && Instruction_0_0_2_0_1_1(b, l + 1);
+    r = r && consumeToken(b, ROUND_L);
+    r = r && Expr(b, l + 1, -1);
+    r = r && consumeToken(b, ROUND_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (BITWISE_NOT|MINUS|PLUS)?
+  private static boolean Instruction_0_0_2_0_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_1_1")) return false;
+    Instruction_0_0_2_0_1_1_0(b, l + 1);
+    return true;
+  }
+
+  // BITWISE_NOT|MINUS|PLUS
+  private static boolean Instruction_0_0_2_0_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Instruction_0_0_2_0_1_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BITWISE_NOT);
+    if (!r) r = consumeToken(b, MINUS);
     if (!r) r = consumeToken(b, PLUS);
     exit_section_(b, m, null, r);
     return r;
