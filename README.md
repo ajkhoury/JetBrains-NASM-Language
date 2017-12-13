@@ -16,10 +16,10 @@ Version 0.2.2 pre-release
 - Brace matching for braces, macros, preprocessor, and structs
 
 ## Todo
-- ~Improved highlighting~
-- Code completion
-- Goto symbol
-- Debugger support
+- Code Completion
+- Find Usages
+- Goto Symbol
+- Debugger Support
 
 # Changes
 
