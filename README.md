@@ -14,7 +14,6 @@ Version 0.2.3 pre-release
 - Preprocessor directives support
 - Structure support
 - Brace matching for braces, macros, preprocessor, and structs
-- Fixed size type prefixes on expressions
 
 ## TODO
 - Code Completion
@@ -46,6 +45,7 @@ Version 0.2.3 pre-release
 - Fixed segment addresses
 - Added AVX, AVX2, AVX512, and Virtualization instruction sets
 - Added brace matching for braces, macros, preprocessor, and structs
+- Fixed size type prefixes on expressions
 
 # License
 
