@@ -6,19 +6,20 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version 0.2.0 pre-release
+Version 0.2.2 pre-release
 - FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support
 - Syntax highlighting
 - Single and multiline macro support
 - Conditional assembly directives support
 - Preprocessor directives support
 - Structure support
+- Brace matching for braces, macros, preprocessor, and structs
 
 ## Todo
-- ~Improved highlighting~
-- Code completion
-- Goto symbol
-- Debugger support
+- Code Completion
+- Find Usages
+- Goto Symbol
+- Debugger Support
 
 # Changes
 
@@ -43,6 +44,7 @@ Version 0.2.0 pre-release
 - Can now prefix expressions with bitwise NOT, minus, or plus symbol
 - Fixed segment addresses
 - Added AVX, AVX2, AVX512, and Virtualization instruction sets
+- Added brace matching for braces, macros, preprocessor, and structs
 
 # License
 
