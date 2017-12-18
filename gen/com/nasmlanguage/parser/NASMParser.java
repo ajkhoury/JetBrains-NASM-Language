@@ -1075,7 +1075,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ISTRUC_TAG Identifier CRLF* (AT_TAG StructureField SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG
+  // ISTRUC_TAG Identifier CRLF* (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG
   public static boolean IStruc(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc")) return false;
     if (!nextTokenIs(b, ISTRUC_TAG)) return false;
@@ -1102,7 +1102,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (AT_TAG StructureField SEPARATOR DATA_OP DataValue CRLF*)*
+  // (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue CRLF*)*
   private static boolean IStruc_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc_3")) return false;
     int c = current_position_(b);
@@ -1114,16 +1114,28 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // AT_TAG StructureField SEPARATOR DATA_OP DataValue CRLF*
+  // AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue CRLF*
   private static boolean IStruc_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, AT_TAG);
-    r = r && StructureField(b, l + 1);
+    r = r && IStruc_3_0_1(b, l + 1);
     r = r && consumeTokens(b, 0, SEPARATOR, DATA_OP);
     r = r && DataValue(b, l + 1);
     r = r && IStruc_3_0_5(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // StructureField|LabelIdentifier|Identifier
+  private static boolean IStruc_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IStruc_3_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StructureField(b, l + 1);
+    if (!r) r = LabelIdentifier(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
