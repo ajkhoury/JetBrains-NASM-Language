@@ -49,6 +49,7 @@ ERROR_TAG=((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*
 SECTION_TAG=(([sS][eE][cC][tT][iI][oO][nN])|([sS][eE][gG][mM][eE][nN][tT]))
 CODE_SECTION_NAME=(\.[tT][eE][xX][tT])
 DATA_SECTION_NAME=(\.[dD][aA][tT][aA])
+RDATA_SECTION_NAME=(\.[rR][dD][aA][tT][aA])
 BSS_SECTION_NAME=(\.[bB][sS][sS])
 MAP_OPTIONS=(all|brief|sections|segments|symbols)
 MAP_FILE=(([a-zA-Z0-9_.]+)(\.)[mM][aA][pP])
@@ -233,6 +234,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {SECTION_TAG}               { return SECTION_TAG; }
   {CODE_SECTION_NAME}         { return CODE_SECTION_NAME; }
   {DATA_SECTION_NAME}         { return DATA_SECTION_NAME; }
+  {RDATA_SECTION_NAME}        { return RDATA_SECTION_NAME; }
   {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }
   {MAP_OPTIONS}               { return MAP_OPTIONS; }
   {MAP_FILE}                  { return MAP_FILE; }
@@ -245,7 +247,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {DIRECTIVE_OP}              { return DIRECTIVE_OP; }
   {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
   {DATA_OP}                   { return DATA_OP; }
-
   {OP_PREFIX}                 { return OP_PREFIX; }
   {GENERAL_OP}                { return GENERAL_OP; }
   {SYSTEM_OP}                 { return SYSTEM_OP; }

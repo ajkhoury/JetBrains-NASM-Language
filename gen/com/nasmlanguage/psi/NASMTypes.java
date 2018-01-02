@@ -49,6 +49,7 @@ public interface NASMTypes {
   IElementType PARENTHESIS_NUMERIC_EXPR = new NASMElementType("PARENTHESIS_NUMERIC_EXPR");
   IElementType PLUS_EXPR = new NASMElementType("PLUS_EXPR");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
+  IElementType RDATA_SECTION = new NASMElementType("RDATA_SECTION");
   IElementType REG = new NASMElementType("REG");
   IElementType SEG = new NASMElementType("SEG");
   IElementType SEGMENT_ADDRESS = new NASMElementType("SEGMENT_ADDRESS");
@@ -211,6 +212,7 @@ public interface NASMTypes {
   IElementType PLUS = new NASMTokenType("+");
   IElementType PREPROCESSOR_OP = new NASMTokenType("PREPROCESSOR_OP");
   IElementType QUESTION = new NASMTokenType("?");
+  IElementType RDATA_SECTION_NAME = new NASMTokenType("RDATA_SECTION_NAME");
   IElementType REGISTER = new NASMTokenType("REGISTER");
   IElementType ROUND_L = new NASMTokenType("(");
   IElementType ROUND_R = new NASMTokenType(")");
@@ -358,6 +360,9 @@ public interface NASMTypes {
       }
       else if (type == PREPROCESSOR) {
         return new NASMPreprocessorImpl(node);
+      }
+      else if (type == RDATA_SECTION) {
+        return new NASMRdataSectionImpl(node);
       }
       else if (type == REG) {
         return new NASMRegImpl(node);

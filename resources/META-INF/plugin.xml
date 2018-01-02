@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Language</name>
-    <version>0.2.4</version>
+    <version>0.2.5</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM language for JetBrains IDEs</h1>
         <br>
-        <h2>Version 0.2.4 pre-release</h2>
+        <h2>Version 0.2.5 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -55,6 +55,7 @@
             <li>Added brace matching for braces, macros, preprocessor, and structs.</li>
             <li>Fixed size type prefixes on expressions.</li>
             <li>Added identifiers to istruc structure instances.</li>
+            <li>Added .RDATA section directive.</li>
         </ul>
     ]]>
     </change-notes>
