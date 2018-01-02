@@ -23,30 +23,31 @@ Version 0.2.4 pre-release
 
 # Changes
 
-- Added macro syntax highlighting
-- Added support for conditional assembly directives
-- Fix for bug where blank comments would not match the comment regex
-- Added support for structures and improved highlighting
-- Fixed conditional assembly problems
-- Fixed number size prefixes, segment addresses, data/instruction labels
-- Added new operator expressions
-- Added pinning for some repeating rules
-- Added system instructions
-- Added highlighting for segment addresses, and structure references
-- Fix for blank labels in structs
-- Fixed istruc structure parsing
-- Added support for the RETF instruction
-- Added bitwise operations and fixed macro label definitions
-- Added BSS section
-- Now allow structs to have macros and identifiers
-- Fixed macro labels
-- Allow expressions in struc fields
-- Can now prefix expressions with bitwise NOT, minus, or plus symbol
-- Fixed segment addresses
-- Added AVX, AVX2, AVX512, and Virtualization instruction sets
-- Added brace matching for braces, macros, preprocessor, and structs
-- Fixed size type prefixes on expressions
-- Added identifiers to istruc structure instances
+- Added macro syntax highlighting.
+- Added support for conditional assembly directives.
+- Fix for bug where blank comments would not match the comment regex.
+- Added support for structures and improved highlighting.
+- Fixed conditional assembly problems.
+- Fixed number size prefixes, segment addresses, data/instruction labels.
+- Added new operator expressions.
+- Added pinning for some repeating rules.
+- Added system instructions.
+- Added highlighting for segment addresses, and structure references.
+- Fix for blank labels in structs.
+- Fixed istruc structure parsing.
+- Added support for the RETF instruction.
+- Added bitwise operations and fixed macro label definitions.
+- Added BSS section.
+- Now allow structs to have macros and identifiers.
+- Fixed macro labels.
+- Allow expressions in struc fields.
+- Can now prefix expressions with bitwise NOT, minus, or plus symbol.
+- Fixed segment addresses.
+- Added AVX, AVX2, AVX512, and Virtualization instruction sets.
+- Added brace matching for braces, macros, preprocessor, and structs.
+- Fixed size type prefixes on expressions.
+- Added identifiers to istruc structure instances.
+- Added .RDATA section directive.
 
 # License
 
