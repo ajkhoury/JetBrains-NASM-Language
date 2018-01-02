@@ -6,7 +6,7 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version 0.2.3 pre-release
+Version 0.2.4 pre-release
 - FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support
 - Syntax highlighting
 - Single and multiline macro support
@@ -46,6 +46,7 @@ Version 0.2.3 pre-release
 - Added AVX, AVX2, AVX512, and Virtualization instruction sets
 - Added brace matching for braces, macros, preprocessor, and structs
 - Fixed size type prefixes on expressions
+- Added identifiers to istruc structure instances
 
 # License
 
