@@ -38,7 +38,7 @@
       <property name="caretWidth" class="java.lang.Integer" />
     </properties>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="IntelliJ IDEA Community Edition IC-171.4694.23" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="IntelliJ IDEA IU-173.4548.28" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

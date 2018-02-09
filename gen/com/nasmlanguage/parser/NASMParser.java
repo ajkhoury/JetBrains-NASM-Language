@@ -71,6 +71,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     else if (t == LABEL) {
       r = Label(b, 0);
     }
+    else if (t == LABEL_DEF_MACRO) {
+      r = LabelDefMacro(b, 0);
+    }
     else if (t == MACRO) {
       r = Macro(b, 0);
     }
@@ -940,7 +943,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (MINUS|PLUS)? (NumericLiteral|Address|SegmentAddress|Identifier)
+  // (MINUS|PLUS)? (MacroCall|NumericLiteral|Address|SegmentAddress|Identifier)
   public static boolean DirectiveArg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveArg")) return false;
     boolean r;
@@ -969,12 +972,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NumericLiteral|Address|SegmentAddress|Identifier
+  // MacroCall|NumericLiteral|Address|SegmentAddress|Identifier
   private static boolean DirectiveArg_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveArg_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = NumericLiteral(b, l + 1);
+    r = MacroCall(b, l + 1);
+    if (!r) r = NumericLiteral(b, l + 1);
     if (!r) r = Address(b, l + 1);
     if (!r) r = SegmentAddress(b, l + 1);
     if (!r) r = Identifier(b, l + 1);
@@ -1368,39 +1372,80 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ((LBL_DEF (Instruction|Data|Structure)?)) CRLF*
+  // ((LBL_DEF (Instruction|Data|Structure)?) | (LabelDefMacro (Instruction|Data|Structure)?)) CRLF*
   public static boolean Label(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label")) return false;
-    if (!nextTokenIs(b, LBL_DEF)) return false;
+    if (!nextTokenIs(b, "<label>", ID, LBL_DEF)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, LABEL, "<label>");
     r = Label_0(b, l + 1);
     r = r && Label_1(b, l + 1);
-    exit_section_(b, m, LABEL, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // LBL_DEF (Instruction|Data|Structure)?
+  // (LBL_DEF (Instruction|Data|Structure)?) | (LabelDefMacro (Instruction|Data|Structure)?)
   private static boolean Label_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
+    r = Label_0_0(b, l + 1);
+    if (!r) r = Label_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LBL_DEF (Instruction|Data|Structure)?
+  private static boolean Label_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Label_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, LBL_DEF);
-    r = r && Label_0_1(b, l + 1);
+    r = r && Label_0_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (Instruction|Data|Structure)?
-  private static boolean Label_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Label_0_1")) return false;
-    Label_0_1_0(b, l + 1);
+  private static boolean Label_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Label_0_0_1")) return false;
+    Label_0_0_1_0(b, l + 1);
     return true;
   }
 
   // Instruction|Data|Structure
-  private static boolean Label_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Label_0_1_0")) return false;
+  private static boolean Label_0_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Label_0_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Instruction(b, l + 1);
+    if (!r) r = Data(b, l + 1);
+    if (!r) r = Structure(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LabelDefMacro (Instruction|Data|Structure)?
+  private static boolean Label_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Label_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = LabelDefMacro(b, l + 1);
+    r = r && Label_0_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (Instruction|Data|Structure)?
+  private static boolean Label_0_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Label_0_1_1")) return false;
+    Label_0_1_1_0(b, l + 1);
+    return true;
+  }
+
+  // Instruction|Data|Structure
+  private static boolean Label_0_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Label_0_1_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Instruction(b, l + 1);
@@ -1417,6 +1462,32 @@ public class NASMParser implements PsiParser, LightPsiParser {
     while (true) {
       if (!consumeToken(b, CRLF)) break;
       if (!empty_element_parsed_guard_(b, "Label_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // MacroCall COLON CRLF*
+  public static boolean LabelDefMacro(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LabelDefMacro")) return false;
+    if (!nextTokenIs(b, ID)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MacroCall(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    r = r && LabelDefMacro_2(b, l + 1);
+    exit_section_(b, m, LABEL_DEF_MACRO, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean LabelDefMacro_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LabelDefMacro_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "LabelDefMacro_2", c)) break;
       c = current_position_(b);
     }
     return true;
@@ -1510,13 +1581,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MACRO_LBL_DEF (Instruction|Data)? CRLF*
+  // MACRO_PARAM_LBL_DEF (Instruction|Data)? CRLF*
   public static boolean MacroLabel(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroLabel")) return false;
-    if (!nextTokenIs(b, MACRO_LBL_DEF)) return false;
+    if (!nextTokenIs(b, MACRO_PARAM_LBL_DEF)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, MACRO_LBL_DEF);
+    r = consumeToken(b, MACRO_PARAM_LBL_DEF);
     r = r && MacroLabel_1(b, l + 1);
     r = r && MacroLabel_2(b, l + 1);
     exit_section_(b, m, MACRO_LABEL, r);

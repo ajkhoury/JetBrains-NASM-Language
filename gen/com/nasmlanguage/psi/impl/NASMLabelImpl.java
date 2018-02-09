@@ -40,14 +40,20 @@ public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
 
   @Override
   @Nullable
+  public NASMLabelDefMacro getLabelDefMacro() {
+    return findChildByClass(NASMLabelDefMacro.class);
+  }
+
+  @Override
+  @Nullable
   public NASMStructure getStructure() {
     return findChildByClass(NASMStructure.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getLblDef() {
-    return findNotNullChildByType(LBL_DEF);
+    return findChildByType(LBL_DEF);
   }
 
   public String getLabelIdentifierString() {

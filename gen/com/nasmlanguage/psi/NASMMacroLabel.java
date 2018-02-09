@@ -14,6 +14,6 @@ public interface NASMMacroLabel extends PsiElement {
   NASMInstruction getInstruction();
 
   @NotNull
-  PsiElement getMacroLblDef();
+  PsiElement getMacroParamLblDef();
 
 }

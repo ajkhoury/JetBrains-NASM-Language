@@ -31,8 +31,8 @@
         MACRO_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])'
         MACRO_END_TAG       = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
         MACRO_PARAM_REF     = 'regexp:((%|%%)([1-9][0-9]*))'
-        MACRO_LBL_DEF       = 'regexp:((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)):)'
         MACRO_VAR_REF       = 'regexp:((%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*))'
+        MACRO_PARAM_LBL_DEF = 'regexp:((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)):)'
         IF_TAG              = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)'
         IFMACRO_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])'
         IFCTX_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][cC][tT][xX])'
@@ -273,10 +273,10 @@ BssSection  ::= (((SQUARE_L SECTION_TAG BSS_SECTION_NAME SQUARE_R)|(SECTION_TAG 
 Preprocessor ::= Include | Define | Assign | Macro | Strlen | Error | Conditional | (PREPROCESSOR_OP Identifier Expr)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG Identifier ROUND_L (Identifier (SEPARATOR Identifier)*)? ROUND_R Expr CRLF*)
-        | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*) {methods=[getDefineIdentifier]}
+        | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*) {methods=[getDefineIdentifier getDefineIdentifierString]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
 Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifier]}
-MacroLabel ::= (MACRO_LBL_DEF (Instruction|Data)? CRLF*)
+MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|Data)? CRLF*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 Strlen ::= STRLEN_TAG Identifier (STRING|Identifier) CRLF*
@@ -285,7 +285,8 @@ Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Constant|Directive|Label|S
             | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
-Label ::= (((LBL_DEF (Instruction|Data|Structure)?)) CRLF*) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
+Label ::= (((LBL_DEF (Instruction|Data|Structure)?) | (LabelDefMacro (Instruction|Data|Structure)?)) CRLF*) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
+LabelDefMacro ::= (MacroCall COLON CRLF*)
 Constant ::= (Identifier EQU ((MINUS|PLUS)? NumericExpr) CRLF*) {methods=[getConstantIdentifierString]}
 
 //LabelData ::= (LBL_DATA DataValue CRLF*) {methods=[getLabelIdentifierString]}
@@ -305,7 +306,7 @@ MapOption ::= SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MA
 Directive ::= (DirectiveDecl|DirectiveDeclBrackets|MapOption) CRLF*
 private DirectiveDecl ::= DIRECTIVE_OP DirectiveArg*
 private DirectiveDeclBrackets ::= SQUARE_L DirectiveDecl SQUARE_R
-DirectiveArg ::= ((MINUS|PLUS)? (NumericLiteral|Address|SegmentAddress|Identifier))
+DirectiveArg ::= ((MINUS|PLUS)? (MacroCall|NumericLiteral|Address|SegmentAddress|Identifier))
 
 // Root expression rules
 Expr ::= ParenthesisExpr

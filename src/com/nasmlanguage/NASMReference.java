@@ -21,7 +21,7 @@ public class NASMReference extends PsiReferenceBase<PsiElement> implements PsiPo
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         Project project = myElement.getProject();
-        final List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesByString(project, id);
+        final List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesByStringInProject(project, id);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (NASMIdentifier identifier : identifiers) {
             results.add(new PsiElementResolveResult(identifier));

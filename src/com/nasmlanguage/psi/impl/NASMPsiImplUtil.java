@@ -21,10 +21,17 @@ public class NASMPsiImplUtil {
         return null;
     }
 
-    public static String getDefineIdentifier(NASMDefine element) {
+    public static String getDefineIdentifierString(NASMDefine element) {
         ASTNode defineIdentifier = element.getNode().findChildByType(NASMTypes.IDENTIFIER);
         if (defineIdentifier != null)
             return defineIdentifier.getText();
+        return null;
+    }
+
+    public static NASMIdentifier getDefineIdentifier(NASMDefine element) {
+        ASTNode defineIdentifier = element.getNode().findChildByType(NASMTypes.IDENTIFIER);
+        if (defineIdentifier != null)
+            return (NASMIdentifier)defineIdentifier.getPsi();
         return null;
     }
 

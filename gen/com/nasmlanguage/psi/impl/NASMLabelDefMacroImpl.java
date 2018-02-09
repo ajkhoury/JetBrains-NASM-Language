@@ -11,14 +11,14 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMMacroLabelImpl extends ASTWrapperPsiElement implements NASMMacroLabel {
+public class NASMLabelDefMacroImpl extends ASTWrapperPsiElement implements NASMLabelDefMacro {
 
-  public NASMMacroLabelImpl(ASTNode node) {
+  public NASMLabelDefMacroImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitMacroLabel(this);
+    visitor.visitLabelDefMacro(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,21 +27,9 @@ public class NASMMacroLabelImpl extends ASTWrapperPsiElement implements NASMMacr
   }
 
   @Override
-  @Nullable
-  public NASMData getData() {
-    return findChildByClass(NASMData.class);
-  }
-
-  @Override
-  @Nullable
-  public NASMInstruction getInstruction() {
-    return findChildByClass(NASMInstruction.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getMacroParamLblDef() {
-    return findNotNullChildByType(MACRO_PARAM_LBL_DEF);
+  public NASMMacroCall getMacroCall() {
+    return findNotNullChildByClass(NASMMacroCall.class);
   }
 
 }

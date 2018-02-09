@@ -226,7 +226,47 @@ class NASMUtil {
     }
 
     @SuppressWarnings("ConstantConditions")
-    static List<NASMIdentifier> findIdentifierReferencesByString(Project project, String targetIdentifierId) {
+    static List<NASMIdentifier> findIdentifierReferencesByString(PsiFile containingFile, String targetIdentifierId) {
+        List<NASMIdentifier> result = null;
+        // First check the containing file's identifiers
+        Collection<NASMIdentifier> nasmIdentifiers = PsiTreeUtil.collectElementsOfType(containingFile, NASMIdentifier.class);
+        if (!nasmIdentifiers.isEmpty()) {
+            for (NASMIdentifier nasmIdentifier : nasmIdentifiers) {
+                if (targetIdentifierId.equals(nasmIdentifier.getId().getText())) {
+                    if (result == null) {
+                        result = new ArrayList<>();
+                    }
+                    result.add(nasmIdentifier);
+                }
+            }
+        }
+
+        //List<NASMIdentifier> result = null;
+        //Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME,
+        //        NASMFileType.INSTANCE, GlobalSearchScope.allScope(project));
+        //for (VirtualFile virtualFile : virtualFiles) {
+        //    NASMFile nasmFile = (NASMFile) PsiManager.getInstance(project).findFile(virtualFile);
+        //    if (nasmFile != null) {
+        //        NASMIdentifier[] identifiers = PsiTreeUtil.getChildrenOfType(nasmFile, NASMIdentifier.class);
+        //        if (identifiers != null) {
+        //            for (NASMIdentifier identifier : identifiers) {
+        //                if (targetIdentifierId.equals(identifier.getId().getText())) {
+        //                    if (result == null) {
+        //                        result = new ArrayList<NASMIdentifier>();
+        //                    }
+        //                    result.add(identifier);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+        //return result != null ? result : Collections.<NASMIdentifier>emptyList();
+
+        return result != null ? result : Collections.emptyList();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    static List<NASMIdentifier> findIdentifierReferencesByStringInProject(Project project, String targetIdentifierId) {
         List<NASMIdentifier> result = null;
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME,
                 NASMFileType.INSTANCE, GlobalSearchScope.allScope(project));
@@ -238,7 +278,7 @@ class NASMUtil {
                     for (NASMIdentifier identifier : identifiers) {
                         if (targetIdentifierId.equals(identifier.getId().getText())) {
                             if (result == null) {
-                                result = new ArrayList<NASMIdentifier>();
+                                result = new ArrayList<>();
                             }
                             result.add(identifier);
                         }
@@ -246,7 +286,7 @@ class NASMUtil {
                 }
             }
         }
-        return result != null ? result : Collections.<NASMIdentifier>emptyList();
+        return result != null ? result : Collections.emptyList();
     }
 
     @SuppressWarnings("ConstantConditions")
