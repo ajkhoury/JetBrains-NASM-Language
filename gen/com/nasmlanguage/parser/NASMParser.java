@@ -1197,7 +1197,6 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // ((LBL_DEF (Instruction|Data|Structure)?) | (LabelDefMacro (Instruction|Data|Structure)?)) CRLF*
   public static boolean Label(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label")) return false;
-    if (!nextTokenIs(b, "<label>", ID, LBL_DEF)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LABEL, "<label>");
     r = Label_0(b, l + 1);
@@ -1293,13 +1292,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // MacroCall COLON CRLF*
   public static boolean LabelDefMacro(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelDefMacro")) return false;
-    if (!nextTokenIs(b, ID)) return false;
+    if (!nextTokenIs(b, "<label def macro>", ID, SIZE_TYPE)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, LABEL_DEF_MACRO, "<label def macro>");
     r = MacroCall(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && LabelDefMacro_2(b, l + 1);
-    exit_section_(b, m, LABEL_DEF_MACRO, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -2423,21 +2422,39 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (Identifier MacroParenthesis)|(Identifier NumericExpr)
+  // SIZE_TYPE? ((Identifier MacroParenthesis)|(Identifier NumericExpr))
   public static boolean MacroCall(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroCall")) return false;
-    if (!nextTokenIsSmart(b, ID)) return false;
+    if (!nextTokenIsSmart(b, ID, SIZE_TYPE)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, MACRO_CALL, "<macro call>");
+    r = MacroCall_0(b, l + 1);
+    r = r && MacroCall_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // SIZE_TYPE?
+  private static boolean MacroCall_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_0")) return false;
+    consumeTokenSmart(b, SIZE_TYPE);
+    return true;
+  }
+
+  // (Identifier MacroParenthesis)|(Identifier NumericExpr)
+  private static boolean MacroCall_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = MacroCall_0(b, l + 1);
-    if (!r) r = MacroCall_1(b, l + 1);
-    exit_section_(b, m, MACRO_CALL, r);
+    r = MacroCall_1_0(b, l + 1);
+    if (!r) r = MacroCall_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
   // Identifier MacroParenthesis
-  private static boolean MacroCall_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_0")) return false;
+  private static boolean MacroCall_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Identifier(b, l + 1);
@@ -2447,8 +2464,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // Identifier NumericExpr
-  private static boolean MacroCall_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_1")) return false;
+  private static boolean MacroCall_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Identifier(b, l + 1);

@@ -6,7 +6,7 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version v0.3-beta.0 pre-release
+Version v0.3-beta.1 pre-release
 
     FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support
     Syntax highlighting
@@ -54,6 +54,7 @@ Version v0.3-beta.0 pre-release
     Fixed a null pointer exception that would happen with labels in segment addresses.
     Added highlighting for macros in segment part of segment addresses.
     Fixed section and segment directives so you can use any section/segment name.
+    Can now use size prefixes for macro calls/references.
 
 # License
 

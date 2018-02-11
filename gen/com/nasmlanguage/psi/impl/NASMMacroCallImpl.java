@@ -37,4 +37,10 @@ public class NASMMacroCallImpl extends NASMExprImpl implements NASMMacroCall {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSizeType() {
+    return findChildByType(SIZE_TYPE);
+  }
+
 }

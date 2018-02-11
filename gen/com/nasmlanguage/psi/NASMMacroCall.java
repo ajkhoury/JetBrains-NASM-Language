@@ -13,4 +13,7 @@ public interface NASMMacroCall extends NASMExpr {
   @NotNull
   List<NASMNumericExpr> getNumericExprList();
 
+  @Nullable
+  PsiElement getSizeType();
+
 }

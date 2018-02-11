@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
-    <version>v0.3-beta.0</version>
+    <version>v0.3-beta.1</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM assembly language for JetBrains IDEs</h1>
         <br>
-        <h2>Version v0.3-beta.0 pre-release</h2>
+        <h2>Version v0.3-beta.1 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -60,6 +60,7 @@
             <li>Fixed a null pointer exception that would happen with labels in segment addresses.</li>
             <li>Added highlighting for macros in segment part of segment addresses.</li>
             <li>Fixed section and segment directives so you can use any section/segment name.</li>
+            <li>Can now use size prefixes for macro calls/references.</li>
         </ul>
     ]]>
     </change-notes>
