@@ -54,6 +54,7 @@ Version v0.3-beta.1 pre-release
     Fixed a null pointer exception that would happen with labels in segment addresses.
     Added highlighting for macros in segment part of segment addresses.
     Fixed section and segment directives so you can use any section/segment name.
+    Can now use size prefixes for macro calls/references.
 
 # License
 
