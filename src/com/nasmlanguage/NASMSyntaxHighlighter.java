@@ -1,3 +1,23 @@
+/*++
+
+NASM Assembly Language Plugin
+Copyright (c) 2017-2018 Aidan Khoury. All rights reserved.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+--*/
+
 package com.nasmlanguage;
 
 import com.intellij.lexer.Lexer;
@@ -18,8 +38,8 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             "NASM_REGISTER",
             DefaultLanguageHighlighterColors.LOCAL_VARIABLE
     );
-    public static final TextAttributesKey NASM_SEGMENT = TextAttributesKey.createTextAttributesKey(
-            "NASM_SEGMENT",
+    public static final TextAttributesKey NASM_SEGMENT_REGISTER = TextAttributesKey.createTextAttributesKey(
+            "NASM_SEGMENT_REGISTER",
             DefaultLanguageHighlighterColors.GLOBAL_VARIABLE
     );
     public static final TextAttributesKey NASM_OPERATION = TextAttributesKey.createTextAttributesKey(
@@ -102,8 +122,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         keys2 = new THashMap<>();
 
         keys1.put(NASMTypes.REGISTER, NASM_REGISTER);
-
-        keys1.put(NASMTypes.SEGMENT, NASM_SEGMENT);
+        keys1.put(NASMTypes.SEGMENT_REGISTER, NASM_SEGMENT_REGISTER);
 
         keys1.put(NASMTypes.SEPARATOR, NASM_SEPARATOR);
 
@@ -134,7 +153,8 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(NASMTypes.DATA_OP, NASM_OPERATION);
 
         keys1.put(NASMTypes.DIRECTIVE_OP, NASM_DIRECTIVE);
-        keys1.put(NASMTypes.SECTION_TAG, NASM_DIRECTIVE);
+        keys1.put(NASMTypes.SECTION, NASM_DIRECTIVE);
+        keys1.put(NASMTypes.SEGMENT, NASM_DIRECTIVE);
         keys1.put(NASMTypes.EQU, NASM_DIRECTIVE);
 
         keys1.put(NASMTypes.STRING, NASM_STRING);

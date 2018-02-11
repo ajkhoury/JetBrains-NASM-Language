@@ -1,3 +1,23 @@
+/*++
+
+NASM Assembly Language Plugin
+Copyright (c) 2017-2018 Aidan Khoury. All rights reserved.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+--*/
+
 package com.nasmlanguage;
 
 import com.intellij.lexer.FlexLexer;
@@ -46,11 +66,8 @@ ELSE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][sS][eE])
 ENDIF_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][nN][dD][iI][fF])
 STRLEN_TAG=((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([sS][tT][rR][lL][eE][nN]))
 ERROR_TAG=((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*
-SECTION_TAG=(([sS][eE][cC][tT][iI][oO][nN])|([sS][eE][gG][mM][eE][nN][tT]))
-CODE_SECTION_NAME=(\.[tT][eE][xX][tT])
-DATA_SECTION_NAME=(\.[dD][aA][tT][aA])
-RDATA_SECTION_NAME=(\.[rR][dD][aA][tT][aA])
-BSS_SECTION_NAME=(\.[bB][sS][sS])
+SECTION=(([sS][eE][cC][tT][iI][oO][nN])({WHITE_SPACE})((\.)([a-zA-Z_]+[a-zA-Z0-9_]*)))
+SEGMENT=(([sS][eE][gG][mM][eE][nN][tT])({WHITE_SPACE})([a-zA-Z_]+[a-zA-Z0-9_]*))
 MAP_OPTIONS=(all|brief|sections|segments|symbols)
 MAP_FILE=(([a-zA-Z0-9_.]+)(\.)[mM][aA][pP])
 STRUC_TAG=([sS][tT][rR][uU][cC])
@@ -59,7 +76,7 @@ ISTRUC_TAG=([iI][sS][tT][rR][uU][cC])
 IEND_TAG=([iI][eE][nN][dD])
 AT_TAG=([aA][tT])
 STRUCT_FIELD=(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))
-DIRECTIVE_OP=[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]|[eE][nN][dD]
+DIRECTIVE_OP=[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]|[eE][nN][dD]
 PREPROCESSOR_OP=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])
 DATA_OP=([rR][eE][sS][bBwWdDqQtToOyYzZ]|[dD][bBwWdDqQtToOyYzZ]|[tT][iI][mM][eE][sS])
 INS_DATA_TRANS_MOV=(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)
@@ -168,7 +185,7 @@ AVX_OP={INS_AVX_GENERAL}|{INS_AVX_AES}|{INS_AVX_COMPARISON}|{INS_AVX_CONVERSION}
 AVX2_OP={INS_AVX2_SIMD}|{INS_AVX2_BROADCAST}|{INS_AVX2_BLEND}|{INS_AVX2_GATHER}
 AVX512_OP={INS_AVX512_BLEND}|{INS_AVX512_BROADCAST}|{INS_AVX512_MOV}|{INS_AVX512_COMPRESS}|{INS_AVX512_CONV}|{INS_AVX512_MATH}|{INS_AVX512_LOGICAL}|{INS_AVX512_COMPARE}|{INS_AVX512_PACKED}|{INS_AVX512_PERM}|{INS_AVX512_OTHER}
 REGISTER=(%)?(([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[0-8])|(d[rb][0-367]|dr([89]|1[0-5]))|(tr[3-7])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|(efer|tpr|syscfg)|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr)|(zmm([12]?[0-9]|30|31)))
-SEGMENT=([c-gs]s)
+SEGMENT_REGISTER=([c-gs]s)
 SIZE_TYPE=[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)
 ID=([a-zA-Z_]+[a-zA-Z0-9_%]*)
 LBL_DEF=([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*):
@@ -231,11 +248,8 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {ENDIF_TAG}                 { return ENDIF_TAG; }
   {STRLEN_TAG}                { return STRLEN_TAG; }
   {ERROR_TAG}                 { return ERROR_TAG; }
-  {SECTION_TAG}               { return SECTION_TAG; }
-  {CODE_SECTION_NAME}         { return CODE_SECTION_NAME; }
-  {DATA_SECTION_NAME}         { return DATA_SECTION_NAME; }
-  {RDATA_SECTION_NAME}        { return RDATA_SECTION_NAME; }
-  {BSS_SECTION_NAME}          { return BSS_SECTION_NAME; }
+  {SECTION}                   { return SECTION; }
+  {SEGMENT}                   { return SEGMENT; }
   {MAP_OPTIONS}               { return MAP_OPTIONS; }
   {MAP_FILE}                  { return MAP_FILE; }
   {STRUC_TAG}                 { return STRUC_TAG; }
@@ -263,7 +277,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {AVX2_OP}                   { return AVX2_OP; }
   {AVX512_OP}                 { return AVX512_OP; }
   {REGISTER}                  { return REGISTER; }
-  {SEGMENT}                   { return SEGMENT; }
+  {SEGMENT_REGISTER}          { return SEGMENT_REGISTER; }
   {SIZE_TYPE}                 { return SIZE_TYPE; }
   {ID}                        { return ID; }
   {LBL_DEF}                   { return LBL_DEF; }

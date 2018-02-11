@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface NASMSeg extends NASMExpr {
 
   @NotNull
-  PsiElement getSegment();
+  PsiElement getSegmentRegister();
 
 }

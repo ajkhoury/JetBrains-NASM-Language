@@ -39,14 +39,6 @@ public class NASMVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
-  public void visitBssSection(@NotNull NASMBssSection o) {
-    visitPsiElement(o);
-  }
-
-  public void visitCodeSection(@NotNull NASMCodeSection o) {
-    visitPsiElement(o);
-  }
-
   public void visitConditional(@NotNull NASMConditional o) {
     visitPsiElement(o);
   }
@@ -56,10 +48,6 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitData(@NotNull NASMData o) {
-    visitPsiElement(o);
-  }
-
-  public void visitDataSection(@NotNull NASMDataSection o) {
     visitPsiElement(o);
   }
 
@@ -173,10 +161,6 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitPreprocessor(@NotNull NASMPreprocessor o) {
-    visitPsiElement(o);
-  }
-
-  public void visitRdataSection(@NotNull NASMRdataSection o) {
     visitPsiElement(o);
   }
 

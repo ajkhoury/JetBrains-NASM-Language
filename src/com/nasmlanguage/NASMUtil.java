@@ -63,31 +63,39 @@ class NASMUtil {
         return result;
     }
 
-    static List<NASMDefine> findPreprocessorDefines(Project project) {
+    static List<NASMDefine> findPreprocessorDefines(PsiFile containingFile) {
         List<NASMDefine> result = new ArrayList<>();
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
-                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
-        );
-        for (VirtualFile virtualFile : virtualFiles) {
-            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
-            if (assemblyFile != null) {
-                Collection<NASMPreprocessor> nasmPreprocessors = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMPreprocessor.class);
-                if (!nasmPreprocessors.isEmpty()) {
-                    for (NASMPreprocessor nasmPreprocessor : nasmPreprocessors) {
-                        NASMDefine define = nasmPreprocessor.getDefine();
-                        if (define != null)
-                            result.add(define);
-                    }
-                }
-            }
-        }
+
+        // Check the containing file's preprocessor defines
+        Collection<NASMDefine> nasmDefines = PsiTreeUtil.collectElementsOfType(containingFile, NASMDefine.class);
+        if (!nasmDefines.isEmpty())
+            result.addAll(nasmDefines);
+
+        // Makes this plugin perform like shit
+        //Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
+        //        FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
+        //);
+        //for (VirtualFile virtualFile : virtualFiles) {
+        //    NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
+        //    if (assemblyFile != null) {
+        //        Collection<NASMPreprocessor> nasmPreprocessors = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMPreprocessor.class);
+        //        if (!nasmPreprocessors.isEmpty()) {
+        //            for (NASMPreprocessor nasmPreprocessor : nasmPreprocessors) {
+        //                NASMDefine define = nasmPreprocessor.getDefine();
+        //                if (define != null)
+        //                    result.add(define);
+        //            }
+        //        }
+        //    }
+        //}
+
         return result;
     }
 
     static List<NASMLabel> findLabels(PsiFile containingFile) {
         List<NASMLabel> result = new ArrayList<>();
 
-        // First check the containing file's labels
+        // Check the containing file's labels
         Collection<NASMLabel> nasmLabels = PsiTreeUtil.collectElementsOfType(containingFile, NASMLabel.class);
         if (!nasmLabels.isEmpty())
             result.addAll(nasmLabels);
@@ -115,23 +123,6 @@ class NASMUtil {
         //    }
         //}
 
-        return result;
-    }
-
-    static List<NASMStructure> findStructures(Project project) {
-        List<NASMStructure> result = new ArrayList<>();
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
-                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
-        );
-        for (VirtualFile virtualFile : virtualFiles) {
-            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
-            if (assemblyFile != null) {
-                Collection<NASMStructure> nasmStructs = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMStructure.class);
-                if (!nasmStructs.isEmpty()) {
-                    result.addAll(nasmStructs);
-                }
-            }
-        }
         return result;
     }
 
@@ -169,19 +160,33 @@ class NASMUtil {
         return result;
     }
 
+    static List<NASMStructure> findStructures(Project project) {
+        List<NASMStructure> result = new ArrayList<>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
+                FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
+        );
+        for (VirtualFile virtualFile : virtualFiles) {
+            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
+            if (assemblyFile != null) {
+                Collection<NASMStructure> nasmStructs = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMStructure.class);
+                if (!nasmStructs.isEmpty()) {
+                    result.addAll(nasmStructs);
+                }
+            }
+        }
+        return result;
+    }
+
     @SuppressWarnings("ConstantConditions")
     static List<NASMIdentifier> findIdentifierReferences(PsiFile containingFile, NASMIdentifier identifier) {
 
         List<NASMIdentifier> result = new ArrayList<>();
-
         PsiElement targetIdentifierId = identifier.getId();
         if (targetIdentifierId != null) {
-
             // First check the containing file's identifiers
             Collection<NASMIdentifier> nasmIdentifiers = PsiTreeUtil.collectElementsOfType(containingFile, NASMIdentifier.class);
-            if (!nasmIdentifiers.isEmpty()) {
-                for (NASMIdentifier nasmIdentifier : nasmIdentifiers) {
-                    if (nasmIdentifier == identifier) continue;
+            for (NASMIdentifier nasmIdentifier : nasmIdentifiers) {
+                if (nasmIdentifier != identifier) {
                     PsiElement nasmIdentifierId = nasmIdentifier.getId();
                     if (nasmIdentifierId != null) {
                         if (nasmIdentifierId.getText().equals(targetIdentifierId.getText())) {
@@ -230,14 +235,11 @@ class NASMUtil {
         List<NASMIdentifier> result = null;
         // First check the containing file's identifiers
         Collection<NASMIdentifier> nasmIdentifiers = PsiTreeUtil.collectElementsOfType(containingFile, NASMIdentifier.class);
-        if (!nasmIdentifiers.isEmpty()) {
-            for (NASMIdentifier nasmIdentifier : nasmIdentifiers) {
-                if (targetIdentifierId.equals(nasmIdentifier.getId().getText())) {
-                    if (result == null) {
-                        result = new ArrayList<>();
-                    }
-                    result.add(nasmIdentifier);
-                }
+        for (NASMIdentifier nasmIdentifier : nasmIdentifiers) {
+            if (targetIdentifierId.equals(nasmIdentifier.getId().getText())) {
+                if (result == null)
+                    result = new ArrayList<>();
+                result.add(nasmIdentifier);
             }
         }
 
@@ -271,7 +273,7 @@ class NASMUtil {
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME,
                 NASMFileType.INSTANCE, GlobalSearchScope.allScope(project));
         for (VirtualFile virtualFile : virtualFiles) {
-            NASMFile nasmFile = (NASMFile) PsiManager.getInstance(project).findFile(virtualFile);
+            NASMFile nasmFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
             if (nasmFile != null) {
                 NASMIdentifier[] identifiers = PsiTreeUtil.getChildrenOfType(nasmFile, NASMIdentifier.class);
                 if (identifiers != null) {
@@ -291,7 +293,7 @@ class NASMUtil {
 
     @SuppressWarnings("ConstantConditions")
     static List<NASMIdentifier> findIdentifierReferencesInProject(Project project) {
-        List<NASMIdentifier> result = new ArrayList<NASMIdentifier>();
+        List<NASMIdentifier> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME,
                 NASMFileType.INSTANCE, GlobalSearchScope.allScope(project));
         for (VirtualFile virtualFile : virtualFiles) {
@@ -303,7 +305,7 @@ class NASMUtil {
                 }
             }
         }
-        return result != null ? result : Collections.<NASMIdentifier>emptyList();
+        return result != null ? result : Collections.emptyList();
     }
 
 }
