@@ -6,7 +6,7 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version 0.2.6 pre-release
+Version 0.3.0 pre-release
 - FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support
 - Syntax highlighting
 - Single and multiline macro support
@@ -22,7 +22,7 @@ Version 0.2.6 pre-release
 - Goto Symbol
 - Debugger Support
 
-# Changes
+# Changelog
 
 - Added macro syntax highlighting.
 - Added support for conditional assembly directives.
@@ -50,6 +50,9 @@ Version 0.2.6 pre-release
 - Added identifiers to istruc structure instances.
 - Added .RDATA section directive.
 - Added improved macro highlighting.
+- Fixed a null pointer exception that would happen with labels in segment addresses.
+- Added highlighting for macros in segment part of segment addresses.
+- Fixed section and segment directives so you can use any section/segment name.
 
 # License
 
