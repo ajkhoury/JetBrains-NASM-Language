@@ -1,3 +1,23 @@
+/*++
+
+NASM Assembly Language Plugin
+Copyright (c) 2017-2018 Aidan Khoury. All rights reserved.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+--*/
+
 {
     parserClass="com.nasmlanguage.parser.NASMParser"
     parserUtilClass="com.nasmlanguage.parser.NASMParserUtil"
@@ -43,11 +63,13 @@
         STRLEN_TAG          = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([sS][tT][rR][lL][eE][nN]))'
         ERROR_TAG           = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*'
 
-        SECTION_TAG         = 'regexp:(([sS][eE][cC][tT][iI][oO][nN])|([sS][eE][gG][mM][eE][nN][tT]))'
-        CODE_SECTION_NAME   = 'regexp:(\.[tT][eE][xX][tT])'
-        DATA_SECTION_NAME   = 'regexp:(\.[dD][aA][tT][aA])'
-        RDATA_SECTION_NAME  = 'regexp:(\.[rR][dD][aA][tT][aA])'
-        BSS_SECTION_NAME    = 'regexp:(\.[bB][sS][sS])'
+        SECTION             = 'regexp:(([sS][eE][cC][tT][iI][oO][nN])({WHITE_SPACE})((\.)([a-zA-Z_]+[a-zA-Z0-9_]*)))'
+        SEGMENT             = 'regexp:(([sS][eE][gG][mM][eE][nN][tT])({WHITE_SPACE})([a-zA-Z_]+[a-zA-Z0-9_]*))'
+
+        //CODE_SECTION_NAME   = 'regexp:(\.[tT][eE][xX][tT])'
+        //DATA_SECTION_NAME   = 'regexp:(\.[dD][aA][tT][aA])'
+        //RDATA_SECTION_NAME  = 'regexp:(\.[rR][dD][aA][tT][aA])'
+        //BSS_SECTION_NAME    = 'regexp:(\.[bB][sS][sS])'
 
         MAP_OPTIONS         = 'regexp:(all|brief|sections|segments|symbols)'
         MAP_FILE            = 'regexp:(([a-zA-Z0-9_.]+)(\.)[mM][aA][pP])'
@@ -60,7 +82,7 @@
         STRUCT_FIELD        = 'regexp:(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))'
         SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
 
-        DIRECTIVE_OP        = 'regexp:[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][gG][mM][eE][nN][tT]|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]|[eE][nN][dD]'
+        DIRECTIVE_OP        = 'regexp:[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]|[eE][nN][dD]'
         PREPROCESSOR_OP     = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])'
         DATA_OP             = 'regexp:([rR][eE][sS][bBwWdDqQtToOyYzZ]|[dD][bBwWdDqQtToOyYzZ]|[tT][iI][mM][eE][sS])'
 
@@ -203,7 +225,7 @@
 
         // All kinds of registers
         REGISTER            = 'regexp:(%)?(([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[0-8])|(d[rb][0-367]|dr([89]|1[0-5]))|(tr[3-7])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|(efer|tpr|syscfg)|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr)|(zmm([12]?[0-9]|30|31)))'
-        SEGMENT             = 'regexp:([c-gs]s)'
+        SEGMENT_REGISTER    = 'regexp:([c-gs]s)'
         SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
 
         // Make last!
@@ -255,6 +277,7 @@ private Element ::= COMMENT
                 | CRLF
                 | COMMENT CRLF
                 | Section
+                | Segment
                 | Preprocessor
                 | Directive
                 | Constant
@@ -264,11 +287,8 @@ private Element ::= COMMENT
                 | Instruction
                 ;
 
-private Section ::= DataSection | CodeSection | BssSection | RdataSection
-DataSection ::= (((SQUARE_L SECTION_TAG DATA_SECTION_NAME SQUARE_R)|(SECTION_TAG DATA_SECTION_NAME)) CRLF*)
-RdataSection::= (((SQUARE_L SECTION_TAG RDATA_SECTION_NAME SQUARE_R)|(SECTION_TAG RDATA_SECTION_NAME)) CRLF*)
-CodeSection ::= (((SQUARE_L SECTION_TAG CODE_SECTION_NAME SQUARE_R)|(SECTION_TAG CODE_SECTION_NAME)) CRLF*)
-BssSection  ::= (((SQUARE_L SECTION_TAG BSS_SECTION_NAME SQUARE_R)|(SECTION_TAG BSS_SECTION_NAME)) CRLF*)
+private Section ::= (((SQUARE_L SECTION SQUARE_R) | SECTION) CRLF*)
+private Segment ::= (((SQUARE_L SEGMENT SQUARE_R) | SEGMENT) CRLF*)
 
 Preprocessor ::= Include | Define | Assign | Macro | Strlen | Error | Conditional | (PREPROCESSOR_OP Identifier Expr)
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
@@ -376,10 +396,12 @@ NumericLiteral ::= ((SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)?)? (BINARY|ZEROES|HEXADE
 Identifier ::= ID { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
 LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
 Reg ::= REGISTER { extends=Expr }
-Seg ::= SEGMENT { extends=Expr }
+Seg ::= SEGMENT_REGISTER { extends=Expr }
 Str ::= STRING { extends=Expr }
 StructureField ::= STRUCT_FIELD { extends=Expr }
-SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))|(LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))) { extends=Expr }
+SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))|
+                                (LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL)))|
+                                (LabelDefMacro (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))) { extends=Expr }
 Address ::= (SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2 { extends=Expr }
 private AddressInternal ::= SQUARE_L MINUS? Expr SQUARE_R { pin(".*")=1 }
 MacroCall ::= (Identifier MacroParenthesis)|(Identifier NumericExpr) { extends=Expr }

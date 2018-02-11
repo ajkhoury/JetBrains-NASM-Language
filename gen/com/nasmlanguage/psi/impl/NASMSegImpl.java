@@ -27,8 +27,8 @@ public class NASMSegImpl extends NASMExprImpl implements NASMSeg {
 
   @Override
   @NotNull
-  public PsiElement getSegment() {
-    return findNotNullChildByType(SEGMENT);
+  public PsiElement getSegmentRegister() {
+    return findNotNullChildByType(SEGMENT_REGISTER);
   }
 
 }

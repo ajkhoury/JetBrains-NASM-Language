@@ -16,12 +16,9 @@ public interface NASMTypes {
   IElementType BITWISE_XOR_EXPR = new NASMElementType("BITWISE_XOR_EXPR");
   IElementType BIT_SHIFT_L_EXPR = new NASMElementType("BIT_SHIFT_L_EXPR");
   IElementType BIT_SHIFT_R_EXPR = new NASMElementType("BIT_SHIFT_R_EXPR");
-  IElementType BSS_SECTION = new NASMElementType("BSS_SECTION");
-  IElementType CODE_SECTION = new NASMElementType("CODE_SECTION");
   IElementType CONDITIONAL = new NASMElementType("CONDITIONAL");
   IElementType CONSTANT = new NASMElementType("CONSTANT");
   IElementType DATA = new NASMElementType("DATA");
-  IElementType DATA_SECTION = new NASMElementType("DATA_SECTION");
   IElementType DEFINE = new NASMElementType("DEFINE");
   IElementType DIRECTIVE = new NASMElementType("DIRECTIVE");
   IElementType DIRECTIVE_ARG = new NASMElementType("DIRECTIVE_ARG");
@@ -50,7 +47,6 @@ public interface NASMTypes {
   IElementType PARENTHESIS_NUMERIC_EXPR = new NASMElementType("PARENTHESIS_NUMERIC_EXPR");
   IElementType PLUS_EXPR = new NASMElementType("PLUS_EXPR");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
-  IElementType RDATA_SECTION = new NASMElementType("RDATA_SECTION");
   IElementType REG = new NASMElementType("REG");
   IElementType SEG = new NASMElementType("SEG");
   IElementType SEGMENT_ADDRESS = new NASMElementType("SEGMENT_ADDRESS");
@@ -72,14 +68,11 @@ public interface NASMTypes {
   IElementType BITWISE_NOT = new NASMTokenType("~");
   IElementType BITWISE_OR = new NASMTokenType("|");
   IElementType BITWISE_XOR = new NASMTokenType("^");
-  IElementType BSS_SECTION_NAME = new NASMTokenType("BSS_SECTION_NAME");
   IElementType CHARACTER = new NASMTokenType("CHARACTER");
-  IElementType CODE_SECTION_NAME = new NASMTokenType("CODE_SECTION_NAME");
   IElementType COLON = new NASMTokenType(":");
   IElementType COMMENT = new NASMTokenType("COMMENT");
   IElementType CRLF = new NASMTokenType("CRLF");
   IElementType DATA_OP = new NASMTokenType("DATA_OP");
-  IElementType DATA_SECTION_NAME = new NASMTokenType("DATA_SECTION_NAME");
   IElementType DECIMAL = new NASMTokenType("DECIMAL");
   IElementType DEFINE_TAG = new NASMTokenType("DEFINE_TAG");
   IElementType DIRECTIVE_OP = new NASMTokenType("DIRECTIVE_OP");
@@ -213,13 +206,13 @@ public interface NASMTypes {
   IElementType PLUS = new NASMTokenType("+");
   IElementType PREPROCESSOR_OP = new NASMTokenType("PREPROCESSOR_OP");
   IElementType QUESTION = new NASMTokenType("?");
-  IElementType RDATA_SECTION_NAME = new NASMTokenType("RDATA_SECTION_NAME");
   IElementType REGISTER = new NASMTokenType("REGISTER");
   IElementType ROUND_L = new NASMTokenType("(");
   IElementType ROUND_R = new NASMTokenType(")");
-  IElementType SECTION_TAG = new NASMTokenType("SECTION_TAG");
+  IElementType SECTION = new NASMTokenType("SECTION");
   IElementType SEGMENT = new NASMTokenType("SEGMENT");
   IElementType SEGMENT_ADDR_L = new NASMTokenType("SEGMENT_ADDR_L");
+  IElementType SEGMENT_REGISTER = new NASMTokenType("SEGMENT_REGISTER");
   IElementType SEMICOLON = new NASMTokenType(";");
   IElementType SEPARATOR = new NASMTokenType(",");
   IElementType SIZE_TYPE = new NASMTokenType("SIZE_TYPE");
@@ -266,12 +259,6 @@ public interface NASMTypes {
       else if (type == BIT_SHIFT_R_EXPR) {
         return new NASMBitShiftRExprImpl(node);
       }
-      else if (type == BSS_SECTION) {
-        return new NASMBssSectionImpl(node);
-      }
-      else if (type == CODE_SECTION) {
-        return new NASMCodeSectionImpl(node);
-      }
       else if (type == CONDITIONAL) {
         return new NASMConditionalImpl(node);
       }
@@ -280,9 +267,6 @@ public interface NASMTypes {
       }
       else if (type == DATA) {
         return new NASMDataImpl(node);
-      }
-      else if (type == DATA_SECTION) {
-        return new NASMDataSectionImpl(node);
       }
       else if (type == DEFINE) {
         return new NASMDefineImpl(node);
@@ -364,9 +348,6 @@ public interface NASMTypes {
       }
       else if (type == PREPROCESSOR) {
         return new NASMPreprocessorImpl(node);
-      }
-      else if (type == RDATA_SECTION) {
-        return new NASMRdataSectionImpl(node);
       }
       else if (type == REG) {
         return new NASMRegImpl(node);
