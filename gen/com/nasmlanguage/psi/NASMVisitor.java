@@ -67,6 +67,10 @@ public class NASMVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitEndDirective(@NotNull NASMEndDirective o) {
+    visitExpr(o);
+  }
+
   public void visitError(@NotNull NASMError o) {
     visitPsiElement(o);
   }
