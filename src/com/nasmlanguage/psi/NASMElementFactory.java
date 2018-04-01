@@ -33,6 +33,6 @@ public class NASMElementFactory {
 
     public static NASMFile createFile(Project project, String text) {
         String name = "dummy.create.asm";
-        return (NASMFile) PsiFileFactory.getInstance(project).createFileFromText(name, NASMFileType.INSTANCE, text);
+        return (NASMFile)PsiFileFactory.getInstance(project).createFileFromText(name, NASMFileType.INSTANCE, text);
     }
 }

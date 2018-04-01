@@ -859,6 +859,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //                 | Structure
   //                 | Data
   //                 | Instruction
+  //                 | ID CRLF
   static boolean Element(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Element")) return false;
     boolean r;
@@ -876,6 +877,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Structure(b, l + 1);
     if (!r) r = Data(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
+    if (!r) r = parseTokens(b, 0, ID, CRLF);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1317,7 +1319,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction)*) MACRO_END_TAG
+  // MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction|Preprocessor|ID CRLF*)*) MACRO_END_TAG
   public static boolean Macro(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro")) return false;
     if (!nextTokenIs(b, MACRO_TAG)) return false;
@@ -1331,7 +1333,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction)*
+  // Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction|Preprocessor|ID CRLF*)*
   private static boolean Macro_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1")) return false;
     boolean r;
@@ -1364,7 +1366,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (MacroLabel|Data|Instruction)*
+  // (MacroLabel|Data|Instruction|Preprocessor|ID CRLF*)*
   private static boolean Macro_1_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1_4")) return false;
     int c = current_position_(b);
@@ -1376,7 +1378,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // MacroLabel|Data|Instruction
+  // MacroLabel|Data|Instruction|Preprocessor|ID CRLF*
   private static boolean Macro_1_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1_4_0")) return false;
     boolean r;
@@ -1384,8 +1386,33 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = MacroLabel(b, l + 1);
     if (!r) r = Data(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
+    if (!r) r = Preprocessor(b, l + 1);
+    if (!r) r = Macro_1_4_0_4(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // ID CRLF*
+  private static boolean Macro_1_4_0_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Macro_1_4_0_4")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ID);
+    r = r && Macro_1_4_0_4_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean Macro_1_4_0_4_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Macro_1_4_0_4_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Macro_1_4_0_4_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -2586,7 +2613,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ID
+  // (ID)
   public static boolean Identifier(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Identifier")) return false;
     if (!nextTokenIsSmart(b, ID)) return false;

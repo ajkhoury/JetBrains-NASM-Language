@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
-    <version>v0.3-beta.2</version>
+    <version>0.3-beta.2</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
 
     <description><![CDATA[
@@ -62,6 +62,8 @@
             <li>Fixed section and segment directives so you can use any section/segment name.</li>
             <li>Can now use size prefixes for macro calls/references.</li>
             <li>Added the ability to use END tag in expressions.</li>
+            <li>Conditional and other preprocessor directives now supported inside macro definitions.</li>
+            <li>Nested macros now supported.</li>
         </ul>
     ]]>
     </change-notes>
@@ -82,7 +84,9 @@
         <colorSettingsPage implementation="com.nasmlanguage.NASMColorSettingsPage"/>
         <lang.braceMatcher language="NASM" implementationClass="com.nasmlanguage.NASMPairedBraceMatcher"/>
         <completion.contributor language="NASM" implementationClass="com.nasmlanguage.NASMCompletionContributor"/>
+        <psi.referenceContributor implementation="com.nasmlanguage.NASMReferenceContributor"/>
         <lang.findUsagesProvider language="NASM" implementationClass="com.nasmlanguage.NASMFindUsagesProvider"/>
+        <gotoSymbolContributor implementation="com.nasmlanguage.NASMChooseByNameContributor"/>
         <spellchecker.support language="NASM" implementationClass="com.intellij.spellchecker.tokenizer.SpellcheckingStrategy"/>
         <annotator language="NASM" implementationClass="com.nasmlanguage.NASMAnnotator"/>
     </extensions>

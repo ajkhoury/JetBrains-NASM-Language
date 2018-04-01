@@ -21,8 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.nasmlanguage.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
+import com.nasmlanguage.NASMIcons;
+import com.nasmlanguage.NASMReference;
 import com.nasmlanguage.psi.*;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 public class NASMPsiImplUtil {
 
@@ -91,6 +100,38 @@ public class NASMPsiImplUtil {
 
     public static PsiElement getNameIdentifier(NASMIdentifier element) {
         return element.getId();
+    }
+
+    @NotNull
+    public static PsiReference[] getReferences(@NotNull NASMIdentifier element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    //@NotNull
+    //public static PsiReference getReference(@NotNull NASMIdentifier element) {
+    //    return new NASMReference( element.getId(), element.getId().getTextRange());
+    //}
+
+    public static ItemPresentation getPresentation(final NASMIdentifier element) {
+        return new ItemPresentation() {
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                return element.getName();
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                return element.getContainingFile().getName();
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean unused) {
+                return NASMIcons.ASM_FILE;
+            }
+        };
     }
 
     //public static String getLabelIdentifierString(NASMLabelInstruction element) {

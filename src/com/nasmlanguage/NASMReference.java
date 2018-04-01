@@ -14,7 +14,7 @@ public class NASMReference extends PsiReferenceBase<PsiElement> implements PsiPo
 
     public NASMReference(@NotNull PsiElement element, TextRange textRange) {
         super(element, textRange);
-        id = element.getText().substring(textRange.getStartOffset(), textRange.getEndOffset());
+        id = element.getText();
     }
 
     @NotNull
@@ -39,13 +39,12 @@ public class NASMReference extends PsiReferenceBase<PsiElement> implements PsiPo
     @NotNull
     @Override
     public Object[] getVariants() {
-        Project project = myElement.getProject();
-        List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesInProject(project);
+        List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesInProject(myElement.getProject());
         List<LookupElement> variants = new ArrayList<LookupElement>();
         for (final NASMIdentifier identifier : identifiers) {
             String identifierText = identifier.getId().getText();
             if (identifierText != null && identifierText.length() > 0) {
-                variants.add(LookupElementBuilder.create(identifier).
+                variants.add(LookupElementBuilder.create(identifier.getId()).
                         withIcon(NASMIcons.ASM_FILE).
                         withTypeText(identifier.getContainingFile().getName())
                 );
