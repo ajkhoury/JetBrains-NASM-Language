@@ -6,7 +6,7 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version v0.3-beta.2 pre-release
+Version v0.3-beta.3 pre-release
 
     FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
@@ -23,12 +23,10 @@ Version v0.3-beta.2 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.3-beta.2 Changes
+# v0.3-beta.3 Changes
     
-    Added the ability to use END tag in expressions.
-    Conditional and other preprocessor directives now supported inside macro definitions.
-    Nested macros now supported.
-    Macros without parameters now properly supported.
+    Single semicolon (comment) now allowed at end of file.
+    Added a "ChooseByNameContributor" that can navigate to a symbol by name.
 
 # Complete Changelog
 
@@ -66,10 +64,12 @@ Version v0.3-beta.2 pre-release
     Conditional and other preprocessor directives now supported inside macro definitions.
     Nested macros now supported.
     Macros without parameters now properly supported.
+    Single semicolon (comment) now allowed at end of file.
+    Added a "ChooseByNameContributor" that can navigate to a symbol by name.
 
 # License
 
-Copyright (C) 2017 Aidan Khoury (dude719)
+Copyright (C) 2017-2018 Aidan Khoury (dude719)
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
