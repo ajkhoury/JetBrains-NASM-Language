@@ -26,6 +26,9 @@ Version v0.3-beta.2 pre-release
 # v0.3-beta.2 Changes
     
     Added the ability to use END tag in expressions.
+    Conditional and other preprocessor directives now supported inside macro definitions.
+    Nested macros now supported.
+    Macros without parameters now properly supported.
 
 # Changelog
 
