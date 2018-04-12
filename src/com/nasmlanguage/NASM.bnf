@@ -82,7 +82,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         STRUCT_FIELD        = 'regexp:(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))'
         SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
 
-        DIRECTIVE_OP        = 'regexp:[bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE]|[eE][nN][dD]'
+        DIRECTIVE_OP        = 'regexp:([bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE])'
+        END_DIRECTIVE_OP    = 'regexp:([eE][nN][dD])'
         PREPROCESSOR_OP     = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])'
         DATA_OP             = 'regexp:([rR][eE][sS][bBwWdDqQtToOyYzZ]|[dD][bBwWdDqQtToOyYzZ]|[tT][iI][mM][eE][sS])'
 
@@ -280,11 +281,13 @@ private Element ::= COMMENT
                 | Segment
                 | Preprocessor
                 | Directive
+                | EndDirective
                 | Constant
                 | Label
                 | Structure
                 | Data
                 | Instruction
+                | ID CRLF
                 ;
 
 private Section ::= (((SQUARE_L SECTION SQUARE_R) | SECTION) CRLF*)
@@ -295,7 +298,7 @@ Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG Identifier ROUND_L (Identifier (SEPARATOR Identifier)*)? ROUND_R Expr CRLF*)
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*) {methods=[getDefineIdentifier getDefineIdentifierString]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
-Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifier]}
+Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction|Preprocessor|ID CRLF*)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifier]}
 MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|Data)? CRLF*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
@@ -328,6 +331,9 @@ private DirectiveDecl ::= DIRECTIVE_OP DirectiveArg*
 private DirectiveDeclBrackets ::= SQUARE_L DirectiveDecl SQUARE_R
 DirectiveArg ::= ((MINUS|PLUS)? (MacroCall|NumericLiteral|Address|SegmentAddress|Identifier))
 
+EndDirective ::= (END_DIRECTIVE_OP) { extends=Expr }
+
+
 // Root expression rules
 Expr ::= ParenthesisExpr
         | MulExpr
@@ -353,6 +359,7 @@ Expr ::= ParenthesisExpr
         | Seg
         | Identifier
         | LabelIdentifier
+        | EndDirective
         ;
 NumericExpr ::= ParenthesisNumericExpr
         | MulExpr
@@ -393,7 +400,7 @@ ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
 
 NumericLiteral ::= ((SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)?)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
-Identifier ::= ID { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
+Identifier ::= (ID) { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getReferences getPresentation] }
 LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
 Reg ::= REGISTER { extends=Expr }
 Seg ::= SEGMENT_REGISTER { extends=Expr }
@@ -402,12 +409,13 @@ StructureField ::= STRUCT_FIELD { extends=Expr }
 SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))|
                                 (LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL)))|
                                 (LabelDefMacro (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))) { extends=Expr }
-Address ::= (SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2 { extends=Expr }
-private AddressInternal ::= SQUARE_L MINUS? Expr SQUARE_R { pin(".*")=1 }
-MacroCall ::= SIZE_TYPE? ((Identifier MacroParenthesis)|(Identifier NumericExpr)) { extends=Expr }
-private MacroParenthesis ::= ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R { pin(".*")=1 }
+Address ::= ((SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2) { extends=Expr }
+private AddressInternal ::= (SQUARE_L MINUS? Expr SQUARE_R) { pin(".*")=1 }
+MacroCall ::= ((SIZE_TYPE? (Identifier MacroParenthesis))|(SIZE_TYPE? (Identifier NumericExpr))) { extends=Expr }
+private MacroParenthesis ::= (ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R) { pin(".*")=1 }
 MacroParamReference ::= (SIZE_TYPE? MACRO_PARAM_REF) { extends=Expr }
 MacroVarReference ::= (SIZE_TYPE? MACRO_VAR_REF) { extends=Expr }
+
 
 //private PrefixedExpr ::= (MINUS|PLUS)? Expr
 //private PrefixedNumericExpr ::= (MINUS|PLUS)? NumericExpr

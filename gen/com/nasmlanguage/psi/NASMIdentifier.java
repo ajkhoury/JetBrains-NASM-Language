@@ -4,6 +4,8 @@ package com.nasmlanguage.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiReference;
 
 public interface NASMIdentifier extends NASMExpr, NASMNamedElement {
 
@@ -15,5 +17,10 @@ public interface NASMIdentifier extends NASMExpr, NASMNamedElement {
   PsiElement setName(String newName);
 
   PsiElement getNameIdentifier();
+
+  @NotNull
+  PsiReference[] getReferences();
+
+  ItemPresentation getPresentation();
 
 }

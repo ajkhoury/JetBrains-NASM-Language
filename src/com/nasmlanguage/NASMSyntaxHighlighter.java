@@ -153,6 +153,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(NASMTypes.DATA_OP, NASM_OPERATION);
 
         keys1.put(NASMTypes.DIRECTIVE_OP, NASM_DIRECTIVE);
+        keys1.put(NASMTypes.END_DIRECTIVE_OP, NASM_DIRECTIVE);
         keys1.put(NASMTypes.SECTION, NASM_DIRECTIVE);
         keys1.put(NASMTypes.SEGMENT, NASM_DIRECTIVE);
         keys1.put(NASMTypes.EQU, NASM_DIRECTIVE);

@@ -17,12 +17,15 @@ public class NASMFindUsagesProvider implements FindUsagesProvider {
         return new DefaultWordsScanner(new NASMLexerAdapter(),
                 TokenSet.create(NASMTypes.IDENTIFIER),
                 TokenSet.create(NASMTypes.COMMENT),
-                TokenSet.EMPTY);
+                TokenSet.create(NASMTypes.NUMERIC_LITERAL));
     }
 
     @Override
     public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-        return psiElement instanceof PsiNamedElement;
+        if (psiElement instanceof PsiNamedElement) {
+            return true;
+        }
+        return false;
     }
 
     @Nullable
@@ -34,20 +37,24 @@ public class NASMFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getType(@NotNull PsiElement element) {
-        return "Identifier Usage";
+        if (element instanceof NASMIdentifier) {
+            return "NASM identifier";
+        } else {
+            return "";
+        }
     }
 
     @NotNull
     @Override
     public String getDescriptiveName(@NotNull PsiElement element) {
-        String elementString = element.toString();
+        String elementString = ((NASMIdentifier)element).getName();
         return elementString;
     }
 
     @NotNull
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-        String elementString = element.toString();
+        String elementString = ((NASMIdentifier)element).getName();
         return elementString;
     }
 

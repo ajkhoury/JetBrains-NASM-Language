@@ -6,16 +6,16 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version v0.3-beta.1 pre-release
+Version v0.3-beta.2 pre-release
 
-    FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support
-    Syntax highlighting
-    Single and multiline macro support
-    Conditional assembly directives support
-    Preprocessor directives support
-    Structure support
-    Brace matching for braces, macros, preprocessor, and structs
-    Improved macro highlighting
+    FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
+    Syntax highlighting.
+    Single and multiline macro support.
+    Conditional assembly directives support.
+    Preprocessor directives support.
+    Structure support.
+    Brace matching for braces, macros, preprocessor, and structs.
+    Improved macro highlighting.
 
 ## TODO
 - Code Completion
@@ -23,7 +23,14 @@ Version v0.3-beta.1 pre-release
 - Goto Symbol
 - Debugger Support
 
-# Changelog
+# v0.3-beta.2 Changes
+    
+    Added the ability to use END tag in expressions.
+    Conditional and other preprocessor directives now supported inside macro definitions.
+    Nested macros now supported.
+    Macros without parameters now properly supported.
+
+# Complete Changelog
 
     Added macro syntax highlighting.
     Added support for conditional assembly directives.
@@ -55,6 +62,10 @@ Version v0.3-beta.1 pre-release
     Added highlighting for macros in segment part of segment addresses.
     Fixed section and segment directives so you can use any section/segment name.
     Can now use size prefixes for macro calls/references.
+    Added the ability to use END tag in expressions.
+    Conditional and other preprocessor directives now supported inside macro definitions.
+    Nested macros now supported.
+    Macros without parameters now properly supported.
 
 # License
 

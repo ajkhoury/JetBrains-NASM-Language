@@ -9,6 +9,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
 import com.nasmlanguage.psi.*;
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiReference;
 
 public class NASMIdentifierImpl extends NASMNamedElementImpl implements NASMIdentifier {
 
@@ -41,6 +43,15 @@ public class NASMIdentifierImpl extends NASMNamedElementImpl implements NASMIden
 
   public PsiElement getNameIdentifier() {
     return NASMPsiImplUtil.getNameIdentifier(this);
+  }
+
+  @NotNull
+  public PsiReference[] getReferences() {
+    return NASMPsiImplUtil.getReferences(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return NASMPsiImplUtil.getPresentation(this);
   }
 
 }

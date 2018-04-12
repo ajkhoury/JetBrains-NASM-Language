@@ -23,6 +23,7 @@ public interface NASMTypes {
   IElementType DIRECTIVE = new NASMElementType("DIRECTIVE");
   IElementType DIRECTIVE_ARG = new NASMElementType("DIRECTIVE_ARG");
   IElementType DIV_EXPR = new NASMElementType("DIV_EXPR");
+  IElementType END_DIRECTIVE = new NASMElementType("END_DIRECTIVE");
   IElementType ERROR = new NASMElementType("ERROR");
   IElementType EXPR = new NASMElementType("EXPR");
   IElementType IDENTIFIER = new NASMElementType("IDENTIFIER");
@@ -84,6 +85,7 @@ public interface NASMTypes {
   IElementType ELSE_TAG = new NASMTokenType("ELSE_TAG");
   IElementType ENDIF_TAG = new NASMTokenType("ENDIF_TAG");
   IElementType ENDSTRUC_TAG = new NASMTokenType("ENDSTRUC_TAG");
+  IElementType END_DIRECTIVE_OP = new NASMTokenType("END_DIRECTIVE_OP");
   IElementType EQU = new NASMTokenType("EQU");
   IElementType EQUAL = new NASMTokenType("=");
   IElementType EQUALEQUAL = new NASMTokenType("==");
@@ -279,6 +281,9 @@ public interface NASMTypes {
       }
       else if (type == DIV_EXPR) {
         return new NASMDivExprImpl(node);
+      }
+      else if (type == END_DIRECTIVE) {
+        return new NASMEndDirectiveImpl(node);
       }
       else if (type == ERROR) {
         return new NASMErrorImpl(node);
