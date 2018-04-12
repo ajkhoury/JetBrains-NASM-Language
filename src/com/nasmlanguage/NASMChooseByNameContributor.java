@@ -25,7 +25,6 @@ public class NASMChooseByNameContributor implements ChooseByNameContributor {
     @NotNull
     @Override
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
-        // todo include non project items
         List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesByStringInProject(project, name);
         return identifiers.toArray(new NavigationItem[identifiers.size()]);
     }

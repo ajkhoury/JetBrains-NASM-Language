@@ -80,6 +80,7 @@
         <!-- Add your extensions here -->
         <fileTypeFactory implementation="com.nasmlanguage.NASMFileTypeFactory"/>
         <lang.parserDefinition language="NASM" implementationClass="com.nasmlanguage.NASMParserDefinition"/>
+        <!--suppress PluginXmlValidity -->
         <lang.syntaxHighlighterFactory key="NASM" language="NASM" implementationClass="com.nasmlanguage.NASMSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.nasmlanguage.NASMColorSettingsPage"/>
         <lang.braceMatcher language="NASM" implementationClass="com.nasmlanguage.NASMPairedBraceMatcher"/>

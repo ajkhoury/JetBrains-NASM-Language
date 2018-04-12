@@ -30,7 +30,7 @@ Version v0.3-beta.2 pre-release
     Nested macros now supported.
     Macros without parameters now properly supported.
 
-# Changelog
+# Complete Changelog
 
     Added macro syntax highlighting.
     Added support for conditional assembly directives.
@@ -63,6 +63,9 @@ Version v0.3-beta.2 pre-release
     Fixed section and segment directives so you can use any section/segment name.
     Can now use size prefixes for macro calls/references.
     Added the ability to use END tag in expressions.
+    Conditional and other preprocessor directives now supported inside macro definitions.
+    Nested macros now supported.
+    Macros without parameters now properly supported.
 
 # License
 
