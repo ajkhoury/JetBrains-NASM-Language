@@ -181,6 +181,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(NASMTypes.IDENTIFIER, NASM_IDENTIFIER);
 
         keys1.put(NASMTypes.COMMENT, NASM_COMMENT);
+        keys1.put(NASMTypes.SEMICOLON, NASM_COMMENT);
 
         keys1.put(TokenType.BAD_CHARACTER, NASM_BAD_CHARACTER);
     }

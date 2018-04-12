@@ -846,9 +846,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // COMMENT
-  //                 | CRLF
-  //                 | COMMENT CRLF
+  // COMMENT | SEMICOLON | COMMENT CRLF | CRLF
   //                 | Section
   //                 | Segment
   //                 | Preprocessor
@@ -865,8 +863,9 @@ public class NASMParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMENT);
-    if (!r) r = consumeToken(b, CRLF);
+    if (!r) r = consumeToken(b, SEMICOLON);
     if (!r) r = parseTokens(b, 0, COMMENT, CRLF);
+    if (!r) r = consumeToken(b, CRLF);
     if (!r) r = Section(b, l + 1);
     if (!r) r = Segment(b, l + 1);
     if (!r) r = Preprocessor(b, l + 1);
