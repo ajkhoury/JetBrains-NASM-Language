@@ -90,6 +90,7 @@
         <gotoSymbolContributor implementation="com.nasmlanguage.NASMChooseByNameContributor"/>
         <spellchecker.support language="NASM" implementationClass="com.intellij.spellchecker.tokenizer.SpellcheckingStrategy"/>
         <annotator language="NASM" implementationClass="com.nasmlanguage.NASMAnnotator"/>
+        <lang.commenter language="NASM" implementationClass="com.nasmlanguage.NASMCommenter"/>
     </extensions>
 
     <actions>
