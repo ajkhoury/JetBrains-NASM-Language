@@ -44,7 +44,7 @@ SOFTWARE.
         CRLF                = 'regexp:\r|\n|\r\n'
         WHITE_SPACE         = 'regexp:[ \t\x0B\f]+'
 
-        COMMENT             = 'regexp:(;.*?(\r|\n|\r\n)?)'
+        COMMENT             = 'regexp:(;.*?(\r|\n|\r\n)*?)'
         EQU                 = 'regexp:([eE][qQ][uU])'
 
         SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
@@ -279,9 +279,7 @@ SOFTWARE.
 }
 
 NASMFile ::= Element*
-private Element ::= COMMENT
-                | CRLF
-                | COMMENT CRLF
+private Element ::= COMMENT | SEMICOLON | COMMENT CRLF | CRLF
                 | Section
                 | Segment
                 | Preprocessor
@@ -420,7 +418,3 @@ MacroCall ::= ((SIZE_TYPE? (Identifier MacroParenthesis))|(SIZE_TYPE? (Identifie
 private MacroParenthesis ::= (ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R) { pin(".*")=1 }
 MacroParamReference ::= (SIZE_TYPE? MACRO_PARAM_REF) { extends=Expr }
 MacroVarReference ::= (SIZE_TYPE? MACRO_VAR_REF) { extends=Expr }
-
-
-//private PrefixedExpr ::= (MINUS|PLUS)? Expr
-//private PrefixedNumericExpr ::= (MINUS|PLUS)? NumericExpr

@@ -27,7 +27,7 @@ WHITE_SPACE=\s+
 
 CRLF=\r|\n|\r\n
 WHITE_SPACE=[ \t\x0B\f]+
-COMMENT=(;.*?(\r|\n|\r\n)?)
+COMMENT=(;.*?(\r|\n|\r\n)*?)
 EQU=([eE][qQ][uU])
 SEGMENT_ADDR_L=((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):
 INCLUDE_TAG=(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])
