@@ -2,7 +2,7 @@
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
     <version>0.4-beta.1</version>
-    <vendor email="aidankhoury@gmail.com" url="https://github.com/dude719">Aidan Khoury</vendor>
+    <vendor email="aidankhoury@gmail.com" url="https://github.com/ajkhoury">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM assembly language for JetBrains IDEs</h1>
