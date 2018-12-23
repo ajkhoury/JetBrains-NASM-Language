@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMBitShiftRExprImpl extends NASMExprImpl implements NASMBitShiftRExpr {
 
-  public NASMBitShiftRExprImpl(ASTNode node) {
+  public NASMBitShiftRExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

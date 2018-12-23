@@ -37,6 +37,7 @@ public interface NASMTypes {
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType MACRO_LABEL = new NASMElementType("MACRO_LABEL");
   IElementType MACRO_PARAM_REFERENCE = new NASMElementType("MACRO_PARAM_REFERENCE");
+  IElementType MACRO_PARENTHESIS = new NASMElementType("MACRO_PARENTHESIS");
   IElementType MACRO_VAR_REFERENCE = new NASMElementType("MACRO_VAR_REFERENCE");
   IElementType MAP_OPTION = new NASMElementType("MAP_OPTION");
   IElementType MINUS_EXPR = new NASMElementType("MINUS_EXPR");
@@ -99,97 +100,6 @@ public interface NASMTypes {
   IElementType IFMACRO_TAG = new NASMTokenType("IFMACRO_TAG");
   IElementType IF_TAG = new NASMTokenType("IF_TAG");
   IElementType INCLUDE_TAG = new NASMTokenType("INCLUDE_TAG");
-  IElementType INS_64_BIT = new NASMTokenType("INS_64_BIT");
-  IElementType INS_AMD_SVM = new NASMTokenType("INS_AMD_SVM");
-  IElementType INS_AVX2_BLEND = new NASMTokenType("INS_AVX2_BLEND");
-  IElementType INS_AVX2_BROADCAST = new NASMTokenType("INS_AVX2_BROADCAST");
-  IElementType INS_AVX2_GATHER = new NASMTokenType("INS_AVX2_GATHER");
-  IElementType INS_AVX2_SIMD = new NASMTokenType("INS_AVX2_SIMD");
-  IElementType INS_AVX512_BLEND = new NASMTokenType("INS_AVX512_BLEND");
-  IElementType INS_AVX512_BROADCAST = new NASMTokenType("INS_AVX512_BROADCAST");
-  IElementType INS_AVX512_COMPARE = new NASMTokenType("INS_AVX512_COMPARE");
-  IElementType INS_AVX512_COMPRESS = new NASMTokenType("INS_AVX512_COMPRESS");
-  IElementType INS_AVX512_CONV = new NASMTokenType("INS_AVX512_CONV");
-  IElementType INS_AVX512_LOGICAL = new NASMTokenType("INS_AVX512_LOGICAL");
-  IElementType INS_AVX512_MATH = new NASMTokenType("INS_AVX512_MATH");
-  IElementType INS_AVX512_MOV = new NASMTokenType("INS_AVX512_MOV");
-  IElementType INS_AVX512_OTHER = new NASMTokenType("INS_AVX512_OTHER");
-  IElementType INS_AVX512_PACKED = new NASMTokenType("INS_AVX512_PACKED");
-  IElementType INS_AVX512_PERM = new NASMTokenType("INS_AVX512_PERM");
-  IElementType INS_AVX_AES = new NASMTokenType("INS_AVX_AES");
-  IElementType INS_AVX_ARITH = new NASMTokenType("INS_AVX_ARITH");
-  IElementType INS_AVX_BLEND = new NASMTokenType("INS_AVX_BLEND");
-  IElementType INS_AVX_CACHE = new NASMTokenType("INS_AVX_CACHE");
-  IElementType INS_AVX_COMPARISON = new NASMTokenType("INS_AVX_COMPARISON");
-  IElementType INS_AVX_CONVERSION = new NASMTokenType("INS_AVX_CONVERSION");
-  IElementType INS_AVX_FMA3 = new NASMTokenType("INS_AVX_FMA3");
-  IElementType INS_AVX_GENERAL = new NASMTokenType("INS_AVX_GENERAL");
-  IElementType INS_AVX_LOGICAL = new NASMTokenType("INS_AVX_LOGICAL");
-  IElementType INS_AVX_MOV = new NASMTokenType("INS_AVX_MOV");
-  IElementType INS_AVX_OTHER = new NASMTokenType("INS_AVX_OTHER");
-  IElementType INS_AVX_PACKED = new NASMTokenType("INS_AVX_PACKED");
-  IElementType INS_BINARY_ARITH = new NASMTokenType("INS_BINARY_ARITH");
-  IElementType INS_BINARY_LOGICAL = new NASMTokenType("INS_BINARY_LOGICAL");
-  IElementType INS_BINARY_OTHER = new NASMTokenType("INS_BINARY_OTHER");
-  IElementType INS_BINARY_ROTATE = new NASMTokenType("INS_BINARY_ROTATE");
-  IElementType INS_BINARY_SET = new NASMTokenType("INS_BINARY_SET");
-  IElementType INS_BIT_MANIPULATION = new NASMTokenType("INS_BIT_MANIPULATION");
-  IElementType INS_CONTROL_TRANS = new NASMTokenType("INS_CONTROL_TRANS");
-  IElementType INS_DATA_TRANS_MOV = new NASMTokenType("INS_DATA_TRANS_MOV");
-  IElementType INS_DATA_TRANS_OTHER = new NASMTokenType("INS_DATA_TRANS_OTHER");
-  IElementType INS_DATA_TRANS_XCHG = new NASMTokenType("INS_DATA_TRANS_XCHG");
-  IElementType INS_DECIMAL_ARITH = new NASMTokenType("INS_DECIMAL_ARITH");
-  IElementType INS_FLAG_CONTROL = new NASMTokenType("INS_FLAG_CONTROL");
-  IElementType INS_FPU_BASIC_ARITH = new NASMTokenType("INS_FPU_BASIC_ARITH");
-  IElementType INS_FPU_COMPARISON = new NASMTokenType("INS_FPU_COMPARISON");
-  IElementType INS_FPU_CONTROL = new NASMTokenType("INS_FPU_CONTROL");
-  IElementType INS_FPU_DATA_TRANS = new NASMTokenType("INS_FPU_DATA_TRANS");
-  IElementType INS_FPU_LOAD = new NASMTokenType("INS_FPU_LOAD");
-  IElementType INS_FPU_STATE = new NASMTokenType("INS_FPU_STATE");
-  IElementType INS_FPU_TRANSCEND = new NASMTokenType("INS_FPU_TRANSCEND");
-  IElementType INS_INPUT_OUTPUT = new NASMTokenType("INS_INPUT_OUTPUT");
-  IElementType INS_INTEL_VMX = new NASMTokenType("INS_INTEL_VMX");
-  IElementType INS_MISC_OTHER = new NASMTokenType("INS_MISC_OTHER");
-  IElementType INS_MMX_ARITH = new NASMTokenType("INS_MMX_ARITH");
-  IElementType INS_MMX_COMPARISON = new NASMTokenType("INS_MMX_COMPARISON");
-  IElementType INS_MMX_CONVERSION = new NASMTokenType("INS_MMX_CONVERSION");
-  IElementType INS_MMX_DATA_TRANS = new NASMTokenType("INS_MMX_DATA_TRANS");
-  IElementType INS_MMX_LOGICAL = new NASMTokenType("INS_MMX_LOGICAL");
-  IElementType INS_MMX_ROTATE = new NASMTokenType("INS_MMX_ROTATE");
-  IElementType INS_MMX_STATE = new NASMTokenType("INS_MMX_STATE");
-  IElementType INS_RNG_RAND = new NASMTokenType("INS_RNG_RAND");
-  IElementType INS_SEG_REGS = new NASMTokenType("INS_SEG_REGS");
-  IElementType INS_SSE2_ARITH = new NASMTokenType("INS_SSE2_ARITH");
-  IElementType INS_SSE2_CACHE_CTRL = new NASMTokenType("INS_SSE2_CACHE_CTRL");
-  IElementType INS_SSE2_COMPARISON = new NASMTokenType("INS_SSE2_COMPARISON");
-  IElementType INS_SSE2_CONVERSION = new NASMTokenType("INS_SSE2_CONVERSION");
-  IElementType INS_SSE2_DATA_TRANS = new NASMTokenType("INS_SSE2_DATA_TRANS");
-  IElementType INS_SSE2_LOGICAL = new NASMTokenType("INS_SSE2_LOGICAL");
-  IElementType INS_SSE2_OTHER = new NASMTokenType("INS_SSE2_OTHER");
-  IElementType INS_SSE2_SIMD_INT = new NASMTokenType("INS_SSE2_SIMD_INT");
-  IElementType INS_SSE3_ARITH = new NASMTokenType("INS_SSE3_ARITH");
-  IElementType INS_SSE3_GENERAL = new NASMTokenType("INS_SSE3_GENERAL");
-  IElementType INS_SSE3_OTHER = new NASMTokenType("INS_SSE3_OTHER");
-  IElementType INS_SSE4_ARITH = new NASMTokenType("INS_SSE4_ARITH");
-  IElementType INS_SSE4_BLEND = new NASMTokenType("INS_SSE4_BLEND");
-  IElementType INS_SSE4_CONVERSION = new NASMTokenType("INS_SSE4_CONVERSION");
-  IElementType INS_SSE4_DATA_TRANS = new NASMTokenType("INS_SSE4_DATA_TRANS");
-  IElementType INS_SSE4_INS_EXT = new NASMTokenType("INS_SSE4_INS_EXT");
-  IElementType INS_SSE4_OTHER = new NASMTokenType("INS_SSE4_OTHER");
-  IElementType INS_SSE4_PACKED_FP = new NASMTokenType("INS_SSE4_PACKED_FP");
-  IElementType INS_SSE4_PACKED_INT = new NASMTokenType("INS_SSE4_PACKED_INT");
-  IElementType INS_SSE_ARITH = new NASMTokenType("INS_SSE_ARITH");
-  IElementType INS_SSE_CACHE_CTRL = new NASMTokenType("INS_SSE_CACHE_CTRL");
-  IElementType INS_SSE_COMPARISON = new NASMTokenType("INS_SSE_COMPARISON");
-  IElementType INS_SSE_CONVERSION = new NASMTokenType("INS_SSE_CONVERSION");
-  IElementType INS_SSE_DATA_TRANS = new NASMTokenType("INS_SSE_DATA_TRANS");
-  IElementType INS_SSE_LOGICAL = new NASMTokenType("INS_SSE_LOGICAL");
-  IElementType INS_SSE_OTHER = new NASMTokenType("INS_SSE_OTHER");
-  IElementType INS_SSE_PREFETCH = new NASMTokenType("INS_SSE_PREFETCH");
-  IElementType INS_SSE_SIMD_INT = new NASMTokenType("INS_SSE_SIMD_INT");
-  IElementType INS_SSE_STATE = new NASMTokenType("INS_SSE_STATE");
-  IElementType INS_STRING_DATA = new NASMTokenType("INS_STRING_DATA");
-  IElementType INS_SYSTEM = new NASMTokenType("INS_SYSTEM");
   IElementType ISTRUC_TAG = new NASMTokenType("ISTRUC_TAG");
   IElementType LBL = new NASMTokenType("LBL");
   IElementType LBL_DEF = new NASMTokenType("LBL_DEF");
@@ -237,7 +147,7 @@ public interface NASMTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == ADDRESS) {
+      if (type == ADDRESS) {
         return new NASMAddressImpl(node);
       }
       else if (type == ASSIGN) {
@@ -320,6 +230,9 @@ public interface NASMTypes {
       }
       else if (type == MACRO_PARAM_REFERENCE) {
         return new NASMMacroParamReferenceImpl(node);
+      }
+      else if (type == MACRO_PARENTHESIS) {
+        return new NASMMacroParenthesisImpl(node);
       }
       else if (type == MACRO_VAR_REFERENCE) {
         return new NASMMacroVarReferenceImpl(node);

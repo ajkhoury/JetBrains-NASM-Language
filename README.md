@@ -6,7 +6,7 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version v0.3-beta.3 pre-release
+Version v0.4-beta.1 pre-release
 
     FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
@@ -23,10 +23,9 @@ Version v0.3-beta.3 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.3-beta.3 Changes
+# v0.4-beta.1 Changes
     
-    Single semicolon (comment) now allowed at end of file.
-    Added a "ChooseByNameContributor" that can navigate to a symbol by name.
+    Fixed bug where generic identifiers would error if a comment was after it.
 
 # Complete Changelog
 
@@ -66,6 +65,7 @@ Version v0.3-beta.3 pre-release
     Macros without parameters now properly supported.
     Single semicolon (comment) now allowed at end of file.
     Added a "ChooseByNameContributor" that can navigate to a symbol by name.
+    Fixed bug where generic identifiers would error if a comment was after it.
 
 # License
 

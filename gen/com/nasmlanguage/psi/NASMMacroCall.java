@@ -8,10 +8,13 @@ import com.intellij.psi.PsiElement;
 public interface NASMMacroCall extends NASMExpr {
 
   @NotNull
-  NASMIdentifier getIdentifier();
+  List<NASMExpr> getExprList();
 
-  @NotNull
-  List<NASMNumericExpr> getNumericExprList();
+  @Nullable
+  NASMMacroParenthesis getMacroParenthesis();
+
+  @Nullable
+  PsiElement getId();
 
   @Nullable
   PsiElement getSizeType();

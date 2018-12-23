@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMNumericLiteralImpl extends NASMExprImpl implements NASMNumericLiteral {
 
-  public NASMNumericLiteralImpl(ASTNode node) {
+  public NASMNumericLiteralImpl(@NotNull ASTNode node) {
     super(node);
   }
 

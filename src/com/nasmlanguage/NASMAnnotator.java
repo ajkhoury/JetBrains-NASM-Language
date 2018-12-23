@@ -104,7 +104,9 @@ public class NASMAnnotator implements Annotator {
             NASMLabel nasmLabel = (NASMLabel)element;
             NASMLabelDefMacro nasmLabelDefMacro = nasmLabel.getLabelDefMacro();
             if (nasmLabelDefMacro != null) {
-                List<NASMNumericExpr> nasmNumericExprList = nasmLabelDefMacro.getMacroCall().getNumericExprList();
+                NASMIdentifier labelDefIdentifier = nasmLabelDefMacro.getIdentifier();
+                highlightTextRange(labelDefIdentifier.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
+                List<NASMNumericExpr> nasmNumericExprList = nasmLabelDefMacro.getMacroParenthesis().getNumericExprList();
                 if (nasmNumericExprList.size() == 1) {
                     NASMNumericExpr nasmLabelDefMacroExpr = nasmNumericExprList.get(0);
                     highlightTextRange(nasmLabelDefMacroExpr.getTextRange(), NASMSyntaxHighlighter.NASM_LABEL, holder);

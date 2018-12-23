@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMStrlenImpl extends ASTWrapperPsiElement implements NASMStrlen {
 
-  public NASMStrlenImpl(ASTNode node) {
+  public NASMStrlenImpl(@NotNull ASTNode node) {
     super(node);
   }
 

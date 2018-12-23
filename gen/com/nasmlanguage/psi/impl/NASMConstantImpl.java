@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMConstantImpl extends ASTWrapperPsiElement implements NASMConstant {
 
-  public NASMConstantImpl(ASTNode node) {
+  public NASMConstantImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,20 +28,20 @@ public class NASMConstantImpl extends ASTWrapperPsiElement implements NASMConsta
 
   @Override
   @NotNull
-  public NASMIdentifier getIdentifier() {
-    return findNotNullChildByClass(NASMIdentifier.class);
-  }
-
-  @Override
-  @NotNull
-  public NASMNumericExpr getNumericExpr() {
-    return findNotNullChildByClass(NASMNumericExpr.class);
+  public List<NASMNumericExpr> getNumericExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
   }
 
   @Override
   @NotNull
   public PsiElement getEqu() {
     return findNotNullChildByType(EQU);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
   public String getConstantIdentifierString() {

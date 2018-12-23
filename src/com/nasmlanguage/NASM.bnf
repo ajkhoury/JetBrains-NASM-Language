@@ -36,42 +36,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     psiImplUtilClass="com.nasmlanguage.psi.impl.NASMPsiImplUtil"
 
     tokens = [
-        CRLF                = 'regexp:\r|\n|\r\n'
-        WHITE_SPACE         = 'regexp:[ \t\x0B\f]+'
+        CRLF                = 'regexp:(\r|\n|\r\n)'
 
-        COMMENT             = 'regexp:(;.*?(\r|\n|\r\n)*?)'
         EQU                 = 'regexp:([eE][qQ][uU])'
 
         SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
 
-        INCLUDE_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][nN][cC][lL][uU][dD][eE])'
-        DEFINE_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])'
-        ASSIGN_TAG          = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[aA][sS][sS][iI][gG][nN])'
+        INCLUDE_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][nN][cC][lL][uU][dD][eE])'
+        DEFINE_TAG          = 'regexp:((\s+)?[#%](\s+)?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])'
+        ASSIGN_TAG          = 'regexp:((\s+)?[#%](\s+)?)([iI]?[aA][sS][sS][iI][gG][nN])'
 
-        MACRO_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[mM][aA][cC][rR][oO])'
-        MACRO_END_TAG       = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
+        MACRO_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI]?[mM][aA][cC][rR][oO])'
+        MACRO_END_TAG       = 'regexp:((\s+)?[#%](\s+)?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])'
         MACRO_PARAM_REF     = 'regexp:((%|%%)([1-9][0-9]*))'
-        MACRO_VAR_REF       = 'regexp:((%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@\126]*))'
+        MACRO_VAR_REF       = 'regexp:((%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@]*))'
         MACRO_PARAM_LBL_DEF = 'regexp:((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)):)'
-        IF_TAG              = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][nN]?([dD][eE][fF])?)'
-        IFMACRO_TAG         = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][mM][aA][cC][rR][oO])'
-        IFCTX_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([iI][fF][cC][tT][xX])'
-        ELIF_TAG            = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)'
-        ELSE_TAG            = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][lL][sS][eE])'
-        ENDIF_TAG           = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][nN][dD][iI][fF])'
+        IF_TAG              = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][nN]?([dD][eE][fF])?)'
+        IFMACRO_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][mM][aA][cC][rR][oO])'
+        IFCTX_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][cC][tT][xX])'
+        ELIF_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)'
+        ELSE_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][sS][eE])'
+        ENDIF_TAG           = 'regexp:((\s+)?[#%](\s+)?)([eE][nN][dD][iI][fF])'
 
-        STRLEN_TAG          = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([sS][tT][rR][lL][eE][nN]))'
-        ERROR_TAG           = 'regexp:((({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([eE][rR][rR][oO][rR])).*'
+        STRLEN_TAG          = 'regexp:(((\s+)?[#%](\s+)?)([sS][tT][rR][lL][eE][nN]))'
+        ERROR_TAG           = 'regexp:(((\s+)?[#%](\s+)?)([eE][rR][rR][oO][rR])).*'
 
-        SECTION             = 'regexp:(([sS][eE][cC][tT][iI][oO][nN])({WHITE_SPACE})((\.)([a-zA-Z_]+[a-zA-Z0-9_]*)))'
-        SEGMENT             = 'regexp:(([sS][eE][gG][mM][eE][nN][tT])({WHITE_SPACE})([a-zA-Z_]+[a-zA-Z0-9_]*))'
+        SECTION             = 'regexp:(([sS][eE][cC][tT][iI][oO][nN])(\s+)((\.)([a-zA-Z_]+[a-zA-Z0-9_]*)))'
+        SEGMENT             = 'regexp:(([sS][eE][gG][mM][eE][nN][tT])(\s+)([a-zA-Z_]+[a-zA-Z0-9_]*))'
 
-        //CODE_SECTION_NAME   = 'regexp:(\.[tT][eE][xX][tT])'
-        //DATA_SECTION_NAME   = 'regexp:(\.[dD][aA][tT][aA])'
-        //RDATA_SECTION_NAME  = 'regexp:(\.[rR][dD][aA][tT][aA])'
-        //BSS_SECTION_NAME    = 'regexp:(\.[bB][sS][sS])'
-
-        MAP_OPTIONS         = 'regexp:(all|brief|sections|segments|symbols)'
+        MAP_OPTIONS         = 'regexp:((all|ALL)|(brief|BRIEF)|(sections|SECTIONS)|(segments|SEGMENTS)|(symbols|SYMBOLS))'
         MAP_FILE            = 'regexp:(([a-zA-Z0-9_.]+)(\.)[mM][aA][pP])'
 
         STRUC_TAG           = 'regexp:([sS][tT][rR][uU][cC])'
@@ -84,129 +77,128 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         DIRECTIVE_OP        = 'regexp:([bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE])'
         END_DIRECTIVE_OP    = 'regexp:([eE][nN][dD])'
-        PREPROCESSOR_OP     = 'regexp:(({WHITE_SPACE})?[#%]({WHITE_SPACE})?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])'
+        PREPROCESSOR_OP     = 'regexp:((\s+)?[#%](\s+)?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])'
         DATA_OP             = 'regexp:([rR][eE][sS][bBwWdDqQtToOyYzZ]|[dD][bBwWdDqQtToOyYzZ]|[tT][iI][mM][eE][sS])'
 
-        // General purpose instructions
-        INS_DATA_TRANS_MOV  = 'regexp:(mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(xchg|bswap|xadd|cmpxchg(8b)?)'                                // Data Transfer MOV
-        INS_DATA_TRANS_XCHG = 'regexp:(xchg|bswap|xadd|cmpxchg(8b)?)'                                                                                   // Data Transfer XCHG
-        INS_DATA_TRANS_OTHER= 'regexp:((push|pop)(ad?)?|cwde?|cdq|cbw)'                                                                                 // Data Transfer Other
-        INS_DECIMAL_ARITH   = 'regexp:(daa|das|aaa|aas|aam|aad)'                                                                                        // Decimal Arithmetic
-        INS_BINARY_ARITH    = 'regexp:(adcx?|adox|add|sub|sbb|i?mul|i?div|inc|dec|neg|cmp)'                                                             // Binary Arithmetic
-        INS_BINARY_LOGICAL  = 'regexp:(and|x?or|not)'                                                                                                   // Binary Logical
-        INS_BINARY_ROTATE   = 'regexp:(s[ah][rl]|sh[rl]d|r[co][rl])'                                                                                    // Binary Rotation
-        INS_BINARY_SET      = 'regexp:(set(n?[abceglopsz]|n?[abgl]e|p[eo]))'                                                                            // Binary Set
-        INS_BINARY_OTHER    = 'regexp:(bt[crs]?|bs[fr]|test|crc32|popcnt)'                                                                              // Binary Other
-        INS_CONTROL_TRANS   = 'regexp:(jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret[fn]?|iret[dq]?|into?|bound|enter|leave)'// Control Transfer
-        INS_STRING_DATA     = 'regexp:((mov|cmp|sca|lod|sto)(s[bdw]?)|rep(n?[ez])?)'                                                                    // String Data
-        INS_INPUT_OUTPUT    = 'regexp:((in|out)(s[bdw]?)?)'                                                                                             // I/O
-        INS_FLAG_CONTROL    = 'regexp:((st|cl)[cdi]|cmc|[ls]ahf|(push|pop)f[dq]?)'                                                                      // Flag Control
-        INS_SEG_REGS        = 'regexp:(l[defgs]s)'                                                                                                      // Segment Registers
-        INS_MISC_OTHER      = 'regexp:(lea|nop|ud2|xlatb?|cpuid|movbe)'                                                                                 // Misc/Other
-        INS_RNG_RAND        = 'regexp:(rdrand|rdseed)'                                                                                                  // Random Number Generation (RNG)
-        INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)'                                         // Bit Manipulation (BMI)
+        //// General purpose instructions
+        //INS_DATA_TRANS_MOV  = 'regexp:((mov([sz]x)?|cmov(n?[abceglopsz]|n?[abgl]e|p[eo]))|(MOV([SZ]X)?|CMOV(N?[ABCEGLOPSZ]|N?[ABGL]E|P[EO])))'          // Data Transfer MOV
+        //INS_DATA_TRANS_XCHG = 'regexp:((xchg|bswap|xadd|cmpxchg(8b)?)|(XCHG|BSWAP|XADD|CMPXCHG(8[Bb])?))'                                               // Data Transfer XCHG
+        //INS_DATA_TRANS_OTHER= 'regexp:((push|pop)(ad?)?|cwde?|cdq|cbw)|((PUSH|POP)(AD?)?|CWDE?|CDQ|CBW)'                                                // Data Transfer Other
+        //INS_DECIMAL_ARITH   = 'regexp:(daa|das|aaa|aas|aam|aad)|(DAA|DAS|AAA|AAS|AAM|AAD)'                                                              // Decimal Arithmetic
+        //INS_BINARY_ARITH    = 'regexp:(adcx?|adox|add|sub|sbb|i?mul|i?div|inc|dec|neg|cmp)|(ADCX?|ADOX|ADD|SUB|SBB|I?MUL|I?DIV|INC|DEC|NEG|CMP)'        // Binary Arithmetic
+        //INS_BINARY_LOGICAL  = 'regexp:(and|x?or|not)|(AND|X?OR|NOT)'                                                                                    // Binary Logical
+        //INS_BINARY_ROTATE   = 'regexp:(s[ah][rl]|sh[rl]d|r[co][rl])|(S[AH][RL]|SH[RL]D|R[CO][RL])'                                                      // Binary Rotation
+        //INS_BINARY_SET      = 'regexp:(set(n?[abceglopsz]|n?[abgl]e|p[eo]))|(SET(N?[ABCEGLOPSZ]|N?[ABGL]E|P[EO]))'                                      // Binary Set
+        //INS_BINARY_OTHER    = 'regexp:(bt[crs]?|bs[fr]|test|crc32|popcnt)|(BT[CRS]?|BS[FR]|TEST|CRC32|POPCNT)'                                          // Binary Other
+        //INS_CONTROL_TRANS   = 'regexp:((jmp|jn?[abceglopsz]|jn?[abgl]e|jp[eo]|j[er]?cxz)|(loop(n?[ez])?|call|ret[fn]?|iret[dq]?|into?|bound|enter|leave))|((JMP|JN?[ABCEGLOPSZ]|JN?[ABGL]E|JP[EO]|J[ER]?CXZ)|(LOOP(N?[EZ])?|CALL|RET[FN]?|IRET[DQ]?|INTO?|BOUND|ENTER|LEAVE))' // Control Transfer
+        //INS_STRING_DATA     = 'regexp:((mov|cmp|sca|lod|sto)(s[bdw]?)|rep(n?[ez])?)|((MOV|CMP|SCA|LOD|STO)(S[BDW]?)|REP(N?[EZ])?)'                      // String Data
+        //INS_INPUT_OUTPUT    = 'regexp:((in|out)(s[bdw]?)?)|((IN|OUT)(S[BDW]?)?)'                                                                        // I/O
+        //INS_FLAG_CONTROL    = 'regexp:((st|cl)[cdi]|cmc|[ls]ahf|(push|pop)f[dq]?)|((ST|CL)[CDI]|CMC|[LS]AHF|(PUSH|POP)F[DQ]?)'                          // Flag Control
+        //INS_SEG_REGS        = 'regexp:(l[defgs]s)|(L[DEFGS]S)'                                                                                          // Segment Registers
+        //INS_MISC_OTHER      = 'regexp:(lea|nop|ud2|xlatb?|cpuid|movbe)|(LEA|NOP|UD2|XLATB?|CPUID|MOVBE)'                                                // Misc/Other
+        //INS_RNG_RAND        = 'regexp:(rdrand|rdseed)|(RDRAND|RDSEED)'                                                                                  // Random Number Generation (RNG)
+        //INS_BIT_MANIPULATION= 'regexp:(andn|bextr|bls(i|r|msk)|bzhi|pdep|pext|[lt]zcnt|(mul|ror|sar|shl|shr)x)|(ANDN|BEXTR|BLS(I|R|MSK)|BZHI|PDEP|PEXT|[LT]ZCNT|(MUL|ROR|SAR|SHL|SHR)X)' // Bit Manipulation (BMI)
 
-        // System instructions
-        INS_SYSTEM          = 'regexp:((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpga?|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv))'
+        //// System instructions
+        //INS_SYSTEM          = 'regexp:(((cl|st)ac|[ls]([gli]dt|tr|msw)|clts|arpl|lar|lsl|ver[rw]|inv(d|lpga?|pcid)|wbinvd)|(lock|hlt|rsm|(rd|wr)(msr|pkru|[fg]sbase)|rd(pmc|tscp?)|sys(enter|exit))|(x((save(c|opt|s)?|rstors?)(64)?|[gs]etbv)))|(((CL|ST)AC|[LS]([GLI]DT|TR|MSW)|CLTS|ARPL|LAR|LSL|VER[RW]|INV(D|LPGA?|PCID)|WBINVD)|(LOCK|HLT|RSM|(RD|WR)(MSR|PKRU|[FG]SBASE)|RD(PMC|TSCP?)|SYS(ENTER|EXIT))|(X((SAVE(C|OPT|S)?|RSTORS?)(64)?|[GS]ETBV)))'
 
-        // Virtualization instructions
-        INS_INTEL_VMX       = 'regexp:(vm(ptr(ld|st)|clear|read|write|launch|resume|xo(ff|n)|call|func)|inv(ept|vpid))'
-        INS_AMD_SVM         = 'regexp:(vm(run|load|save|mcall)|stgi|clgi|skinit)'
+        //// Virtualization instructions
+        //INS_INTEL_VMX       = 'regexp:(vm(ptr(ld|st)|clear|read|write|launch|resume|xo(ff|n)|call|func)|inv(ept|vpid))|(VM(PTR(LD|ST)|CLEAR|READ|WRITE|LAUNCH|RESUME|XO(FF|N)|CALL|FUNC)|INV(EPT|VPID))'
+        //INS_AMD_SVM         = 'regexp:(vm(run|load|save|mcall)|stgi|clgi|skinit)|(VM(RUN|LOAD|SAVE|MCALL)|STGI|CLGI|SKINIT)'
 
-        // 64 bit instructions
-        INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))'                                // 64 bit Instructions
+        //// 64 bit instructions
+        //INS_64_BIT          = 'regexp:(cdqe|cqo|(cmp|lod|mov|sto)sq|cmpxchg16b|mov(ntq|sxd)|scasq|swapgs|sys(call|ret))|(CDQE|CQO|(CMP|LOD|MOV|STO)SQ|CMPXCHG16[Bb]|MOV(NTQ|SXD)|SCASQ|SWAPGS|SYS(CALL|RET))'
 
-        // FPU instructions
-        INS_FPU_DATA_TRANS  = 'regexp:(fcmov(n?([beu]|be)))|(f(i?(ld|stp?)|b(ld|stp)|xch))'                                                             // FPU Data Transfer
-        INS_FPU_BASIC_ARITH = 'regexp:(f((add|div|mul|sub)p?|i(add|div|mul|sub)|(div|sub)rp?|i(div|sub)r))|(f(prem1?|abs|chs|rndint|scale|sqrt|xtract))'// FPU Basic Arithmetic
-        INS_FPU_COMPARISON  = 'regexp:(f(u?com[ip]?p?|icomp?|tst|xam))'                                                                                 // FPU Comparison
-        INS_FPU_TRANSCEND   = 'regexp:(f(sin|cos|sincos|pa?tan|2xm1|yl2x(p1)?))'                                                                        // FPU Transcendental
-        INS_FPU_LOAD        = 'regexp:(fld(1|z|pi|l2[et]|l[ng]2))'                                                                                      // FPU Load
-        INS_FPU_CONTROL     = 'regexp:(f((inc|dec)stp|free|n?(init|clex|st[cs]w|stenv|save)|ld(cw|env)|rstor|nop)|f?wait)'                              // FPU Control Management
-        INS_FPU_STATE       = 'regexp:(fx(save|rstor)(64)?)'                                                                                            // FPU State Management
+        //// FPU instructions
+        //INS_FPU_DATA_TRANS  = 'regexp:((fcmov(n?([beu]|be)))|(f(i?(ld|stp?)|b(ld|stp)|xch)))|((FCMOV(N?([BEU]|BE)))|(F(I?(LD|STP?)|B(LD|STP)|XCH)))'    // FPU Data Transfer
+        //INS_FPU_BASIC_ARITH = 'regexp:((f((add|div|mul|sub)p?|i(add|div|mul|sub)|(div|sub)rp?|i(div|sub)r))|(f(prem1?|abs|chs|rndint|scale|sqrt|xtract)))|((F((ADD|DIV|MUL|SUB)P?|I(ADD|DIV|MUL|SUB)|(DIV|SUB)RP?|I(DIV|SUB)R))|(F(PREML?|ABS|CHS|RNDINT|SCALE|SQRT|XTRACT)))'// FPU Basic Arithmetic
+        //INS_FPU_COMPARISON  = 'regexp:(f(u?com[ip]?p?|icomp?|tst|xam))|(F(U?COM[IP]?P?|ICOMP?|TST|XAM))'                                                // FPU Comparison
+        //INS_FPU_TRANSCEND   = 'regexp:(f(sin|cos|sincos|pa?tan|2xm1|yl2x(p1)?))|(F(SIN|COS|SINCOS|PA?TAN|2XML|YL2X(PL)?))'                              // FPU Transcendental
+        //INS_FPU_LOAD        = 'regexp:(fld(1|z|pi|l2[et]|l[ng]2))|(FLD(L|Z|PI|L2[ET]|L[NG]2))'                                                          // FPU Load
+        //INS_FPU_CONTROL     = 'regexp:(f((inc|dec)stp|free|n?(init|clex|st[cs]w|stenv|save)|ld(cw|env)|rstor|nop)|f?wait)|(F((INC|DEC)STP|FREE|N?(INIT|CLEX|ST[CS]W|STENV|SAVE)|LD(CW|ENV)|RSTOR|NOP)|F?WAIT)'// FPU Control Management
+        //INS_FPU_STATE       = 'regexp:(fx(save|rstor)(64)?)|(FX(SAVE|RSTOR)(64)?)'                                                                      // FPU State Management
 
-        // MMX instructions
-        INS_MMX_DATA_TRANS  = 'regexp:(mov[dq])'
-        INS_MMX_CONVERSION  = 'regexp:(pack(ssdw|[su]swb)|punpck[hl](bw|dq|wd))'
-        INS_MMX_ARITH       = 'regexp:(p(((add|sub)(d|(u?s)?[bw]))|maddwd|mul[lh]w))'
-        INS_MMX_COMPARISON  = 'regexp:(pcmp((eq|gt)[bdw]))'
-        INS_MMX_LOGICAL     = 'regexp:(pandn?|px?or)'
-        INS_MMX_ROTATE      = 'regexp:(ps([rl]l[dwq]|raw|rad))'
-        INS_MMX_STATE       = 'regexp:(emms)'
+        //// MMX instructions
+        //INS_MMX_DATA_TRANS  = 'regexp:(mov[dq])|(MOV[DQ])'
+        //INS_MMX_CONVERSION  = 'regexp:(pack(ssdw|[su]swb)|punpck[hl](bw|dq|wd))|(PACK(SSDW|[SU]SWB)|PUNPCK[HL](BW|DQ|WD))'
+        //INS_MMX_ARITH       = 'regexp:(p(((add|sub)(d|(u?s)?[bw]))|maddwd|mul[lh]w))|(P(((ADD|SUB)(D|(U?S)?[BW]))|MADDWD|MUL[LH]W))'
+        //INS_MMX_COMPARISON  = 'regexp:(pcmp((eq|gt)[bdw]))|(PCMP((EQ|GT)[BDW]))'
+        //INS_MMX_LOGICAL     = 'regexp:(pandn?|px?or)|(PANDN?|PX?OR)'
+        //INS_MMX_ROTATE      = 'regexp:(ps([rl]l[dwq]|raw|rad))|(PS([RL]L[DWQ]|RAW|RAD))'
+        //INS_MMX_STATE       = 'regexp:(emms)|(EMMS)'
 
-        // SSE instructions
-        INS_SSE_DATA_TRANS  = 'regexp:(mov(([ahlu]|hl|lh|msk)ps|ss))'
-        INS_SSE_ARITH       = 'regexp:((add|div|max|min|mul|rcp|r?sqrt|sub)[ps]s)'
-        INS_SSE_COMPARISON  = 'regexp:(cmp[ps]s|u?comiss)'
-        INS_SSE_LOGICAL     = 'regexp:((andn?|x?or)ps)'
-        INS_SSE_OTHER       = 'regexp:((shuf|unpck[hl])ps)'
-        INS_SSE_CONVERSION  = 'regexp:(cvt(pi2ps|si2ss|ps2pi|tps2pi|ss2si|tss2si))'
-        INS_SSE_STATE       = 'regexp:((ld|st)mxcsr)'
-        INS_SSE_SIMD_INT    = 'regexp:(p(avg[bw]|extrw|insrw|(max|min)(sw|ub)|sadbw|shufw|mulhuw|movmskb))'
-        INS_SSE_CACHE_CTRL  = 'regexp:(maskmovq|movntps|sfence)'
-        INS_SSE_PREFETCH    = 'regexp:(prefetch(nta|t[0-2]|w(t1)?))'
+        //// SSE instructions
+        //INS_SSE_DATA_TRANS  = 'regexp:(mov(([ahlu]|hl|lh|msk)ps|ss))|(MOV(([AHLU]|HL|LH|MSK)PS|SS))'
+        //INS_SSE_ARITH       = 'regexp:((add|div|max|min|mul|rcp|r?sqrt|sub)[ps]s)|((ADD|DIV|MAX|MIN|MUL|RCP|R?SQRT|SUB)[PS]S)'
+        //INS_SSE_COMPARISON  = 'regexp:(cmp[ps]s|u?comiss)|(CMP[PS]S|U?COMISS)'
+        //INS_SSE_LOGICAL     = 'regexp:((andn?|x?or)ps)|((ANDN?|X?OR)PS)'
+        //INS_SSE_OTHER       = 'regexp:((shuf|unpck[hl])ps)|((SHUF|UNPCK[HL])PS)'
+        //INS_SSE_CONVERSION  = 'regexp:(cvt(pi2ps|si2ss|ps2pi|tps2pi|ss2si|tss2si))|(CVT(PI2PS|SI2SS|PS2PI|TPS2PI|SS2SI|TSS2SI))'
+        //INS_SSE_STATE       = 'regexp:((ld|st)mxcsr)|((LD|ST)MXCSR)'
+        //INS_SSE_SIMD_INT    = 'regexp:(p(avg[bw]|extrw|insrw|(max|min)(sw|ub)|sadbw|shufw|mulhuw|movmskb))|(P(AVG[BW]|EXTRW|INSRW|(MAX|MIN)(SW|UB)|SADBW|SHUFW|MULHUW|MOVMSKB))'
+        //INS_SSE_CACHE_CTRL  = 'regexp:(maskmovq|movntps|sfence)|(MASKMOVQ|MOVNTPS|SFENCE)'
+        //INS_SSE_PREFETCH    = 'regexp:(prefetch(nta|t[0-2]|w(t1)?))|(PREFECTH(NTA|T[0-2]|W(TL)?))'
 
-        // SSE2 instructions
-        INS_SSE2_DATA_TRANS = 'regexp:(mov([auhl]|msk)pd)'
-        INS_SSE2_ARITH      = 'regexp:((add|div|max|min|mul|sub|sqrt)[ps]d)'
-        INS_SSE2_LOGICAL    = 'regexp:((andn?|x?or)pd)'
-        INS_SSE2_COMPARISON = 'regexp:((cmpp|u?comis)d)'
-        INS_SSE2_OTHER      = 'regexp:((shuf|unpck[hl])pd)'
-        INS_SSE2_CONVERSION = 'regexp:(cvt(dq2pd|pi2pd|ps2pd|pd2ps|si2sd|sd2ss|ss2sd|t?(pd2dq|pd2pi|sd2si)))|(cvt(dq2ps|ps2dq|tps2dq))'
-        INS_SSE2_SIMD_INT   = 'regexp:(mov(dq[au]|q2dq|dq2q))|(p((add|sub|(s[lr]l|mulu|unpck[hl]q)d)q|shuf(d|[hl]w)))'
-        INS_SSE2_CACHE_CTRL = 'regexp:(clflush|[lm]fence|pause|maskmovdqu|movnt(dq|i|pd))'
+        //// SSE2 instructions
+        //INS_SSE2_DATA_TRANS = 'regexp:(mov([auhl]|msk)pd)|(MOV([AUHL]|MSK)PD)'
+        //INS_SSE2_ARITH      = 'regexp:((add|div|max|min|mul|sub|sqrt)[ps]d)|((ADD|DIV|MAX|MIN|MUL|SUB|SQRT)[PS]D)'
+        //INS_SSE2_LOGICAL    = 'regexp:((andn?|x?or)pd)|((ANDN?|X?OR)PD)'
+        //INS_SSE2_COMPARISON = 'regexp:((cmpp|u?comis)d)|((CMPP|U?COMIS)D)'
+        //INS_SSE2_OTHER      = 'regexp:((shuf|unpck[hl])pd)|((SHUF|UNPCK[HL])PD)'
+        //INS_SSE2_CONVERSION = 'regexp:((cvt(dq2pd|pi2pd|ps2pd|pd2ps|si2sd|sd2ss|ss2sd|t?(pd2dq|pd2pi|sd2si)))|(cvt(dq2ps|ps2dq|tps2dq)))|((CVT(DQ2PD|PI2PD|PS2PD|PD2PS|SI2SD|SD2SS|SS2SD|T?(PD2DQ|PD2PI|SD2SI)))|(CVT(DQ2PS|PS2DQ|TPS2DQ)))'
+        //INS_SSE2_SIMD_INT   = 'regexp:((mov(dq[au]|q2dq|dq2q))|(p((add|sub|(s[lr]l|mulu|unpck[hl]q)d)q|shuf(d|[hl]w))))|((MOV(DQ[AU]|Q2DQ|DQ2Q))|(P((ADD|SUB|(S[LR]L|MULU|UNPCK[HL]Q)D)Q|SHUF(D|[HL]W))))'
+        //INS_SSE2_CACHE_CTRL = 'regexp:(clflush|[lm]fence|pause|maskmovdqu|movnt(dq|i|pd))|(CLFLUSH|[LM]FENCE|PAUSE|MASKMOVDQU|MOVNT(DQ|I|PD))'
 
-        // SSE3 instructions
-        INS_SSE3_GENERAL    = 'regexp:(fisttp|lddqu|(addsub|h(add|sub))p[sd]|mov(sh|sl|d)dup|monitor|mwait)'
-        INS_SSE3_ARITH      = 'regexp:(ph(add|sub)(s?w|d))'
-        INS_SSE3_OTHER      = 'regexp:(p((abs|sign)[bdw]|maddubsw|mulhrsw|shufb|alignr))'
+        //// SSE3 instructions
+        //INS_SSE3_GENERAL    = 'regexp:(fisttp|lddqu|(addsub|h(add|sub))p[sd]|mov(sh|sl|d)dup|monitor|mwait)|(FISTTP|LDDQU|(ADDSUB|H(ADD|SUB))P[SD]|MOV(SH|SL|D)DUP|MONITOR|MWAIT)'
+        //INS_SSE3_ARITH      = 'regexp:(ph(add|sub)(s?w|d))|(PH(ADD|SUB)(S?W|D))'
+        //INS_SSE3_OTHER      = 'regexp:(p((abs|sign)[bdw]|maddubsw|mulhrsw|shufb|alignr))|(P((ABS|SIGN)[BDW]|MADDUBSW|MULHRSW|SHUFB|ALIGNR))'
 
-        // SSE4 instructions
-        INS_SSE4_ARITH      = 'regexp:(pmul(ld|dq)|dpp[ds])'
-        INS_SSE4_DATA_TRANS = 'regexp:(movntdqa)'
-        INS_SSE4_BLEND      = 'regexp:(blendv?p[ds]|pblend(vb|w))'
-        INS_SSE4_PACKED_INT = 'regexp:(p(min|max)(u[dw]|s[bd]))'
-        INS_SSE4_PACKED_FP  = 'regexp:(round[ps][sd])'
-        INS_SSE4_INS_EXT    = 'regexp:((extract|insert)ps|p((ins|ext)(r[bdq])))'
-        INS_SSE4_CONVERSION = 'regexp:(pmov([sz]x(b[dqw]|dq|wd|wq)))'
-        INS_SSE4_OTHER      = 'regexp:(mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq))'
+        //// SSE4 instructions
+        //INS_SSE4_ARITH      = 'regexp:(pmul(ld|dq)|dpp[ds])|(PMUL(LD|DQ)|DPP[DS])'
+        //INS_SSE4_DATA_TRANS = 'regexp:(movntdqa)|(MOVNTDQA)'
+        //INS_SSE4_BLEND      = 'regexp:(blendv?p[ds]|pblend(vb|w))|(BLENDV?P[DS]|PBLEND(VB|W))'
+        //INS_SSE4_PACKED_INT = 'regexp:(p(min|max)(u[dw]|s[bd]))|(P(MIN|MAX)(U[DW]|S[BD]))'
+        //INS_SSE4_PACKED_FP  = 'regexp:(round[ps][sd])|(ROUND[PS][SD])'
+        //INS_SSE4_INS_EXT    = 'regexp:((extract|insert)ps|p((ins|ext)(r[bdq])))|((EXTRACT|INSERT)PS|P((INS|EXT)(R[BDQ])))'
+        //INS_SSE4_CONVERSION = 'regexp:(pmov([sz]x(b[dqw]|dq|wd|wq)))|(PMOV([SZ]X(B[DQW]|DQ|WD|WQ)))'
+        //INS_SSE4_OTHER      = 'regexp:((mpsadbw|phminposuw|ptest|pcmpeqq|packusdw)|(pcmp([ei]str[im]|gtq)))|((MPSADBW|PHMINPOSUW|PTEST|PCMPEQQ|PACKUSDW)|(PCMP([EI]STR[IM]|GTQ)))'
 
-        // AVX instructons
-        INS_AVX_GENERAL     = 'regexp:(v((test|permil|maskmov)p[ds]|zero(all|upper)|(perm2|insert|extract|broadcast)f128|broadcasts[ds]))'
-        INS_AVX_AES         = 'regexp:(vaes((dec|enc)(last)?|imc|keygenassist)|vpclmulqdq)'
-        INS_AVX_COMPARISON  = 'regexp:(v((cmp[ps]|u?comis)[ds]|pcmp([ei]str[im]|(eq|gt)[bdqw])))'
-        INS_AVX_CONVERSION  = 'regexp:((v(cvt(dq2pd|dq2ps|pd2ps|ps2pd|sd2ss|si2sd|si2ss|ss2sd|t?(pd2dq|ps2dq|sd2si|ss2si))))|(vcvt(ph2ps|ps2ph)))'
-        INS_AVX_LOGICAL     = 'regexp:((v((andn?|x?or)p[ds]))|(vp(andn?|x?or)))'
-        INS_AVX_MOV         = 'regexp:((v(mov(([ahl]|msk|nt|u)p[ds]|(hl|lh)ps|s([ds]|[hl]dup)|q)))|(vpmov(mskb|[sz]x(b[dqw]|w[dq]|dq)))|(vmov(d(dup|qa|qu)?)))'
-        INS_AVX_ARITH       = 'regexp:((v((add|div|mul|sub|max|min|round|sqrt)[ps][ds]|(addsub|dp)p[ds]|(rcp|rsqrt)[ps]s))|(vh((add|sub)p[ds])|vph((add|sub)([dw]|sw)|minposuw)))'
-        INS_AVX_PACKED      = 'regexp:((v(pack[su]s(dw|wb)|punpck[hl](bw|dq|wd|qdq)|unpck[hl]p[ds]))|(vp(shuf([bd]|[hl]w))|vshufp[ds])|(vp((abs|sign|(max|min)[su])[bdw]|(add|sub)([bdqw]|u?s[bw])|avg[bw]|extr[bdqw]|madd(wd|ubsw)|mul(hu?w|hrsw|l[dw]|u?dq)|sadbw)))'
-        INS_AVX_BLEND       = 'regexp:((vpblend(vb|w))|(vblendv?p[ds]))'
-        INS_AVX_CACHE       = 'regexp:(v(maskmovdqu|movntdqa?))'
-        INS_AVX_FMA3        = 'regexp:(vfn?m((add|sub)(132|213|231)[ps][ds])|vfm((addsub|subadd)(132|213|231)p[ds]))'
-        INS_AVX_OTHER       = 'regexp:((vp(test|alignr))|(v((extract|insert)ps|lddqu|(ld|st)mxcsr|mpsadbw)))'
+        //// AVX instructons
+        //INS_AVX_GENERAL     = 'regexp:(v((test|permil|maskmov)p[ds]|zero(all|upper)|(perm2|insert|extract|broadcast)f128|broadcasts[ds]))|(V((TEST|PERMIL|MASKMOV)P[DS]|ZERO(ALL|UPPER)|(PERM2|INSERT|EXTRACT|BROADCAST)F128|BROADCASTS[DS]))'
+        //INS_AVX_AES         = 'regexp:(vaes((dec|enc)(last)?|imc|keygenassist)|vpclmulqdq)|(VAES((DEC|ENC)(LAST)?|IMC|KEYGENASSIST)|VPCLMULQDQ)'
+        //INS_AVX_COMPARISON  = 'regexp:(v((cmp[ps]|u?comis)[ds]|pcmp([ei]str[im]|(eq|gt)[bdqw])))|(V((CMP[PS]|U?COMIS)[DS]|PCMP([EI]STR[IM]|(EQ|GT)[BDQW])))'
+        //INS_AVX_CONVERSION  = 'regexp:((v(cvt(dq2pd|dq2ps|pd2ps|ps2pd|sd2ss|si2sd|si2ss|ss2sd|t?(pd2dq|ps2dq|sd2si|ss2si))))|(vcvt(ph2ps|ps2ph)))|((V(CVT(DQ2PD|DQ2PS|PD2PS|PS2PD|SD2SS|SI2SD|SI2SS|SS2SD|T?(PD2DQ|PS2DQ|SD2SI|SS2SI))))|(VCVT(PH2PS|PS2PH)))'
+        //INS_AVX_LOGICAL     = 'regexp:((v((andn?|x?or)p[ds]))|(vp(andn?|x?or)))|((V((ANDN?|X?OR)P[DS]))|(VP(ANDN?|X?OR)))'
+        //INS_AVX_MOV         = 'regexp:((v(mov(([ahl]|msk|nt|u)p[ds]|(hl|lh)ps|s([ds]|[hl]dup)|q)))|(vpmov(mskb|[sz]x(b[dqw]|w[dq]|dq)))|(vmov(d(dup|qa|qu)?)))|((V(MOV(([AHL]|MSK|NT|U)P[DS]|(HL|LH)PS|S([DS]|[HL]DUP)|Q)))|(VPMOV(MSKB|[SZ]X(B[DQW]|W[DQ]|DQ)))|(VMOV(D(DUP|QA|QU)?)))'
+        //INS_AVX_ARITH       = 'regexp:((v((add|div|mul|sub|max|min|round|sqrt)[ps][ds]|(addsub|dp)p[ds]|(rcp|rsqrt)[ps]s))|(vh((add|sub)p[ds])|vph((add|sub)([dw]|sw)|minposuw)))|((V((ADD|DIV|MUL|SUB|MAX|MIN|ROUND|SQRT)[PS][DS]|(ADDSUB|DP)P[DS]|(RCP|RSQRT)[PS]S))|(VH((ADD|SUB)P[DS])|VPH((ADD|SUB)([DW]|SW)|MINPOSUW)))'
+        //INS_AVX_PACKED      = 'regexp:((v(pack[su]s(dw|wb)|punpck[hl](bw|dq|wd|qdq)|unpck[hl]p[ds]))|(vp(shuf([bd]|[hl]w))|vshufp[ds])|(vp((abs|sign|(max|min)[su])[bdw]|(add|sub)([bdqw]|u?s[bw])|avg[bw]|extr[bdqw]|madd(wd|ubsw)|mul(hu?w|hrsw|l[dw]|u?dq)|sadbw)))|((V(PACK[SU]S(DW|WB)|PUNPCK[HL](BW|DQ|WD|QDQ)|UNPCK[HL]P[DS]))|(VP(SHUF([BD]|[HL]W))|VSHUFP[DS])|(VP((ABS|SIGN|(MAX|MIN)[SU])[BDW]|(ADD|SUB)([BDQW]|U?S[BW])|AVG[BW]|EXTR[BDQW]|MADD(WD|UBSW)|MUL(HU?W|HRSW|L[DW]|U?DQ)|SADBW)))'
+        //INS_AVX_BLEND       = 'regexp:((vpblend(vb|w))|(vblendv?p[ds]))|((VPBLEND(VB|W))|(VBLENDV?P[DS]))'
+        //INS_AVX_CACHE       = 'regexp:(v(maskmovdqu|movntdqa?))|(V(MASKMOVDQU|MOVNTDQA?))'
+        //INS_AVX_FMA3        = 'regexp:(vfn?m((add|sub)(132|213|231)[ps][ds])|vfm((addsub|subadd)(132|213|231)p[ds]))|(VFN?M((ADD|SUB)(132|213|231)[PS][DS])|VFM((ADDSUB|SUBADD)(132|213|231)P[DS]))'
+        //INS_AVX_OTHER       = 'regexp:((vp(test|alignr))|(v((extract|insert)ps|lddqu|(ld|st)mxcsr|mpsadbw)))|((VP(TEST|ALIGNR))|(V((EXTRACT|INSERT)PS|LDDQU|(LD|ST)MXCSR|MPSADBW)))'
 
-        // AVX2 instructions
-        INS_AVX2_SIMD       = 'regexp:(v((extract|insert|perm2)i128|pmaskmov[dq]|perm([dsq]|p[sd])))'
-        INS_AVX2_BROADCAST  = 'regexp:(vpbroadcast[qwbd]|vbroadcast(sd|ss)|vbroadcasti128)'
-        INS_AVX2_BLEND      = 'regexp:(vp(blendd|s[lr]lv[dq]|sravd))'
-        INS_AVX2_GATHER     = 'regexp:(vp?gather[dq][dq]|vgather([dq]|dq)p[ds])'
+        //// AVX2 instructions
+        //INS_AVX2_SIMD       = 'regexp:(v((extract|insert|perm2)i128|pmaskmov[dq]|perm([dsq]|p[sd])))|(V((EXTRACT|INSERT|PERM2)I128|PMASKMOV[DQ]|PERM([DSQ]|P[SD])))'
+        //INS_AVX2_BROADCAST  = 'regexp:(vpbroadcast[qwbd]|vbroadcast(sd|ss)|vbroadcasti128)|(VPBROADCAST[QWBD]|VBROADCAST(SD|SS)|VBROADCASTI128)'
+        //INS_AVX2_BLEND      = 'regexp:(vp(blendd|s[lr]lv[dq]|sravd))|(VP(BLENDD|S[LR]LV[DQ]|SRAVD))'
+        //INS_AVX2_GATHER     = 'regexp:(vp?gather[dq][dq]|vgather([dq]|dq)p[ds])|(VP?GATHER[DQ][DQ]|VGATHER([DQ]|DQ)P[DS])'
 
-        // AVX512 instructions
-        INS_AVX512_BLEND    = 'regexp:(vblendm(pd|ps)|vpblendm[bdqw])'
-        INS_AVX512_BROADCAST= 'regexp:(vbroadcast[fi](32x[248]|64x[24])|vpbroadcastm(b2q|w2d))'
-        INS_AVX512_MOV      = 'regexp:(vmovdq(a(32|64)|u(8|16|32|64))|v(extract|insert)[fi](32x[48]|64x[24])|vshuf[fi](32x4|64x2))'
-        INS_AVX512_COMPRESS = 'regexp:(v(compress|expand)p[ds]|vp(compress|expand|conflict)[dq])'
-        INS_AVX512_CONV     = 'regexp:(vcvt(t?p[sd]2(udq|u?qq)|(udq|u?qq)2p[ds]|t?s[ds]2usi|usi2s[ds]))'
-        INS_AVX512_MATH     = 'regexp:((v(fixupimm|fpclass|get(exp|mant)|range|(rcp|rsqrt)(14|28)|reduce|rndscale|scalef)([ps][ds]))|(v(exp2p[ds]|(scatter|(gather|scatter)pf[01])[dq]p[ds])))'
-        INS_AVX512_LOGICAL  = 'regexp:(vp(andn?|x?or)[dq])'
-        INS_AVX512_COMPARE  = 'regexp:(vpcmpu?[dqw])'
-        INS_AVX512_PACKED   = 'regexp:((vp(absq|(lzcnt|ternlog)[dq]|madd52[lh]uq|(max|min)[su]q|mullq))|(vpmov(m2[bdqw]|[bdqw]2m|(u?s)?([qd][bw]|qd|wb)))|(vp(ro[rl]v?[dq]|scatter[dq][dq]))|(vptestn?m[bdqw]))'
-        INS_AVX512_PERM     = 'regexp:(vperm([bdw]|[it]2([bdwq]|p[ds])))'
-        INS_AVX512_OTHER    = 'regexp:(valign[dq]|vdbpsadbw|vpmultishiftqb|vpsrav[dqw])'
-
+        //// AVX512 instructions
+        //INS_AVX512_BLEND    = 'regexp:(vblendm(pd|ps)|vpblendm[bdqw])|(VBLENDM(PD|PS)|VPBLENDM[BDQW])'
+        //INS_AVX512_BROADCAST= 'regexp:(vbroadcast[fi](32x[248]|64x[24])|vpbroadcastm(b2q|w2d))|(VBROADCAST[FI](32X[248]|64X[24])|VPBROADCASTM(B2Q|W2D))'
+        //INS_AVX512_MOV      = 'regexp:(vmovdq(a(32|64)|u(8|16|32|64))|v(extract|insert)[fi](32x[48]|64x[24])|vshuf[fi](32x4|64x2))|(VMOVDQ(A(32|64)|U(8|16|32|64))|V(EXTRACT|INSERT)[FI](32X[48]|64X[24])|VSHUF[FI](32X4|64X2))'
+        //INS_AVX512_COMPRESS = 'regexp:(v(compress|expand)p[ds]|vp(compress|expand|conflict)[dq])|(V(COMPRESS|EXPAND)P[DS]|VP(COMPRESS|EXPAND|CONFLICT)[DQ])'
+        //INS_AVX512_CONV     = 'regexp:(vcvt(t?p[sd]2(udq|u?qq)|(udq|u?qq)2p[ds]|t?s[ds]2usi|usi2s[ds]))|(VCVT(T?P[SD]2(UDQ|U?QQ)|(UDQ|U?QQ)2P[DS]|T?S[DS]2USI|USI2S[DS]))'
+        //INS_AVX512_MATH     = 'regexp:((v(fixupimm|fpclass|get(exp|mant)|range|(rcp|rsqrt)(14|28)|reduce|rndscale|scalef)([ps][ds]))|(v(exp2p[ds]|(scatter|(gather|scatter)pf[01])[dq]p[ds])))|((V(FIXUPIMM|FPCLASS|GET(EXP|MANT)|RANGE|(RCP|RSQRT)(14|28)|REDUCE|RNDSCALE|SCALEF)([PS][DS]))|(V(EXP2P[DS]|(SCATTER|(GATHER|SCATTER)PF[01])[DQ]P[DS])))'
+        //INS_AVX512_LOGICAL  = 'regexp:(vp(andn?|x?or)[dq])|(VP(ANDN?|X?OR)[DQ])'
+        //INS_AVX512_COMPARE  = 'regexp:(vpcmpu?[dqw])|(VPCMPU?[DQW])'
+        //INS_AVX512_PACKED   = 'regexp:((vp(absq|(lzcnt|ternlog)[dq]|madd52[lh]uq|(max|min)[su]q|mullq))|(vpmov(m2[bdqw]|[bdqw]2m|(u?s)?([qd][bw]|qd|wb)))|(vp(ro[rl]v?[dq]|scatter[dq][dq]))|(vptestn?m[bdqw]))|((VP(ABSQ|(LZCNT|TERNLOG)[DQ]|MADD52[LH]UQ|(MAX|MIN)[SU]Q|MULLQ))|(VPMOV(M2[BDQW]|[BDQW]2M|(U?S)?([QD][BW]|QD|WB)))|(VP(RO[RL]V?[DQ]|SCATTER[DQ][DQ]))|(VPTESTN?M[BDQW]))'
+        //INS_AVX512_PERM     = 'regexp:(vperm([bdw]|[it]2([bdwq]|p[ds])))|(VPERM([BDW]|[IT]2([BDWQ]|P[DS])))'
+        //INS_AVX512_OTHER    = 'regexp:(valign[dq]|vdbpsadbw|vpmultishiftqb|vpsrav[dqw])|(VALIGN[DQ]|VDBPSADBW|VPMULTISHIFTQB|VPSRAV[DQW])'
 
         // Instruction operation prefixes
-        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock)'
+        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock)|((REP(N?[EZ])|REP)|LOCK)'
 
         // Instructions
         GENERAL_OP          = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}'
@@ -223,10 +215,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         AVX2_OP             = 'regexp:{INS_AVX2_SIMD}|{INS_AVX2_BROADCAST}|{INS_AVX2_BLEND}|{INS_AVX2_GATHER}'
         AVX512_OP           = 'regexp:{INS_AVX512_BLEND}|{INS_AVX512_BROADCAST}|{INS_AVX512_MOV}|{INS_AVX512_COMPRESS}|{INS_AVX512_CONV}|{INS_AVX512_MATH}|{INS_AVX512_LOGICAL}|{INS_AVX512_COMPARE}|{INS_AVX512_PACKED}|{INS_AVX512_PERM}|{INS_AVX512_OTHER}'
 
-
         // All kinds of registers
-        REGISTER            = 'regexp:(%)?(([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[0-8])|(d[rb][0-367]|dr([89]|1[0-5]))|(tr[3-7])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|(efer|tpr|syscfg)|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr)|(zmm([12]?[0-9]|30|31)))'
-        SEGMENT_REGISTER    = 'regexp:([c-gs]s)'
+        REGISTER            = 'regexp:(%)?((([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[0-8])|(d[rb][0-367]|dr([89]|1[0-5]))|(tr[3-7])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|(efer|tpr|syscfg)|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr)|(zmm([12]?[0-9]|30|31))))|((([C-GS]S):)?(([ABCD][HL])|([ER]?[ABCD]X)|([ER]?[SB]P)|([ER]?[SD]I|DIL|SIL|BPL|SPL)|([ER]?IP)|(R(8|9|1[0-5])[BDLW]?)|([ER]?FLAGS)|(CR[0-8])|(D[RB][0-367]|DR([89]|1[0-5]))|(TR[3-7])|(([GIL]DT)R?|TR)|(BND([0-3]|CFG[SU]|STATUS))|(EFER|TPR|SYSCFG)|((MM|ST|FPR)[0-7])|([XY]MM([0-9]|1[0-5])|MXCSR)|(ZMM([12]?[0-9]|30|31))))'
+        SEGMENT_REGISTER    = 'regexp:([c-gs]s)|([C-GS]S)'
         SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
 
         // Make last!
@@ -274,8 +265,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 NASMFile ::= Element*
-private Element ::= COMMENT | SEMICOLON | COMMENT CRLF | CRLF
-                | Section
+private Element ::= Section
                 | Segment
                 | Preprocessor
                 | Directive
@@ -285,50 +275,62 @@ private Element ::= COMMENT | SEMICOLON | COMMENT CRLF | CRLF
                 | Structure
                 | Data
                 | Instruction
-                | ID CRLF
+                | COMMENT
+                | CRLF
+                | ID
                 ;
-
 private Section ::= (((SQUARE_L SECTION SQUARE_R) | SECTION) CRLF*)
 private Segment ::= (((SQUARE_L SEGMENT SQUARE_R) | SEGMENT) CRLF*)
 
-Preprocessor ::= Include | Define | Assign | Macro | Strlen | Error | Conditional | (PREPROCESSOR_OP Identifier Expr)
+Preprocessor ::= Include
+                | Define
+                | Assign
+                | Macro
+                | LabelDefMacro
+                | MacroCall
+                | Strlen
+                | Error
+                | Conditional
+                | (PREPROCESSOR_OP Identifier Expr)
+                ;
 Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG Identifier ROUND_L (Identifier (SEPARATOR Identifier)*)? ROUND_R Expr CRLF*)
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*) {methods=[getDefineIdentifier getDefineIdentifierString]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
-Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* (MacroLabel|Data|Instruction|Preprocessor|ID CRLF*)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifier]}
+Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|ID) CRLF*)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifierString]}
 MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|Data)? CRLF*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 Strlen ::= STRLEN_TAG Identifier (STRING|Identifier) CRLF*
 Error ::= ERROR_TAG CRLF*
-Conditional ::= (IF_TAG Condition CRLF* (Preprocessor|Constant|Directive|Label|Structure|Data|Instruction)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Preprocessor|Constant|Directive|Label|Structure|Data|Instruction)*)* ENDIF_TAG CRLF*)
+Conditional ::= (IF_TAG Condition CRLF* (Element)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Element)*)* ENDIF_TAG CRLF*)
             | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
 
-Label ::= (((LBL_DEF (Instruction|Data|Structure)?) | (LabelDefMacro (Instruction|Data|Structure)?)) CRLF*) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
-LabelDefMacro ::= (MacroCall COLON CRLF*)
-Constant ::= (Identifier EQU ((MINUS|PLUS)? NumericExpr) CRLF*) {methods=[getConstantIdentifierString]}
+Label ::= (((LBL_DEF (Instruction|MacroCall|Data|Structure)? CRLF*)|(LabelDefMacro (Instruction|MacroCall|Data|Structure)? CRLF*))) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
+LabelDefMacro ::= ((Identifier MacroParenthesis) COLON CRLF*)
+Constant ::= (ID EQU ((MINUS|PLUS|BITWISE_NOT)? NumericExpr)* CRLF*) {methods=[getConstantIdentifierString]}
 
 //LabelData ::= (LBL_DATA DataValue CRLF*) {methods=[getLabelIdentifierString]}
-Data ::= (Identifier? DATA_OP DataValue)
-private DataValue ::= ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier) (SEPARATOR ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier)))* COMMENT?)
+Data ::= (ID? DATA_OP DataValue CRLF*)
+private DataValue ::= ((MINUS|PLUS|BITWISE_NOT)? (NumericExpr|STRING|LabelIdentifier) (SEPARATOR ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier)))*)
 
 Structure ::= ((Struc|IStruc) CRLF*)
-Struc ::= (STRUC_TAG Identifier CRLF* (((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier)) CRLF*)|((LabelIdentifier|LBL_DEF) CRLF*))* ENDSTRUC_TAG)
+Struc ::= (STRUC_TAG Identifier CRLF* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*)* ENDSTRUC_TAG)
 IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
 //LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}
-Instruction ::= (((OP_PREFIX? Mnemonic (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?)|Directive|MacroCall) CRLF*)
+Instruction ::= ((OP_PREFIX? (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?) CRLF*)
 private Mnemonic ::= (GENERAL_OP|SYSTEM_OP|VIRTUALIZATION_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP|AVX_OP|AVX2_OP|AVX512_OP)
 
-MapOption ::= SQUARE_L 'map' ('all'|'brief'|'sections'|'segments'|'symbols')? MAP_FILE SQUARE_R
+MapOption ::= SQUARE_L ('map'|'MAP') (('all'|'ALL')|('brief'|'BRIEF')|('sections'|'SECTIONS')|('segments'|'SEGMENTS')|('symbols'|'SYMBOLS'))? MAP_FILE SQUARE_R
 
 Directive ::= (DirectiveDecl|DirectiveDeclBrackets|MapOption) CRLF*
 private DirectiveDecl ::= DIRECTIVE_OP DirectiveArg*
 private DirectiveDeclBrackets ::= SQUARE_L DirectiveDecl SQUARE_R
 DirectiveArg ::= ((MINUS|PLUS)? (MacroCall|NumericLiteral|Address|SegmentAddress|Identifier))
 
+// for eventual MASM support
 EndDirective ::= (END_DIRECTIVE_OP) { extends=Expr }
 
 
@@ -398,7 +400,7 @@ ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
 
 NumericLiteral ::= ((SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)?)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
-Identifier ::= (ID) { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getReferences getPresentation] }
+Identifier ::= ID { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getReferences getPresentation] }
 LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
 Reg ::= REGISTER { extends=Expr }
 Seg ::= SEGMENT_REGISTER { extends=Expr }
@@ -409,7 +411,7 @@ SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID
                                 (LabelDefMacro (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))) { extends=Expr }
 Address ::= ((SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2) { extends=Expr }
 private AddressInternal ::= (SQUARE_L MINUS? Expr SQUARE_R) { pin(".*")=1 }
-MacroCall ::= ((SIZE_TYPE? (Identifier MacroParenthesis))|(SIZE_TYPE? (Identifier NumericExpr))) { extends=Expr }
-private MacroParenthesis ::= (ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R) { pin(".*")=1 }
+MacroCall ::= (SIZE_TYPE? (Identifier (MacroParenthesis|(NumericLiteral|ID|COMMENT)))) { extends=Expr }
+MacroParenthesis ::= (ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R) { pin(".*")=1 }
 MacroParamReference ::= (SIZE_TYPE? MACRO_PARAM_REF) { extends=Expr }
 MacroVarReference ::= (SIZE_TYPE? MACRO_VAR_REF) { extends=Expr }

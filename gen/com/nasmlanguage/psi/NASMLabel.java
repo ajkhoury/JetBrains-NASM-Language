@@ -11,6 +11,9 @@ public interface NASMLabel extends PsiElement {
   NASMData getData();
 
   @Nullable
+  NASMExpr getExpr();
+
+  @Nullable
   NASMInstruction getInstruction();
 
   @Nullable

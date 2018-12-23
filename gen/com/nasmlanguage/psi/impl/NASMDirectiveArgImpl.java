@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMDirectiveArgImpl extends ASTWrapperPsiElement implements NASMDirectiveArg {
 
-  public NASMDirectiveArgImpl(ASTNode node) {
+  public NASMDirectiveArgImpl(@NotNull ASTNode node) {
     super(node);
   }
 

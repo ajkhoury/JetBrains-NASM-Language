@@ -7,9 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMInstruction extends PsiElement {
 
-  @Nullable
-  NASMDirective getDirective();
-
   @NotNull
   List<NASMExpr> getExprList();
 
@@ -27,6 +24,9 @@ public interface NASMInstruction extends PsiElement {
 
   @Nullable
   PsiElement getGeneralOp();
+
+  @Nullable
+  PsiElement getId();
 
   @Nullable
   PsiElement getMmxOp();

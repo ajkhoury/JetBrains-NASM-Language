@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMAssignImpl extends ASTWrapperPsiElement implements NASMAssign {
 
-  public NASMAssignImpl(ASTNode node) {
+  public NASMAssignImpl(@NotNull ASTNode node) {
     super(node);
   }
 

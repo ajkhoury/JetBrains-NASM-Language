@@ -11,6 +11,9 @@ public interface NASMMacro extends PsiElement {
   List<NASMData> getDataList();
 
   @NotNull
+  List<NASMDirective> getDirectiveList();
+
+  @NotNull
   List<NASMExpr> getExprList();
 
   @NotNull
@@ -34,6 +37,6 @@ public interface NASMMacro extends PsiElement {
   @Nullable
   PsiElement getString();
 
-  String getMacroIdentifier();
+  String getMacroIdentifierString();
 
 }

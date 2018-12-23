@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMSegImpl extends NASMExprImpl implements NASMSeg {
 
-  public NASMSegImpl(ASTNode node) {
+  public NASMSegImpl(@NotNull ASTNode node) {
     super(node);
   }
 

@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMErrorImpl extends ASTWrapperPsiElement implements NASMError {
 
-  public NASMErrorImpl(ASTNode node) {
+  public NASMErrorImpl(@NotNull ASTNode node) {
     super(node);
   }
 

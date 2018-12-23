@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
 
-  public NASMLabelImpl(ASTNode node) {
+  public NASMLabelImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -30,6 +30,12 @@ public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
   @Nullable
   public NASMData getData() {
     return findChildByClass(NASMData.class);
+  }
+
+  @Override
+  @Nullable
+  public NASMExpr getExpr() {
+    return findChildByClass(NASMExpr.class);
   }
 
   @Override

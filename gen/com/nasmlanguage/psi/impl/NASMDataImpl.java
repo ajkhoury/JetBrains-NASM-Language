@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMDataImpl extends ASTWrapperPsiElement implements NASMData {
 
-  public NASMDataImpl(ASTNode node) {
+  public NASMDataImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -24,12 +24,6 @@ public class NASMDataImpl extends ASTWrapperPsiElement implements NASMData {
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public NASMIdentifier getIdentifier() {
-    return findChildByClass(NASMIdentifier.class);
   }
 
   @Override
@@ -45,15 +39,15 @@ public class NASMDataImpl extends ASTWrapperPsiElement implements NASMData {
   }
 
   @Override
-  @Nullable
-  public PsiElement getComment() {
-    return findChildByType(COMMENT);
-  }
-
-  @Override
   @NotNull
   public PsiElement getDataOp() {
     return findNotNullChildByType(DATA_OP);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getId() {
+    return findChildByType(ID);
   }
 
 }

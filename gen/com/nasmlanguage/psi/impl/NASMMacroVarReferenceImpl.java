@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMMacroVarReferenceImpl extends NASMExprImpl implements NASMMacroVarReference {
 
-  public NASMMacroVarReferenceImpl(ASTNode node) {
+  public NASMMacroVarReferenceImpl(@NotNull ASTNode node) {
     super(node);
   }
 

@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMMinusExprImpl extends NASMExprImpl implements NASMMinusExpr {
 
-  public NASMMinusExprImpl(ASTNode node) {
+  public NASMMinusExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

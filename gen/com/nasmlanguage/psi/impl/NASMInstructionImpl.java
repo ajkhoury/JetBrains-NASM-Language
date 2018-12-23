@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMInstruction {
 
-  public NASMInstructionImpl(ASTNode node) {
+  public NASMInstructionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -24,12 +24,6 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public NASMDirective getDirective() {
-    return findChildByClass(NASMDirective.class);
   }
 
   @Override
@@ -66,6 +60,12 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
   @Nullable
   public PsiElement getGeneralOp() {
     return findChildByType(GENERAL_OP);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getId() {
+    return findChildByType(ID);
   }
 
   @Override
