@@ -33,6 +33,9 @@ public interface NASMTypes {
   IElementType LABEL = new NASMElementType("LABEL");
   IElementType LABEL_DEF_MACRO = new NASMElementType("LABEL_DEF_MACRO");
   IElementType LABEL_IDENTIFIER = new NASMElementType("LABEL_IDENTIFIER");
+  IElementType LOGICAL_AND_EXPR = new NASMElementType("LOGICAL_AND_EXPR");
+  IElementType LOGICAL_OR_EXPR = new NASMElementType("LOGICAL_OR_EXPR");
+  IElementType LOGICAL_XOR_EXPR = new NASMElementType("LOGICAL_XOR_EXPR");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
   IElementType MACRO_LABEL = new NASMElementType("MACRO_LABEL");
@@ -93,6 +96,8 @@ public interface NASMTypes {
   IElementType ERROR_TAG = new NASMTokenType("ERROR_TAG");
   IElementType FPU_OP = new NASMTokenType("FPU_OP");
   IElementType GENERAL_OP = new NASMTokenType("GENERAL_OP");
+  IElementType GREATERTHAN = new NASMTokenType(">");
+  IElementType GREATERTHANOREQUAL = new NASMTokenType(">=");
   IElementType HEXADECIMAL = new NASMTokenType("HEXADECIMAL");
   IElementType ID = new NASMTokenType("ID");
   IElementType IEND_TAG = new NASMTokenType("IEND_TAG");
@@ -103,6 +108,11 @@ public interface NASMTypes {
   IElementType ISTRUC_TAG = new NASMTokenType("ISTRUC_TAG");
   IElementType LBL = new NASMTokenType("LBL");
   IElementType LBL_DEF = new NASMTokenType("LBL_DEF");
+  IElementType LESSTHAN = new NASMTokenType("<");
+  IElementType LESSTHANOREQUAL = new NASMTokenType("<=");
+  IElementType LOGICAL_AND = new NASMTokenType("&&");
+  IElementType LOGICAL_OR = new NASMTokenType("||");
+  IElementType LOGICAL_XOR = new NASMTokenType("^^");
   IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
   IElementType MACRO_PARAM_LBL_DEF = new NASMTokenType("MACRO_PARAM_LBL_DEF");
   IElementType MACRO_PARAM_REF = new NASMTokenType("MACRO_PARAM_REF");
@@ -112,6 +122,7 @@ public interface NASMTypes {
   IElementType MAP_OPTIONS = new NASMTokenType("MAP_OPTIONS");
   IElementType MINUS = new NASMTokenType("-");
   IElementType MMX_OP = new NASMTokenType("MMX_OP");
+  IElementType NOTEQUAL = new NASMTokenType("!=");
   IElementType OP_PREFIX = new NASMTokenType("OP_PREFIX");
   IElementType PERCENT = new NASMTokenType("%");
   IElementType PERCENT2 = new NASMTokenType("%%");
@@ -218,6 +229,15 @@ public interface NASMTypes {
       }
       else if (type == LABEL_IDENTIFIER) {
         return new NASMLabelIdentifierImpl(node);
+      }
+      else if (type == LOGICAL_AND_EXPR) {
+        return new NASMLogicalANDExprImpl(node);
+      }
+      else if (type == LOGICAL_OR_EXPR) {
+        return new NASMLogicalORExprImpl(node);
+      }
+      else if (type == LOGICAL_XOR_EXPR) {
+        return new NASMLogicalXORExprImpl(node);
       }
       else if (type == MACRO) {
         return new NASMMacroImpl(node);

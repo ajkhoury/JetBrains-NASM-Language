@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
-    <version>0.4-beta.1</version>
+    <version>0.4-beta.2</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/ajkhoury">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM assembly language for JetBrains IDEs</h1>
         <br>
-        <h2>Version v0.4-beta.1 pre-release</h2>
+        <h2>Version v0.4-beta.2 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -68,6 +68,8 @@
             <li>Single semicolon (comment) now allowed at end of file.</li>
             <li>Added a "ChooseByNameContributor" that can navigate to a symbol by name.</li>
             <li>Fixed bug where generic identifiers would error if a comment was after it.</li>
+            <li>Fixed highlighting which broke in v0.4.1.</li>
+            <li>Began adding more conditions for conditional expressions.</li>
         </ul>
     ]]>
     </change-notes>

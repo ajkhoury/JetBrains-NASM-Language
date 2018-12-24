@@ -187,6 +187,11 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   "?"                         { return QUESTION; }
   "="                         { return EQUAL; }
   "=="                        { return EQUALEQUAL; }
+  "!="                        { return NOTEQUAL; }
+  ">"                         { return GREATERTHAN; }
+  "<"                         { return LESSTHAN; }
+  ">="                        { return GREATERTHANOREQUAL; }
+  "<="                        { return LESSTHANOREQUAL; }
   "+"                         { return PLUS; }
   "-"                         { return MINUS; }
   "*"                         { return TIMES; }
@@ -197,6 +202,9 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   "|"                         { return BITWISE_OR; }
   "^"                         { return BITWISE_XOR; }
   "~"                         { return BITWISE_NOT; }
+  "&&"                        { return LOGICAL_AND; }
+  "||"                        { return LOGICAL_OR; }
+  "^^"                        { return LOGICAL_XOR; }
   "$"                         { return DOLLARSIGN; }
   "$$"                        { return DOLLARSIGN2; }
   "%"                         { return PERCENT; }

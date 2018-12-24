@@ -28,14 +28,14 @@ public class NASMLabelDefMacroImpl extends ASTWrapperPsiElement implements NASML
 
   @Override
   @NotNull
-  public NASMIdentifier getIdentifier() {
-    return findNotNullChildByClass(NASMIdentifier.class);
+  public List<NASMNumericExpr> getNumericExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
   }
 
   @Override
   @NotNull
-  public NASMMacroParenthesis getMacroParenthesis() {
-    return findNotNullChildByClass(NASMMacroParenthesis.class);
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
 }

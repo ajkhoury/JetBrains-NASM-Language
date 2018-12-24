@@ -78,7 +78,7 @@ public class NASMPsiImplUtil {
 
     @SuppressWarnings("ConstantConditions")
     public static String getConstantIdentifierString(NASMConstant element) {
-        PsiElement identifier = element.getId();
+        NASMIdentifier identifier = element.getIdentifier();
         if (identifier != null)
             return identifier.getText();
         return null;

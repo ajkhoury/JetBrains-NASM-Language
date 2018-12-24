@@ -108,6 +108,18 @@ public class NASMVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitLogicalANDExpr(@NotNull NASMLogicalANDExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitLogicalORExpr(@NotNull NASMLogicalORExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitLogicalXORExpr(@NotNull NASMLogicalXORExpr o) {
+    visitExpr(o);
+  }
+
   public void visitMacro(@NotNull NASMMacro o) {
     visitPsiElement(o);
   }

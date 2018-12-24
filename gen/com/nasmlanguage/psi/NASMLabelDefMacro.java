@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMLabelDefMacro extends PsiElement {
 
   @NotNull
-  NASMIdentifier getIdentifier();
+  List<NASMNumericExpr> getNumericExprList();
 
   @NotNull
-  NASMMacroParenthesis getMacroParenthesis();
+  PsiElement getId();
 
 }

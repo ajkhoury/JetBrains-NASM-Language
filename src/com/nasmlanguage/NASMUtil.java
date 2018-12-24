@@ -154,29 +154,6 @@ class NASMUtil {
         if (!nasmConstants.isEmpty())
             result.addAll(nasmConstants);
 
-        // Makes this plugin perform like shit
-        //Project project = containingFile.getProject();
-        //// Then check each include file for constants
-        //Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
-        //        FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
-        //);
-        //Collection<NASMInclude> includes = PsiTreeUtil.collectElementsOfType(containingFile, NASMInclude.class);
-        //for (NASMInclude include : includes) {
-        //    String includeFileName = include.getIncludeString();
-        //    for (VirtualFile virtualFile : virtualFiles) {
-        //        String virtFileName = virtualFile.getName();
-        //        if (virtFileName.equals(includeFileName)) {
-        //            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
-        //            if (assemblyFile != null) {
-        //                nasmConstants = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMConstant.class);
-        //                if (!nasmConstants.isEmpty()) {
-        //                    result.addAll(nasmConstants);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
         return result;
     }
 
@@ -215,36 +192,6 @@ class NASMUtil {
                     }
                 }
             }
-
-            //Project project = containingFile.getProject();
-            //// Then check each include file for identifiers
-            //Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
-            //        FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
-            //);
-            //Collection<NASMInclude> includes = PsiTreeUtil.collectElementsOfType(containingFile, NASMInclude.class);
-            //for (NASMInclude include : includes) {
-            //    String includeFileName = include.getIncludeString();
-            //    for (VirtualFile virtualFile : virtualFiles) {
-            //        String virtFileName = virtualFile.getName();
-            //        if (virtFileName.equals(includeFileName)) {
-            //            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
-            //            if (assemblyFile != null) {
-            //                nasmIdentifiers = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMIdentifier.class);
-            //                if (!nasmIdentifiers.isEmpty()) {
-            //                    for (NASMIdentifier nasmIdentifier : nasmIdentifiers) {
-            //                        if (nasmIdentifier == identifier) continue;
-            //                        PsiElement nasmIdentifierId = nasmIdentifier.getId();
-            //                        if (nasmIdentifierId != null) {
-            //                            if (nasmIdentifierId.getText().equals(targetIdentifierId.getText())) {
-            //                                result.add(nasmIdentifier);
-            //                            }
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
         }
 
         return result;
@@ -262,27 +209,6 @@ class NASMUtil {
                 result.add(nasmIdentifier);
             }
         }
-
-        //List<NASMIdentifier> result = null;
-        //Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME,
-        //        NASMFileType.INSTANCE, GlobalSearchScope.allScope(project));
-        //for (VirtualFile virtualFile : virtualFiles) {
-        //    NASMFile nasmFile = (NASMFile) PsiManager.getInstance(project).findFile(virtualFile);
-        //    if (nasmFile != null) {
-        //        NASMIdentifier[] identifiers = PsiTreeUtil.getChildrenOfType(nasmFile, NASMIdentifier.class);
-        //        if (identifiers != null) {
-        //            for (NASMIdentifier identifier : identifiers) {
-        //                if (targetIdentifierId.equals(identifier.getId().getText())) {
-        //                    if (result == null) {
-        //                        result = new ArrayList<NASMIdentifier>();
-        //                    }
-        //                    result.add(identifier);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        //return result != null ? result : Collections.<NASMIdentifier>emptyList();
 
         return result != null ? result : Collections.emptyList();
     }

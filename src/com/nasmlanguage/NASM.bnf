@@ -246,6 +246,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         EQUAL               = '='
         EQUALEQUAL          = '=='
+        NOTEQUAL            = '!='
+        GREATERTHAN         = '>'
+        LESSTHAN            = '<'
+        GREATERTHANOREQUAL  = '>='
+        LESSTHANOREQUAL     = '<='
+
         PLUS                = '+'
         MINUS               = '-'
         TIMES               = '*'
@@ -256,6 +262,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         BITWISE_OR          = '|'
         BITWISE_XOR         = '^'
         BITWISE_NOT         = '~'
+        LOGICAL_AND         = '&&'
+        LOGICAL_OR          = '||'
+        LOGICAL_XOR         = '^^'
 
         DOLLARSIGN          = '$'
         DOLLARSIGN2         = '$$'
@@ -267,14 +276,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 NASMFile ::= Element*
 private Element ::= Section
                 | Segment
+                | Label
                 | Preprocessor
                 | Directive
                 | EndDirective
                 | Constant
-                | Label
                 | Structure
-                | Data
                 | Instruction
+                | Data
                 | COMMENT
                 | CRLF
                 | ID
@@ -286,7 +295,6 @@ Preprocessor ::= Include
                 | Define
                 | Assign
                 | Macro
-                | LabelDefMacro
                 | MacroCall
                 | Strlen
                 | Error
@@ -301,15 +309,15 @@ Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabe
 MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|Data)? CRLF*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
-Strlen ::= STRLEN_TAG Identifier (STRING|Identifier) CRLF*
+Strlen ::= STRLEN_TAG Identifier (STRING|ID) CRLF*
 Error ::= ERROR_TAG CRLF*
-Conditional ::= (IF_TAG Condition CRLF* (Element)* ((ELIF_TAG Condition|ELSE_TAG) CRLF* (Element)*)* ENDIF_TAG CRLF*)
-            | (IFMACRO_TAG Identifier MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
-private Condition ::= ((Expr EQUALEQUAL Expr)|Expr)
+Conditional ::= (IF_TAG (Condition|Expr) CRLF* Element* ((ELIF_TAG Condition|ELSE_TAG) CRLF* Element*)* ENDIF_TAG CRLF*)
+            | (IFMACRO_TAG ID MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
+private Condition ::= (Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL) Expr)
 
-Label ::= (((LBL_DEF (Instruction|MacroCall|Data|Structure)? CRLF*)|(LabelDefMacro (Instruction|MacroCall|Data|Structure)? CRLF*))) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
-LabelDefMacro ::= ((Identifier MacroParenthesis) COLON CRLF*)
-Constant ::= (ID EQU ((MINUS|PLUS|BITWISE_NOT)? NumericExpr)* CRLF*) {methods=[getConstantIdentifierString]}
+Label ::= (((LBL_DEF (Instruction|Data|Structure)? CRLF*)|(LabelDefMacro (Instruction|Data|Structure)? CRLF*))) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
+LabelDefMacro ::= (ID (ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R) COLON CRLF*)
+Constant ::= (Identifier EQU ((MINUS|PLUS|BITWISE_NOT)? NumericExpr)* CRLF*)
 
 //LabelData ::= (LBL_DATA DataValue CRLF*) {methods=[getLabelIdentifierString]}
 Data ::= (ID? DATA_OP DataValue CRLF*)
@@ -347,6 +355,9 @@ Expr ::= ParenthesisExpr
         | BitwiseORExpr
         | BitwiseXORExpr
         | BitwiseNOTExpr
+        | LogicalANDExpr
+        | LogicalORExpr
+        | LogicalXORExpr
         | NumericLiteral
         | SegmentAddress
         | Str
@@ -373,6 +384,9 @@ NumericExpr ::= ParenthesisNumericExpr
         | BitwiseORExpr
         | BitwiseXORExpr
         | BitwiseNOTExpr
+        | LogicalANDExpr
+        | LogicalORExpr
+        | LogicalXORExpr
         | NumericLiteral
         | SegmentAddress
         | Str
@@ -396,6 +410,9 @@ BitwiseANDExpr ::= Expr BITWISE_AND Expr { extends=Expr }
 BitwiseORExpr ::= Expr BITWISE_OR Expr { extends=Expr }
 BitwiseXORExpr ::= Expr BITWISE_XOR Expr { extends=Expr }
 BitwiseNOTExpr ::= BITWISE_NOT NumericExpr { extends=Expr }
+LogicalANDExpr ::= Expr LOGICAL_AND Expr { extends=Expr }
+LogicalORExpr ::= Expr LOGICAL_OR Expr { extends=Expr }
+LogicalXORExpr ::= Expr LOGICAL_XOR Expr { extends=Expr }
 ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
 

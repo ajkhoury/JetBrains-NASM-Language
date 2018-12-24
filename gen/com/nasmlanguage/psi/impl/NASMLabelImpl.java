@@ -34,12 +34,6 @@ public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
 
   @Override
   @Nullable
-  public NASMExpr getExpr() {
-    return findChildByClass(NASMExpr.class);
-  }
-
-  @Override
-  @Nullable
   public NASMInstruction getInstruction() {
     return findChildByClass(NASMInstruction.class);
   }

@@ -26,9 +26,6 @@ public interface NASMPreprocessor extends PsiElement {
   NASMInclude getInclude();
 
   @Nullable
-  NASMLabelDefMacro getLabelDefMacro();
-
-  @Nullable
   NASMMacro getMacro();
 
   @Nullable
