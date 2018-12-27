@@ -14,7 +14,7 @@ import com.intellij.psi.PsiReference;
 
 public class NASMIdentifierImpl extends NASMNamedElementImpl implements NASMIdentifier {
 
-  public NASMIdentifierImpl(ASTNode node) {
+  public NASMIdentifierImpl(@NotNull ASTNode node) {
     super(node);
   }
 

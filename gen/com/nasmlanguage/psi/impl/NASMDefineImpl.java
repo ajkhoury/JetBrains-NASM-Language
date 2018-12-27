@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
 
-  public NASMDefineImpl(ASTNode node) {
+  public NASMDefineImpl(@NotNull ASTNode node) {
     super(node);
   }
 

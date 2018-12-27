@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public abstract class NASMExprImpl extends ASTWrapperPsiElement implements NASMExpr {
 
-  public NASMExprImpl(ASTNode node) {
+  public NASMExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

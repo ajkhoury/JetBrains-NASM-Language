@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMStructureImpl extends ASTWrapperPsiElement implements NASMStructure {
 
-  public NASMStructureImpl(ASTNode node) {
+  public NASMStructureImpl(@NotNull ASTNode node) {
     super(node);
   }
 

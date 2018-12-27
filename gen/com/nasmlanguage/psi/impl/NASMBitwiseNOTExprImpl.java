@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMBitwiseNOTExprImpl extends NASMExprImpl implements NASMBitwiseNOTExpr {
 
-  public NASMBitwiseNOTExprImpl(ASTNode node) {
+  public NASMBitwiseNOTExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

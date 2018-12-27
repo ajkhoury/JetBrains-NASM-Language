@@ -45,8 +45,7 @@ public class NASMAnnotator implements Annotator {
             NASMIdentifier nasmIdentifier = (NASMIdentifier)element;
             PsiElement parentElement = nasmIdentifier.getParent();
             if (parentElement != null) {
-                if (parentElement instanceof NASMIStruc ||
-                    parentElement instanceof NASMStruc) {
+                if (parentElement instanceof NASMIStruc || parentElement instanceof NASMStruc) {
                     highlightTextRange(nasmIdentifier.getTextRange(), NASMSyntaxHighlighter.NASM_STRUCTURE, holder);
                     NASMLabelIdentifier[] labelIdentifiers = PsiTreeUtil.getChildrenOfType(parentElement, NASMLabelIdentifier.class);
                     if (labelIdentifiers != null) {
@@ -81,6 +80,9 @@ public class NASMAnnotator implements Annotator {
                     if (identifierNode != null) {
                         highlightTextRange(identifierNode.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
                     }
+                    //List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferences(parentElement.getContainingFile(), nasmIdentifier);
+                    //for (NASMIdentifier identifierRef : identifierRefs)
+                    //    highlightTextRange(identifierRef.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
                 } else if (parentElement instanceof NASMInstruction) {
                     List<NASMLabel> labels = NASMUtil.findLabels(parentElement.getContainingFile());
                     for (NASMLabel label : labels) {
@@ -91,7 +93,6 @@ public class NASMAnnotator implements Annotator {
                         }
                     }
                 }
-
             }
         } else if (element instanceof NASMDefine) {
             NASMDefine nasmDefine = (NASMDefine)element;
@@ -109,7 +110,9 @@ public class NASMAnnotator implements Annotator {
             NASMLabel nasmLabel = (NASMLabel)element;
             NASMLabelDefMacro nasmLabelDefMacro = nasmLabel.getLabelDefMacro();
             if (nasmLabelDefMacro != null) {
-                List<NASMNumericExpr> nasmNumericExprList = nasmLabelDefMacro.getMacroCall().getNumericExprList();
+                PsiElement labelDefId = nasmLabelDefMacro.getId();
+                highlightTextRange(labelDefId.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
+                List<NASMNumericExpr> nasmNumericExprList = nasmLabelDefMacro.getNumericExprList();
                 if (nasmNumericExprList.size() == 1) {
                     NASMNumericExpr nasmLabelDefMacroExpr = nasmNumericExprList.get(0);
                     highlightTextRange(nasmLabelDefMacroExpr.getTextRange(), NASMSyntaxHighlighter.NASM_LABEL, holder);
@@ -158,7 +161,7 @@ public class NASMAnnotator implements Annotator {
                     // Search for a constant
                     List<NASMConstant> constants = NASMUtil.findConstants(element.getContainingFile());
                     for (NASMConstant constant : constants) {
-                        String constantIdentifier = constant.getConstantIdentifierString();
+                        String constantIdentifier = constant.getIdentifier().getText();
                         if (constantIdentifier != null && constantIdentifier.equals(identifierText)) {
                             found = true;
                             highlightTextRange(tr.getStartOffset(), identifierText.length(),
@@ -216,7 +219,7 @@ public class NASMAnnotator implements Annotator {
                 // Search for a constant
                 List<NASMConstant> constants = NASMUtil.findConstants(element.getContainingFile());
                 for (NASMConstant constant : constants) {
-                    String constantIdentifier = constant.getConstantIdentifierString();
+                    String constantIdentifier = constant.getIdentifier().getText();
                     if (constantIdentifier.equals(addrIdentifierText)) {
                         found = true;
                         highlightTextRange(tr, NASMSyntaxHighlighter.NASM_CONSTANT, holder);

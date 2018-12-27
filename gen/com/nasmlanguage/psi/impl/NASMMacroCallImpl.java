@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMMacroCallImpl extends NASMExprImpl implements NASMMacroCall {
 
-  public NASMMacroCallImpl(ASTNode node) {
+  public NASMMacroCallImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -27,14 +27,20 @@ public class NASMMacroCallImpl extends NASMExprImpl implements NASMMacroCall {
 
   @Override
   @NotNull
-  public NASMIdentifier getIdentifier() {
-    return findNotNullChildByClass(NASMIdentifier.class);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override
-  @NotNull
-  public List<NASMNumericExpr> getNumericExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
+  @Nullable
+  public NASMMacroParenthesis getMacroParenthesis() {
+    return findChildByClass(NASMMacroParenthesis.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getId() {
+    return findChildByType(ID);
   }
 
   @Override

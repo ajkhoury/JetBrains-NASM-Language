@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMIncludeImpl extends ASTWrapperPsiElement implements NASMInclude {
 
-  public NASMIncludeImpl(ASTNode node) {
+  public NASMIncludeImpl(@NotNull ASTNode node) {
     super(node);
   }
 

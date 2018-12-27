@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMDivExprImpl extends NASMExprImpl implements NASMDivExpr {
 
-  public NASMDivExprImpl(ASTNode node) {
+  public NASMDivExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

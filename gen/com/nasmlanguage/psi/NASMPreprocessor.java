@@ -19,8 +19,8 @@ public interface NASMPreprocessor extends PsiElement {
   @Nullable
   NASMError getError();
 
-  @NotNull
-  List<NASMExpr> getExprList();
+  @Nullable
+  NASMExpr getExpr();
 
   @Nullable
   NASMInclude getInclude();

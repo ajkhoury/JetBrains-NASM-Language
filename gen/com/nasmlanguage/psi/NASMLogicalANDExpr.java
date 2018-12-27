@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMConstant extends PsiElement {
+public interface NASMLogicalANDExpr extends NASMExpr {
 
   @NotNull
-  NASMIdentifier getIdentifier();
-
-  @NotNull
-  List<NASMNumericExpr> getNumericExprList();
-
-  @NotNull
-  PsiElement getEqu();
+  List<NASMExpr> getExprList();
 
 }

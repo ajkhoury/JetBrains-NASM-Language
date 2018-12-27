@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMLabelDefMacroImpl extends ASTWrapperPsiElement implements NASMLabelDefMacro {
 
-  public NASMLabelDefMacroImpl(ASTNode node) {
+  public NASMLabelDefMacroImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,8 +28,14 @@ public class NASMLabelDefMacroImpl extends ASTWrapperPsiElement implements NASML
 
   @Override
   @NotNull
-  public NASMMacroCall getMacroCall() {
-    return findNotNullChildByClass(NASMMacroCall.class);
+  public List<NASMNumericExpr> getNumericExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
 }

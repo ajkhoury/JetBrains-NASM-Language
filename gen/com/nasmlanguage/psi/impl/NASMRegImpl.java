@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMRegImpl extends NASMExprImpl implements NASMReg {
 
-  public NASMRegImpl(ASTNode node) {
+  public NASMRegImpl(@NotNull ASTNode node) {
     super(node);
   }
 

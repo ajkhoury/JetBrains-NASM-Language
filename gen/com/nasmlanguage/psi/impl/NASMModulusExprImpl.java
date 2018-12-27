@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMModulusExprImpl extends NASMExprImpl implements NASMModulusExpr {
 
-  public NASMModulusExprImpl(ASTNode node) {
+  public NASMModulusExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

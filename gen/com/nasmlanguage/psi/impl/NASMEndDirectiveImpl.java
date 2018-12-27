@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMEndDirectiveImpl extends NASMExprImpl implements NASMEndDirective {
 
-  public NASMEndDirectiveImpl(ASTNode node) {
+  public NASMEndDirectiveImpl(@NotNull ASTNode node) {
     super(node);
   }
 

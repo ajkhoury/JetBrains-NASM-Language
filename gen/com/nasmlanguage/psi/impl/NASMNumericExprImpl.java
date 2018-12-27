@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMNumericExprImpl extends ASTWrapperPsiElement implements NASMNumericExpr {
 
-  public NASMNumericExprImpl(ASTNode node) {
+  public NASMNumericExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

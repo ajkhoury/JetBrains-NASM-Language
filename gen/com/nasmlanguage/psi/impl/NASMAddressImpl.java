@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMAddressImpl extends NASMExprImpl implements NASMAddress {
 
-  public NASMAddressImpl(ASTNode node) {
+  public NASMAddressImpl(@NotNull ASTNode node) {
     super(node);
   }
 

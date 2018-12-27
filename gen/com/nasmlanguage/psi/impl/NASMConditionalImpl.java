@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMConditional {
 
-  public NASMConditionalImpl(ASTNode node) {
+  public NASMConditionalImpl(@NotNull ASTNode node) {
     super(node);
   }
 

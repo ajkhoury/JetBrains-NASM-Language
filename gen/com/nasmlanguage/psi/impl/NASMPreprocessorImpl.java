@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPreprocessor {
 
-  public NASMPreprocessorImpl(ASTNode node) {
+  public NASMPreprocessorImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -51,9 +51,9 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
   }
 
   @Override
-  @NotNull
-  public List<NASMExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
+  @Nullable
+  public NASMExpr getExpr() {
+    return findChildByClass(NASMExpr.class);
   }
 
   @Override

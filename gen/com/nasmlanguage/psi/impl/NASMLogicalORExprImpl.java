@@ -8,17 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMMacroLabelImpl extends ASTWrapperPsiElement implements NASMMacroLabel {
+public class NASMLogicalORExprImpl extends NASMExprImpl implements NASMLogicalORExpr {
 
-  public NASMMacroLabelImpl(@NotNull ASTNode node) {
+  public NASMLogicalORExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitMacroLabel(this);
+    visitor.visitLogicalORExpr(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,21 +26,9 @@ public class NASMMacroLabelImpl extends ASTWrapperPsiElement implements NASMMacr
   }
 
   @Override
-  @Nullable
-  public NASMData getData() {
-    return findChildByClass(NASMData.class);
-  }
-
-  @Override
-  @Nullable
-  public NASMInstruction getInstruction() {
-    return findChildByClass(NASMInstruction.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getMacroParamLblDef() {
-    return findNotNullChildByType(MACRO_PARAM_LBL_DEF);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
 }

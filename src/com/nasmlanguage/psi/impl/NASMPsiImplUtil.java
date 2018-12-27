@@ -1,7 +1,7 @@
 /*++
 
 NASM Assembly Language Plugin
-Copyright (c) 2017-2018 Aidan Khoury
+Copyright (c) 2017-2018 Aidan Khoury. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -64,7 +64,7 @@ public class NASMPsiImplUtil {
         return null;
     }
 
-    public static String getMacroIdentifier(NASMMacro element) {
+    public static String getMacroIdentifierString(NASMMacro element) {
         ASTNode macroIdentifier = element.getNode().findChildByType(NASMTypes.IDENTIFIER);
         if (macroIdentifier != null)
             return macroIdentifier.getText();
@@ -83,7 +83,7 @@ public class NASMPsiImplUtil {
 
     @SuppressWarnings("ConstantConditions")
     public static String getConstantIdentifierString(NASMConstant element) {
-        PsiElement identifier = element.getIdentifier().getId();
+        NASMIdentifier identifier = element.getIdentifier();
         if (identifier != null)
             return identifier.getText();
         return null;

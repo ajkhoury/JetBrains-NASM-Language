@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
 
-  public NASMMacroImpl(ASTNode node) {
+  public NASMMacroImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -30,6 +30,12 @@ public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
   @NotNull
   public List<NASMData> getDataList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMData.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NASMDirective> getDirectiveList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMDirective.class);
   }
 
   @Override
@@ -80,8 +86,8 @@ public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
     return findChildByType(STRING);
   }
 
-  public String getMacroIdentifier() {
-    return NASMPsiImplUtil.getMacroIdentifier(this);
+  public String getMacroIdentifierString() {
+    return NASMPsiImplUtil.getMacroIdentifierString(this);
   }
 
 }

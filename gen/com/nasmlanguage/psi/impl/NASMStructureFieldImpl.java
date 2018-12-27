@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMStructureFieldImpl extends NASMExprImpl implements NASMStructureField {
 
-  public NASMStructureFieldImpl(ASTNode node) {
+  public NASMStructureFieldImpl(@NotNull ASTNode node) {
     super(node);
   }
 

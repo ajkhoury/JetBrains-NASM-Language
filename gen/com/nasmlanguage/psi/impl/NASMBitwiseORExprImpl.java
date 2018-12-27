@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMBitwiseORExprImpl extends NASMExprImpl implements NASMBitwiseORExpr {
 
-  public NASMBitwiseORExprImpl(ASTNode node) {
+  public NASMBitwiseORExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

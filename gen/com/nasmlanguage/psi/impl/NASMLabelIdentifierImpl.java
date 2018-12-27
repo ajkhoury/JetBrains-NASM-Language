@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMLabelIdentifierImpl extends NASMExprImpl implements NASMLabelIdentifier {
 
-  public NASMLabelIdentifierImpl(ASTNode node) {
+  public NASMLabelIdentifierImpl(@NotNull ASTNode node) {
     super(node);
   }
 

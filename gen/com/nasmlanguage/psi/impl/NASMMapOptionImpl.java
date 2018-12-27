@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMMapOptionImpl extends ASTWrapperPsiElement implements NASMMapOption {
 
-  public NASMMapOptionImpl(ASTNode node) {
+  public NASMMapOptionImpl(@NotNull ASTNode node) {
     super(node);
   }
 

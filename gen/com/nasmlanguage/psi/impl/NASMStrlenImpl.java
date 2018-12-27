@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMStrlenImpl extends ASTWrapperPsiElement implements NASMStrlen {
 
-  public NASMStrlenImpl(ASTNode node) {
+  public NASMStrlenImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,8 +28,14 @@ public class NASMStrlenImpl extends ASTWrapperPsiElement implements NASMStrlen {
 
   @Override
   @NotNull
-  public List<NASMIdentifier> getIdentifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMIdentifier.class);
+  public NASMIdentifier getIdentifier() {
+    return findNotNullChildByClass(NASMIdentifier.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getId() {
+    return findChildByType(ID);
   }
 
   @Override

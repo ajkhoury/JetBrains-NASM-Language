@@ -12,7 +12,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMParenthesisExprImpl extends NASMExprImpl implements NASMParenthesisExpr {
 
-  public NASMParenthesisExprImpl(ASTNode node) {
+  public NASMParenthesisExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 

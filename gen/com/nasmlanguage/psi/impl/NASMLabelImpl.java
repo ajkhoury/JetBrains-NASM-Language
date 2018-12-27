@@ -13,7 +13,7 @@ import com.nasmlanguage.psi.*;
 
 public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
 
-  public NASMLabelImpl(ASTNode node) {
+  public NASMLabelImpl(@NotNull ASTNode node) {
     super(node);
   }
 
