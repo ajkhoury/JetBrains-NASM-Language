@@ -310,7 +310,7 @@ Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG Identifier ROUND_L (Identifier (SEPARATOR Identifier)*)? ROUND_R Expr CRLF*)
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*) {methods=[getDefineIdentifier getDefineIdentifierString]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
-Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|ID) CRLF*)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifierString]}
+Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifierString]}
 MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|Data)? CRLF*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
