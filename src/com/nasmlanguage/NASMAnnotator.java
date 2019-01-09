@@ -1,7 +1,7 @@
 /*++
 
 NASM Assembly Language Plugin
-Copyright (c) 2017-2018 Aidan Khoury
+Copyright (c) 2017-2019 Aidan Khoury
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

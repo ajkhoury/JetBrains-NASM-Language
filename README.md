@@ -6,7 +6,7 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version v0.4-beta.3 pre-release
+Version v0.4-beta.4 pre-release
 
     FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
@@ -23,9 +23,9 @@ Version v0.4-beta.3 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.4-beta.3 Changes
+# v0.4-beta.4 Changes
     
-    Added ability to use non-local to macro labels.
+    Macro parameters can now be any expression or mnemonic.
 
 # Complete Changelog
 
@@ -69,10 +69,11 @@ Version v0.4-beta.3 pre-release
     Fixed highlighting which broke in v0.4.1.
     Began adding more conditions for conditional expressions.
     Added ability to use non-local to macro labels.
+    Macro parameters can now be any expression or mnemonic.
 
 # License
 
-Copyright (c) 2017-2018 Aidan Khoury
+Copyright (c) 2017-2019 Aidan Khoury
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
