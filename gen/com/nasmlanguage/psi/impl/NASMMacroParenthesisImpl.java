@@ -28,8 +28,8 @@ public class NASMMacroParenthesisImpl extends ASTWrapperPsiElement implements NA
 
   @Override
   @NotNull
-  public List<NASMNumericExpr> getNumericExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
 }

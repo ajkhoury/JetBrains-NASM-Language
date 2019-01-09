@@ -433,7 +433,7 @@ SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID
                                 (LabelDefMacro (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))) { extends=Expr }
 Address ::= ((SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2) { extends=Expr }
 private AddressInternal ::= (SQUARE_L MINUS? Expr SQUARE_R) { pin(".*")=1 }
-MacroCall ::= (SIZE_TYPE? (Identifier (MacroParenthesis|(NumericLiteral|ID|COMMENT)))) { extends=Expr }
-MacroParenthesis ::= (ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R) { pin(".*")=1 }
+MacroCall ::= (SIZE_TYPE? (Identifier (MacroParenthesis | ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*)))) { extends=Expr }
+MacroParenthesis ::= (ROUND_L ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*)? ROUND_R) { pin(".*")=1 }
 MacroParamReference ::= (SIZE_TYPE? MACRO_PARAM_REF) { extends=Expr }
 MacroVarReference ::= (SIZE_TYPE? MACRO_VAR_REF) { extends=Expr }

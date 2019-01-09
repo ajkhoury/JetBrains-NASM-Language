@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface NASMMacroParenthesis extends PsiElement {
 
   @NotNull
-  List<NASMNumericExpr> getNumericExprList();
+  List<NASMExpr> getExprList();
 
 }

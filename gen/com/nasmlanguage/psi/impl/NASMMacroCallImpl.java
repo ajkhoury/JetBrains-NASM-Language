@@ -39,12 +39,6 @@ public class NASMMacroCallImpl extends NASMExprImpl implements NASMMacroCall {
 
   @Override
   @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getSizeType() {
     return findChildByType(SIZE_TYPE);
   }

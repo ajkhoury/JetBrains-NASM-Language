@@ -14,9 +14,6 @@ public interface NASMMacroCall extends NASMExpr {
   NASMMacroParenthesis getMacroParenthesis();
 
   @Nullable
-  PsiElement getId();
-
-  @Nullable
   PsiElement getSizeType();
 
 }
