@@ -1326,7 +1326,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|ID) CRLF*)*) MACRO_END_TAG
+  // MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*)*) MACRO_END_TAG
   public static boolean Macro(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro")) return false;
     if (!nextTokenIs(b, MACRO_TAG)) return false;
@@ -1340,7 +1340,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|ID) CRLF*)*
+  // Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*)*
   private static boolean Macro_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1")) return false;
     boolean r;
@@ -1372,7 +1372,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((MacroLabel|Data|Instruction|Directive|Preprocessor|ID) CRLF*)*
+  // ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*)*
   private static boolean Macro_1_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1_4")) return false;
     while (true) {
@@ -1383,7 +1383,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (MacroLabel|Data|Instruction|Directive|Preprocessor|ID) CRLF*
+  // (MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*
   private static boolean Macro_1_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1_4_0")) return false;
     boolean r;
@@ -1394,7 +1394,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // MacroLabel|Data|Instruction|Directive|Preprocessor|ID
+  // MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID
   private static boolean Macro_1_4_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1_4_0_0")) return false;
     boolean r;
@@ -1403,6 +1403,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Instruction(b, l + 1);
     if (!r) r = Directive(b, l + 1);
     if (!r) r = Preprocessor(b, l + 1);
+    if (!r) r = Label(b, l + 1);
     if (!r) r = consumeToken(b, ID);
     return r;
   }
