@@ -2680,15 +2680,23 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // REGISTER
+  // SIZE_TYPE? REGISTER
   public static boolean Reg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Reg")) return false;
-    if (!nextTokenIsSmart(b, REGISTER)) return false;
+    if (!nextTokenIsSmart(b, REGISTER, SIZE_TYPE)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, REGISTER);
-    exit_section_(b, m, REG, r);
+    Marker m = enter_section_(b, l, _NONE_, REG, "<reg>");
+    r = Reg_0(b, l + 1);
+    r = r && consumeToken(b, REGISTER);
+    exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // SIZE_TYPE?
+  private static boolean Reg_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Reg_0")) return false;
+    consumeTokenSmart(b, SIZE_TYPE);
+    return true;
   }
 
   // SEGMENT_REGISTER

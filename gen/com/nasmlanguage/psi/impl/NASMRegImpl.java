@@ -31,4 +31,10 @@ public class NASMRegImpl extends NASMExprImpl implements NASMReg {
     return findNotNullChildByType(REGISTER);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSizeType() {
+    return findChildByType(SIZE_TYPE);
+  }
+
 }

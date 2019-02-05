@@ -10,4 +10,7 @@ public interface NASMReg extends NASMExpr {
   @NotNull
   PsiElement getRegister();
 
+  @Nullable
+  PsiElement getSizeType();
+
 }

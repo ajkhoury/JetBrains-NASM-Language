@@ -424,7 +424,7 @@ ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=Num
 NumericLiteral ::= ((SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)?)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
 Identifier ::= ID { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getReferences getPresentation] }
 LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
-Reg ::= REGISTER { extends=Expr }
+Reg ::= SIZE_TYPE? REGISTER { extends=Expr }
 Seg ::= SEGMENT_REGISTER { extends=Expr }
 Str ::= STRING { extends=Expr }
 StructureField ::= STRUCT_FIELD { extends=Expr }

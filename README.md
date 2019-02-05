@@ -6,7 +6,7 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version v0.4-beta.4 pre-release
+Version v0.4-beta.5 pre-release
 
     FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
@@ -23,9 +23,9 @@ Version v0.4-beta.4 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.4-beta.4 Changes
+# v0.4-beta.5 Changes
     
-    Macro parameters can now be any expression or mnemonic.
+    Added size type prefix for registers.
 
 # Complete Changelog
 
@@ -70,6 +70,7 @@ Version v0.4-beta.4 pre-release
     Began adding more conditions for conditional expressions.
     Added ability to use non-local to macro labels.
     Macro parameters can now be any expression or mnemonic.
+    Added size type prefix for registers.
 
 # License
 
