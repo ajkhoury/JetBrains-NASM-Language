@@ -2,6 +2,8 @@
 
 A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
+The latest release can be found in the [JetBrains Plugins](https://plugins.jetbrains.com/plugin/9759-nasm-assembly-language)
+
 ![NASM Language](http://i.imgur.com/0BW2jL7.png "NASM Language Preview")
 
 # Features
