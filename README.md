@@ -6,7 +6,7 @@ A plugin that adds NASM support for the IntelliJ Platform IDEs.
 
 # Features
 
-Version v0.4-beta.5 pre-release
+Version v0.4-beta.6 pre-release
 
     FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
@@ -23,9 +23,9 @@ Version v0.4-beta.5 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.4-beta.5 Changes
+# v0.4-beta.6 Changes
     
-    Added size type prefix for registers.
+    Added support for commas in directives.
 
 # Complete Changelog
 
@@ -71,6 +71,7 @@ Version v0.4-beta.5 pre-release
     Added ability to use non-local to macro labels.
     Macro parameters can now be any expression or mnemonic.
     Added size type prefix for registers.
+    Added support for commas in directives. Thanks to github.com/snowwm.
 
 # License
 
