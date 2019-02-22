@@ -774,7 +774,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DIRECTIVE_OP DirectiveArg*
+  // DIRECTIVE_OP (DirectiveArg SEPARATOR?)*
   static boolean DirectiveDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveDecl")) return false;
     if (!nextTokenIs(b, DIRECTIVE_OP)) return false;
@@ -786,29 +786,58 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // DirectiveArg*
+  // (DirectiveArg SEPARATOR?)*
   private static boolean DirectiveDecl_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveDecl_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!DirectiveArg(b, l + 1)) break;
+      if (!DirectiveDecl_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "DirectiveDecl_1", c)) break;
     }
     return true;
   }
 
+  // DirectiveArg SEPARATOR?
+  private static boolean DirectiveDecl_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DirectiveDecl_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = DirectiveArg(b, l + 1);
+    r = r && DirectiveDecl_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SEPARATOR?
+  private static boolean DirectiveDecl_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DirectiveDecl_1_0_1")) return false;
+    consumeToken(b, SEPARATOR);
+    return true;
+  }
+
   /* ********************************************************** */
-  // SQUARE_L DirectiveDecl SQUARE_R
+  // SQUARE_L DIRECTIVE_OP DirectiveArg* SQUARE_R
   static boolean DirectiveDeclBrackets(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirectiveDeclBrackets")) return false;
     if (!nextTokenIs(b, SQUARE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, SQUARE_L);
-    r = r && DirectiveDecl(b, l + 1);
+    r = consumeTokens(b, 0, SQUARE_L, DIRECTIVE_OP);
+    r = r && DirectiveDeclBrackets_2(b, l + 1);
     r = r && consumeToken(b, SQUARE_R);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // DirectiveArg*
+  private static boolean DirectiveDeclBrackets_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DirectiveDeclBrackets_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!DirectiveArg(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "DirectiveDeclBrackets_2", c)) break;
+    }
+    return true;
   }
 
   /* ********************************************************** */
