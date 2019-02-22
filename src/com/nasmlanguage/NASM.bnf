@@ -339,8 +339,8 @@ private Mnemonic ::= (GENERAL_OP|SYSTEM_OP|VIRTUALIZATION_OP|X64_OP|FPU_OP|MMX_O
 MapOption ::= SQUARE_L ('map'|'MAP') (('all'|'ALL')|('brief'|'BRIEF')|('sections'|'SECTIONS')|('segments'|'SEGMENTS')|('symbols'|'SYMBOLS'))? MAP_FILE SQUARE_R
 
 Directive ::= (DirectiveDecl|DirectiveDeclBrackets|MapOption) CRLF*
-private DirectiveDecl ::= DIRECTIVE_OP DirectiveArg*
-private DirectiveDeclBrackets ::= SQUARE_L DirectiveDecl SQUARE_R
+private DirectiveDecl ::= DIRECTIVE_OP (DirectiveArg SEPARATOR?)*
+private DirectiveDeclBrackets ::= SQUARE_L DIRECTIVE_OP DirectiveArg* SQUARE_R
 DirectiveArg ::= ((MINUS|PLUS)? (MacroCall|NumericLiteral|Address|SegmentAddress|Identifier))
 
 // for eventual MASM support
