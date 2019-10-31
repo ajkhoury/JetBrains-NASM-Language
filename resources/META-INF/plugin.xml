@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
-    <version>0.4-beta.6</version>
+    <version>0.4-beta.7</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/ajkhoury">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM assembly language for JetBrains IDEs</h1>
         <br>
-        <h2>Version v0.4-beta.6 pre-release</h2>
+        <h2>Version v0.4-beta.7 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -74,6 +74,7 @@
             <li>Macro parameters can now be any expression or mnemonic.</li>
             <li>Added size type prefix for registers.</li>
             <li>Added support for commas in directives.</li>
+            <li>Added support for back-tick strings.</li>
         </ul>
     ]]>
     </change-notes>
@@ -94,7 +95,7 @@
         <lang.syntaxHighlighterFactory key="NASM" language="NASM" implementationClass="com.nasmlanguage.NASMSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.nasmlanguage.NASMColorSettingsPage"/>
         <lang.braceMatcher language="NASM" implementationClass="com.nasmlanguage.NASMPairedBraceMatcher"/>
-        <completion.contributor language="NASM" implementationClass="com.nasmlanguage.NASMCompletionContributor"/>
+        <!--completion.contributor language="NASM" implementationClass="com.nasmlanguage.NASMCompletionContributor"/-->
         <psi.referenceContributor implementation="com.nasmlanguage.NASMReferenceContributor"/>
         <!--lang.findUsagesProvider language="NASM" implementationClass="com.nasmlanguage.NASMFindUsagesProvider"/-->
         <gotoSymbolContributor implementation="com.nasmlanguage.NASMChooseByNameContributor"/>
