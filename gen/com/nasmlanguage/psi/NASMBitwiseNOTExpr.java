@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMBitwiseNOTExpr extends NASMExpr {
 
-  @NotNull
-  NASMNumericExpr getNumericExpr();
+  @Nullable
+  NASMExpr getExpr();
 
 }

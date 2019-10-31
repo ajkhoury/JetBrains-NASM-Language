@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
+public class NASMLabelImpl extends NASMNamedElementImpl implements NASMLabel {
 
   public NASMLabelImpl(@NotNull ASTNode node) {
     super(node);
@@ -56,8 +55,19 @@ public class NASMLabelImpl extends ASTWrapperPsiElement implements NASMLabel {
     return findChildByType(LBL_DEF);
   }
 
-  public String getLabelIdentifierString() {
-    return NASMPsiImplUtil.getLabelIdentifierString(this);
+  @Override
+  public String getName() {
+    return NASMPsiImplUtil.getName(this);
+  }
+
+  @Override
+  public PsiElement setName(String newName) {
+    return NASMPsiImplUtil.setName(this, newName);
+  }
+
+  @Override
+  public PsiElement getNameIdentifier() {
+    return NASMPsiImplUtil.getNameIdentifier(this);
   }
 
 }

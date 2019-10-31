@@ -33,25 +33,30 @@ public class NASMIdentifierImpl extends NASMNamedElementImpl implements NASMIden
     return findNotNullChildByType(ID);
   }
 
+  @Override
   public String getName() {
     return NASMPsiImplUtil.getName(this);
   }
 
+  @Override
   public PsiElement setName(String newName) {
     return NASMPsiImplUtil.setName(this, newName);
   }
 
+  @Override
   public PsiElement getNameIdentifier() {
     return NASMPsiImplUtil.getNameIdentifier(this);
   }
 
+  @Override
+  public ItemPresentation getPresentation() {
+    return NASMPsiImplUtil.getPresentation(this);
+  }
+
+  @Override
   @NotNull
   public PsiReference[] getReferences() {
     return NASMPsiImplUtil.getReferences(this);
-  }
-
-  public ItemPresentation getPresentation() {
-    return NASMPsiImplUtil.getPresentation(this);
   }
 
 }

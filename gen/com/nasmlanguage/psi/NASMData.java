@@ -8,10 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface NASMData extends PsiElement {
 
   @NotNull
-  List<NASMLabelIdentifier> getLabelIdentifierList();
-
-  @NotNull
-  List<NASMNumericExpr> getNumericExprList();
+  List<NASMExpr> getExprList();
 
   @NotNull
   PsiElement getDataOp();

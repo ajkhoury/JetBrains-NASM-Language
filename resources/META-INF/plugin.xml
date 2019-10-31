@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
-    <version>0.4-beta.7</version>
+    <version>0.5-beta.0</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/ajkhoury">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM assembly language for JetBrains IDEs</h1>
         <br>
-        <h2>Version v0.4-beta.7 pre-release</h2>
+        <h2>Version v0.5-beta.0 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -18,11 +18,12 @@
             <li>Preprocessor directives support.</li>
             <li>Structure support.</li>
             <li>Brace matching for braces, macros, preprocessor, and structs.</li>
+            <li>Goto declaration support for labels.</li>
         </ul>
         <br>
         <h3>Planned Features</h3>
         <ul>
-            <li>Goto symbol</li>
+            <li>Goto symbol (WIP)</li>
             <li>Code completion</li>
             <li>Debugger support</li>
         </ul>
@@ -75,6 +76,7 @@
             <li>Added size type prefix for registers.</li>
             <li>Added support for commas in directives.</li>
             <li>Added support for back-tick strings.</li>
+            <li>Added initial references implementation for goto declaration support.</li>
         </ul>
     ]]>
     </change-notes>
@@ -97,7 +99,7 @@
         <lang.braceMatcher language="NASM" implementationClass="com.nasmlanguage.NASMPairedBraceMatcher"/>
         <!--completion.contributor language="NASM" implementationClass="com.nasmlanguage.NASMCompletionContributor"/-->
         <psi.referenceContributor implementation="com.nasmlanguage.NASMReferenceContributor"/>
-        <!--lang.findUsagesProvider language="NASM" implementationClass="com.nasmlanguage.NASMFindUsagesProvider"/-->
+        <lang.findUsagesProvider language="NASM" implementationClass="com.nasmlanguage.NASMFindUsagesProvider"/>
         <gotoSymbolContributor implementation="com.nasmlanguage.NASMChooseByNameContributor"/>
         <spellchecker.support language="NASM" implementationClass="com.intellij.spellchecker.tokenizer.SpellcheckingStrategy"/>
         <annotator language="NASM" implementationClass="com.nasmlanguage.NASMAnnotator"/>

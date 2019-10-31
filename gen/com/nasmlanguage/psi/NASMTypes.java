@@ -46,10 +46,8 @@ public interface NASMTypes {
   IElementType MINUS_EXPR = new NASMElementType("MINUS_EXPR");
   IElementType MODULUS_EXPR = new NASMElementType("MODULUS_EXPR");
   IElementType MUL_EXPR = new NASMElementType("MUL_EXPR");
-  IElementType NUMERIC_EXPR = new NASMElementType("NUMERIC_EXPR");
   IElementType NUMERIC_LITERAL = new NASMElementType("NUMERIC_LITERAL");
   IElementType PARENTHESIS_EXPR = new NASMElementType("PARENTHESIS_EXPR");
-  IElementType PARENTHESIS_NUMERIC_EXPR = new NASMElementType("PARENTHESIS_NUMERIC_EXPR");
   IElementType PLUS_EXPR = new NASMElementType("PLUS_EXPR");
   IElementType PREPROCESSOR = new NASMElementType("PREPROCESSOR");
   IElementType REG = new NASMElementType("REG");
@@ -269,17 +267,11 @@ public interface NASMTypes {
       else if (type == MUL_EXPR) {
         return new NASMMulExprImpl(node);
       }
-      else if (type == NUMERIC_EXPR) {
-        return new NASMNumericExprImpl(node);
-      }
       else if (type == NUMERIC_LITERAL) {
         return new NASMNumericLiteralImpl(node);
       }
       else if (type == PARENTHESIS_EXPR) {
         return new NASMParenthesisExprImpl(node);
-      }
-      else if (type == PARENTHESIS_NUMERIC_EXPR) {
-        return new NASMParenthesisNumericExprImpl(node);
       }
       else if (type == PLUS_EXPR) {
         return new NASMPlusExprImpl(node);

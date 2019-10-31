@@ -25,6 +25,7 @@ SOFTWARE.
 
 package com.nasmlanguage;
 
+import com.intellij.application.options.colors.InspectionColorSettingsPage;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.*;
@@ -33,24 +34,24 @@ import org.jetbrains.annotations.*;
 import javax.swing.*;
 import java.util.Map;
 
-public class NASMColorSettingsPage implements ColorSettingsPage {
+public class NASMColorSettingsPage implements ColorSettingsPage, InspectionColorSettingsPage {
 
-    private static final AttributesDescriptor[] NASM_DESCRIPTORS = new AttributesDescriptor[] {
-            new AttributesDescriptor("Number", NASMSyntaxHighlighter.NASM_NUMBER),
+    private static final AttributesDescriptor[] NASM_ATTRIBUTE_DESCRIPTORS = new AttributesDescriptor[] {
             new AttributesDescriptor("Constant", NASMSyntaxHighlighter.NASM_CONSTANT),
-            new AttributesDescriptor("Separator", NASMSyntaxHighlighter.NASM_SEPARATOR),
-            new AttributesDescriptor("Register", NASMSyntaxHighlighter.NASM_REGISTER),
-            new AttributesDescriptor("Segment Register", NASMSyntaxHighlighter.NASM_SEGMENT_REGISTER),
-            new AttributesDescriptor("Operation", NASMSyntaxHighlighter.NASM_OPERATION),
-            new AttributesDescriptor("String", NASMSyntaxHighlighter.NASM_STRING),
+            new AttributesDescriptor("Instruction Mnemonic", NASMSyntaxHighlighter.NASM_OPERATION),
+            new AttributesDescriptor("Instruction Prefix", NASMSyntaxHighlighter.NASM_OP_PREFIX),
+            new AttributesDescriptor("Label", NASMSyntaxHighlighter.NASM_LABEL),
             new AttributesDescriptor("Macro Identifier", NASMSyntaxHighlighter.NASM_MACRO),
             new AttributesDescriptor("Macro Parameter Reference", NASMSyntaxHighlighter.NASM_MACRO_PARAM_REF),
             new AttributesDescriptor("Macro Variable Reference", NASMSyntaxHighlighter.NASM_MACRO_VAR_REF),
             new AttributesDescriptor("Macro Label", NASMSyntaxHighlighter.NASM_MACRO_LABEL),
-            new AttributesDescriptor("Label", NASMSyntaxHighlighter.NASM_LABEL),
-            new AttributesDescriptor("Structure", NASMSyntaxHighlighter.NASM_STRUCTURE),
+            new AttributesDescriptor("Number", NASMSyntaxHighlighter.NASM_NUMBER),
+            new AttributesDescriptor("Register", NASMSyntaxHighlighter.NASM_REGISTER),
+            new AttributesDescriptor("Segment Register", NASMSyntaxHighlighter.NASM_SEGMENT_REGISTER),
+            new AttributesDescriptor("Separator", NASMSyntaxHighlighter.NASM_SEPARATOR),
             new AttributesDescriptor("Size Type", NASMSyntaxHighlighter.NASM_SIZE_TYPE),
-            new AttributesDescriptor("Instruction Prefix", NASMSyntaxHighlighter.NASM_OP_PREFIX),
+            new AttributesDescriptor("String", NASMSyntaxHighlighter.NASM_STRING),
+            new AttributesDescriptor("Structure", NASMSyntaxHighlighter.NASM_STRUCTURE),
     };
 
     @Nullable
@@ -69,46 +70,62 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
     @Override
     public String getDemoText() {
         return "; Sample NASM File\n" +
-                "\n" +
-                "global\tfunc\n" +
-                "\n" +
-                "section\t.data\n" +
-                "\n" +
-                "floatval\tdd 3.14159\n" +
-                "byteval1\tdb 0xFF\n" +
-                "byteval2\tdb 0A1h\n" +
-                "binaryval1\tdb 0b0101\n" +
-                "\n" +
                 "section .text\n" +
                 "\n" +
                 "example_constant equ 45\n" +
-                "\n" +
                 "%macro multi_line_macro 1\n" +
-                "    mov\t%1, ebx\n" +
-                "%endmacro\n" +
-                "%macro silly 2\n" +
-                "    %2: db %1\n" +
+                "    mov    %1, ebx\n" +
                 "%endmacro\n" +
                 "%macro retz 0 \n" +
                 "        jnz %%skip \n" +
                 "        ret \n" +
                 "    %%skip: \n" +
                 "%endmacro\n" +
+                "%define single_line_macro(x)   (x+5)\n" +
                 "\n" +
-                "%define\tsingle_line_macro(x)\t(x+5)\n" +
-                "\n" +
+                "global func\n" +
                 "func:\n" +
-                "    multi_line_macro(eax)\n" +
-                "    mov\teax, single_line_macro(5)\n" +
-                "    xor\tax, ax\n" +
-                "    mov\tss, ax ; Set segments\n" +
-                "    mov\tds, ax\n" +
-                "    mov\tes, ax\n" +
-                "    fadd\tS(0) ; FPU instruction\n" +
-                "    pxor\txmm0, xmm0 ; MMX instruction\n" +
-                "    cvtsi2ss\txmm0, rax\n" +
-                "    mov\teax, dword [ebp + 4*eax - 12h]\n" +
-                "    repz ret\n";
+                "       multi_line_macro eax\n" +
+                "       mov     eax, single_line_macro(5)\n" +
+                "       xor     ax, ax\n" +
+                "       mov     ss, ax ; Set segments\n" +
+                "       mov     ds, ax\n" +
+                "       mov     es, ax\n" +
+                "       fadd    S(0) ; FPU instruction\n" +
+                "       pxor    xmm0, xmm0 ; MMX instruction\n" +
+                "       cvtsi2ss xmm0, rax\n" +
+                "       mov     eax, dword [ebp + 4*eax - 12h]\n" +
+                "       mov     eax, 'str'\n" +
+                "       mov     eax, partition.sizeof\n" +
+                "       repz ret\n" +
+                "\n" +
+                "section .data\n" +
+                "\n" +
+                "; Format of fdisk partition entry.\n" +
+                "struc partition\n" +
+                "    .bootid  resb 1 ; bootable or not\n" +
+                "    .head    resb 1 ; starting head, sector, cylinder\n" +
+                "    .sect    resb 1 ;\n" +
+                "    .cyl     resb 1 ;\n" +
+                "    .type    resb 1 ; partition type\n" +
+                "    .endhead resb 1 ; ending head, sector, cylinder\n" +
+                "    .endsect resb 1 ;\n" +
+                "    .endcyl  resb 1 ;\n" +
+                "    .lba     resd 1 ; starting lba\n" +
+                "    .sectors resd 1 ; size in sectors\n" +
+                "    .sizeof\n" +
+                "endstruc\n" +
+                "%macro silly 2\n" +
+                "    %2: db %1\n" +
+                "%endmacro\n" +
+                "silly \"example string 1\" exampleString1\n" +
+                "exampleString2:db \"example string 2\"\n" +
+                "floatval:      dd 3.14159\n" +
+                "byteval1:      db 0xFF\n" +
+                "byteval2:      db 0A1h\n" +
+                "binaryval1:    db 0b0101\n" +
+                "\n" +
+                "       END\n";
     }
 
     @Nullable
@@ -120,7 +137,7 @@ public class NASMColorSettingsPage implements ColorSettingsPage {
     @NotNull
     @Override
     public AttributesDescriptor[] getAttributeDescriptors() {
-        return NASM_DESCRIPTORS;
+        return NASM_ATTRIBUTE_DESCRIPTORS;
     }
 
     @NotNull

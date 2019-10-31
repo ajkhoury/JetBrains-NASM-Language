@@ -8,12 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface NASMConstant extends PsiElement {
 
   @NotNull
-  NASMIdentifier getIdentifier();
-
-  @NotNull
-  List<NASMNumericExpr> getNumericExprList();
+  List<NASMExpr> getExprList();
 
   @NotNull
   PsiElement getEqu();
+
+  @NotNull
+  PsiElement getId();
 
 }

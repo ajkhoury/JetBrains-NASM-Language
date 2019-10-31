@@ -14,9 +14,9 @@ public class NASMChooseByNameContributor implements ChooseByNameContributor {
         List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesInProject(project);
         List<String> names = new ArrayList<String>(identifiers.size());
         for (NASMIdentifier identifier : identifiers) {
-            String identifierName = identifier.getName();
-            if (identifierName != null && identifierName.length() > 0) {
-                names.add(identifierName);
+            String identifierString = identifier.getId().getText();
+            if (identifierString != null && identifierString.length() > 0) {
+                names.add(identifierString);
             }
         }
         return names.toArray(new String[names.size()]);
@@ -25,7 +25,7 @@ public class NASMChooseByNameContributor implements ChooseByNameContributor {
     @NotNull
     @Override
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
-        List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesByStringInProject(project, name);
+        List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesByIdInProject(project, name);
         return identifiers.toArray(new NavigationItem[identifiers.size()]);
     }
 }

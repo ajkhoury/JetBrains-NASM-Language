@@ -28,20 +28,20 @@ public class NASMConstantImpl extends ASTWrapperPsiElement implements NASMConsta
 
   @Override
   @NotNull
-  public NASMIdentifier getIdentifier() {
-    return findNotNullChildByClass(NASMIdentifier.class);
-  }
-
-  @Override
-  @NotNull
-  public List<NASMNumericExpr> getNumericExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override
   @NotNull
   public PsiElement getEqu() {
     return findNotNullChildByType(EQU);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
 }

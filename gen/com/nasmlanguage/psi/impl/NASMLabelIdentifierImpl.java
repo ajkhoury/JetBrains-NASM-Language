@@ -9,8 +9,10 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
 import com.nasmlanguage.psi.*;
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiReference;
 
-public class NASMLabelIdentifierImpl extends NASMExprImpl implements NASMLabelIdentifier {
+public class NASMLabelIdentifierImpl extends NASMNamedElementImpl implements NASMLabelIdentifier {
 
   public NASMLabelIdentifierImpl(@NotNull ASTNode node) {
     super(node);
@@ -41,6 +43,32 @@ public class NASMLabelIdentifierImpl extends NASMExprImpl implements NASMLabelId
   @Nullable
   public PsiElement getSizeType() {
     return findChildByType(SIZE_TYPE);
+  }
+
+  @Override
+  public String getName() {
+    return NASMPsiImplUtil.getName(this);
+  }
+
+  @Override
+  public PsiElement setName(String newName) {
+    return NASMPsiImplUtil.setName(this, newName);
+  }
+
+  @Override
+  public PsiElement getNameIdentifier() {
+    return NASMPsiImplUtil.getNameIdentifier(this);
+  }
+
+  @Override
+  public ItemPresentation getPresentation() {
+    return NASMPsiImplUtil.getPresentation(this);
+  }
+
+  @Override
+  @NotNull
+  public PsiReference[] getReferences() {
+    return NASMPsiImplUtil.getReferences(this);
   }
 
 }

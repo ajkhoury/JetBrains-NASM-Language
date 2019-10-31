@@ -74,10 +74,6 @@ public class NASMParserDefinition implements ParserDefinition {
         return new NASMFile(viewProvider);
     }
 
-    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
-        return SpaceRequirements.MAY;
-    }
-
     @NotNull
     public PsiElement createElement(ASTNode node) {
         return NASMTypes.Factory.createElement(node);

@@ -38,6 +38,7 @@ public class NASMIncludeImpl extends ASTWrapperPsiElement implements NASMInclude
     return findNotNullChildByType(STRING);
   }
 
+  @Override
   public String getIncludeString() {
     return NASMPsiImplUtil.getIncludeString(this);
   }

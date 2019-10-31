@@ -23,20 +23,31 @@ SOFTWARE.
 
 --*/
 
-package com.nasmlanguage.psi;
+package com.nasmlanguage;
 
-import com.intellij.psi.tree.IElementType;
-import com.nasmlanguage.NASMLanguage;
-import org.jetbrains.annotations.*;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceProvider;
+import com.intellij.util.ProcessingContext;
+import org.jetbrains.annotations.NotNull;
 
-public class NASMTokenType extends IElementType {
-    public NASMTokenType(@NotNull @NonNls String debugName) {
-        super(debugName, NASMLanguage.INSTANCE);
-    }
-
+public class NASMReferenceProvider extends PsiReferenceProvider {
+    @NotNull
     @Override
-    @SuppressWarnings({"HardCodedStringLiteral"})
-    public String toString() {
-        return "NASMTokenType." + super.toString();
+    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                 @NotNull ProcessingContext context) {
+        if (element instanceof PsiNamedElement) {
+            PsiNamedElement namedElement = (PsiNamedElement) element;
+            String value = namedElement.getName();
+            if (value != null) {
+                int valueIndex = namedElement.getText().indexOf(value);
+                return new PsiReference[]{new NASMReference(element, new TextRange(valueIndex, valueIndex + value.length()))};
+            }
+        }
+
+        return PsiReference.EMPTY_ARRAY;
     }
+
 }

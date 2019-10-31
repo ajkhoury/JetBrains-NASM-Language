@@ -28,8 +28,8 @@ public class NASMLabelDefMacroImpl extends ASTWrapperPsiElement implements NASML
 
   @Override
   @NotNull
-  public List<NASMNumericExpr> getNumericExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMNumericExpr.class);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override

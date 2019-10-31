@@ -11,9 +11,6 @@ public interface NASMIStruc extends PsiElement {
   List<NASMExpr> getExprList();
 
   @NotNull
-  List<NASMNumericExpr> getNumericExprList();
-
-  @NotNull
   PsiElement getIendTag();
 
   @NotNull

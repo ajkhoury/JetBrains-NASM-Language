@@ -42,7 +42,7 @@ public class NASMAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof NASMIdentifier) {
-            NASMIdentifier nasmIdentifier = (NASMIdentifier)element;
+            NASMIdentifier nasmIdentifier = (NASMIdentifier) element;
             PsiElement parentElement = nasmIdentifier.getParent();
             if (parentElement != null) {
                 if (parentElement instanceof NASMIStruc || parentElement instanceof NASMStruc) {
@@ -65,28 +65,24 @@ public class NASMAnnotator implements Annotator {
                     for (NASMIdentifier identifierRef : identifierRefs) {
                         //NASMInstruction parentInstruction = PsiTreeUtil.getParentOfType(identifierRef, NASMInstruction.class);
                         //if (parentInstruction != null)
-                            highlightTextRange(identifierRef.getTextRange(), NASMSyntaxHighlighter.NASM_STRUCTURE, holder);
+                        highlightTextRange(identifierRef.getTextRange(), NASMSyntaxHighlighter.NASM_STRUCTURE, holder);
                     }
-                } else if (parentElement instanceof NASMConstant) {
-                    highlightTextRange(nasmIdentifier.getTextRange(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
-                    List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferences(parentElement.getContainingFile(), nasmIdentifier);
-                    for (NASMIdentifier identifierRef : identifierRefs)
-                        highlightTextRange(identifierRef.getTextRange(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
                 } else if (parentElement instanceof NASMMacro ||
-                           parentElement instanceof NASMMacroCall ||
-                           parentElement instanceof NASMAssign ||
-                           parentElement instanceof NASMStrlen) {
+                        parentElement instanceof NASMMacroCall ||
+                        parentElement instanceof NASMAssign ||
+                        parentElement instanceof NASMStrlen) {
                     ASTNode identifierNode = parentElement.getNode().findChildByType(NASMTypes.IDENTIFIER);
                     if (identifierNode != null) {
                         highlightTextRange(identifierNode.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
                     }
                     //List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferences(parentElement.getContainingFile(), nasmIdentifier);
-                    //for (NASMIdentifier identifierRef : identifierRefs)
+                    //for (NASMIdentifier identifierRef : identifierRefs) {
                     //    highlightTextRange(identifierRef.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
+                    //}
                 } else if (parentElement instanceof NASMInstruction) {
                     List<NASMLabel> labels = NASMUtil.findLabels(parentElement.getContainingFile());
                     for (NASMLabel label : labels) {
-                        String labelIdentifierText = label.getLabelIdentifierString();
+                        String labelIdentifierText = label.getName();
                         if (labelIdentifierText != null && labelIdentifierText.equals(nasmIdentifier.getText())) {
                             TextRange tr = nasmIdentifier.getTextRange();
                             highlightTextRange(tr.getStartOffset(), tr.getLength(), NASMSyntaxHighlighter.NASM_LABEL, holder);
@@ -94,8 +90,16 @@ public class NASMAnnotator implements Annotator {
                     }
                 }
             }
+        } else if (element instanceof NASMConstant) {
+            NASMConstant nasmConstant = (NASMConstant) element;
+            PsiElement idElement = nasmConstant.getId();
+            highlightTextRange(idElement.getTextRange(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
+            List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferencesById(element.getContainingFile(), idElement.getText());
+            for (NASMIdentifier identifierRef : identifierRefs) {
+                highlightTextRange(identifierRef.getTextRange(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
+            }
         } else if (element instanceof NASMDefine) {
-            NASMDefine nasmDefine = (NASMDefine)element;
+            NASMDefine nasmDefine = (NASMDefine) element;
             NASMIdentifier defineIdentifier = nasmDefine.getDefineIdentifier();
             highlightTextRange(defineIdentifier.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
             List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferences(element.getContainingFile(), defineIdentifier);
@@ -107,19 +111,19 @@ public class NASMAnnotator implements Annotator {
                 }
             }
         } else if (element instanceof NASMLabel) {
-            NASMLabel nasmLabel = (NASMLabel)element;
+            NASMLabel nasmLabel = (NASMLabel) element;
             NASMLabelDefMacro nasmLabelDefMacro = nasmLabel.getLabelDefMacro();
             if (nasmLabelDefMacro != null) {
                 PsiElement labelDefId = nasmLabelDefMacro.getId();
                 highlightTextRange(labelDefId.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
-                List<NASMNumericExpr> nasmNumericExprList = nasmLabelDefMacro.getNumericExprList();
-                if (nasmNumericExprList.size() == 1) {
-                    NASMNumericExpr nasmLabelDefMacroExpr = nasmNumericExprList.get(0);
+                List<NASMExpr> nasmExprList = nasmLabelDefMacro.getExprList();
+                if (nasmExprList.size() == 1) {
+                    NASMExpr nasmLabelDefMacroExpr = nasmExprList.get(0);
                     highlightTextRange(nasmLabelDefMacroExpr.getTextRange(), NASMSyntaxHighlighter.NASM_LABEL, holder);
                 }
             }
         } else if (element instanceof NASMLabelIdentifier) {
-            NASMLabelIdentifier nasmLabelIdentifier = (NASMLabelIdentifier)element;
+            NASMLabelIdentifier nasmLabelIdentifier = (NASMLabelIdentifier) element;
             PsiElement parentElement = nasmLabelIdentifier.getParent();
             if (!((parentElement instanceof NASMStruc) || (parentElement instanceof NASMIStruc))) {
                 PsiElement labelIdElement = nasmLabelIdentifier.getId();
@@ -128,7 +132,7 @@ public class NASMAnnotator implements Annotator {
                 }
             }
         } else if (element instanceof NASMStructureField) {
-            PsiElement structField = ((NASMStructureField)element).getStructField();
+            PsiElement structField = ((NASMStructureField) element).getStructField();
             String structFieldText = structField.getText();
             int separatorIdx = structFieldText.indexOf('.');
             if (separatorIdx != -1) {
@@ -138,7 +142,7 @@ public class NASMAnnotator implements Annotator {
                 highlightTextRange(tr.getStartOffset() + separatorIdx + 1, fieldText.length(), NASMSyntaxHighlighter.NASM_LABEL, holder);
             }
         } else if (element instanceof NASMSegmentAddress) {
-            NASMSegmentAddress nasmSegmentAddress = (NASMSegmentAddress)element;
+            NASMSegmentAddress nasmSegmentAddress = (NASMSegmentAddress) element;
             //System.out.println("nasmSegmentAddress=" + nasmSegmentAddress.getText());
             // Handle segment (left side) value
             PsiElement segmentElement = nasmSegmentAddress.getSegmentAddrL();
@@ -156,15 +160,15 @@ public class NASMAnnotator implements Annotator {
                     int separatorIdx = lblDefText.indexOf(':');
                     TextRange tr = segmentElement.getTextRange();
                     highlightTextRange(tr.getStartOffset() + separatorIdx, 1, NASMSyntaxHighlighter.NASM_SEPARATOR, holder);
-                    String identifierText = lblDefText.substring(0, separatorIdx).trim();
+                    String lblDefIdentifierText = lblDefText.substring(0, separatorIdx).trim();
                     boolean found = false;
                     // Search for a constant
                     List<NASMConstant> constants = NASMUtil.findConstants(element.getContainingFile());
                     for (NASMConstant constant : constants) {
-                        String constantIdentifier = constant.getIdentifier().getText();
-                        if (constantIdentifier != null && constantIdentifier.equals(identifierText)) {
+                        String constantIdentifier = constant.getId().getText();
+                        if (constantIdentifier != null && constantIdentifier.equals(lblDefIdentifierText)) {
                             found = true;
-                            highlightTextRange(tr.getStartOffset(), identifierText.length(),
+                            highlightTextRange(tr.getStartOffset(), lblDefIdentifierText.length(),
                                     NASMSyntaxHighlighter.NASM_CONSTANT, holder);
                             break;
                         }
@@ -174,9 +178,9 @@ public class NASMAnnotator implements Annotator {
                         List<NASMDefine> defines = NASMUtil.findPreprocessorDefines(element.getContainingFile());
                         for (NASMDefine define : defines) {
                             String defineIdentifier = define.getDefineIdentifierString();
-                            if (defineIdentifier != null && defineIdentifier.equals(identifierText)) {
+                            if (defineIdentifier != null && defineIdentifier.equals(lblDefIdentifierText)) {
                                 found = true;
-                                highlightTextRange(tr.getStartOffset(), identifierText.length(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
+                                highlightTextRange(tr.getStartOffset(), lblDefIdentifierText.length(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
                                 break;
                             }
                         }
@@ -185,10 +189,10 @@ public class NASMAnnotator implements Annotator {
                     if (!found) {
                         List<NASMLabel> labels = NASMUtil.findLabels(element.getContainingFile());
                         for (NASMLabel label : labels) {
-                            String labelIdentifier = label.getLabelIdentifierString();
-                            if (labelIdentifier != null && labelIdentifier.equals(identifierText)) {
+                            String labelName = label.getName();
+                            if (labelName != null && labelName.equals(lblDefIdentifierText)) {
                                 found = true;
-                                highlightTextRange(tr.getStartOffset(), identifierText.length(),
+                                highlightTextRange(tr.getStartOffset(), lblDefIdentifierText.length(),
                                         NASMSyntaxHighlighter.NASM_LABEL, holder);
                                 break;
                             }
@@ -196,7 +200,7 @@ public class NASMAnnotator implements Annotator {
                     }
                     // If a match wasnt found, color it a generic identifier color
                     if (!found) {
-                        highlightTextRange(tr.getStartOffset(), identifierText.length(),
+                        highlightTextRange(tr.getStartOffset(), lblDefIdentifierText.length(),
                                 NASMSyntaxHighlighter.NASM_IDENTIFIER, holder);
                     }
                 }
@@ -219,7 +223,7 @@ public class NASMAnnotator implements Annotator {
                 // Search for a constant
                 List<NASMConstant> constants = NASMUtil.findConstants(element.getContainingFile());
                 for (NASMConstant constant : constants) {
-                    String constantIdentifier = constant.getIdentifier().getText();
+                    String constantIdentifier = constant.getId().getText();
                     if (constantIdentifier.equals(addrIdentifierText)) {
                         found = true;
                         highlightTextRange(tr, NASMSyntaxHighlighter.NASM_CONSTANT, holder);
@@ -242,8 +246,8 @@ public class NASMAnnotator implements Annotator {
                 if (!found) {
                     List<NASMLabel> labels = NASMUtil.findLabels(element.getContainingFile());
                     for (NASMLabel label : labels) {
-                        String labelIdentifier = label.getLabelIdentifierString();
-                        if (labelIdentifier != null && labelIdentifier.equals(addrIdentifierText)) {
+                        String labelName = label.getName();
+                        if (labelName != null && labelName.equals(addrIdentifierText)) {
                             found = true;
                             highlightTextRange(tr, NASMSyntaxHighlighter.NASM_LABEL, holder);
                             break;

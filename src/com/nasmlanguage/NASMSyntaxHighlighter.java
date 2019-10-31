@@ -38,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
-
     public static final TextAttributesKey NASM_REGISTER = TextAttributesKey.createTextAttributesKey(
             "NASM_REGISTER",
             DefaultLanguageHighlighterColors.LOCAL_VARIABLE
@@ -120,75 +119,73 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
             HighlighterColors.BAD_CHARACTER
     );
 
-    private static final Map<IElementType, TextAttributesKey> keys1;
-    private static final Map<IElementType, TextAttributesKey> keys2;
+    private static final Map<IElementType, TextAttributesKey> AttributeKeys;
     static {
-        keys1 = new THashMap<>();
-        keys2 = new THashMap<>();
+        AttributeKeys = new THashMap<>();
 
-        keys1.put(NASMTypes.REGISTER, NASM_REGISTER);
-        keys1.put(NASMTypes.SEGMENT_REGISTER, NASM_SEGMENT_REGISTER);
+        AttributeKeys.put(NASMTypes.REGISTER, NASM_REGISTER);
+        AttributeKeys.put(NASMTypes.SEGMENT_REGISTER, NASM_SEGMENT_REGISTER);
 
-        keys1.put(NASMTypes.SEPARATOR, NASM_SEPARATOR);
+        AttributeKeys.put(NASMTypes.SEPARATOR, NASM_SEPARATOR);
 
-        keys1.put(NASMTypes.SIZE_TYPE, NASM_SIZE_TYPE);
+        AttributeKeys.put(NASMTypes.SIZE_TYPE, NASM_SIZE_TYPE);
 
-        keys1.put(NASMTypes.MACRO, NASM_MACRO);
-        keys1.put(NASMTypes.MACRO_CALL, NASM_MACRO);
-        keys1.put(NASMTypes.MACRO_PARAM_REF, NASM_MACRO_PARAM_REF);
-        keys1.put(NASMTypes.MACRO_VAR_REF, NASM_MACRO_VAR_REF);
-        keys1.put(NASMTypes.MACRO_PARAM_LBL_DEF, NASM_MACRO_LABEL);
+        AttributeKeys.put(NASMTypes.MACRO, NASM_MACRO);
+        AttributeKeys.put(NASMTypes.MACRO_CALL, NASM_MACRO);
+        AttributeKeys.put(NASMTypes.MACRO_PARAM_REF, NASM_MACRO_PARAM_REF);
+        AttributeKeys.put(NASMTypes.MACRO_VAR_REF, NASM_MACRO_VAR_REF);
+        AttributeKeys.put(NASMTypes.MACRO_PARAM_LBL_DEF, NASM_MACRO_LABEL);
 
-        keys1.put(NASMTypes.OP_PREFIX, NASM_OP_PREFIX);
+        AttributeKeys.put(NASMTypes.OP_PREFIX, NASM_OP_PREFIX);
 
-        keys1.put(NASMTypes.GENERAL_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.SYSTEM_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.VIRTUALIZATION_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.X64_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.FPU_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.MMX_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.SSE_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.SSE2_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.SSE3_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.SSE4_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.AVX_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.AVX2_OP, NASM_OPERATION);
-        keys1.put(NASMTypes.AVX512_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.GENERAL_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.SYSTEM_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.VIRTUALIZATION_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.X64_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.FPU_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.MMX_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.SSE_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.SSE2_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.SSE3_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.SSE4_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.AVX_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.AVX2_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.AVX512_OP, NASM_OPERATION);
 
-        keys1.put(NASMTypes.DATA_OP, NASM_OPERATION);
+        AttributeKeys.put(NASMTypes.DATA_OP, NASM_OPERATION);
 
-        keys1.put(NASMTypes.DIRECTIVE_OP, NASM_DIRECTIVE);
-        keys1.put(NASMTypes.END_DIRECTIVE_OP, NASM_DIRECTIVE);
-        keys1.put(NASMTypes.SECTION, NASM_DIRECTIVE);
-        keys1.put(NASMTypes.SEGMENT, NASM_DIRECTIVE);
-        keys1.put(NASMTypes.EQU, NASM_DIRECTIVE);
+        AttributeKeys.put(NASMTypes.CONSTANT, NASM_CONSTANT);
 
-        keys1.put(NASMTypes.STRING, NASM_STRING);
-        keys1.put(NASMTypes.CHARACTER, NASM_STRING);
+        AttributeKeys.put(NASMTypes.DIRECTIVE_OP, NASM_DIRECTIVE);
+        AttributeKeys.put(NASMTypes.END_DIRECTIVE_OP, NASM_DIRECTIVE);
+        AttributeKeys.put(NASMTypes.SECTION, NASM_DIRECTIVE);
+        AttributeKeys.put(NASMTypes.SEGMENT, NASM_DIRECTIVE);
+        AttributeKeys.put(NASMTypes.EQU, NASM_DIRECTIVE);
 
-        keys1.put(NASMTypes.STRUCTURE, NASM_STRUCTURE);
-        keys1.put(NASMTypes.STRUCT_FIELD, NASM_STRUCTURE_FIELD);
+        AttributeKeys.put(NASMTypes.STRING, NASM_STRING);
+        AttributeKeys.put(NASMTypes.CHARACTER, NASM_STRING);
 
-        keys1.put(NASMTypes.CONSTANT, NASM_CONSTANT);
+        AttributeKeys.put(NASMTypes.STRUCTURE, NASM_STRUCTURE);
+        AttributeKeys.put(NASMTypes.STRUCT_FIELD, NASM_STRUCTURE_FIELD);
 
-        keys1.put(NASMTypes.NUMERIC_LITERAL, NASM_NUMBER);
-        keys1.put(NASMTypes.BINARY, NASM_NUMBER);
-        keys1.put(NASMTypes.HEXADECIMAL, NASM_NUMBER);
-        keys1.put(NASMTypes.ZEROES, NASM_NUMBER);
-        keys1.put(NASMTypes.DECIMAL, NASM_NUMBER);
-        keys1.put(NASMTypes.SEGMENT_ADDR_L, NASM_NUMBER);
+        AttributeKeys.put(NASMTypes.NUMERIC_LITERAL, NASM_NUMBER);
+        AttributeKeys.put(NASMTypes.BINARY, NASM_NUMBER);
+        AttributeKeys.put(NASMTypes.HEXADECIMAL, NASM_NUMBER);
+        AttributeKeys.put(NASMTypes.ZEROES, NASM_NUMBER);
+        AttributeKeys.put(NASMTypes.DECIMAL, NASM_NUMBER);
+        AttributeKeys.put(NASMTypes.SEGMENT_ADDR_L, NASM_NUMBER);
 
-        keys1.put(NASMTypes.LBL, NASM_LABEL);
-        keys1.put(NASMTypes.LBL_DEF, NASM_LABEL);
-        //keys1.put(NASMTypes.LBL_INS, NASM_LABEL);
-        //keys1.put(NASMTypes.LBL_DATA, NASM_LABEL);
+        AttributeKeys.put(NASMTypes.LBL, NASM_LABEL);
+        AttributeKeys.put(NASMTypes.LBL_DEF, NASM_LABEL);
+        //AttributeKeys.put(NASMTypes.LBL_INS, NASM_LABEL);
+        //AttributeKeys.put(NASMTypes.LBL_DATA, NASM_LABEL);
 
-        keys1.put(NASMTypes.IDENTIFIER, NASM_IDENTIFIER);
+        AttributeKeys.put(NASMTypes.IDENTIFIER, NASM_IDENTIFIER);
 
-        keys1.put(NASMTypes.COMMENT, NASM_COMMENT);
-        keys1.put(NASMTypes.SEMICOLON, NASM_COMMENT);
+        AttributeKeys.put(NASMTypes.COMMENT, NASM_COMMENT);
+        AttributeKeys.put(NASMTypes.SEMICOLON, NASM_COMMENT);
 
-        keys1.put(TokenType.BAD_CHARACTER, NASM_BAD_CHARACTER);
+        AttributeKeys.put(TokenType.BAD_CHARACTER, NASM_BAD_CHARACTER);
     }
 
     @NotNull
@@ -200,6 +197,6 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        return SyntaxHighlighterBase.pack(keys1.get(tokenType), keys2.get(tokenType));
+        return SyntaxHighlighterBase.pack(AttributeKeys.get(tokenType));
     }
 }

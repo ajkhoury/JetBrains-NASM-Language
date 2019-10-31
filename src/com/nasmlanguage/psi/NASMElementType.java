@@ -34,4 +34,10 @@ public class NASMElementType extends IElementType {
     public NASMElementType(@NotNull @NonNls String debugName) {
         super(debugName, NASMLanguage.INSTANCE);
     }
+
+    @Override
+    @SuppressWarnings({"HardCodedStringLiteral"})
+    public String toString() {
+        return "NASMElementType." + super.toString();
+    }
 }

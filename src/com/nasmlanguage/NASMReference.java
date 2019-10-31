@@ -1,30 +1,34 @@
 package com.nasmlanguage;
 
-import com.intellij.codeInsight.lookup.*;
-import com.intellij.openapi.project.Project;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.nasmlanguage.psi.NASMIdentifier;
-import org.jetbrains.annotations.*;
+import com.nasmlanguage.psi.NASMLabel;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NASMReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
-    private String id;
+    private String myReferenceId;
 
-    public NASMReference(@NotNull PsiElement element, TextRange textRange) {
-        super(element, textRange);
-        id = element.getText();
+    public NASMReference(@NotNull PsiElement element, TextRange rangeInElement) {
+        super(element, rangeInElement);
+        myReferenceId = element.getText().substring(rangeInElement.getStartOffset(), rangeInElement.getEndOffset());
+        //System.out.println("myReferenceId="+myReferenceId);
     }
 
+    @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        Project project = myElement.getProject();
-        final List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesByStringInProject(project, id);
+        List<NASMLabel> labels = NASMUtil.findLabelReferencesByIdInProject(myElement.getProject(), myReferenceId);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
-        for (NASMIdentifier identifier : identifiers) {
-            results.add(new PsiElementResolveResult(identifier));
+        for (NASMLabel label : labels) {
+            results.add(new PsiElementResolveResult(label));
         }
         return results.toArray(new ResolveResult[results.size()]);
     }

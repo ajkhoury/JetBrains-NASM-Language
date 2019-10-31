@@ -36,6 +36,16 @@ public class NASMElementFactory {
         return (NASMIdentifier)file.getFirstChild();
     }
 
+    public static NASMLabel createLabel(Project project, String name) {
+        final NASMFile file = createFile(project, name+":");
+        return (NASMLabel)file.getFirstChild();
+    }
+
+    public static NASMLabelIdentifier createLabelIdentifier(Project project, String name) {
+        final NASMFile file = createFile(project, name);
+        return (NASMLabelIdentifier)file.getFirstChild();
+    }
+
     public static NASMFile createFile(Project project, String text) {
         String name = "dummy.create.asm";
         return (NASMFile)PsiFileFactory.getInstance(project).createFileFromText(name, NASMFileType.INSTANCE, text);

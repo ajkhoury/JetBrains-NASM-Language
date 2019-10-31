@@ -26,9 +26,9 @@ public class NASMBitwiseNOTExprImpl extends NASMExprImpl implements NASMBitwiseN
   }
 
   @Override
-  @NotNull
-  public NASMNumericExpr getNumericExpr() {
-    return findNotNullChildByClass(NASMNumericExpr.class);
+  @Nullable
+  public NASMExpr getExpr() {
+    return findChildByClass(NASMExpr.class);
   }
 
 }

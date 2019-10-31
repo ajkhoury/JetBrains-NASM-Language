@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMLabel extends PsiElement {
+public interface NASMLabel extends NASMNamedElement {
 
   @Nullable
   NASMData getData();
@@ -22,6 +22,10 @@ public interface NASMLabel extends PsiElement {
   @Nullable
   PsiElement getLblDef();
 
-  String getLabelIdentifierString();
+  String getName();
+
+  PsiElement setName(String newName);
+
+  PsiElement getNameIdentifier();
 
 }

@@ -18,9 +18,9 @@ public interface NASMIdentifier extends NASMExpr, NASMNamedElement {
 
   PsiElement getNameIdentifier();
 
+  ItemPresentation getPresentation();
+
   @NotNull
   PsiReference[] getReferences();
-
-  ItemPresentation getPresentation();
 
 }

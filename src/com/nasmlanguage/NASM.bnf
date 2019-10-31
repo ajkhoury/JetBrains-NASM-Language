@@ -320,19 +320,17 @@ Conditional ::= (IF_TAG (Condition|Expr) CRLF* Element* ((ELIF_TAG Condition|ELS
             | (IFMACRO_TAG ID MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
 private Condition ::= (Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL) Expr)
 
-Label ::= (((LBL_DEF (Instruction|Data|Structure)? CRLF*)|(LabelDefMacro (Instruction|Data|Structure)? CRLF*))) {methods=[getLabelIdentifierString]} // (((LBL_DEF (Instruction|Data|Structure)?)|LabelInstruction|LabelData) CRLF*)
-LabelDefMacro ::= (ID (ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R) COLON CRLF*)
-Constant ::= (Identifier EQU ((MINUS|PLUS|BITWISE_NOT)? NumericExpr)* CRLF*)
+Label ::= (((LBL_DEF (Instruction|Data|Structure)? CRLF*)|(LabelDefMacro (Instruction|Data|Structure)? CRLF*))) { mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
+LabelDefMacro ::= (ID (ROUND_L (Expr (SEPARATOR Expr)*)? ROUND_R) COLON CRLF*)
+Constant ::= (ID EQU ((MINUS|PLUS|BITWISE_NOT)? Expr)* CRLF*)
 
-//LabelData ::= (LBL_DATA DataValue CRLF*) {methods=[getLabelIdentifierString]}
 Data ::= (ID? DATA_OP DataValue CRLF*)
-private DataValue ::= ((MINUS|PLUS|BITWISE_NOT)? (NumericExpr|STRING|LabelIdentifier) (SEPARATOR ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier)))*)
+private DataValue ::= ((MINUS|PLUS|BITWISE_NOT)? (Expr|STRING|LabelIdentifier) (SEPARATOR ((MINUS|PLUS)? (Expr|STRING|LabelIdentifier)))*)
 
 Structure ::= ((Struc|IStruc) CRLF*)
-Struc ::= (STRUC_TAG Identifier CRLF* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*)* ENDSTRUC_TAG)
+Struc ::= (STRUC_TAG Identifier CRLF* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*)* ENDSTRUC_TAG)
 IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
-//LabelInstruction ::= (((LBL_INS ((Expr SEPARATOR)* Expr)?)|Directive|MacroCall) CRLF*) {methods=[getLabelIdentifierString]}
 Instruction ::= ((OP_PREFIX? (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?) CRLF*)
 private Mnemonic ::= (GENERAL_OP|SYSTEM_OP|VIRTUALIZATION_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP|AVX_OP|AVX2_OP|AVX512_OP)
 
@@ -377,32 +375,6 @@ Expr ::= ParenthesisExpr
         | LabelIdentifier
         | EndDirective
         ;
-NumericExpr ::= ParenthesisNumericExpr
-        | MulExpr
-        | DivExpr
-        | PlusExpr
-        | MinusExpr
-        | ModulusExpr
-        | BitShiftLExpr
-        | BitShiftRExpr
-        | BitwiseANDExpr
-        | BitwiseORExpr
-        | BitwiseXORExpr
-        | BitwiseNOTExpr
-        | LogicalANDExpr
-        | LogicalORExpr
-        | LogicalXORExpr
-        | NumericLiteral
-        | SegmentAddress
-        | Str
-        | StructureField
-        | MacroCall
-        | MacroParamReference
-        | MacroVarReference
-        | Address
-        | Identifier
-        | LabelIdentifier
-        ;
 
 MulExpr ::= Expr TIMES Expr { extends=Expr }
 DivExpr ::= Expr DIVIDE Expr { extends=Expr }
@@ -414,16 +386,15 @@ BitShiftRExpr ::= Expr BITSHIFT_R Expr { extends=Expr }
 BitwiseANDExpr ::= Expr BITWISE_AND Expr { extends=Expr }
 BitwiseORExpr ::= Expr BITWISE_OR Expr { extends=Expr }
 BitwiseXORExpr ::= Expr BITWISE_XOR Expr { extends=Expr }
-BitwiseNOTExpr ::= BITWISE_NOT NumericExpr { extends=Expr }
+BitwiseNOTExpr ::= BITWISE_NOT Expr { extends=Expr }
 LogicalANDExpr ::= Expr LOGICAL_AND Expr { extends=Expr }
 LogicalORExpr ::= Expr LOGICAL_OR Expr { extends=Expr }
 LogicalXORExpr ::= Expr LOGICAL_XOR Expr { extends=Expr }
 ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
-ParenthesisNumericExpr ::= ROUND_L NumericExpr ROUND_R { pin(".*")=1 extends=NumericExpr }
 
 NumericLiteral ::= ((SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)?)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)) { extends=Expr }
-Identifier ::= ID { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getReferences getPresentation] }
-LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr }
+Identifier ::= ID { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getPresentation getReferences]}
+LabelIdentifier ::= (SIZE_TYPE? (LBL|ID)) { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getPresentation getReferences] }
 Reg ::= SIZE_TYPE? REGISTER { extends=Expr }
 Seg ::= SEGMENT_REGISTER { extends=Expr }
 Str ::= STRING { extends=Expr }

@@ -23,90 +23,19 @@ public class NASMParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, EXTENDS_SETS_);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == ASSIGN) {
-      r = Assign(b, 0);
-    }
-    else if (t == CONDITIONAL) {
-      r = Conditional(b, 0);
-    }
-    else if (t == CONSTANT) {
-      r = Constant(b, 0);
-    }
-    else if (t == DATA) {
-      r = Data(b, 0);
-    }
-    else if (t == DEFINE) {
-      r = Define(b, 0);
-    }
-    else if (t == DIRECTIVE) {
-      r = Directive(b, 0);
-    }
-    else if (t == DIRECTIVE_ARG) {
-      r = DirectiveArg(b, 0);
-    }
-    else if (t == ERROR) {
-      r = Error(b, 0);
-    }
-    else if (t == EXPR) {
-      r = Expr(b, 0, -1);
-    }
-    else if (t == I_STRUC) {
-      r = IStruc(b, 0);
-    }
-    else if (t == INCLUDE) {
-      r = Include(b, 0);
-    }
-    else if (t == INSTRUCTION) {
-      r = Instruction(b, 0);
-    }
-    else if (t == LABEL) {
-      r = Label(b, 0);
-    }
-    else if (t == LABEL_DEF_MACRO) {
-      r = LabelDefMacro(b, 0);
-    }
-    else if (t == MACRO) {
-      r = Macro(b, 0);
-    }
-    else if (t == MACRO_LABEL) {
-      r = MacroLabel(b, 0);
-    }
-    else if (t == MACRO_PARENTHESIS) {
-      r = MacroParenthesis(b, 0);
-    }
-    else if (t == MAP_OPTION) {
-      r = MapOption(b, 0);
-    }
-    else if (t == NUMERIC_EXPR) {
-      r = NumericExpr(b, 0);
-    }
-    else if (t == PARENTHESIS_NUMERIC_EXPR) {
-      r = ParenthesisNumericExpr(b, 0);
-    }
-    else if (t == PREPROCESSOR) {
-      r = Preprocessor(b, 0);
-    }
-    else if (t == STRLEN) {
-      r = Strlen(b, 0);
-    }
-    else if (t == STRUC) {
-      r = Struc(b, 0);
-    }
-    else if (t == STRUCTURE) {
-      r = Structure(b, 0);
-    }
-    else {
-      r = parse_root_(t, b, 0);
-    }
+    r = parse_root_(t, b);
     exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
   }
 
-  protected boolean parse_root_(IElementType t, PsiBuilder b, int l) {
+  protected boolean parse_root_(IElementType t, PsiBuilder b) {
+    return parse_root_(t, b, 0);
+  }
+
+  static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
     return NASMFile(b, l + 1);
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(NUMERIC_EXPR, PARENTHESIS_NUMERIC_EXPR),
     create_token_set_(ADDRESS, BITWISE_AND_EXPR, BITWISE_NOT_EXPR, BITWISE_OR_EXPR,
       BITWISE_XOR_EXPR, BIT_SHIFT_L_EXPR, BIT_SHIFT_R_EXPR, DIV_EXPR,
       END_DIRECTIVE, EXPR, IDENTIFIER, LABEL_IDENTIFIER,
@@ -375,21 +304,20 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Identifier EQU ((MINUS|PLUS|BITWISE_NOT)? NumericExpr)* CRLF*
+  // ID EQU ((MINUS|PLUS|BITWISE_NOT)? Expr)* CRLF*
   public static boolean Constant(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Constant")) return false;
-    if (!nextTokenIsSmart(b, ID)) return false;
+    if (!nextTokenIs(b, ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Identifier(b, l + 1);
-    r = r && consumeToken(b, EQU);
+    r = consumeTokens(b, 0, ID, EQU);
     r = r && Constant_2(b, l + 1);
     r = r && Constant_3(b, l + 1);
     exit_section_(b, m, CONSTANT, r);
     return r;
   }
 
-  // ((MINUS|PLUS|BITWISE_NOT)? NumericExpr)*
+  // ((MINUS|PLUS|BITWISE_NOT)? Expr)*
   private static boolean Constant_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Constant_2")) return false;
     while (true) {
@@ -400,13 +328,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (MINUS|PLUS|BITWISE_NOT)? NumericExpr
+  // (MINUS|PLUS|BITWISE_NOT)? Expr
   private static boolean Constant_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Constant_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Constant_2_0_0(b, l + 1);
-    r = r && NumericExpr(b, l + 1);
+    r = r && Expr(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -473,7 +401,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (MINUS|PLUS|BITWISE_NOT)? (NumericExpr|STRING|LabelIdentifier) (SEPARATOR ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier)))*
+  // (MINUS|PLUS|BITWISE_NOT)? (Expr|STRING|LabelIdentifier) (SEPARATOR ((MINUS|PLUS)? (Expr|STRING|LabelIdentifier)))*
   static boolean DataValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DataValue")) return false;
     boolean r;
@@ -502,17 +430,17 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NumericExpr|STRING|LabelIdentifier
+  // Expr|STRING|LabelIdentifier
   private static boolean DataValue_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DataValue_1")) return false;
     boolean r;
-    r = NumericExpr(b, l + 1);
+    r = Expr(b, l + 1, -1);
     if (!r) r = consumeToken(b, STRING);
     if (!r) r = LabelIdentifier(b, l + 1);
     return r;
   }
 
-  // (SEPARATOR ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier)))*
+  // (SEPARATOR ((MINUS|PLUS)? (Expr|STRING|LabelIdentifier)))*
   private static boolean DataValue_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DataValue_2")) return false;
     while (true) {
@@ -523,7 +451,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // SEPARATOR ((MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier))
+  // SEPARATOR ((MINUS|PLUS)? (Expr|STRING|LabelIdentifier))
   private static boolean DataValue_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DataValue_2_0")) return false;
     boolean r;
@@ -534,7 +462,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (MINUS|PLUS)? (NumericExpr|STRING|LabelIdentifier)
+  // (MINUS|PLUS)? (Expr|STRING|LabelIdentifier)
   private static boolean DataValue_2_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DataValue_2_0_1")) return false;
     boolean r;
@@ -561,11 +489,11 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NumericExpr|STRING|LabelIdentifier
+  // Expr|STRING|LabelIdentifier
   private static boolean DataValue_2_0_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DataValue_2_0_1_1")) return false;
     boolean r;
-    r = NumericExpr(b, l + 1);
+    r = Expr(b, l + 1, -1);
     if (!r) r = consumeToken(b, STRING);
     if (!r) r = LabelIdentifier(b, l + 1);
     return r;
@@ -1277,7 +1205,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ID (ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R) COLON CRLF*
+  // ID (ROUND_L (Expr (SEPARATOR Expr)*)? ROUND_R) COLON CRLF*
   public static boolean LabelDefMacro(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelDefMacro")) return false;
     if (!nextTokenIs(b, ID)) return false;
@@ -1291,7 +1219,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ROUND_L (NumericExpr (SEPARATOR NumericExpr)*)? ROUND_R
+  // ROUND_L (Expr (SEPARATOR Expr)*)? ROUND_R
   private static boolean LabelDefMacro_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelDefMacro_1")) return false;
     boolean r;
@@ -1303,25 +1231,25 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (NumericExpr (SEPARATOR NumericExpr)*)?
+  // (Expr (SEPARATOR Expr)*)?
   private static boolean LabelDefMacro_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelDefMacro_1_1")) return false;
     LabelDefMacro_1_1_0(b, l + 1);
     return true;
   }
 
-  // NumericExpr (SEPARATOR NumericExpr)*
+  // Expr (SEPARATOR Expr)*
   private static boolean LabelDefMacro_1_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelDefMacro_1_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = NumericExpr(b, l + 1);
+    r = Expr(b, l + 1, -1);
     r = r && LabelDefMacro_1_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (SEPARATOR NumericExpr)*
+  // (SEPARATOR Expr)*
   private static boolean LabelDefMacro_1_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelDefMacro_1_1_0_1")) return false;
     while (true) {
@@ -1332,13 +1260,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // SEPARATOR NumericExpr
+  // SEPARATOR Expr
   private static boolean LabelDefMacro_1_1_0_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelDefMacro_1_1_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, SEPARATOR);
-    r = r && NumericExpr(b, l + 1);
+    r = r && Expr(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1775,80 +1703,6 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ParenthesisNumericExpr
-  //         | MulExpr
-  //         | DivExpr
-  //         | PlusExpr
-  //         | MinusExpr
-  //         | ModulusExpr
-  //         | BitShiftLExpr
-  //         | BitShiftRExpr
-  //         | BitwiseANDExpr
-  //         | BitwiseORExpr
-  //         | BitwiseXORExpr
-  //         | BitwiseNOTExpr
-  //         | LogicalANDExpr
-  //         | LogicalORExpr
-  //         | LogicalXORExpr
-  //         | NumericLiteral
-  //         | SegmentAddress
-  //         | Str
-  //         | StructureField
-  //         | MacroCall
-  //         | MacroParamReference
-  //         | MacroVarReference
-  //         | Address
-  //         | Identifier
-  //         | LabelIdentifier
-  public static boolean NumericExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NumericExpr")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, NUMERIC_EXPR, "<numeric expr>");
-    r = ParenthesisNumericExpr(b, l + 1);
-    if (!r) r = Expr(b, l + 1, 0);
-    if (!r) r = Expr(b, l + 1, 1);
-    if (!r) r = Expr(b, l + 1, 2);
-    if (!r) r = Expr(b, l + 1, 3);
-    if (!r) r = Expr(b, l + 1, 4);
-    if (!r) r = Expr(b, l + 1, 5);
-    if (!r) r = Expr(b, l + 1, 6);
-    if (!r) r = Expr(b, l + 1, 7);
-    if (!r) r = Expr(b, l + 1, 8);
-    if (!r) r = Expr(b, l + 1, 9);
-    if (!r) r = BitwiseNOTExpr(b, l + 1);
-    if (!r) r = Expr(b, l + 1, 11);
-    if (!r) r = Expr(b, l + 1, 12);
-    if (!r) r = Expr(b, l + 1, 13);
-    if (!r) r = NumericLiteral(b, l + 1);
-    if (!r) r = SegmentAddress(b, l + 1);
-    if (!r) r = Str(b, l + 1);
-    if (!r) r = StructureField(b, l + 1);
-    if (!r) r = MacroCall(b, l + 1);
-    if (!r) r = MacroParamReference(b, l + 1);
-    if (!r) r = MacroVarReference(b, l + 1);
-    if (!r) r = Address(b, l + 1);
-    if (!r) r = Identifier(b, l + 1);
-    if (!r) r = LabelIdentifier(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // ROUND_L NumericExpr ROUND_R
-  public static boolean ParenthesisNumericExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ParenthesisNumericExpr")) return false;
-    if (!nextTokenIs(b, ROUND_L)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, PARENTHESIS_NUMERIC_EXPR, null);
-    r = consumeToken(b, ROUND_L);
-    p = r; // pin = 1
-    r = r && report_error_(b, NumericExpr(b, l + 1));
-    r = p && consumeToken(b, ROUND_R) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  /* ********************************************************** */
   // Include
   //                 | Define
   //                 | Assign
@@ -2013,7 +1867,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // STRUC_TAG Identifier CRLF* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*)* ENDSTRUC_TAG
+  // STRUC_TAG Identifier CRLF* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*)* ENDSTRUC_TAG
   public static boolean Struc(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc")) return false;
     if (!nextTokenIs(b, STRUC_TAG)) return false;
@@ -2039,7 +1893,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*)*
+  // ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*)*
   private static boolean Struc_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3")) return false;
     while (true) {
@@ -2050,7 +1904,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*
+  // (((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*
   private static boolean Struc_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0")) return false;
     boolean r;
@@ -2061,7 +1915,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier)))|(LabelIdentifier|LBL_DEF)
+  // ((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)
   private static boolean Struc_3_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0_0")) return false;
     boolean r;
@@ -2072,7 +1926,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (NumericExpr|Identifier))
+  // (LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier))
   private static boolean Struc_3_0_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0_0_0")) return false;
     boolean r;
@@ -2093,7 +1947,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (MINUS|PLUS)? (NumericExpr|Identifier)
+  // (MINUS|PLUS)? (Expr|Identifier)
   private static boolean Struc_3_0_0_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0_0_0_2")) return false;
     boolean r;
@@ -2120,11 +1974,11 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NumericExpr|Identifier
+  // Expr|Identifier
   private static boolean Struc_3_0_0_0_2_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0_0_0_2_1")) return false;
     boolean r;
-    r = NumericExpr(b, l + 1);
+    r = Expr(b, l + 1, -1);
     if (!r) r = Identifier(b, l + 1);
     return r;
   }
@@ -2196,7 +2050,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // 8: BINARY(BitwiseANDExpr)
   // 9: BINARY(BitwiseORExpr)
   // 10: BINARY(BitwiseXORExpr)
-  // 11: ATOM(BitwiseNOTExpr)
+  // 11: PREFIX(BitwiseNOTExpr)
   // 12: BINARY(LogicalANDExpr)
   // 13: BINARY(LogicalORExpr)
   // 14: BINARY(LogicalXORExpr)
@@ -2318,16 +2172,16 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // BITWISE_NOT NumericExpr
   public static boolean BitwiseNOTExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BitwiseNOTExpr")) return false;
     if (!nextTokenIsSmart(b, BITWISE_NOT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, BITWISE_NOT);
-    r = r && NumericExpr(b, l + 1);
-    exit_section_(b, m, BITWISE_NOT_EXPR, r);
-    return r;
+    p = r;
+    r = p && Expr(b, l, 11);
+    exit_section_(b, l, m, BITWISE_NOT_EXPR, r, p, null);
+    return r || p;
   }
 
   // (SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)?)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)
