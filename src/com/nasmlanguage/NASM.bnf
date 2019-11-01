@@ -227,8 +227,8 @@ SOFTWARE.
 
         // Make last!
         ID                  = 'regexp:([a-zA-Z_]+[a-zA-Z0-9_%]*)' // Some identifier
-        LBL_DEF             = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*):' // Label definition
-        LBL                 = 'regexp:([a-zA-Z$._?#@\126]+[a-zA-Z0-9_]*)' // Label can have chars like '%', '.', '?', '@', etc
+        LBL_DEF             = 'regexp:([a-zA-Z$._?#@~]+[a-zA-Z0-9_]*):' // Label definition
+        LBL                 = 'regexp:([a-zA-Z$._?#@~]+[a-zA-Z0-9_]*)' // Label can have chars like % . ? @ # ~ etc
 
         // Literals
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'

@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
-    <version>0.5-beta.0</version>
+    <version>0.5-beta.1</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/ajkhoury">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM assembly language for JetBrains IDEs</h1>
         <br>
-        <h2>Version v0.5-beta.0 pre-release</h2>
+        <h2>Version v0.5-beta.1 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -31,52 +31,8 @@
 
     <change-notes><![CDATA[
         <ul>
-            <li>Added macro syntax highlighting.</li>
-            <li>Added support for conditional assembly directives.</li>
-            <li>Fix for bug where blank comments would not match the comment regex.</li>
-            <li>Added support for structures and improved highlighting.</li>
-            <li>Fixed conditional assembly problems.</li>
-            <li>Fixed number size prefixes, segment addresses, data/instruction labels.</li>
-            <li>Added new operator expressions.</li>
-            <li>Added pinning for some repeating rules.</li>
-            <li>Added system instructions.</li>
-            <li>Added highlighting for segment addresses, and structure references.</li>
-            <li>Fix for blank labels in structs.</li>
-            <li>Fixed istruc structure parsing.</li>
-            <li>Added support for the RETF instruction.</li>
-            <li>Added bitwise operations and fixed macro label definitions.</li>
-            <li>Added BSS section.</li>
-            <li>Now allow structs to have macros and identifiers.</li>
-            <li>Fixed macro labels.</li>
-            <li>Allow expressions in struc fields.</li>
-            <li>Can now prefix expressions with bitwise NOT, minus, or plus symbol.</li>
-            <li>Fixed segment addresses.</li>
-            <li>Added AVX, AVX2, AVX512, and Virtualization instruction sets.</li>
-            <li>Can now use macros in segment addresses.</li>
-            <li>Added brace matching for braces, macros, preprocessor, and structs.</li>
-            <li>Fixed size type prefixes on expressions.</li>
-            <li>Added identifiers to istruc structure instances.</li>
-            <li>Added .RDATA section directive.</li>
-            <li>Added improved macro highlighting.</li>
-            <li>Fixed a null pointer exception that would happen with labels in segment addresses.</li>
-            <li>Added highlighting for macros in segment part of segment addresses.</li>
-            <li>Fixed section and segment directives so you can use any section/segment name.</li>
-            <li>Can now use size prefixes for macro calls/references.</li>
-            <li>Added the ability to use END tag in expressions.</li>
-            <li>Conditional and other preprocessor directives now supported inside macro definitions.</li>
-            <li>Nested macros now supported.</li>
-            <li>Macros without parameters now properly supported.</li>
-            <li>Single semicolon (comment) now allowed at end of file.</li>
-            <li>Added a "ChooseByNameContributor" that can navigate to a symbol by name.</li>
-            <li>Fixed bug where generic identifiers would error if a comment was after it.</li>
-            <li>Fixed highlighting which broke in v0.4.1.</li>
-            <li>Began adding more conditions for conditional expressions.</li>
-            <li>Added ability to use non-local to macro labels.</li>
-            <li>Macro parameters can now be any expression or mnemonic.</li>
-            <li>Added size type prefix for registers.</li>
-            <li>Added support for commas in directives.</li>
-            <li>Added support for back-tick strings.</li>
-            <li>Added initial references implementation for goto declaration support.</li>
+            <li>Fixed bug caused by an invalid index being used when getting references.</li>
+            <li>Add plugin logo icon and now use svg for file icons.</li>
         </ul>
     ]]>
     </change-notes>
@@ -101,6 +57,8 @@
         <psi.referenceContributor implementation="com.nasmlanguage.NASMReferenceContributor"/>
         <lang.findUsagesProvider language="NASM" implementationClass="com.nasmlanguage.NASMFindUsagesProvider"/>
         <gotoSymbolContributor implementation="com.nasmlanguage.NASMChooseByNameContributor"/>
+        <lang.refactoringSupport language="NASM" implementationClass="com.nasmlanguage.NASMRefactoringSupportProvider"/>
+        <lang.namesValidator language="NASM" implementationClass="com.nasmlanguage.NASMNamesValidator"/>
         <spellchecker.support language="NASM" implementationClass="com.intellij.spellchecker.tokenizer.SpellcheckingStrategy"/>
         <annotator language="NASM" implementationClass="com.nasmlanguage.NASMAnnotator"/>
         <lang.commenter language="NASM" implementationClass="com.nasmlanguage.NASMCommenter"/>

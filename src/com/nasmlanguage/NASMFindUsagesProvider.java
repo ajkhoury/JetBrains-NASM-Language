@@ -43,7 +43,7 @@ public class NASMFindUsagesProvider implements FindUsagesProvider {
     @Override
     public WordsScanner getWordsScanner() {
         return new DefaultWordsScanner(new NASMLexerAdapter(),
-                TokenSet.create(NASMTypes.ID),
+                TokenSet.create(NASMTypes.LBL),
                 TokenSet.create(NASMTypes.COMMENT),
                 TokenSet.EMPTY);
     }

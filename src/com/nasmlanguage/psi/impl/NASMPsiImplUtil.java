@@ -75,11 +75,10 @@ public class NASMPsiImplUtil {
     }
 
     public static PsiElement setName(NASMIdentifier element, String newName) {
-        ASTNode keyNode = element.getId().getNode();
-        if (keyNode != null) {
-            NASMIdentifier property = NASMElementFactory.createIdentifier(element.getProject(), newName);
-            ASTNode newKeyNode = property.getFirstChild().getNode();
-            element.getNode().replaceChild(keyNode, newKeyNode);
+        ASTNode idNode = element.getId().getNode();
+        if (idNode != null) {
+            PsiElement newId = NASMElementFactory.createIdentifier(element.getProject(), newName);
+            element.getNode().replaceChild(idNode, newId.getNode());
         }
         return element;
     }
@@ -130,14 +129,14 @@ public class NASMPsiImplUtil {
     public static PsiElement setName(NASMLabelIdentifier element, String newName) {
         ASTNode idNode = element.getNode().findChildByType(NASMTypes.ID);
         if (idNode != null) {
-            NASMLabelIdentifier newLabelIdentifier = NASMElementFactory.createLabelIdentifier(element.getProject(), newName);
+            NASMLabelIdentifier newLabelIdentifier = NASMElementFactory.createLabelIdentifierId(element.getProject(), newName);
             ASTNode newIdNode = newLabelIdentifier.getNode().findChildByType(NASMTypes.ID);
             assert newIdNode != null;
             element.getNode().replaceChild(idNode, newIdNode);
         }
         ASTNode lblNode = element.getNode().findChildByType(NASMTypes.LBL);
         if (lblNode != null) {
-            NASMLabelIdentifier newLabelIdentifier = NASMElementFactory.createLabelIdentifier(element.getProject(), newName);
+            NASMLabelIdentifier newLabelIdentifier = NASMElementFactory.createLabelIdentifierLbl(element.getProject(), newName);
             ASTNode newLblNode = newLabelIdentifier.getNode().findChildByType(NASMTypes.LBL);
             assert newLblNode != null;
             element.getNode().replaceChild(lblNode, newLblNode);

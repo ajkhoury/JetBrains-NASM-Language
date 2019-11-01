@@ -26,14 +26,16 @@ SOFTWARE.
 package com.nasmlanguage.psi;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.nasmlanguage.NASMFileType;
 
 public class NASMElementFactory {
 
-    public static NASMIdentifier createIdentifier(Project project, String name) {
+    public static PsiElement createIdentifier(Project project, String name) {
         final NASMFile file = createFile(project, name);
-        return (NASMIdentifier)file.getFirstChild();
+        return file.getFirstChild();
     }
 
     public static NASMLabel createLabel(Project project, String name) {
@@ -41,13 +43,20 @@ public class NASMElementFactory {
         return (NASMLabel)file.getFirstChild();
     }
 
-    public static NASMLabelIdentifier createLabelIdentifier(Project project, String name) {
-        final NASMFile file = createFile(project, name);
-        return (NASMLabelIdentifier)file.getFirstChild();
+    public static NASMLabelIdentifier createLabelIdentifierId(Project project, String name) {
+        final NASMFile file = createFile(project, "db short "+name);
+        return PsiTreeUtil.getChildOfType(file.getFirstChild(), NASMLabelIdentifier.class);
     }
 
-    public static NASMFile createFile(Project project, String text) {
-        String name = "dummy.create.asm";
-        return (NASMFile)PsiFileFactory.getInstance(project).createFileFromText(name, NASMFileType.INSTANCE, text);
+    public static NASMLabelIdentifier createLabelIdentifierLbl(Project project, String name) {
+        if (name.charAt(0) == '.') {
+            name = name.substring(1);
+        }
+        final NASMFile file = createFile(project, "db ."+name);
+        return PsiTreeUtil.getChildOfType(file.getFirstChild(), NASMLabelIdentifier.class);
+    }
+
+    private static NASMFile createFile(Project project, String text) {
+        return (NASMFile)PsiFileFactory.getInstance(project).createFileFromText("dummy.create.asm", NASMFileType.INSTANCE, text);
     }
 }

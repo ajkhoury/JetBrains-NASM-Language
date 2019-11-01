@@ -29,5 +29,5 @@ import com.intellij.openapi.util.IconLoader;
 import javax.swing.Icon;
 
 public class NASMIcons {
-    public static final Icon ASM_FILE = IconLoader.getIcon("/com/nasmlanguage/icons/FileType_asm.png");
+    public static final Icon ASM_FILE = IconLoader.getIcon("/com/nasmlanguage/icons/FileType_asm.svg");
 }

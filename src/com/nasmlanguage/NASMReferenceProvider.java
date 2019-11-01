@@ -43,7 +43,9 @@ public class NASMReferenceProvider extends PsiReferenceProvider {
             String value = namedElement.getName();
             if (value != null) {
                 int valueIndex = namedElement.getText().indexOf(value);
-                return new PsiReference[]{new NASMReference(element, new TextRange(valueIndex, valueIndex + value.length()))};
+                if (valueIndex >= 0) {
+                    return new PsiReference[]{new NASMReference(element, new TextRange(valueIndex, valueIndex + value.length()))};
+                }
             }
         }
 
