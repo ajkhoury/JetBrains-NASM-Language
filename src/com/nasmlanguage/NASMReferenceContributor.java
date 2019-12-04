@@ -26,15 +26,15 @@ SOFTWARE.
 package com.nasmlanguage;
 
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceRegistrar;
+import com.nasmlanguage.psi.NASMNamedElement;
 import org.jetbrains.annotations.NotNull;
 
 public class NASMReferenceContributor extends PsiReferenceContributor {
     @Override
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-        registrar.registerReferenceProvider(PlatformPatterns.psiElement(PsiNamedElement.class),
+        registrar.registerReferenceProvider(PlatformPatterns.psiElement(NASMNamedElement.class),
                                             new NASMReferenceProvider());
     }
 }
