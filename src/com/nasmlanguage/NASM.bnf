@@ -56,10 +56,10 @@ SOFTWARE.
         MACRO_PARAM_REF     = 'regexp:((%|%%)([1-9][0-9]*))'
         MACRO_VAR_REF       = 'regexp:((%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@]*))'
         MACRO_PARAM_LBL_DEF = 'regexp:((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)):)'
-        IF_TAG              = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][nN]?([dD][eE][fF])?)'
+        IF_TAG              = 'regexp:((\s+)?[#%](\s+)?)(([iI][fF][iI][dD][nN])|([iI][fF][nN]?([dD][eE][fF])?))'
         IFMACRO_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][mM][aA][cC][rR][oO])'
         IFCTX_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][cC][tT][xX])'
-        ELIF_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][iI][fF][nN]?([dD][eE][fF])?)'
+        ELIF_TAG            = 'regexp:((\s+)?[#%](\s+)?)(([eE][lL][iI][fF][iI][dD][nN])|([eE][lL][iI][fF][nN]?([dD][eE][fF])?))'
         ELSE_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][sS][eE])'
         ENDIF_TAG           = 'regexp:((\s+)?[#%](\s+)?)([eE][nN][dD][iI][fF])'
 
@@ -203,7 +203,7 @@ SOFTWARE.
         //INS_AVX512_OTHER    = 'regexp:(valign[dq]|vdbpsadbw|vpmultishiftqb|vpsrav[dqw])|(VALIGN[DQ]|VDBPSADBW|VPMULTISHIFTQB|VPSRAV[DQW])'
 
         // Instruction operation prefixes
-        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock)|((REP(N?[EZ])|REP)|LOCK)'
+        OP_PREFIX           = 'regexp:((rep(n?[ez])|rep)|lock|bnd|xacquire|xrelease)|((REP(N?[EZ])|REP)|LOCK|BND|XACQUIRE|XRELEASE)'
 
         // Instructions
         GENERAL_OP          = 'regexp:{INS_DATA_TRANS_MOV}|{INS_DATA_TRANS_XCHG}|{INS_DATA_TRANS_OTHER}|{INS_DECIMAL_ARITH}|{INS_BINARY_ARITH}|{INS_BINARY_LOGICAL}|{INS_BINARY_ROTATE}|{INS_BINARY_SET}|{INS_BINARY_OTHER}|{INS_CONTROL_TRANS}|{INS_STRING_DATA}|{INS_INPUT_OUTPUT}|{INS_FLAG_CONTROL}|{INS_SEG_REGS}|{INS_MISC_OTHER}|{INS_RNG_RAND}|{INS_BIT_MANIPULATION}'
@@ -219,6 +219,7 @@ SOFTWARE.
         AVX_OP              = 'regexp:{INS_AVX_GENERAL}|{INS_AVX_AES}|{INS_AVX_COMPARISON}|{INS_AVX_CONVERSION}|{INS_AVX_LOGICAL}|{INS_AVX_MOV}|{INS_AVX_ARITH}|{INS_AVX_PACKED}|{INS_AVX_BLEND}|{INS_AVX_CACHE}|{INS_AVX_FMA3}|{INS_AVX_OTHER}'
         AVX2_OP             = 'regexp:{INS_AVX2_SIMD}|{INS_AVX2_BROADCAST}|{INS_AVX2_BLEND}|{INS_AVX2_GATHER}'
         AVX512_OP           = 'regexp:{INS_AVX512_BLEND}|{INS_AVX512_BROADCAST}|{INS_AVX512_MOV}|{INS_AVX512_COMPRESS}|{INS_AVX512_CONV}|{INS_AVX512_MATH}|{INS_AVX512_LOGICAL}|{INS_AVX512_COMPARE}|{INS_AVX512_PACKED}|{INS_AVX512_PERM}|{INS_AVX512_OTHER}'
+        HLE_OP              = 'regexp:{INS_HLE_PREFIXES}'
 
         // All kinds of registers
         REGISTER            = 'regexp:(%)?((([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[0-8])|(d[rb][0-367]|dr([89]|1[0-5]))|(tr[3-7])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|(efer|tpr|syscfg)|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr)|(zmm([12]?[0-9]|30|31))))|((([C-GS]S):)?(([ABCD][HL])|([ER]?[ABCD]X)|([ER]?[SB]P)|([ER]?[SD]I|DIL|SIL|BPL|SPL)|([ER]?IP)|(R(8|9|1[0-5])[BDLW]?)|([ER]?FLAGS)|(CR[0-8])|(D[RB][0-367]|DR([89]|1[0-5]))|(TR[3-7])|(([GIL]DT)R?|TR)|(BND([0-3]|CFG[SU]|STATUS))|(EFER|TPR|SYSCFG)|((MM|ST|FPR)[0-7])|([XY]MM([0-9]|1[0-5])|MXCSR)|(ZMM([12]?[0-9]|30|31))))'
@@ -226,9 +227,9 @@ SOFTWARE.
         SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
 
         // Make last!
-        ID                  = 'regexp:([a-zA-Z_]+[a-zA-Z0-9_%]*)' // Some identifier
-        LBL_DEF             = 'regexp:([a-zA-Z$._?#@~]+[a-zA-Z0-9_]*):' // Label definition
-        LBL                 = 'regexp:([a-zA-Z$._?#@~]+[a-zA-Z0-9_]*)' // Label can have chars like % . ? @ # ~ etc
+        ID                  = 'regexp:([a-zA-Z_?]+[a-zA-Z0-9_?#@~]*)' // Some identifier
+        LBL_DEF             = 'regexp:([a-zA-Z$._?#@]+[a-zA-Z0-9$._~]*):' // Label definition
+        LBL                 = 'regexp:([a-zA-Z$._?#@]+[a-zA-Z0-9$._~]*)' // Label can have chars like % . ? @ # ~ etc
 
         // Literals
         BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
@@ -279,7 +280,8 @@ SOFTWARE.
 }
 
 NASMFile ::= Element*
-private Element ::= Section
+private Element ::= COMMENT
+                | Section
                 | Segment
                 | Label
                 | Preprocessor
@@ -289,7 +291,6 @@ private Element ::= Section
                 | Structure
                 | Instruction
                 | Data
-                | COMMENT
                 | CRLF
                 | ID
                 ;
@@ -299,7 +300,9 @@ private Segment ::= (((SQUARE_L SEGMENT SQUARE_R) | SEGMENT) CRLF*)
 Preprocessor ::= Include
                 | Define
                 | Assign
+                | Label
                 | Macro
+                | MacroDefinitionCall
                 | MacroCall
                 | Strlen
                 | Error
@@ -310,7 +313,7 @@ Include ::= (INCLUDE_TAG STRING) {methods=[getIncludeString]}
 Define ::= (DEFINE_TAG Identifier ROUND_L (Identifier (SEPARATOR Identifier)*)? ROUND_R Expr CRLF*)
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R)) CRLF*) {methods=[getDefineIdentifier getDefineIdentifierString]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
-Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifierString]}
+Macro ::= MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|LabelDefMacro|ID) CRLF*)*) MACRO_END_TAG { pin=1 methods=[getMacroIdentifierString]}
 MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|Data)? CRLF*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral TIMES?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?))
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
@@ -318,7 +321,7 @@ Strlen ::= STRLEN_TAG Identifier (STRING|ID) CRLF*
 Error ::= ERROR_TAG CRLF*
 Conditional ::= (IF_TAG (Condition|Expr) CRLF* Element* ((ELIF_TAG Condition|ELSE_TAG) CRLF* Element*)* ENDIF_TAG CRLF*)
             | (IFMACRO_TAG ID MacroParams MacroDefaultParam? CRLF* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
-private Condition ::= (Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL) Expr)
+private Condition ::= (Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL|SEPARATOR) Expr)
 
 Label ::= (((LBL_DEF (Instruction|Data|Structure)? CRLF*)|(LabelDefMacro (Instruction|Data|Structure)? CRLF*))) { mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
 LabelDefMacro ::= (ID (ROUND_L (Expr (SEPARATOR Expr)*)? ROUND_R) COLON CRLF*)
@@ -331,7 +334,8 @@ Structure ::= ((Struc|IStruc) CRLF*)
 Struc ::= (STRUC_TAG Identifier CRLF* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) CRLF*)* ENDSTRUC_TAG)
 IStruc ::= (ISTRUC_TAG Identifier CRLF* (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue CRLF*)* IEND_TAG)
 
-Instruction ::= ((OP_PREFIX? (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?) CRLF*)
+Instruction ::= ((Prefix* (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?) CRLF*)
+private Prefix ::= (OP_PREFIX CRLF*)
 private Mnemonic ::= (GENERAL_OP|SYSTEM_OP|VIRTUALIZATION_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP|AVX_OP|AVX2_OP|AVX512_OP)
 
 MapOption ::= SQUARE_L ('map'|'MAP') (('all'|'ALL')|('brief'|'BRIEF')|('sections'|'SECTIONS')|('segments'|'SEGMENTS')|('symbols'|'SYMBOLS'))? MAP_FILE SQUARE_R
@@ -365,6 +369,7 @@ Expr ::= ParenthesisExpr
         | SegmentAddress
         | Str
         | StructureField
+        | MacroDefinitionCall
         | MacroCall
         | MacroParamReference
         | MacroVarReference
@@ -404,7 +409,8 @@ SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID
                                 (LabelDefMacro (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))) { extends=Expr }
 Address ::= ((SIZE_TYPE? AddressInternal)|DOLLARSIGN|DOLLARSIGN2) { extends=Expr }
 private AddressInternal ::= (SQUARE_L MINUS? Expr SQUARE_R) { pin(".*")=1 }
-MacroCall ::= (SIZE_TYPE? (Identifier (MacroParenthesis | ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*)))) { extends=Expr }
-MacroParenthesis ::= (ROUND_L ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*)? ROUND_R) { pin(".*")=1 }
+MacroCall ::= SIZE_TYPE? (Identifier (Expr|Mnemonic|Identifier) (SEPARATOR (Expr|Mnemonic|Identifier))*) { extends=Expr }
+MacroDefinitionCall ::= SIZE_TYPE? Identifier MacroParenthesis { extends=Expr }
+private MacroParenthesis ::= (ROUND_L ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*)? ROUND_R) { pin(".*")=1 }
 MacroParamReference ::= (SIZE_TYPE? MACRO_PARAM_REF) { extends=Expr }
 MacroVarReference ::= (SIZE_TYPE? MACRO_VAR_REF) { extends=Expr }

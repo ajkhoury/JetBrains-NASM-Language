@@ -33,12 +33,6 @@ public class NASMMacroCallImpl extends NASMExprImpl implements NASMMacroCall {
 
   @Override
   @Nullable
-  public NASMMacroParenthesis getMacroParenthesis() {
-    return findChildByClass(NASMMacroParenthesis.class);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getSizeType() {
     return findChildByType(SIZE_TYPE);
   }

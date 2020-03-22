@@ -8,17 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMMacroParenthesisImpl extends ASTWrapperPsiElement implements NASMMacroParenthesis {
+public class NASMMacroDefinitionCallImpl extends NASMExprImpl implements NASMMacroDefinitionCall {
 
-  public NASMMacroParenthesisImpl(@NotNull ASTNode node) {
+  public NASMMacroDefinitionCallImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitMacroParenthesis(this);
+    visitor.visitMacroDefinitionCall(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -30,6 +29,12 @@ public class NASMMacroParenthesisImpl extends ASTWrapperPsiElement implements NA
   @NotNull
   public List<NASMExpr> getExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSizeType() {
+    return findChildByType(SIZE_TYPE);
   }
 
 }
