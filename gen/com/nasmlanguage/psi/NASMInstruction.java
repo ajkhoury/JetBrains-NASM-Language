@@ -32,9 +32,6 @@ public interface NASMInstruction extends PsiElement {
   PsiElement getMmxOp();
 
   @Nullable
-  PsiElement getOpPrefix();
-
-  @Nullable
   PsiElement getSizeType();
 
   @Nullable

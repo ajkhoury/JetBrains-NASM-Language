@@ -129,16 +129,16 @@ public class NASMVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitMacroDefinitionCall(@NotNull NASMMacroDefinitionCall o) {
+    visitExpr(o);
+  }
+
   public void visitMacroLabel(@NotNull NASMMacroLabel o) {
     visitPsiElement(o);
   }
 
   public void visitMacroParamReference(@NotNull NASMMacroParamReference o) {
     visitExpr(o);
-  }
-
-  public void visitMacroParenthesis(@NotNull NASMMacroParenthesis o) {
-    visitPsiElement(o);
   }
 
   public void visitMacroVarReference(@NotNull NASMMacroVarReference o) {

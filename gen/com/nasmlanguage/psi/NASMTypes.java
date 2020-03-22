@@ -38,9 +38,9 @@ public interface NASMTypes {
   IElementType LOGICAL_XOR_EXPR = new NASMElementType("LOGICAL_XOR_EXPR");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
+  IElementType MACRO_DEFINITION_CALL = new NASMElementType("MACRO_DEFINITION_CALL");
   IElementType MACRO_LABEL = new NASMElementType("MACRO_LABEL");
   IElementType MACRO_PARAM_REFERENCE = new NASMElementType("MACRO_PARAM_REFERENCE");
-  IElementType MACRO_PARENTHESIS = new NASMElementType("MACRO_PARENTHESIS");
   IElementType MACRO_VAR_REFERENCE = new NASMElementType("MACRO_VAR_REFERENCE");
   IElementType MAP_OPTION = new NASMElementType("MAP_OPTION");
   IElementType MINUS_EXPR = new NASMElementType("MINUS_EXPR");
@@ -97,6 +97,7 @@ public interface NASMTypes {
   IElementType GREATERTHAN = new NASMTokenType(">");
   IElementType GREATERTHANOREQUAL = new NASMTokenType(">=");
   IElementType HEXADECIMAL = new NASMTokenType("HEXADECIMAL");
+  IElementType HLE_OP = new NASMTokenType("HLE_OP");
   IElementType ID = new NASMTokenType("ID");
   IElementType IEND_TAG = new NASMTokenType("IEND_TAG");
   IElementType IFCTX_TAG = new NASMTokenType("IFCTX_TAG");
@@ -243,14 +244,14 @@ public interface NASMTypes {
       else if (type == MACRO_CALL) {
         return new NASMMacroCallImpl(node);
       }
+      else if (type == MACRO_DEFINITION_CALL) {
+        return new NASMMacroDefinitionCallImpl(node);
+      }
       else if (type == MACRO_LABEL) {
         return new NASMMacroLabelImpl(node);
       }
       else if (type == MACRO_PARAM_REFERENCE) {
         return new NASMMacroParamReferenceImpl(node);
-      }
-      else if (type == MACRO_PARENTHESIS) {
-        return new NASMMacroParenthesisImpl(node);
       }
       else if (type == MACRO_VAR_REFERENCE) {
         return new NASMMacroVarReferenceImpl(node);

@@ -40,10 +40,10 @@ public class NASMParser implements PsiParser, LightPsiParser {
       BITWISE_XOR_EXPR, BIT_SHIFT_L_EXPR, BIT_SHIFT_R_EXPR, DIV_EXPR,
       END_DIRECTIVE, EXPR, IDENTIFIER, LABEL_IDENTIFIER,
       LOGICAL_AND_EXPR, LOGICAL_OR_EXPR, LOGICAL_XOR_EXPR, MACRO_CALL,
-      MACRO_PARAM_REFERENCE, MACRO_VAR_REFERENCE, MINUS_EXPR, MODULUS_EXPR,
-      MUL_EXPR, NUMERIC_LITERAL, PARENTHESIS_EXPR, PLUS_EXPR,
-      REG, SEG, SEGMENT_ADDRESS, STR,
-      STRUCTURE_FIELD),
+      MACRO_DEFINITION_CALL, MACRO_PARAM_REFERENCE, MACRO_VAR_REFERENCE, MINUS_EXPR,
+      MODULUS_EXPR, MUL_EXPR, NUMERIC_LITERAL, PARENTHESIS_EXPR,
+      PLUS_EXPR, REG, SEG, SEGMENT_ADDRESS,
+      STR, STRUCTURE_FIELD),
   };
 
   /* ********************************************************** */
@@ -84,7 +84,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL) Expr
+  // Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL|SEPARATOR) Expr
   static boolean Condition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Condition")) return false;
     boolean r;
@@ -96,7 +96,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL
+  // EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL|SEPARATOR
   private static boolean Condition_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Condition_1")) return false;
     boolean r;
@@ -106,6 +106,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, LESSTHAN);
     if (!r) r = consumeToken(b, GREATERTHANOREQUAL);
     if (!r) r = consumeToken(b, LESSTHANOREQUAL);
+    if (!r) r = consumeToken(b, SEPARATOR);
     return r;
   }
 
@@ -769,7 +770,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Section
+  // COMMENT
+  //                 | Section
   //                 | Segment
   //                 | Label
   //                 | Preprocessor
@@ -779,13 +781,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //                 | Structure
   //                 | Instruction
   //                 | Data
-  //                 | COMMENT
   //                 | CRLF
   //                 | ID
   static boolean Element(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Element")) return false;
     boolean r;
-    r = Section(b, l + 1);
+    r = consumeToken(b, COMMENT);
+    if (!r) r = Section(b, l + 1);
     if (!r) r = Segment(b, l + 1);
     if (!r) r = Label(b, l + 1);
     if (!r) r = Preprocessor(b, l + 1);
@@ -795,7 +797,6 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Structure(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
     if (!r) r = Data(b, l + 1);
-    if (!r) r = consumeToken(b, COMMENT);
     if (!r) r = consumeToken(b, CRLF);
     if (!r) r = consumeToken(b, ID);
     return r;
@@ -911,7 +912,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (OP_PREFIX? (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?) CRLF*
+  // (Prefix* (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?) CRLF*
   public static boolean Instruction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction")) return false;
     boolean r;
@@ -922,7 +923,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // OP_PREFIX? (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?
+  // Prefix* (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?
   private static boolean Instruction_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0")) return false;
     boolean r;
@@ -934,10 +935,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // OP_PREFIX?
+  // Prefix*
   private static boolean Instruction_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Instruction_0_0")) return false;
-    consumeToken(b, OP_PREFIX);
+    while (true) {
+      int c = current_position_(b);
+      if (!Prefix(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Instruction_0_0", c)) break;
+    }
     return true;
   }
 
@@ -1283,7 +1288,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*)*) MACRO_END_TAG
+  // MACRO_TAG (Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|LabelDefMacro|ID) CRLF*)*) MACRO_END_TAG
   public static boolean Macro(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro")) return false;
     if (!nextTokenIs(b, MACRO_TAG)) return false;
@@ -1297,7 +1302,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*)*
+  // Identifier MacroParams MacroDefaultParam? CRLF* ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|LabelDefMacro|ID) CRLF*)*
   private static boolean Macro_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1")) return false;
     boolean r;
@@ -1329,7 +1334,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*)*
+  // ((MacroLabel|Data|Instruction|Directive|Preprocessor|Label|LabelDefMacro|ID) CRLF*)*
   private static boolean Macro_1_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1_4")) return false;
     while (true) {
@@ -1340,7 +1345,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID) CRLF*
+  // (MacroLabel|Data|Instruction|Directive|Preprocessor|Label|LabelDefMacro|ID) CRLF*
   private static boolean Macro_1_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1_4_0")) return false;
     boolean r;
@@ -1351,7 +1356,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // MacroLabel|Data|Instruction|Directive|Preprocessor|Label|ID
+  // MacroLabel|Data|Instruction|Directive|Preprocessor|Label|LabelDefMacro|ID
   private static boolean Macro_1_4_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_1_4_0_0")) return false;
     boolean r;
@@ -1361,6 +1366,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Directive(b, l + 1);
     if (!r) r = Preprocessor(b, l + 1);
     if (!r) r = Label(b, l + 1);
+    if (!r) r = LabelDefMacro(b, l + 1);
     if (!r) r = consumeToken(b, ID);
     return r;
   }
@@ -1494,11 +1500,11 @@ public class NASMParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // ROUND_L ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*)? ROUND_R
-  public static boolean MacroParenthesis(PsiBuilder b, int l) {
+  static boolean MacroParenthesis(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroParenthesis")) return false;
     if (!nextTokenIs(b, ROUND_L)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, MACRO_PARENTHESIS, null);
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, ROUND_L);
     p = r; // pin = 1
     r = r && report_error_(b, MacroParenthesis_1(b, l + 1));
@@ -1703,10 +1709,36 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // OP_PREFIX CRLF*
+  static boolean Prefix(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Prefix")) return false;
+    if (!nextTokenIs(b, OP_PREFIX)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_PREFIX);
+    r = r && Prefix_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF*
+  private static boolean Prefix_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Prefix_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "Prefix_1", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
   // Include
   //                 | Define
   //                 | Assign
+  //                 | Label
   //                 | Macro
+  //                 | MacroDefinitionCall
   //                 | MacroCall
   //                 | Strlen
   //                 | Error
@@ -1719,19 +1751,21 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = Include(b, l + 1);
     if (!r) r = Define(b, l + 1);
     if (!r) r = Assign(b, l + 1);
+    if (!r) r = Label(b, l + 1);
     if (!r) r = Macro(b, l + 1);
+    if (!r) r = MacroDefinitionCall(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
     if (!r) r = Strlen(b, l + 1);
     if (!r) r = Error(b, l + 1);
     if (!r) r = Conditional(b, l + 1);
-    if (!r) r = Preprocessor_8(b, l + 1);
+    if (!r) r = Preprocessor_10(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // PREPROCESSOR_OP Identifier Expr
-  private static boolean Preprocessor_8(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Preprocessor_8")) return false;
+  private static boolean Preprocessor_10(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Preprocessor_10")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, PREPROCESSOR_OP);
@@ -2058,15 +2092,16 @@ public class NASMParser implements PsiParser, LightPsiParser {
   // 16: ATOM(SegmentAddress)
   // 17: ATOM(Str)
   // 18: ATOM(StructureField)
-  // 19: ATOM(MacroCall)
-  // 20: ATOM(MacroParamReference)
-  // 21: ATOM(MacroVarReference)
-  // 22: ATOM(Address)
-  // 23: ATOM(Reg)
-  // 24: ATOM(Seg)
-  // 25: ATOM(Identifier)
-  // 26: ATOM(LabelIdentifier)
-  // 27: ATOM(EndDirective)
+  // 19: ATOM(MacroDefinitionCall)
+  // 20: ATOM(MacroCall)
+  // 21: ATOM(MacroParamReference)
+  // 22: ATOM(MacroVarReference)
+  // 23: ATOM(Address)
+  // 24: ATOM(Reg)
+  // 25: ATOM(Seg)
+  // 26: ATOM(Identifier)
+  // 27: ATOM(LabelIdentifier)
+  // 28: ATOM(EndDirective)
   public static boolean Expr(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expr")) return false;
     addVariant(b, "<expr>");
@@ -2078,6 +2113,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = SegmentAddress(b, l + 1);
     if (!r) r = Str(b, l + 1);
     if (!r) r = StructureField(b, l + 1);
+    if (!r) r = MacroDefinitionCall(b, l + 1);
     if (!r) r = MacroCall(b, l + 1);
     if (!r) r = MacroParamReference(b, l + 1);
     if (!r) r = MacroVarReference(b, l + 1);
@@ -2403,7 +2439,27 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SIZE_TYPE? (Identifier (MacroParenthesis | ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*)))
+  // SIZE_TYPE? Identifier MacroParenthesis
+  public static boolean MacroDefinitionCall(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroDefinitionCall")) return false;
+    if (!nextTokenIsSmart(b, ID, SIZE_TYPE)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, MACRO_DEFINITION_CALL, "<macro definition call>");
+    r = MacroDefinitionCall_0(b, l + 1);
+    r = r && Identifier(b, l + 1);
+    r = r && MacroParenthesis(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // SIZE_TYPE?
+  private static boolean MacroDefinitionCall_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroDefinitionCall_0")) return false;
+    consumeTokenSmart(b, SIZE_TYPE);
+    return true;
+  }
+
+  // SIZE_TYPE? (Identifier (Expr|Mnemonic|Identifier) (SEPARATOR (Expr|Mnemonic|Identifier))*)
   public static boolean MacroCall(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroCall")) return false;
     if (!nextTokenIsSmart(b, ID, SIZE_TYPE)) return false;
@@ -2422,76 +2478,57 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Identifier (MacroParenthesis | ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*))
+  // Identifier (Expr|Mnemonic|Identifier) (SEPARATOR (Expr|Mnemonic|Identifier))*
   private static boolean MacroCall_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroCall_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Identifier(b, l + 1);
     r = r && MacroCall_1_1(b, l + 1);
+    r = r && MacroCall_1_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // MacroParenthesis | ((Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*)
+  // Expr|Mnemonic|Identifier
   private static boolean MacroCall_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroCall_1_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = MacroParenthesis(b, l + 1);
-    if (!r) r = MacroCall_1_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (Expr|Mnemonic) (SEPARATOR (Expr|Mnemonic))*
-  private static boolean MacroCall_1_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_1_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = MacroCall_1_1_1_0(b, l + 1);
-    r = r && MacroCall_1_1_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Expr|Mnemonic
-  private static boolean MacroCall_1_1_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_1_1_1_0")) return false;
-    boolean r;
     r = Expr(b, l + 1, -1);
     if (!r) r = Mnemonic(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
     return r;
   }
 
-  // (SEPARATOR (Expr|Mnemonic))*
-  private static boolean MacroCall_1_1_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_1_1_1_1")) return false;
+  // (SEPARATOR (Expr|Mnemonic|Identifier))*
+  private static boolean MacroCall_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_1_2")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!MacroCall_1_1_1_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MacroCall_1_1_1_1", c)) break;
+      if (!MacroCall_1_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MacroCall_1_2", c)) break;
     }
     return true;
   }
 
-  // SEPARATOR (Expr|Mnemonic)
-  private static boolean MacroCall_1_1_1_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_1_1_1_1_0")) return false;
+  // SEPARATOR (Expr|Mnemonic|Identifier)
+  private static boolean MacroCall_1_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_1_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, SEPARATOR);
-    r = r && MacroCall_1_1_1_1_0_1(b, l + 1);
+    r = r && MacroCall_1_2_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // Expr|Mnemonic
-  private static boolean MacroCall_1_1_1_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MacroCall_1_1_1_1_0_1")) return false;
+  // Expr|Mnemonic|Identifier
+  private static boolean MacroCall_1_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCall_1_2_0_1")) return false;
     boolean r;
     r = Expr(b, l + 1, -1);
     if (!r) r = Mnemonic(b, l + 1);
+    if (!r) r = Identifier(b, l + 1);
     return r;
   }
 

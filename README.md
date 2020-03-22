@@ -8,9 +8,9 @@ The latest release can be found in the [JetBrains Plugins](https://plugins.jetbr
 
 # Features
 
-Version v0.5-beta.2 pre-release
+Version v0.5-beta.4 pre-release
 
-    FPU, MMX, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
+    FPU, MMX, HLE, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
     Single and multiline macro support.
     Conditional assembly directives support.
@@ -26,9 +26,11 @@ Version v0.5-beta.2 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.5-beta.2 Changes
+# v0.5-beta.4 Changes
     
-    Fixed bug causing unresolved references in non ASM files.
+    Fixed bug where multi-line macro parameters would sometimes cause syntax highlighting errors.
+    Fixed bug where conditional defines cause syntax highlighting errors.
+    Added HLE locking instruction prefixes, and adjusted instruction prefix BNF.
 
 # Complete Changelog
 
@@ -80,10 +82,13 @@ Version v0.5-beta.2 pre-release
     Fixed bug caused by an invalid index being used when getting references.
     Add plugin logo icon and now use svg for file icons.
     Fixed bug causing unresolved references in non ASM files.
+    Fixed bug where multi-line macro parameters would sometimes cause syntax highlighting errors.
+    Fixed bug where conditional defines cause syntax highlighting errors.
+    Added HLE locking instruction prefixes, and adjusted instruction prefix BNF.
 
 # License
 
-Copyright (c) 2017-2019 Aidan Khoury
+Copyright (c) 2017-2020 Aidan Khoury
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

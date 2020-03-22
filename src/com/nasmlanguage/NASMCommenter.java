@@ -33,13 +33,13 @@ public class NASMCommenter implements Commenter {
     @Nullable
     @Override
     public String getBlockCommentPrefix() {
-        return null;
+        return "%if 0";
     }
 
     @Nullable
     @Override
     public String getBlockCommentSuffix() {
-        return null;
+        return "%endif";
     }
 
     @Nullable

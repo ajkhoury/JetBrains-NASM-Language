@@ -76,12 +76,6 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @Nullable
-  public PsiElement getOpPrefix() {
-    return findChildByType(OP_PREFIX);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getSizeType() {
     return findChildByType(SIZE_TYPE);
   }
