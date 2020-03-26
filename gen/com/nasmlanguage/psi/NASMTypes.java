@@ -21,7 +21,6 @@ public interface NASMTypes {
   IElementType DATA = new NASMElementType("DATA");
   IElementType DEFINE = new NASMElementType("DEFINE");
   IElementType DIRECTIVE = new NASMElementType("DIRECTIVE");
-  IElementType DIRECTIVE_ARG = new NASMElementType("DIRECTIVE_ARG");
   IElementType DIV_EXPR = new NASMElementType("DIV_EXPR");
   IElementType END_DIRECTIVE = new NASMElementType("END_DIRECTIVE");
   IElementType ERROR = new NASMElementType("ERROR");
@@ -38,12 +37,14 @@ public interface NASMTypes {
   IElementType LOGICAL_XOR_EXPR = new NASMElementType("LOGICAL_XOR_EXPR");
   IElementType MACRO = new NASMElementType("MACRO");
   IElementType MACRO_CALL = new NASMElementType("MACRO_CALL");
-  IElementType MACRO_DEFINITION_CALL = new NASMElementType("MACRO_DEFINITION_CALL");
+  IElementType MACRO_DEF_CALL = new NASMElementType("MACRO_DEF_CALL");
   IElementType MACRO_LABEL = new NASMElementType("MACRO_LABEL");
+  IElementType MACRO_PARAM_COUNTER = new NASMElementType("MACRO_PARAM_COUNTER");
   IElementType MACRO_PARAM_REFERENCE = new NASMElementType("MACRO_PARAM_REFERENCE");
   IElementType MACRO_VAR_REFERENCE = new NASMElementType("MACRO_VAR_REFERENCE");
   IElementType MAP_OPTION = new NASMElementType("MAP_OPTION");
   IElementType MINUS_EXPR = new NASMElementType("MINUS_EXPR");
+  IElementType MNEMONIC = new NASMElementType("MNEMONIC");
   IElementType MODULUS_EXPR = new NASMElementType("MODULUS_EXPR");
   IElementType MUL_EXPR = new NASMElementType("MUL_EXPR");
   IElementType NUMERIC_LITERAL = new NASMElementType("NUMERIC_LITERAL");
@@ -58,6 +59,7 @@ public interface NASMTypes {
   IElementType STRUC = new NASMElementType("STRUC");
   IElementType STRUCTURE = new NASMElementType("STRUCTURE");
   IElementType STRUCTURE_FIELD = new NASMElementType("STRUCTURE_FIELD");
+  IElementType TOKEN_CONCAT_EXPR = new NASMElementType("TOKEN_CONCAT_EXPR");
 
   IElementType ASSIGN_TAG = new NASMTokenType("ASSIGN_TAG");
   IElementType AT_TAG = new NASMTokenType("AT_TAG");
@@ -74,7 +76,6 @@ public interface NASMTypes {
   IElementType CHARACTER = new NASMTokenType("CHARACTER");
   IElementType COLON = new NASMTokenType(":");
   IElementType COMMENT = new NASMTokenType("COMMENT");
-  IElementType CRLF = new NASMTokenType("CRLF");
   IElementType DATA_OP = new NASMTokenType("DATA_OP");
   IElementType DECIMAL = new NASMTokenType("DECIMAL");
   IElementType DEFINE_TAG = new NASMTokenType("DEFINE_TAG");
@@ -92,6 +93,7 @@ public interface NASMTypes {
   IElementType EQUAL = new NASMTokenType("=");
   IElementType EQUALEQUAL = new NASMTokenType("==");
   IElementType ERROR_TAG = new NASMTokenType("ERROR_TAG");
+  IElementType FLOAT_DECIMAL = new NASMTokenType("FLOAT_DECIMAL");
   IElementType FPU_OP = new NASMTokenType("FPU_OP");
   IElementType GENERAL_OP = new NASMTokenType("GENERAL_OP");
   IElementType GREATERTHAN = new NASMTokenType(">");
@@ -101,7 +103,12 @@ public interface NASMTypes {
   IElementType ID = new NASMTokenType("ID");
   IElementType IEND_TAG = new NASMTokenType("IEND_TAG");
   IElementType IFCTX_TAG = new NASMTokenType("IFCTX_TAG");
+  IElementType IFDEF_TAG = new NASMTokenType("IFDEF_TAG");
+  IElementType IFIDN_TAG = new NASMTokenType("IFIDN_TAG");
+  IElementType IFID_TAG = new NASMTokenType("IFID_TAG");
   IElementType IFMACRO_TAG = new NASMTokenType("IFMACRO_TAG");
+  IElementType IFNUM_TAG = new NASMTokenType("IFNUM_TAG");
+  IElementType IFSTR_TAG = new NASMTokenType("IFSTR_TAG");
   IElementType IF_TAG = new NASMTokenType("IF_TAG");
   IElementType INCLUDE_TAG = new NASMTokenType("INCLUDE_TAG");
   IElementType ISTRUC_TAG = new NASMTokenType("ISTRUC_TAG");
@@ -113,6 +120,8 @@ public interface NASMTypes {
   IElementType LOGICAL_OR = new NASMTokenType("||");
   IElementType LOGICAL_XOR = new NASMTokenType("^^");
   IElementType MACRO_END_TAG = new NASMTokenType("MACRO_END_TAG");
+  IElementType MACRO_NOLIST_QUAL = new NASMTokenType("MACRO_NOLIST_QUAL");
+  IElementType MACRO_PARAM_COUNT = new NASMTokenType("MACRO_PARAM_COUNT");
   IElementType MACRO_PARAM_LBL_DEF = new NASMTokenType("MACRO_PARAM_LBL_DEF");
   IElementType MACRO_PARAM_REF = new NASMTokenType("MACRO_PARAM_REF");
   IElementType MACRO_TAG = new NASMTokenType("MACRO_TAG");
@@ -121,6 +130,7 @@ public interface NASMTypes {
   IElementType MAP_OPTIONS = new NASMTokenType("MAP_OPTIONS");
   IElementType MINUS = new NASMTokenType("-");
   IElementType MMX_OP = new NASMTokenType("MMX_OP");
+  IElementType NL = new NASMTokenType("NL");
   IElementType NOTEQUAL = new NASMTokenType("!=");
   IElementType OP_PREFIX = new NASMTokenType("OP_PREFIX");
   IElementType PERCENT = new NASMTokenType("%");
@@ -150,6 +160,7 @@ public interface NASMTypes {
   IElementType STRUC_TAG = new NASMTokenType("STRUC_TAG");
   IElementType SYSTEM_OP = new NASMTokenType("SYSTEM_OP");
   IElementType TIMES = new NASMTokenType("*");
+  IElementType TOKEN_CONCAT = new NASMTokenType("%+");
   IElementType VIRTUALIZATION_OP = new NASMTokenType("VIRTUALIZATION_OP");
   IElementType X64_OP = new NASMTokenType("X64_OP");
   IElementType ZEROES = new NASMTokenType("ZEROES");
@@ -196,9 +207,6 @@ public interface NASMTypes {
       else if (type == DIRECTIVE) {
         return new NASMDirectiveImpl(node);
       }
-      else if (type == DIRECTIVE_ARG) {
-        return new NASMDirectiveArgImpl(node);
-      }
       else if (type == DIV_EXPR) {
         return new NASMDivExprImpl(node);
       }
@@ -244,11 +252,14 @@ public interface NASMTypes {
       else if (type == MACRO_CALL) {
         return new NASMMacroCallImpl(node);
       }
-      else if (type == MACRO_DEFINITION_CALL) {
-        return new NASMMacroDefinitionCallImpl(node);
+      else if (type == MACRO_DEF_CALL) {
+        return new NASMMacroDefCallImpl(node);
       }
       else if (type == MACRO_LABEL) {
         return new NASMMacroLabelImpl(node);
+      }
+      else if (type == MACRO_PARAM_COUNTER) {
+        return new NASMMacroParamCounterImpl(node);
       }
       else if (type == MACRO_PARAM_REFERENCE) {
         return new NASMMacroParamReferenceImpl(node);
@@ -261,6 +272,9 @@ public interface NASMTypes {
       }
       else if (type == MINUS_EXPR) {
         return new NASMMinusExprImpl(node);
+      }
+      else if (type == MNEMONIC) {
+        return new NASMMnemonicImpl(node);
       }
       else if (type == MODULUS_EXPR) {
         return new NASMModulusExprImpl(node);
@@ -303,6 +317,9 @@ public interface NASMTypes {
       }
       else if (type == STRUCTURE_FIELD) {
         return new NASMStructureFieldImpl(node);
+      }
+      else if (type == TOKEN_CONCAT_EXPR) {
+        return new NASMTokenConcatExprImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }
