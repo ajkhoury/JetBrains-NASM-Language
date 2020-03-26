@@ -58,13 +58,4 @@ public interface NASMConditional extends PsiElement {
   @Nullable
   PsiElement getIfTag();
 
-  @Nullable
-  PsiElement getMacroNolistQual();
-
-  @Nullable
-  PsiElement getRegister();
-
-  @Nullable
-  PsiElement getString();
-
 }

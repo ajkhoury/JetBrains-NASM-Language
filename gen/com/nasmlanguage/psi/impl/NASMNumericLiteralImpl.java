@@ -45,6 +45,12 @@ public class NASMNumericLiteralImpl extends NASMExprImpl implements NASMNumericL
 
   @Override
   @Nullable
+  public PsiElement getFloatDecimal() {
+    return findChildByType(FLOAT_DECIMAL);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getHexadecimal() {
     return findChildByType(HEXADECIMAL);
   }
