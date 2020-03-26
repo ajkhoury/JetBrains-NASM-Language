@@ -28,8 +28,8 @@ public class NASMIncludeImpl extends ASTWrapperPsiElement implements NASMInclude
 
   @Override
   @Nullable
-  public NASMIdentifier getIdentifier() {
-    return findChildByClass(NASMIdentifier.class);
+  public PsiElement getIdExtension() {
+    return findChildByType(ID_EXTENSION);
   }
 
   @Override

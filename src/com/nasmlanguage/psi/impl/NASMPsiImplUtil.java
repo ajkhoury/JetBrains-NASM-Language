@@ -40,11 +40,16 @@ import javax.swing.*;
 public class NASMPsiImplUtil {
 
     public static String getIncludeString(NASMInclude element) {
-        ASTNode includeString = element.getNode().findChildByType(NASMTypes.STRING);
-        if (includeString != null) {
-            return includeString.getText()
+        ASTNode includeId = element.getNode().findChildByType(NASMTypes.STRING);
+        if (includeId != null) {
+            return includeId.getText()
                     .replace("\"", "")
                     .replace("'", "");
+        } else {
+            includeId = element.getNode().findChildByType(NASMTypes.IDENTIFIER);
+            if (includeId != null) {
+                return includeId.getText();
+            }
         }
         return null;
     }

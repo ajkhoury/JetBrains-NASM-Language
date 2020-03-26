@@ -27,8 +27,8 @@ public class NASMStructureFieldImpl extends NASMExprImpl implements NASMStructur
 
   @Override
   @NotNull
-  public PsiElement getStructField() {
-    return findNotNullChildByType(STRUCT_FIELD);
+  public PsiElement getIdExtension() {
+    return findNotNullChildByType(ID_EXTENSION);
   }
 
 }

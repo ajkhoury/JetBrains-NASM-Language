@@ -132,12 +132,13 @@ public class NASMAnnotator implements Annotator {
                 }
             }
         } else if (element instanceof NASMStructureField) {
-            PsiElement structField = ((NASMStructureField) element).getStructField();
+            PsiElement structField = ((NASMStructureField) element).getIdExtension();
             String structFieldText = structField.getText();
             int separatorIdx = structFieldText.indexOf('.');
             if (separatorIdx != -1) {
                 String fieldText = structFieldText.substring(separatorIdx + 1);
                 TextRange tr = structField.getTextRange();
+                highlightTextRange(tr.getStartOffset(), separatorIdx, NASMSyntaxHighlighter.NASM_STRUCTURE_FIELD, holder);
                 highlightTextRange(tr.getStartOffset() + separatorIdx, 1, NASMSyntaxHighlighter.NASM_SEPARATOR, holder);
                 highlightTextRange(tr.getStartOffset() + separatorIdx + 1, fieldText.length(), NASMSyntaxHighlighter.NASM_LABEL, holder);
             }

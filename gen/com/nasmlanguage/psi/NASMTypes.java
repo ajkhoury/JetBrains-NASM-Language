@@ -101,6 +101,7 @@ public interface NASMTypes {
   IElementType HEXADECIMAL = new NASMTokenType("HEXADECIMAL");
   IElementType HLE_OP = new NASMTokenType("HLE_OP");
   IElementType ID = new NASMTokenType("ID");
+  IElementType ID_EXTENSION = new NASMTokenType("ID_EXTENSION");
   IElementType IEND_TAG = new NASMTokenType("IEND_TAG");
   IElementType IFCTX_TAG = new NASMTokenType("IFCTX_TAG");
   IElementType IFDEF_TAG = new NASMTokenType("IFDEF_TAG");
@@ -156,7 +157,6 @@ public interface NASMTypes {
   IElementType SSE_OP = new NASMTokenType("SSE_OP");
   IElementType STRING = new NASMTokenType("STRING");
   IElementType STRLEN_TAG = new NASMTokenType("STRLEN_TAG");
-  IElementType STRUCT_FIELD = new NASMTokenType("STRUCT_FIELD");
   IElementType STRUC_TAG = new NASMTokenType("STRUC_TAG");
   IElementType SYSTEM_OP = new NASMTokenType("SYSTEM_OP");
   IElementType TIMES = new NASMTokenType("*");

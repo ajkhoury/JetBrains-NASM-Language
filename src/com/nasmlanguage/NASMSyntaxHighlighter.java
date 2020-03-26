@@ -166,7 +166,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         AttributeKeys.put(NASMTypes.CHARACTER, NASM_STRING);
 
         AttributeKeys.put(NASMTypes.STRUCTURE, NASM_STRUCTURE);
-        AttributeKeys.put(NASMTypes.STRUCT_FIELD, NASM_STRUCTURE_FIELD);
+        AttributeKeys.put(NASMTypes.STRUCTURE_FIELD, NASM_STRUCTURE);
 
         AttributeKeys.put(NASMTypes.NUMERIC_LITERAL, NASM_NUMBER);
         AttributeKeys.put(NASMTypes.BINARY, NASM_NUMBER);

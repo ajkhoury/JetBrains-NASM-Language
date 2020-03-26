@@ -9092,7 +9092,7 @@ public class _NASMLexer implements FlexLexer {
             // fall through
           case 161: break;
           case 58: 
-            { return STRUCT_FIELD;
+            { return ID_EXTENSION;
             } 
             // fall through
           case 162: break;

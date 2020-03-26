@@ -844,7 +844,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // INCLUDE_TAG (STRING|Identifier)
+  // INCLUDE_TAG (ID_EXTENSION|STRING)
   public static boolean Include(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Include")) return false;
     if (!nextTokenIs(b, INCLUDE_TAG)) return false;
@@ -856,12 +856,12 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // STRING|Identifier
+  // ID_EXTENSION|STRING
   private static boolean Include_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Include_1")) return false;
     boolean r;
-    r = consumeToken(b, STRING);
-    if (!r) r = Identifier(b, l + 1);
+    r = consumeToken(b, ID_EXTENSION);
+    if (!r) r = consumeToken(b, STRING);
     return r;
   }
 
@@ -2271,13 +2271,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // STRUCT_FIELD
+  // ID_EXTENSION
   public static boolean StructureField(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StructureField")) return false;
-    if (!nextTokenIsSmart(b, STRUCT_FIELD)) return false;
+    if (!nextTokenIsSmart(b, ID_EXTENSION)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, STRUCT_FIELD);
+    r = consumeTokenSmart(b, ID_EXTENSION);
     exit_section_(b, m, STRUCTURE_FIELD, r);
     return r;
   }

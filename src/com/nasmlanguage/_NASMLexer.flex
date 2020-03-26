@@ -88,7 +88,7 @@ ENDSTRUC_TAG=([eE][nN][dD][sS][tT][rR][uU][cC])
 ISTRUC_TAG=([iI][sS][tT][rR][uU][cC])
 IEND_TAG=([iI][eE][nN][dD])
 AT_TAG=([aA][tT])
-STRUCT_FIELD=(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))
+ID_EXTENSION=(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))
 DIRECTIVE_OP=([bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE])
 END_DIRECTIVE_OP=([eE][nN][dD])
 PREPROCESSOR_OP=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([xX]?[iI]?[dD][eE][fF][iI][nN][eE]|[uU][nN][dD][eE][fF]|[aA][sS][sS][iI][gG][nN]|[iI]?[dD][eE][fF][sS][tT][rR]|[iI]?[dD][eE][fF][tT][oO][kK]|[sS][tT][rR][cC][aA][tT]|[sS][tT][rR][lL][eE][nN]|[sS][uU][bB][sS][tT][rR]|[iI]?[mM][aA][cC][rR][oO]|[eE][nN][dD][mM][aA][cC][rR][oO]|[rR][oO][tT][aA][tT][eE]|[rR][eE][pP]|[eE][nN][dD][rR][eE][pP])
@@ -290,7 +290,7 @@ STRING=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 {ISTRUC_TAG}                { return ISTRUC_TAG; }
 {IEND_TAG}                  { return IEND_TAG; }
 {AT_TAG}                    { return AT_TAG; }
-{STRUCT_FIELD}              { return STRUCT_FIELD; }
+{ID_EXTENSION}              { return ID_EXTENSION; }
 {DIRECTIVE_OP}              { return DIRECTIVE_OP; }
 {END_DIRECTIVE_OP}          { return END_DIRECTIVE_OP; }
 {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }

@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface NASMStructureField extends NASMExpr {
 
   @NotNull
-  PsiElement getStructField();
+  PsiElement getIdExtension();
 
 }

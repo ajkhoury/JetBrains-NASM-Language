@@ -84,7 +84,7 @@ SOFTWARE.
         ISTRUC_TAG          = 'regexp:([iI][sS][tT][rR][uU][cC])'
         IEND_TAG            = 'regexp:([iI][eE][nN][dD])'
         AT_TAG              = 'regexp:([aA][tT])'
-        STRUCT_FIELD        = 'regexp:(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))'
+        ID_EXTENSION        = 'regexp:(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))'
         SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
 
         DIRECTIVE_OP        = 'regexp:([bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE])'
@@ -318,7 +318,7 @@ Preprocessor ::= Include
                 | PreprocessorExpr
                 ;
 private PreprocessorExpr ::= PREPROCESSOR_OP Expr*
-Include ::= (INCLUDE_TAG (STRING|Identifier)) {methods=[getIncludeString]}
+Include ::= INCLUDE_TAG (ID_EXTENSION|STRING) {methods=[getIncludeString]}
 Define ::= ((DEFINE_TAG Identifier ROUND_L (Expr (SEPARATOR Expr)*)? ROUND_R Expr)
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R))?)) SEPARATOR? NL* {methods=[getDefineIdentifier getDefineIdentifierString]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
@@ -416,7 +416,7 @@ Reg ::= SIZE_TYPE? REGISTER { extends=Expr }
 Seg ::= SEGMENT_REGISTER { extends=Expr }
 Mnemonic ::= GENERAL_OP|SYSTEM_OP|VIRTUALIZATION_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP|AVX_OP|AVX2_OP|AVX512_OP { extends=Expr }
 Str ::= STRING { extends=Expr }
-StructureField ::= STRUCT_FIELD { extends=Expr }
+StructureField ::= ID_EXTENSION { extends=Expr }
 SegmentAddress ::= (SIZE_TYPE? ((SEGMENT_ADDR_L (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))|
                                 (LBL_DEF (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL)))|
                                 (LabelDefMacro (SIZE_TYPE? (HEXADECIMAL|ZEROES|MacroCall|ID|LBL))))) { extends=Expr }
