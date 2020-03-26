@@ -191,7 +191,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
-        return new NASMLexerAdapter();
+        return new NASMLexer();
     }
 
     @NotNull

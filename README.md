@@ -8,7 +8,7 @@ The latest release can be found in the [JetBrains Plugins](https://plugins.jetbr
 
 # Features
 
-Version v0.5-beta.4 pre-release
+Version v0.5-beta.5 pre-release
 
     FPU, MMX, HLE, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
@@ -26,11 +26,9 @@ Version v0.5-beta.4 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.5-beta.4 Changes
-    
-    Fixed bug where multi-line macro parameters would sometimes cause syntax highlighting errors.
-    Fixed bug where conditional defines cause syntax highlighting errors.
-    Added HLE locking instruction prefixes, and adjusted instruction prefix BNF.
+# v0.5-beta.5 Changes
+
+    Fixed several syntax highlighting errors.
 
 # Complete Changelog
 
@@ -85,6 +83,7 @@ Version v0.5-beta.4 pre-release
     Fixed bug where multi-line macro parameters would sometimes cause syntax highlighting errors.
     Fixed bug where conditional defines cause syntax highlighting errors.
     Added HLE locking instruction prefixes, and adjusted instruction prefix BNF.
+    Fixed several syntax highlighting errors.
 
 # License
 

@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMNumericExpr extends PsiElement {
+public interface NASMTokenConcatExpr extends NASMExpr {
 
-  @Nullable
-  NASMExpr getExpr();
+  @NotNull
+  List<NASMExpr> getExprList();
 
 }

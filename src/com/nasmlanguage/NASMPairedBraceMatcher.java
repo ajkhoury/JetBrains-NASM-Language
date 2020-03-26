@@ -29,9 +29,12 @@ import com.intellij.lang.BracePair;
 import com.intellij.lang.PairedBraceMatcher;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import com.nasmlanguage.psi.NASMTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 public class NASMPairedBraceMatcher implements PairedBraceMatcher {
     private static final BracePair[] BRACE_PAIRS = new BracePair[]{
@@ -41,9 +44,19 @@ public class NASMPairedBraceMatcher implements PairedBraceMatcher {
             new BracePair(NASMTypes.STRUC_TAG, NASMTypes.ENDSTRUC_TAG, true),
             new BracePair(NASMTypes.ISTRUC_TAG, NASMTypes.IEND_TAG, true),
             new BracePair(NASMTypes.IF_TAG, NASMTypes.ENDIF_TAG, true),
+            new BracePair(NASMTypes.IFID_TAG, NASMTypes.ENDIF_TAG, true),
+            new BracePair(NASMTypes.IFDEF_TAG, NASMTypes.ENDIF_TAG, true),
+            new BracePair(NASMTypes.IFIDN_TAG, NASMTypes.ENDIF_TAG, true),
+            new BracePair(NASMTypes.IFSTR_TAG, NASMTypes.ENDIF_TAG, true),
+            new BracePair(NASMTypes.IFNUM_TAG, NASMTypes.ENDIF_TAG, true),
             new BracePair(NASMTypes.IFMACRO_TAG, NASMTypes.ENDIF_TAG, true)
             //new BracePair(NASMTypes.ELIF_TAG, NASMTypes.ENDIF_TAG, false),
             //new BracePair(NASMTypes.ELSE_TAG, NASMTypes.ENDIF_TAG, false)
+    };
+
+    private static final TokenSet[] InsertPairBraceBefore = {
+            NASMParserDefinition.WHITESPACES,
+            NASMParserDefinition.COMMENTS
     };
 
     @NotNull
@@ -53,8 +66,14 @@ public class NASMPairedBraceMatcher implements PairedBraceMatcher {
     }
 
     @Override
-    public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType type) {
-        return true;
+    public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType contextType) {
+        for (TokenSet tokens : InsertPairBraceBefore) {
+            for (IElementType type : tokens.getTypes()) {
+                if (type == contextType)
+                    return true;
+            }
+        }
+        return false;
     }
 
     @Override

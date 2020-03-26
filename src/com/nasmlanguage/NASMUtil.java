@@ -134,15 +134,14 @@ class NASMUtil {
         return result;
     }
 
-    @SuppressWarnings("ConstantConditions")
     static List<NASMIdentifier> findIdentifierReferences(PsiFile containingFile, NASMIdentifier identifier) {
         List<NASMIdentifier> result = new ArrayList<>();
-        PsiElement targetIdentifierId = identifier.getId();
+        PsiElement targetIdentifierId = identifier.getNameIdentifier();
         // First check the containing file's identifiers
         Collection<NASMIdentifier> nasmIdentifiers = PsiTreeUtil.collectElementsOfType(containingFile, NASMIdentifier.class);
         for (NASMIdentifier nasmIdentifier : nasmIdentifiers) {
             if (nasmIdentifier != identifier) {
-                if (targetIdentifierId.getText().equals(nasmIdentifier.getId().getText())) {
+                if (targetIdentifierId.getText().equals(nasmIdentifier.getNameIdentifier().getText())) {
                     result.add(nasmIdentifier);
                 }
             }

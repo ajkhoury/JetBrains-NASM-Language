@@ -35,10 +35,31 @@ public interface NASMConditional extends PsiElement {
   PsiElement getEndifTag();
 
   @Nullable
+  PsiElement getIfctxTag();
+
+  @Nullable
+  PsiElement getIfdefTag();
+
+  @Nullable
+  PsiElement getIfidnTag();
+
+  @Nullable
+  PsiElement getIfidTag();
+
+  @Nullable
   PsiElement getIfmacroTag();
 
   @Nullable
+  PsiElement getIfnumTag();
+
+  @Nullable
+  PsiElement getIfstrTag();
+
+  @Nullable
   PsiElement getIfTag();
+
+  @Nullable
+  PsiElement getMacroNolistQual();
 
   @Nullable
   PsiElement getRegister();

@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
 import com.nasmlanguage.psi.*;
 
-public class NASMMacroDefinitionCallImpl extends NASMExprImpl implements NASMMacroDefinitionCall {
+public class NASMTokenConcatExprImpl extends NASMExprImpl implements NASMTokenConcatExpr {
 
-  public NASMMacroDefinitionCallImpl(@NotNull ASTNode node) {
+  public NASMTokenConcatExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitMacroDefinitionCall(this);
+    visitor.visitTokenConcatExpr(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -29,12 +29,6 @@ public class NASMMacroDefinitionCallImpl extends NASMExprImpl implements NASMMac
   @NotNull
   public List<NASMExpr> getExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSizeType() {
-    return findChildByType(SIZE_TYPE);
   }
 
 }

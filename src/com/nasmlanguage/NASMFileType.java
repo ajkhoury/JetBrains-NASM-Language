@@ -31,12 +31,10 @@ import org.jetbrains.annotations.*;
 import javax.swing.*;
 
 public class NASMFileType extends LanguageFileType {
-
-    public static final String FILE_EXTENSION = "asm";
-
     public static final NASMFileType INSTANCE = new NASMFileType();
+    public static final String EXTENSION = "asm";
 
-    private NASMFileType() {
+    protected NASMFileType() {
         super(NASMLanguage.INSTANCE);
     }
 
@@ -55,7 +53,7 @@ public class NASMFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getDefaultExtension() {
-        return FILE_EXTENSION;
+        return EXTENSION;
     }
 
     @Nullable

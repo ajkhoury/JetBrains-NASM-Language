@@ -9,13 +9,20 @@ import com.intellij.psi.PsiReference;
 
 public interface NASMIdentifier extends NASMExpr, NASMNamedElement {
 
-  @NotNull
+  @Nullable
   PsiElement getId();
+
+  @Nullable
+  PsiElement getMacroParamRef();
+
+  @Nullable
+  PsiElement getMacroVarRef();
 
   String getName();
 
   PsiElement setName(String newName);
 
+  @NotNull
   PsiElement getNameIdentifier();
 
   ItemPresentation getPresentation();

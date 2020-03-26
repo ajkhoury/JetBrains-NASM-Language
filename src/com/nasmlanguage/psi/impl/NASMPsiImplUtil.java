@@ -70,21 +70,30 @@ public class NASMPsiImplUtil {
         return null;
     }
 
-    public static String getName(NASMIdentifier element) {
-        return element.getId().getText();
+    public static PsiElement setName(NASMIdentifier identifier, String newName) {
+        ASTNode idNode = getNameIdentifier(identifier).getNode();
+        if (idNode != null) {
+            PsiElement newId = NASMElementFactory.createIdentifier(identifier.getProject(), newName);
+            identifier.getNode().replaceChild(idNode, newId.getNode());
+        }
+        return identifier;
     }
 
-    public static PsiElement setName(NASMIdentifier element, String newName) {
-        ASTNode idNode = element.getId().getNode();
-        if (idNode != null) {
-            PsiElement newId = NASMElementFactory.createIdentifier(element.getProject(), newName);
-            element.getNode().replaceChild(idNode, newId.getNode());
+    @NotNull
+    public static PsiElement getNameIdentifier(NASMIdentifier identifier) {
+        PsiElement element = identifier.getId();
+        if (element == null) {
+            element = identifier.getMacroParamRef();
+            if (element == null) {
+                element = identifier.getMacroVarRef();
+            }
         }
+        assert element != null;
         return element;
     }
 
-    public static PsiElement getNameIdentifier(NASMIdentifier element) {
-        return element.getId();
+    public static String getName(NASMIdentifier identifier) {
+        return getNameIdentifier(identifier).getText();
     }
 
     public static ItemPresentation getPresentation(final NASMIdentifier element) {

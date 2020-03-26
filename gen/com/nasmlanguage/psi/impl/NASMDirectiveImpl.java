@@ -28,8 +28,8 @@ public class NASMDirectiveImpl extends ASTWrapperPsiElement implements NASMDirec
 
   @Override
   @NotNull
-  public List<NASMDirectiveArg> getDirectiveArgList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMDirectiveArg.class);
+  public List<NASMExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }
 
   @Override

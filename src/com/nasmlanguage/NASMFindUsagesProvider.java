@@ -42,7 +42,7 @@ public class NASMFindUsagesProvider implements FindUsagesProvider {
     @Nullable
     @Override
     public WordsScanner getWordsScanner() {
-        return new DefaultWordsScanner(new NASMLexerAdapter(),
+        return new DefaultWordsScanner(new NASMLexer(),
                 TokenSet.create(NASMTypes.LBL),
                 TokenSet.create(NASMTypes.COMMENT),
                 TokenSet.EMPTY);

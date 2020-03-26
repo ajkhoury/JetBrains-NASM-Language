@@ -23,9 +23,6 @@ public interface NASMMacro extends PsiElement {
   List<NASMLabel> getLabelList();
 
   @NotNull
-  List<NASMLabelDefMacro> getLabelDefMacroList();
-
-  @NotNull
   List<NASMMacroLabel> getMacroLabelList();
 
   @NotNull
@@ -33,6 +30,9 @@ public interface NASMMacro extends PsiElement {
 
   @Nullable
   PsiElement getMacroEndTag();
+
+  @Nullable
+  PsiElement getMacroNolistQual();
 
   @NotNull
   PsiElement getMacroTag();

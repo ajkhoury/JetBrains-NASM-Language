@@ -8,17 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.nasmlanguage.psi.NASMTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMInstruction {
+public class NASMMacroParamCounterImpl extends NASMExprImpl implements NASMMacroParamCounter {
 
-  public NASMInstructionImpl(@NotNull ASTNode node) {
+  public NASMMacroParamCounterImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitInstruction(this);
+    visitor.visitMacroParamCounter(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,14 +27,8 @@ public class NASMInstructionImpl extends ASTWrapperPsiElement implements NASMIns
 
   @Override
   @NotNull
-  public List<NASMExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
+  public PsiElement getMacroParamCount() {
+    return findNotNullChildByType(MACRO_PARAM_COUNT);
   }
 
   @Override

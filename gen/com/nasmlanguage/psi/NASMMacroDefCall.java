@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMMacroParenthesis extends PsiElement {
+public interface NASMMacroDefCall extends NASMExpr {
 
   @NotNull
   List<NASMExpr> getExprList();
+
+  @Nullable
+  PsiElement getSizeType();
 
 }

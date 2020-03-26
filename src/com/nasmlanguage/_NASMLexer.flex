@@ -31,6 +31,7 @@ import com.intellij.psi.tree.IElementType;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static com.nasmlanguage.psi.NASMTypes.*;
+import static com.nasmlanguage.NASMParserDefinition.*;
 
 %%
 
@@ -40,16 +41,19 @@ import static com.nasmlanguage.psi.NASMTypes.*;
   }
 %}
 
-%public
 %class _NASMLexer
 %implements FlexLexer
+%unicode
+%public
+
 %function advance
 %type IElementType
-%unicode
 
-CRLF=(\r|\n|\r\n)
+NL=\R
 WHITE_SPACE=[ \t\x0B\f]+
-LINE_COMMENT=(;.*)
+
+LINE_COMMENT=";" [^\r\n]*
+
 EQU=([eE][qQ][uU])
 SEGMENT_ADDR_L=((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):
 INCLUDE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][nN][cC][lL][uU][dD][eE])
@@ -58,12 +62,19 @@ ASSIGN_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI]?[aA][sS][sS][iI][gG
 MACRO_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI]?[mM][aA][cC][rR][oO])
 MACRO_END_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI]?[eE][nN][dD][mM][aA][cC][rR][oO])
 MACRO_PARAM_REF=((%|%%)([1-9][0-9]*))
-MACRO_VAR_REF=((%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@]*))
+MACRO_PARAM_COUNT=(%0)
+MACRO_NOLIST_QUAL=(\.)([Nn][Oo][Ll][Ii][Ss][Tt])
+MACRO_VAR_REF=(%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@]*)
 MACRO_PARAM_LBL_DEF=((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)):)
 IF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)(([iI][fF][iI][dD][nN])|([iI][fF][nN]?([dD][eE][fF])?))
-IFMACRO_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][mM][aA][cC][rR][oO])
+IFID_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][iI][dD])
+IFDEF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][nN]?[dD][eE][fF])
+IFIDN_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][iI][dD][nN][iI]?)
+IFNUM_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][nN][uU][mM])
+IFSTR_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][sS][tT][rR])
 IFCTX_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][cC][tT][xX])
-ELIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)(([eE][lL][iI][fF][iI][dD][nN])|([eE][lL][iI][fF][nN]?([dD][eE][fF])?))
+IFMACRO_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([iI][fF][mM][aA][cC][rR][oO])
+ELIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)(([eE][lL][iI][fF][iI][dD][nN][iI]?)|([eE][lL][iI][fF][nN]?([dD][eE][fF])?))
 ELSE_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][lL][sS][eE])
 ENDIF_TAG=(([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([eE][nN][dD][iI][fF])
 STRLEN_TAG=((([ \t\n\x0B\f\r]+)?[#%]([ \t\n\x0B\f\r]+)?)([sS][tT][rR][lL][eE][nN]))
@@ -190,116 +201,130 @@ AVX512_OP={INS_AVX512_BLEND}|{INS_AVX512_BROADCAST}|{INS_AVX512_MOV}|{INS_AVX512
 REGISTER=(%)?((([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[0-8])|(d[rb][0-367]|dr([89]|1[0-5]))|(tr[3-7])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|(efer|tpr|syscfg)|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr)|(zmm([12]?[0-9]|30|31))))|((([C-GS]S):)?(([ABCD][HL])|([ER]?[ABCD]X)|([ER]?[SB]P)|([ER]?[SD]I|DIL|SIL|BPL|SPL)|([ER]?IP)|(R(8|9|1[0-5])[BDLW]?)|([ER]?FLAGS)|(CR[0-8])|(D[RB][0-367]|DR([89]|1[0-5]))|(TR[3-7])|(([GIL]DT)R?|TR)|(BND([0-3]|CFG[SU]|STATUS))|(EFER|TPR|SYSCFG)|((MM|ST|FPR)[0-7])|([XY]MM([0-9]|1[0-5])|MXCSR)|(ZMM([12]?[0-9]|30|31))))
 SEGMENT_REGISTER=([c-gs]s)|([C-GS]S)
 SIZE_TYPE=[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)
-ID=([a-zA-Z_?]+[a-zA-Z0-9_?#@~%]*)
+ID=([a-zA-Z_?]+[a-zA-Z0-9_$.#@~?]*)
 LBL_DEF=([a-zA-Z$._?#@]+[a-zA-Z0-9$._~]*):
 LBL=([a-zA-Z$._?#@]+[a-zA-Z0-9$._~]*)
 BINARY=(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])
 HEXADECIMAL=(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])
 ZEROES=[0]+
-DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
+//DECIMAL=((([1-9][0-9]*\.?[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?|0[dD][0-9]+|[0-9]+)
+DECIMAL=((0[dD])?[0-9]+)
+FLOAT_DECIMAL=((([0-9]*\.([^A-Za-z])[0-9]*)|(\.[0-9]+))([Ee][+-]?[0-9]+)?)
 CHARACTER=(`([^`\\]|\\.)`|'([^'\\]|\\.)')
 STRING=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 
 %%
-<YYINITIAL> {
-  ":"                         { return COLON; }
-  "["                         { return SQUARE_L; }
-  "]"                         { return SQUARE_R; }
-  "("                         { return ROUND_L; }
-  ")"                         { return ROUND_R; }
-  ","                         { return SEPARATOR; }
-  "."                         { return DOT; }
-  "?"                         { return QUESTION; }
-  "="                         { return EQUAL; }
-  "=="                        { return EQUALEQUAL; }
-  "!="                        { return NOTEQUAL; }
-  ">"                         { return GREATERTHAN; }
-  "<"                         { return LESSTHAN; }
-  ">="                        { return GREATERTHANOREQUAL; }
-  "<="                        { return LESSTHANOREQUAL; }
-  "+"                         { return PLUS; }
-  "-"                         { return MINUS; }
-  "*"                         { return TIMES; }
-  "/"                         { return DIVIDE; }
-  "<<"                        { return BITSHIFT_L; }
-  ">>"                        { return BITSHIFT_R; }
-  "&"                         { return BITWISE_AND; }
-  "|"                         { return BITWISE_OR; }
-  "^"                         { return BITWISE_XOR; }
-  "~"                         { return BITWISE_NOT; }
-  "&&"                        { return LOGICAL_AND; }
-  "||"                        { return LOGICAL_OR; }
-  "^^"                        { return LOGICAL_XOR; }
-  "$"                         { return DOLLARSIGN; }
-  "$$"                        { return DOLLARSIGN2; }
-  "%"                         { return PERCENT; }
-  "%%"                        { return PERCENT2; }
 
-  {CRLF}                      { return CRLF; }
-  {WHITE_SPACE}               { return WHITE_SPACE; }
-  ";"|{LINE_COMMENT}          { return COMMENT; }
-  {EQU}                       { return EQU; }
-  {SEGMENT_ADDR_L}            { return SEGMENT_ADDR_L; }
-  {INCLUDE_TAG}               { return INCLUDE_TAG; }
-  {DEFINE_TAG}                { return DEFINE_TAG; }
-  {ASSIGN_TAG}                { return ASSIGN_TAG; }
-  {MACRO_TAG}                 { return MACRO_TAG; }
-  {MACRO_END_TAG}             { return MACRO_END_TAG; }
-  {MACRO_PARAM_REF}           { return MACRO_PARAM_REF; }
-  {MACRO_VAR_REF}             { return MACRO_VAR_REF; }
-  {MACRO_PARAM_LBL_DEF}       { return MACRO_PARAM_LBL_DEF; }
-  {IF_TAG}                    { return IF_TAG; }
-  {IFMACRO_TAG}               { return IFMACRO_TAG; }
-  {IFCTX_TAG}                 { return IFCTX_TAG; }
-  {ELIF_TAG}                  { return ELIF_TAG; }
-  {ELSE_TAG}                  { return ELSE_TAG; }
-  {ENDIF_TAG}                 { return ENDIF_TAG; }
-  {STRLEN_TAG}                { return STRLEN_TAG; }
-  {ERROR_TAG}                 { return ERROR_TAG; }
-  {SECTION}                   { return SECTION; }
-  {SEGMENT}                   { return SEGMENT; }
-  {MAP_OPTIONS}               { return MAP_OPTIONS; }
-  {MAP_FILE}                  { return MAP_FILE; }
-  {STRUC_TAG}                 { return STRUC_TAG; }
-  {ENDSTRUC_TAG}              { return ENDSTRUC_TAG; }
-  {ISTRUC_TAG}                { return ISTRUC_TAG; }
-  {IEND_TAG}                  { return IEND_TAG; }
-  {AT_TAG}                    { return AT_TAG; }
-  {STRUCT_FIELD}              { return STRUCT_FIELD; }
-  {DIRECTIVE_OP}              { return DIRECTIVE_OP; }
-  {END_DIRECTIVE_OP}          { return END_DIRECTIVE_OP; }
-  {PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
-  {DATA_OP}                   { return DATA_OP; }
-  {OP_PREFIX}                 { return OP_PREFIX; }
-  {GENERAL_OP}                { return GENERAL_OP; }
-  {SYSTEM_OP}                 { return SYSTEM_OP; }
-  {VIRTUALIZATION_OP}         { return VIRTUALIZATION_OP; }
-  {X64_OP}                    { return X64_OP; }
-  {FPU_OP}                    { return FPU_OP; }
-  {MMX_OP}                    { return MMX_OP; }
-  {SSE_OP}                    { return SSE_OP; }
-  {SSE2_OP}                   { return SSE2_OP; }
-  {SSE3_OP}                   { return SSE3_OP; }
-  {SSE4_OP}                   { return SSE4_OP; }
-  {AVX_OP}                    { return AVX_OP; }
-  {AVX2_OP}                   { return AVX2_OP; }
-  {AVX512_OP}                 { return AVX512_OP; }
-  {REGISTER}                  { return REGISTER; }
-  {SEGMENT_REGISTER}          { return SEGMENT_REGISTER; }
-  {SIZE_TYPE}                 { return SIZE_TYPE; }
-  {ID}                        { return ID; }
-  {LBL_DEF}                   { return LBL_DEF; }
-  {LBL}                       { return LBL; }
-  {BINARY}                    { return BINARY; }
-  {HEXADECIMAL}               { return HEXADECIMAL; }
-  {ZEROES}                    { return ZEROES; }
-  {DECIMAL}                   { return DECIMAL; }
-  {CHARACTER}                 { return CHARACTER; }
-  {STRING}                    { return STRING; }
+<YYINITIAL> {
+{NL}                        { return NL; }
+{WHITE_SPACE}               { return WHITE_SPACE; }
+
+";"|{LINE_COMMENT}          { return COMMENT; }
+
+
+":"                         { return COLON; }
+"["                         { return SQUARE_L; }
+"]"                         { return SQUARE_R; }
+"("                         { return ROUND_L; }
+")"                         { return ROUND_R; }
+","                         { return SEPARATOR; }
+"."                         { return DOT; }
+"?"                         { return QUESTION; }
+"="                         { return EQUAL; }
+"=="                        { return EQUALEQUAL; }
+"!="                        { return NOTEQUAL; }
+">"                         { return GREATERTHAN; }
+"<"                         { return LESSTHAN; }
+">="                        { return GREATERTHANOREQUAL; }
+"<="                        { return LESSTHANOREQUAL; }
+"+"                         { return PLUS; }
+"-"                         { return MINUS; }
+"*"                         { return TIMES; }
+"/"                         { return DIVIDE; }
+"<<"                        { return BITSHIFT_L; }
+">>"                        { return BITSHIFT_R; }
+"&"                         { return BITWISE_AND; }
+"|"                         { return BITWISE_OR; }
+"^"                         { return BITWISE_XOR; }
+"~"                         { return BITWISE_NOT; }
+"&&"                        { return LOGICAL_AND; }
+"||"                        { return LOGICAL_OR; }
+"^^"                        { return LOGICAL_XOR; }
+"$"                         { return DOLLARSIGN; }
+"$$"                        { return DOLLARSIGN2; }
+"%"                         { return PERCENT; }
+"%%"                        { return PERCENT2; }
+"%+"                        { return TOKEN_CONCAT; }
+
+{EQU}                       { return EQU; }
+{SEGMENT_ADDR_L}            { return SEGMENT_ADDR_L; }
+{INCLUDE_TAG}               { return INCLUDE_TAG; }
+{DEFINE_TAG}                { return DEFINE_TAG; }
+{ASSIGN_TAG}                { return ASSIGN_TAG; }
+{MACRO_TAG}                 { return MACRO_TAG; }
+{MACRO_END_TAG}             { return MACRO_END_TAG; }
+{MACRO_PARAM_REF}           { return MACRO_PARAM_REF; }
+{MACRO_PARAM_COUNT}         { return MACRO_PARAM_COUNT; }
+{MACRO_NOLIST_QUAL}         { return MACRO_NOLIST_QUAL; }
+{MACRO_VAR_REF}             { return MACRO_VAR_REF; }
+{MACRO_PARAM_LBL_DEF}       { return MACRO_PARAM_LBL_DEF; }
+{IFMACRO_TAG}               { return IFMACRO_TAG; }
+{IFCTX_TAG}                 { return IFCTX_TAG; }
+{IFNUM_TAG}                 { return IFNUM_TAG; }
+{IFSTR_TAG}                 { return IFSTR_TAG; }
+{IFIDN_TAG}                 { return IFIDN_TAG; }
+{IFDEF_TAG}                 { return IFDEF_TAG; }
+{IFID_TAG}                  { return IFID_TAG; }
+{IF_TAG}                    { return IF_TAG; }
+{ELIF_TAG}                  { return ELIF_TAG; }
+{ELSE_TAG}                  { return ELSE_TAG; }
+{ENDIF_TAG}                 { return ENDIF_TAG; }
+{STRLEN_TAG}                { return STRLEN_TAG; }
+{ERROR_TAG}                 { return ERROR_TAG; }
+{SECTION}                   { return SECTION; }
+{SEGMENT}                   { return SEGMENT; }
+{MAP_OPTIONS}               { return MAP_OPTIONS; }
+{MAP_FILE}                  { return MAP_FILE; }
+{STRUC_TAG}                 { return STRUC_TAG; }
+{ENDSTRUC_TAG}              { return ENDSTRUC_TAG; }
+{ISTRUC_TAG}                { return ISTRUC_TAG; }
+{IEND_TAG}                  { return IEND_TAG; }
+{AT_TAG}                    { return AT_TAG; }
+{STRUCT_FIELD}              { return STRUCT_FIELD; }
+{DIRECTIVE_OP}              { return DIRECTIVE_OP; }
+{END_DIRECTIVE_OP}          { return END_DIRECTIVE_OP; }
+{PREPROCESSOR_OP}           { return PREPROCESSOR_OP; }
+{DATA_OP}                   { return DATA_OP; }
+{OP_PREFIX}                 { return OP_PREFIX; }
+{GENERAL_OP}                { return GENERAL_OP; }
+{SYSTEM_OP}                 { return SYSTEM_OP; }
+{VIRTUALIZATION_OP}         { return VIRTUALIZATION_OP; }
+{X64_OP}                    { return X64_OP; }
+{FPU_OP}                    { return FPU_OP; }
+{MMX_OP}                    { return MMX_OP; }
+{SSE_OP}                    { return SSE_OP; }
+{SSE2_OP}                   { return SSE2_OP; }
+{SSE3_OP}                   { return SSE3_OP; }
+{SSE4_OP}                   { return SSE4_OP; }
+{AVX_OP}                    { return AVX_OP; }
+{AVX2_OP}                   { return AVX2_OP; }
+{AVX512_OP}                 { return AVX512_OP; }
+{REGISTER}                  { return REGISTER; }
+{SEGMENT_REGISTER}          { return SEGMENT_REGISTER; }
+{SIZE_TYPE}                 { return SIZE_TYPE; }
+{ID}                        { return ID; }
+{LBL_DEF}                   { return LBL_DEF; }
+{LBL}                       { return LBL; }
+{BINARY}                    { return BINARY; }
+{HEXADECIMAL}               { return HEXADECIMAL; }
+{ZEROES}                    { return ZEROES; }
+{DECIMAL}                   { return DECIMAL; }
+{FLOAT_DECIMAL}             { return FLOAT_DECIMAL; }
+{CHARACTER}                 { return CHARACTER; }
+{STRING}                    { return STRING; }
 
 }
 
-{CRLF}+                       { yybegin(YYINITIAL); return CRLF; }
-
+{NL}+                       { yybegin(YYINITIAL); return NL; }
 
 . { return BAD_CHARACTER; }

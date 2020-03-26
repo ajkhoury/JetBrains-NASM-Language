@@ -64,12 +64,6 @@ public class NASMPreprocessorImpl extends ASTWrapperPsiElement implements NASMPr
 
   @Override
   @Nullable
-  public NASMLabel getLabel() {
-    return findChildByClass(NASMLabel.class);
-  }
-
-  @Override
-  @Nullable
   public NASMMacro getMacro() {
     return findChildByClass(NASMMacro.class);
   }
