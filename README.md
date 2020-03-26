@@ -8,7 +8,7 @@ The latest release can be found in the [JetBrains Plugins](https://plugins.jetbr
 
 # Features
 
-Version v0.5-beta.6 pre-release
+Version v0.5-beta.7 pre-release
 
     FPU, MMX, HLE, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
@@ -26,7 +26,7 @@ Version v0.5-beta.6 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.5-beta.6 Changes
+# v0.5-beta.7 Changes
 
     Fixed several syntax highlighting errors.
 
