@@ -173,6 +173,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
         AttributeKeys.put(NASMTypes.HEXADECIMAL, NASM_NUMBER);
         AttributeKeys.put(NASMTypes.ZEROES, NASM_NUMBER);
         AttributeKeys.put(NASMTypes.DECIMAL, NASM_NUMBER);
+        AttributeKeys.put(NASMTypes.FLOAT_DECIMAL, NASM_NUMBER);
         AttributeKeys.put(NASMTypes.SEGMENT_ADDR_L, NASM_NUMBER);
 
         AttributeKeys.put(NASMTypes.LBL, NASM_LABEL);

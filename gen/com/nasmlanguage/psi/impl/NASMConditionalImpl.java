@@ -128,22 +128,4 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
     return findChildByType(IF_TAG);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getMacroNolistQual() {
-    return findChildByType(MACRO_NOLIST_QUAL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRegister() {
-    return findChildByType(REGISTER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
-  }
-
 }

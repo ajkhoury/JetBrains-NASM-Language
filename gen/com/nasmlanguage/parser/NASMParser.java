@@ -112,19 +112,19 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (IfConditionTag (Condition|Expr) NL* Element* ((ELIF_TAG Condition|ELSE_TAG) NL* Element*)* ENDIF_TAG NL*)
-  //             | (IFMACRO_TAG ID MacroParams MacroDefaultParam? NL* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
+  // (IfConditionTag (Condition|MacroCondition|Expr) NL* Element* (((ELIF_TAG (Condition|MacroCondition|Expr))|ELSE_TAG) NL* Element*)*) ENDIF_TAG NL*
   public static boolean Conditional(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CONDITIONAL, "<conditional>");
     r = Conditional_0(b, l + 1);
-    if (!r) r = Conditional_1(b, l + 1);
+    r = r && consumeToken(b, ENDIF_TAG);
+    r = r && Conditional_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // IfConditionTag (Condition|Expr) NL* Element* ((ELIF_TAG Condition|ELSE_TAG) NL* Element*)* ENDIF_TAG NL*
+  // IfConditionTag (Condition|MacroCondition|Expr) NL* Element* (((ELIF_TAG (Condition|MacroCondition|Expr))|ELSE_TAG) NL* Element*)*
   private static boolean Conditional_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0")) return false;
     boolean r;
@@ -134,17 +134,16 @@ public class NASMParser implements PsiParser, LightPsiParser {
     r = r && Conditional_0_2(b, l + 1);
     r = r && Conditional_0_3(b, l + 1);
     r = r && Conditional_0_4(b, l + 1);
-    r = r && consumeToken(b, ENDIF_TAG);
-    r = r && Conditional_0_6(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // Condition|Expr
+  // Condition|MacroCondition|Expr
   private static boolean Conditional_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_1")) return false;
     boolean r;
     r = Condition(b, l + 1);
+    if (!r) r = MacroCondition(b, l + 1);
     if (!r) r = Expr(b, l + 1, -1);
     return r;
   }
@@ -171,7 +170,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((ELIF_TAG Condition|ELSE_TAG) NL* Element*)*
+  // (((ELIF_TAG (Condition|MacroCondition|Expr))|ELSE_TAG) NL* Element*)*
   private static boolean Conditional_0_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_4")) return false;
     while (true) {
@@ -182,7 +181,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (ELIF_TAG Condition|ELSE_TAG) NL* Element*
+  // ((ELIF_TAG (Condition|MacroCondition|Expr))|ELSE_TAG) NL* Element*
   private static boolean Conditional_0_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_4_0")) return false;
     boolean r;
@@ -194,7 +193,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ELIF_TAG Condition|ELSE_TAG
+  // (ELIF_TAG (Condition|MacroCondition|Expr))|ELSE_TAG
   private static boolean Conditional_0_4_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_4_0_0")) return false;
     boolean r;
@@ -205,14 +204,24 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ELIF_TAG Condition
+  // ELIF_TAG (Condition|MacroCondition|Expr)
   private static boolean Conditional_0_4_0_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Conditional_0_4_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ELIF_TAG);
-    r = r && Condition(b, l + 1);
+    r = r && Conditional_0_4_0_0_0_1(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Condition|MacroCondition|Expr
+  private static boolean Conditional_0_4_0_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_0_4_0_0_0_1")) return false;
+    boolean r;
+    r = Condition(b, l + 1);
+    if (!r) r = MacroCondition(b, l + 1);
+    if (!r) r = Expr(b, l + 1, -1);
     return r;
   }
 
@@ -239,69 +248,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   // NL*
-  private static boolean Conditional_0_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Conditional_0_6")) return false;
+  private static boolean Conditional_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Conditional_2")) return false;
     while (true) {
       int c = current_position_(b);
       if (!consumeToken(b, NL)) break;
-      if (!empty_element_parsed_guard_(b, "Conditional_0_6", c)) break;
+      if (!empty_element_parsed_guard_(b, "Conditional_2", c)) break;
     }
     return true;
-  }
-
-  // IFMACRO_TAG ID MacroParams MacroDefaultParam? NL* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG
-  private static boolean Conditional_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Conditional_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, IFMACRO_TAG, ID);
-    r = r && MacroParams(b, l + 1);
-    r = r && Conditional_1_3(b, l + 1);
-    r = r && Conditional_1_4(b, l + 1);
-    r = r && Conditional_1_5(b, l + 1);
-    r = r && consumeToken(b, ENDIF_TAG);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // MacroDefaultParam?
-  private static boolean Conditional_1_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Conditional_1_3")) return false;
-    MacroDefaultParam(b, l + 1);
-    return true;
-  }
-
-  // NL*
-  private static boolean Conditional_1_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Conditional_1_4")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!consumeToken(b, NL)) break;
-      if (!empty_element_parsed_guard_(b, "Conditional_1_4", c)) break;
-    }
-    return true;
-  }
-
-  // (Preprocessor|Directive|Data|Instruction)*
-  private static boolean Conditional_1_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Conditional_1_5")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Conditional_1_5_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Conditional_1_5", c)) break;
-    }
-    return true;
-  }
-
-  // Preprocessor|Directive|Data|Instruction
-  private static boolean Conditional_1_5_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Conditional_1_5_0")) return false;
-    boolean r;
-    r = Preprocessor(b, l + 1);
-    if (!r) r = Directive(b, l + 1);
-    if (!r) r = Data(b, l + 1);
-    if (!r) r = Instruction(b, l + 1);
-    return r;
   }
 
   /* ********************************************************** */
@@ -874,11 +828,12 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IFCTX_TAG|IFNUM_TAG|IFSTR_TAG|IFIDN_TAG|IFDEF_TAG|IFID_TAG|IF_TAG
+  // IFMACRO_TAG|IFCTX_TAG|IFNUM_TAG|IFSTR_TAG|IFIDN_TAG|IFDEF_TAG|IFID_TAG|IF_TAG
   static boolean IfConditionTag(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfConditionTag")) return false;
     boolean r;
-    r = consumeToken(b, IFCTX_TAG);
+    r = consumeToken(b, IFMACRO_TAG);
+    if (!r) r = consumeToken(b, IFCTX_TAG);
     if (!r) r = consumeToken(b, IFNUM_TAG);
     if (!r) r = consumeToken(b, IFSTR_TAG);
     if (!r) r = consumeToken(b, IFIDN_TAG);
@@ -1293,6 +1248,26 @@ public class NASMParser implements PsiParser, LightPsiParser {
       if (!consumeToken(b, NL)) break;
       if (!empty_element_parsed_guard_(b, "Macro_5_0_1", c)) break;
     }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // Identifier MacroParams MacroDefaultParam?
+  static boolean MacroCondition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCondition")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Identifier(b, l + 1);
+    r = r && MacroParams(b, l + 1);
+    r = r && MacroCondition_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // MacroDefaultParam?
+  private static boolean MacroCondition_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MacroCondition_2")) return false;
+    MacroDefaultParam(b, l + 1);
     return true;
   }
 
@@ -2097,7 +2072,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // SIZE_TYPE? (BITWISE_NOT|MINUS|PLUS)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER)
+  // SIZE_TYPE? (BITWISE_NOT|MINUS|PLUS)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|FLOAT_DECIMAL|CHARACTER)
   public static boolean NumericLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumericLiteral")) return false;
     boolean r;
@@ -2133,7 +2108,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER
+  // BINARY|ZEROES|HEXADECIMAL|DECIMAL|FLOAT_DECIMAL|CHARACTER
   private static boolean NumericLiteral_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumericLiteral_2")) return false;
     boolean r;
@@ -2141,6 +2116,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeTokenSmart(b, ZEROES);
     if (!r) r = consumeTokenSmart(b, HEXADECIMAL);
     if (!r) r = consumeTokenSmart(b, DECIMAL);
+    if (!r) r = consumeTokenSmart(b, FLOAT_DECIMAL);
     if (!r) r = consumeTokenSmart(b, CHARACTER);
     return r;
   }

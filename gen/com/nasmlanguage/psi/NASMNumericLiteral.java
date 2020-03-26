@@ -17,6 +17,9 @@ public interface NASMNumericLiteral extends NASMExpr {
   PsiElement getDecimal();
 
   @Nullable
+  PsiElement getFloatDecimal();
+
+  @Nullable
   PsiElement getHexadecimal();
 
   @Nullable

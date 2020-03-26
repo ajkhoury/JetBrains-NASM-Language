@@ -65,7 +65,7 @@ SOFTWARE.
         IFSTR_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][sS][tT][rR])'
         IFNUM_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][nN][uU][mM])'
         IFCTX_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][cC][tT][xX])'
-        IFMACRO_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][mM][aA][cC][rR][oO])'
+        IFMACRO_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][nN]?[mM][aA][cC][rR][oO])'
         ELIF_TAG            = 'regexp:((\s+)?[#%](\s+)?)(([eE][lL][iI][fF][iI][dD][nN][iI]?)|([eE][lL][iI][fF][nN]?([dD][eE][fF])?))'
         ELSE_TAG            = 'regexp:((\s+)?[#%](\s+)?)([eE][lL][sS][eE])'
         ENDIF_TAG           = 'regexp:((\s+)?[#%](\s+)?)([eE][nN][dD][iI][fF])'
@@ -328,10 +328,10 @@ private MacroParams ::= ((NumericLiteral MINUS NumericLiteral (PLUS|TIMES)?)|(Nu
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 Strlen ::= STRLEN_TAG Identifier (STRING|ID) NL*
 Error ::= ERROR_TAG NL*
-Conditional ::= (IfConditionTag (Condition|Expr) NL* Element* ((ELIF_TAG Condition|ELSE_TAG) NL* Element*)* ENDIF_TAG NL*)
-            | (IFMACRO_TAG ID MacroParams MacroDefaultParam? NL* (Preprocessor|Directive|Data|Instruction)* ENDIF_TAG)
-private IfConditionTag ::= (IFCTX_TAG|IFNUM_TAG|IFSTR_TAG|IFIDN_TAG|IFDEF_TAG|IFID_TAG|IF_TAG)
+Conditional ::= (IfConditionTag (Condition|MacroCondition|Expr) NL* Element* (((ELIF_TAG (Condition|MacroCondition|Expr))|ELSE_TAG) NL* Element*)*) ENDIF_TAG NL*
+private IfConditionTag ::= (IFMACRO_TAG|IFCTX_TAG|IFNUM_TAG|IFSTR_TAG|IFIDN_TAG|IFDEF_TAG|IFID_TAG|IF_TAG)
 private Condition ::= (Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL|SEPARATOR) Expr)
+private MacroCondition ::= Identifier MacroParams MacroDefaultParam?
 
 Label ::= (LBL_DEF (Instruction|Data|Structure)? NL*) | (LabelDefMacro (Instruction|Data|Structure)? NL*) { mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
 LabelDefMacro ::= (ID MacroParenthesis COLON NL*) // This has to be public so we can highlight using NASMAnnotator
@@ -409,7 +409,7 @@ LogicalXORExpr ::= Expr LOGICAL_XOR Expr { extends=Expr }
 TokenConcatExpr ::= Expr TOKEN_CONCAT Expr { extends=Expr }
 ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 
-NumericLiteral ::= SIZE_TYPE? (BITWISE_NOT|MINUS|PLUS)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|CHARACTER) { extends=Expr }
+NumericLiteral ::= SIZE_TYPE? (BITWISE_NOT|MINUS|PLUS)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|FLOAT_DECIMAL|CHARACTER) { extends=Expr }
 Identifier ::= ID|MACRO_VAR_REF|MACRO_PARAM_REF { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getPresentation getReferences]}
 LabelIdentifier ::= SIZE_TYPE? (LBL|ID) { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getPresentation getReferences] }
 Reg ::= SIZE_TYPE? REGISTER { extends=Expr }
