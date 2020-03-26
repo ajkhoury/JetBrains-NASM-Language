@@ -59,10 +59,6 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitDirectiveArg(@NotNull NASMDirectiveArg o) {
-    visitPsiElement(o);
-  }
-
   public void visitDivExpr(@NotNull NASMDivExpr o) {
     visitExpr(o);
   }
@@ -129,12 +125,16 @@ public class NASMVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
-  public void visitMacroDefinitionCall(@NotNull NASMMacroDefinitionCall o) {
+  public void visitMacroDefCall(@NotNull NASMMacroDefCall o) {
     visitExpr(o);
   }
 
   public void visitMacroLabel(@NotNull NASMMacroLabel o) {
     visitPsiElement(o);
+  }
+
+  public void visitMacroParamCounter(@NotNull NASMMacroParamCounter o) {
+    visitExpr(o);
   }
 
   public void visitMacroParamReference(@NotNull NASMMacroParamReference o) {
@@ -150,6 +150,10 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitMinusExpr(@NotNull NASMMinusExpr o) {
+    visitExpr(o);
+  }
+
+  public void visitMnemonic(@NotNull NASMMnemonic o) {
     visitExpr(o);
   }
 
@@ -206,6 +210,10 @@ public class NASMVisitor extends PsiElementVisitor {
   }
 
   public void visitStructureField(@NotNull NASMStructureField o) {
+    visitExpr(o);
+  }
+
+  public void visitTokenConcatExpr(@NotNull NASMTokenConcatExpr o) {
     visitExpr(o);
   }
 

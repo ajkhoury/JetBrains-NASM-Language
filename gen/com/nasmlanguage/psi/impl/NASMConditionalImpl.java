@@ -82,14 +82,56 @@ public class NASMConditionalImpl extends ASTWrapperPsiElement implements NASMCon
 
   @Override
   @Nullable
+  public PsiElement getIfctxTag() {
+    return findChildByType(IFCTX_TAG);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIfdefTag() {
+    return findChildByType(IFDEF_TAG);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIfidnTag() {
+    return findChildByType(IFIDN_TAG);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIfidTag() {
+    return findChildByType(IFID_TAG);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIfmacroTag() {
     return findChildByType(IFMACRO_TAG);
   }
 
   @Override
   @Nullable
+  public PsiElement getIfnumTag() {
+    return findChildByType(IFNUM_TAG);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIfstrTag() {
+    return findChildByType(IFSTR_TAG);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIfTag() {
     return findChildByType(IF_TAG);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMacroNolistQual() {
+    return findChildByType(MACRO_NOLIST_QUAL);
   }
 
   @Override

@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMParenthesisNumericExpr extends NASMNumericExpr {
+public interface NASMMacroParamCounter extends NASMExpr {
+
+  @NotNull
+  PsiElement getMacroParamCount();
 
   @Nullable
-  NASMNumericExpr getNumericExpr();
+  PsiElement getSizeType();
 
 }

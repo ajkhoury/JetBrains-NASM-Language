@@ -23,12 +23,22 @@ SOFTWARE.
 
 --*/
 
-package com.nasmlanguage;
+package com.nasmlanguage.stubs;
 
-import com.intellij.lexer.FlexAdapter;
+import com.intellij.psi.stubs.PsiFileStubImpl;
+import com.intellij.psi.tree.IStubFileElementType;
+import com.nasmlanguage.NASMFileElementType;
+import com.nasmlanguage.psi.NASMFile;
+import org.jetbrains.annotations.NotNull;
 
-public class NASMLexerAdapter extends FlexAdapter {
-    public NASMLexerAdapter() {
-        super(new _NASMLexer());
+public class NASMFileStub extends PsiFileStubImpl<NASMFile> {
+    public NASMFileStub(@NotNull NASMFile file) {
+        super(file);
+    }
+
+    @NotNull
+    @Override
+    public IStubFileElementType<NASMFileStub> getType() {
+        return NASMFileElementType.INSTANCE;
     }
 }

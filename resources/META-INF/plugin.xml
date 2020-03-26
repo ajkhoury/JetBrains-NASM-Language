@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
-    <version>0.5-beta.4</version>
+    <version>0.5-beta.5</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/ajkhoury">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM assembly language for JetBrains IDEs</h1>
         <br>
-        <h2>Version v0.5-beta.4 pre-release</h2>
+        <h2>Version v0.5-beta.5 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -31,9 +31,7 @@
 
     <change-notes><![CDATA[
         <ul>
-            <li>Fixed bug where multi-line macro parameters would sometimes cause syntax highlighting errors.</li>
-            <li>Fixed bug where conditional defines cause syntax highlighting errors.</li>
-            <li>Added HLE locking instruction prefixes, and adjusted instruction prefix BNF.</li>
+            <li>Fixed several syntax highlighting errors.</li>
         </ul>
     ]]>
     </change-notes>

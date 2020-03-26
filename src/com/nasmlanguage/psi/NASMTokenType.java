@@ -35,7 +35,6 @@ public class NASMTokenType extends IElementType {
     }
 
     @Override
-    @SuppressWarnings({"HardCodedStringLiteral"})
     public String toString() {
         return "NASMTokenType." + super.toString();
     }

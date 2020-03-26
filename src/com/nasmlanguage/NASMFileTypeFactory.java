@@ -32,6 +32,6 @@ import org.jetbrains.annotations.NotNull;
 public class NASMFileTypeFactory extends FileTypeFactory {
     @Override
     public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
-        fileTypeConsumer.consume(NASMFileType.INSTANCE, NASMFileType.FILE_EXTENSION);
+        fileTypeConsumer.consume(NASMFileType.INSTANCE, NASMFileType.EXTENSION);
     }
 }

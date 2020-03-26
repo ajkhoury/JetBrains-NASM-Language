@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface NASMDirective extends PsiElement {
 
   @NotNull
-  List<NASMDirectiveArg> getDirectiveArgList();
+  List<NASMExpr> getExprList();
 
   @Nullable
   NASMMapOption getMapOption();

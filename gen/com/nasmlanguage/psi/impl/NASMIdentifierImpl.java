@@ -28,9 +28,21 @@ public class NASMIdentifierImpl extends NASMNamedElementImpl implements NASMIden
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getId() {
-    return findNotNullChildByType(ID);
+    return findChildByType(ID);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMacroParamRef() {
+    return findChildByType(MACRO_PARAM_REF);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMacroVarRef() {
+    return findChildByType(MACRO_VAR_REF);
   }
 
   @Override
@@ -44,6 +56,7 @@ public class NASMIdentifierImpl extends NASMNamedElementImpl implements NASMIden
   }
 
   @Override
+  @NotNull
   public PsiElement getNameIdentifier() {
     return NASMPsiImplUtil.getNameIdentifier(this);
   }

@@ -32,50 +32,58 @@ import com.intellij.psi.*;
 import com.intellij.psi.tree.*;
 import com.nasmlanguage.parser.NASMParser;
 import com.nasmlanguage.psi.*;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
 public class NASMParserDefinition implements ParserDefinition {
-    private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    private static final TokenSet COMMENTS = TokenSet.create(NASMTypes.COMMENT);
-    private static final IFileElementType FILE = new IFileElementType(NASMLanguage.INSTANCE);
+    public static final TokenSet WHITESPACES = TokenSet.create(TokenType.WHITE_SPACE);
+    public static final TokenSet STRING_LITERALS = TokenSet.create(NASMTypes.STRING);
+    public static final TokenSet COMMENTS = TokenSet.create(NASMTypes.COMMENT);
 
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new NASMLexerAdapter();
+        return new NASMLexer();
     }
 
     @NotNull
+    @Override
+    public PsiParser createParser(final Project project) {
+        return new NASMParser();
+    }
+
+    @NotNull
+    @Override
+    public IFileElementType getFileNodeType() {
+        return NASMFileElementType.INSTANCE;
+    }
+
+    @NotNull
+    @Override
     public TokenSet getWhitespaceTokens() {
-        return WHITE_SPACES;
+        return WHITESPACES;
     }
 
     @NotNull
+    @Override
     public TokenSet getCommentTokens() {
         return COMMENTS;
     }
 
     @NotNull
-    public TokenSet getStringLiteralElements() {
-        return TokenSet.EMPTY;
-    }
-
-    @NotNull
-    public PsiParser createParser(final Project project) {
-        return new NASMParser();
-    }
-
     @Override
-    public IFileElementType getFileNodeType() {
-        return FILE;
-    }
-
-    public PsiFile createFile(FileViewProvider viewProvider) {
-        return new NASMFile(viewProvider);
+    public TokenSet getStringLiteralElements() {
+        return STRING_LITERALS;
     }
 
     @NotNull
+    @Override
     public PsiElement createElement(ASTNode node) {
         return NASMTypes.Factory.createElement(node);
+    }
+
+    @NotNull
+    @Override
+    public PsiFile createFile(@NotNull FileViewProvider viewProvider) {
+        return new NASMFile(viewProvider);
     }
 }

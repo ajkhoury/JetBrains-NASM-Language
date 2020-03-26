@@ -7,10 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface NASMInclude extends PsiElement {
 
+  @Nullable
+  NASMIdentifier getIdentifier();
+
   @NotNull
   PsiElement getIncludeTag();
 
-  @NotNull
+  @Nullable
   PsiElement getString();
 
   String getIncludeString();
