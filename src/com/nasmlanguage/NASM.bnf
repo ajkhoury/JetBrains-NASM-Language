@@ -299,7 +299,8 @@ private Element ::= COMMENT
                 | Constant
                 | Structure
                 | Instruction
-                | Data
+                | DataElement
+                | IStrucElement
                 | NL
                 | ID
                 ;
@@ -322,8 +323,8 @@ Include ::= INCLUDE_TAG (ID_EXTENSION|STRING) {methods=[getIncludeString]}
 Define ::= ((DEFINE_TAG Identifier ROUND_L (Expr (SEPARATOR Expr)*)? ROUND_R Expr)
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R))?)) SEPARATOR? NL* {methods=[getDefineIdentifier getDefineIdentifierString]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
-Macro ::= MACRO_TAG Identifier MacroParams MacroDefaultParam? NL* ((MacroLabel|Label|Data|Instruction|Directive|Preprocessor|Expr) NL*)* MACRO_END_TAG { pin=1 methods=[getMacroIdentifierString]}
-MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|Data)? NL*)
+Macro ::= MACRO_TAG Identifier MacroParams MacroDefaultParam? NL* ((MacroLabel|Label|DataElement|Instruction|Directive|Preprocessor|Expr) NL*)* MACRO_END_TAG { pin=1 methods=[getMacroIdentifierString]}
+MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|DataElement)? NL*)
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral (PLUS|TIMES)?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?)) MACRO_NOLIST_QUAL?
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 Strlen ::= STRLEN_TAG Identifier (STRING|ID) NL*
@@ -333,16 +334,17 @@ private IfConditionTag ::= (IFMACRO_TAG|IFCTX_TAG|IFNUM_TAG|IFSTR_TAG|IFIDN_TAG|
 private Condition ::= (Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL|SEPARATOR) Expr)
 private MacroCondition ::= Identifier MacroParams MacroDefaultParam?
 
-Label ::= (LBL_DEF (Instruction|Data|Structure)? NL*) | (LabelDefMacro (Instruction|Data|Structure)? NL*) { mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
+Label ::= (LBL_DEF (Instruction|DataElement|Structure)? NL*) | (LabelDefMacro (Instruction|DataElement|Structure)? NL*) { mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
 LabelDefMacro ::= (ID MacroParenthesis COLON NL*) // This has to be public so we can highlight using NASMAnnotator
 Constant ::= (ID EQU ((MINUS|PLUS|BITWISE_NOT)? Expr)* NL*)
 
-Data ::= (ID? DATA_OP DataValue NL*)
+DataElement ::= (ID? DATA_OP DataValue NL*)
 private DataValue ::= ((MINUS|PLUS|BITWISE_NOT)? (Expr|STRING|LabelIdentifier) (SEPARATOR ((MINUS|PLUS)? (Expr|STRING|LabelIdentifier)))*)
 
 Structure ::= ((Struc|IStruc) NL*)
-Struc ::= (STRUC_TAG Identifier NL* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) NL*)* ENDSTRUC_TAG)
-IStruc ::= (ISTRUC_TAG Identifier NL* (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue NL*)* IEND_TAG)
+Struc ::= (STRUC_TAG Identifier NL* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)|Conditional) NL*)* ENDSTRUC_TAG)
+IStruc ::= (ISTRUC_TAG Identifier NL* ((IStrucElement|Conditional) NL*)* IEND_TAG)
+private IStrucElement ::= (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue)
 
 Instruction ::= Prefix* (Mnemonic|(ID COMMENT)) (((((BITWISE_NOT|MINUS|PLUS)? Expr) SEPARATOR)* ((BITWISE_NOT|MINUS|PLUS)? Expr))|(SIZE_TYPE (BITWISE_NOT|MINUS|PLUS)? ROUND_L Expr ROUND_R))?
 private Prefix ::= (OP_PREFIX NL*)

@@ -47,7 +47,7 @@ public class NASMVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitData(@NotNull NASMData o) {
+  public void visitDataElement(@NotNull NASMDataElement o) {
     visitPsiElement(o);
   }
 

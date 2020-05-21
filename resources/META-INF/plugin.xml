@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.nasmlanguage</id>
     <name>NASM Assembly Language</name>
-    <version>0.5-beta.7</version>
+    <version>0.5-beta.8</version>
     <vendor email="aidankhoury@gmail.com" url="https://github.com/ajkhoury">Aidan Khoury</vendor>
 
     <description><![CDATA[
         <h1>NASM assembly language for JetBrains IDEs</h1>
         <br>
-        <h2>Version v0.5-beta.7 pre-release</h2>
+        <h2>Version v0.5-beta.8 pre-release</h2>
         <br>
         <h3>Features</h3>
         <ul>
@@ -31,7 +31,7 @@
 
     <change-notes><![CDATA[
         <ul>
-            <li>Fixed several syntax highlighting errors.</li>
+            <li>Add support for conditional preprocessor expressions in structures.</li>
         </ul>
     ]]>
     </change-notes>

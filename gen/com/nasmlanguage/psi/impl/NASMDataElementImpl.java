@@ -11,14 +11,14 @@ import static com.nasmlanguage.psi.NASMTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.nasmlanguage.psi.*;
 
-public class NASMDataImpl extends ASTWrapperPsiElement implements NASMData {
+public class NASMDataElementImpl extends ASTWrapperPsiElement implements NASMDataElement {
 
-  public NASMDataImpl(@NotNull ASTNode node) {
+  public NASMDataElementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NASMVisitor visitor) {
-    visitor.visitData(this);
+    visitor.visitDataElement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -11,7 +11,7 @@ public interface NASMConditional extends PsiElement {
   List<NASMConstant> getConstantList();
 
   @NotNull
-  List<NASMData> getDataList();
+  List<NASMDataElement> getDataElementList();
 
   @NotNull
   List<NASMDirective> getDirectiveList();

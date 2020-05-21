@@ -28,8 +28,8 @@ public class NASMMacroLabelImpl extends ASTWrapperPsiElement implements NASMMacr
 
   @Override
   @Nullable
-  public NASMData getData() {
-    return findChildByClass(NASMData.class);
+  public NASMDataElement getDataElement() {
+    return findChildByClass(NASMDataElement.class);
   }
 
   @Override

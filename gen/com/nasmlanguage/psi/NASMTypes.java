@@ -18,7 +18,7 @@ public interface NASMTypes {
   IElementType BIT_SHIFT_R_EXPR = new NASMElementType("BIT_SHIFT_R_EXPR");
   IElementType CONDITIONAL = new NASMElementType("CONDITIONAL");
   IElementType CONSTANT = new NASMElementType("CONSTANT");
-  IElementType DATA = new NASMElementType("DATA");
+  IElementType DATA_ELEMENT = new NASMElementType("DATA_ELEMENT");
   IElementType DEFINE = new NASMElementType("DEFINE");
   IElementType DIRECTIVE = new NASMElementType("DIRECTIVE");
   IElementType DIV_EXPR = new NASMElementType("DIV_EXPR");
@@ -198,8 +198,8 @@ public interface NASMTypes {
       else if (type == CONSTANT) {
         return new NASMConstantImpl(node);
       }
-      else if (type == DATA) {
-        return new NASMDataImpl(node);
+      else if (type == DATA_ELEMENT) {
+        return new NASMDataElementImpl(node);
       }
       else if (type == DEFINE) {
         return new NASMDefineImpl(node);

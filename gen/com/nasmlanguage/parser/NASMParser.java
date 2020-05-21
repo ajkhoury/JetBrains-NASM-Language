@@ -324,33 +324,33 @@ public class NASMParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // ID? DATA_OP DataValue NL*
-  public static boolean Data(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Data")) return false;
-    if (!nextTokenIs(b, "<data>", DATA_OP, ID)) return false;
+  public static boolean DataElement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DataElement")) return false;
+    if (!nextTokenIs(b, "<data element>", DATA_OP, ID)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, DATA, "<data>");
-    r = Data_0(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, DATA_ELEMENT, "<data element>");
+    r = DataElement_0(b, l + 1);
     r = r && consumeToken(b, DATA_OP);
     r = r && DataValue(b, l + 1);
-    r = r && Data_3(b, l + 1);
+    r = r && DataElement_3(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // ID?
-  private static boolean Data_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Data_0")) return false;
+  private static boolean DataElement_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DataElement_0")) return false;
     consumeToken(b, ID);
     return true;
   }
 
   // NL*
-  private static boolean Data_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Data_3")) return false;
+  private static boolean DataElement_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DataElement_3")) return false;
     while (true) {
       int c = current_position_(b);
       if (!consumeToken(b, NL)) break;
-      if (!empty_element_parsed_guard_(b, "Data_3", c)) break;
+      if (!empty_element_parsed_guard_(b, "DataElement_3", c)) break;
     }
     return true;
   }
@@ -708,7 +708,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
   //                 | Constant
   //                 | Structure
   //                 | Instruction
-  //                 | Data
+  //                 | DataElement
+  //                 | IStrucElement
   //                 | NL
   //                 | ID
   static boolean Element(PsiBuilder b, int l) {
@@ -724,7 +725,8 @@ public class NASMParser implements PsiParser, LightPsiParser {
     if (!r) r = Constant(b, l + 1);
     if (!r) r = Structure(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
-    if (!r) r = Data(b, l + 1);
+    if (!r) r = DataElement(b, l + 1);
+    if (!r) r = IStrucElement(b, l + 1);
     if (!r) r = consumeToken(b, NL);
     if (!r) r = consumeToken(b, ID);
     return r;
@@ -755,7 +757,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ISTRUC_TAG Identifier NL* (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue NL*)* IEND_TAG
+  // ISTRUC_TAG Identifier NL* ((IStrucElement|Conditional) NL*)* IEND_TAG
   public static boolean IStruc(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc")) return false;
     if (!nextTokenIs(b, ISTRUC_TAG)) return false;
@@ -781,7 +783,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue NL*)*
+  // ((IStrucElement|Conditional) NL*)*
   private static boolean IStruc_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc_3")) return false;
     while (true) {
@@ -792,39 +794,60 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue NL*
+  // (IStrucElement|Conditional) NL*
   private static boolean IStruc_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IStruc_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, AT_TAG);
+    r = IStruc_3_0_0(b, l + 1);
     r = r && IStruc_3_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // IStrucElement|Conditional
+  private static boolean IStruc_3_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IStruc_3_0_0")) return false;
+    boolean r;
+    r = IStrucElement(b, l + 1);
+    if (!r) r = Conditional(b, l + 1);
+    return r;
+  }
+
+  // NL*
+  private static boolean IStruc_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IStruc_3_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, NL)) break;
+      if (!empty_element_parsed_guard_(b, "IStruc_3_0_1", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // AT_TAG (StructureField|LabelIdentifier|Identifier) SEPARATOR DATA_OP DataValue
+  static boolean IStrucElement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IStrucElement")) return false;
+    if (!nextTokenIs(b, AT_TAG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, AT_TAG);
+    r = r && IStrucElement_1(b, l + 1);
     r = r && consumeTokens(b, 0, SEPARATOR, DATA_OP);
     r = r && DataValue(b, l + 1);
-    r = r && IStruc_3_0_5(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // StructureField|LabelIdentifier|Identifier
-  private static boolean IStruc_3_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IStruc_3_0_1")) return false;
+  private static boolean IStrucElement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IStrucElement_1")) return false;
     boolean r;
     r = StructureField(b, l + 1);
     if (!r) r = LabelIdentifier(b, l + 1);
     if (!r) r = Identifier(b, l + 1);
     return r;
-  }
-
-  // NL*
-  private static boolean IStruc_3_0_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IStruc_3_0_5")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!consumeToken(b, NL)) break;
-      if (!empty_element_parsed_guard_(b, "IStruc_3_0_5", c)) break;
-    }
-    return true;
   }
 
   /* ********************************************************** */
@@ -1049,7 +1072,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (LBL_DEF (Instruction|Data|Structure)? NL*) | (LabelDefMacro (Instruction|Data|Structure)? NL*)
+  // (LBL_DEF (Instruction|DataElement|Structure)? NL*) | (LabelDefMacro (Instruction|DataElement|Structure)? NL*)
   public static boolean Label(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label")) return false;
     if (!nextTokenIs(b, "<label>", ID, LBL_DEF)) return false;
@@ -1061,7 +1084,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LBL_DEF (Instruction|Data|Structure)? NL*
+  // LBL_DEF (Instruction|DataElement|Structure)? NL*
   private static boolean Label_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_0")) return false;
     boolean r;
@@ -1073,19 +1096,19 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (Instruction|Data|Structure)?
+  // (Instruction|DataElement|Structure)?
   private static boolean Label_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_0_1")) return false;
     Label_0_1_0(b, l + 1);
     return true;
   }
 
-  // Instruction|Data|Structure
+  // Instruction|DataElement|Structure
   private static boolean Label_0_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_0_1_0")) return false;
     boolean r;
     r = Instruction(b, l + 1);
-    if (!r) r = Data(b, l + 1);
+    if (!r) r = DataElement(b, l + 1);
     if (!r) r = Structure(b, l + 1);
     return r;
   }
@@ -1101,7 +1124,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // LabelDefMacro (Instruction|Data|Structure)? NL*
+  // LabelDefMacro (Instruction|DataElement|Structure)? NL*
   private static boolean Label_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_1")) return false;
     boolean r;
@@ -1113,19 +1136,19 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (Instruction|Data|Structure)?
+  // (Instruction|DataElement|Structure)?
   private static boolean Label_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_1_1")) return false;
     Label_1_1_0(b, l + 1);
     return true;
   }
 
-  // Instruction|Data|Structure
+  // Instruction|DataElement|Structure
   private static boolean Label_1_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_1_1_0")) return false;
     boolean r;
     r = Instruction(b, l + 1);
-    if (!r) r = Data(b, l + 1);
+    if (!r) r = DataElement(b, l + 1);
     if (!r) r = Structure(b, l + 1);
     return r;
   }
@@ -1168,7 +1191,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MACRO_TAG Identifier MacroParams MacroDefaultParam? NL* ((MacroLabel|Label|Data|Instruction|Directive|Preprocessor|Expr) NL*)* MACRO_END_TAG
+  // MACRO_TAG Identifier MacroParams MacroDefaultParam? NL* ((MacroLabel|Label|DataElement|Instruction|Directive|Preprocessor|Expr) NL*)* MACRO_END_TAG
   public static boolean Macro(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro")) return false;
     if (!nextTokenIs(b, MACRO_TAG)) return false;
@@ -1204,7 +1227,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((MacroLabel|Label|Data|Instruction|Directive|Preprocessor|Expr) NL*)*
+  // ((MacroLabel|Label|DataElement|Instruction|Directive|Preprocessor|Expr) NL*)*
   private static boolean Macro_5(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_5")) return false;
     while (true) {
@@ -1215,7 +1238,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (MacroLabel|Label|Data|Instruction|Directive|Preprocessor|Expr) NL*
+  // (MacroLabel|Label|DataElement|Instruction|Directive|Preprocessor|Expr) NL*
   private static boolean Macro_5_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_5_0")) return false;
     boolean r;
@@ -1226,13 +1249,13 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // MacroLabel|Label|Data|Instruction|Directive|Preprocessor|Expr
+  // MacroLabel|Label|DataElement|Instruction|Directive|Preprocessor|Expr
   private static boolean Macro_5_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Macro_5_0_0")) return false;
     boolean r;
     r = MacroLabel(b, l + 1);
     if (!r) r = Label(b, l + 1);
-    if (!r) r = Data(b, l + 1);
+    if (!r) r = DataElement(b, l + 1);
     if (!r) r = Instruction(b, l + 1);
     if (!r) r = Directive(b, l + 1);
     if (!r) r = Preprocessor(b, l + 1);
@@ -1285,7 +1308,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MACRO_PARAM_LBL_DEF (Instruction|Data)? NL*
+  // MACRO_PARAM_LBL_DEF (Instruction|DataElement)? NL*
   public static boolean MacroLabel(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroLabel")) return false;
     if (!nextTokenIs(b, MACRO_PARAM_LBL_DEF)) return false;
@@ -1298,19 +1321,19 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (Instruction|Data)?
+  // (Instruction|DataElement)?
   private static boolean MacroLabel_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroLabel_1")) return false;
     MacroLabel_1_0(b, l + 1);
     return true;
   }
 
-  // Instruction|Data
+  // Instruction|DataElement
   private static boolean MacroLabel_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroLabel_1_0")) return false;
     boolean r;
     r = Instruction(b, l + 1);
-    if (!r) r = Data(b, l + 1);
+    if (!r) r = DataElement(b, l + 1);
     return r;
   }
 
@@ -1744,7 +1767,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // STRUC_TAG Identifier NL* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) NL*)* ENDSTRUC_TAG
+  // STRUC_TAG Identifier NL* ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)|Conditional) NL*)* ENDSTRUC_TAG
   public static boolean Struc(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc")) return false;
     if (!nextTokenIs(b, STRUC_TAG)) return false;
@@ -1770,7 +1793,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) NL*)*
+  // ((((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)|Conditional) NL*)*
   private static boolean Struc_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3")) return false;
     while (true) {
@@ -1781,7 +1804,7 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)) NL*
+  // (((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)|Conditional) NL*
   private static boolean Struc_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0")) return false;
     boolean r;
@@ -1792,13 +1815,14 @@ public class NASMParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)
+  // ((LBL_DEF|LabelIdentifier) DATA_OP ((MINUS|PLUS)? (Expr|Identifier)))|(LabelIdentifier|LBL_DEF)|Conditional
   private static boolean Struc_3_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Struc_3_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Struc_3_0_0_0(b, l + 1);
     if (!r) r = Struc_3_0_0_1(b, l + 1);
+    if (!r) r = Conditional(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
