@@ -28,8 +28,8 @@ public class NASMMacroImpl extends ASTWrapperPsiElement implements NASMMacro {
 
   @Override
   @NotNull
-  public List<NASMData> getDataList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMData.class);
+  public List<NASMDataElement> getDataElementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMDataElement.class);
   }
 
   @Override

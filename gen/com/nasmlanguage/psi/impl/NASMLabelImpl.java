@@ -27,8 +27,8 @@ public class NASMLabelImpl extends NASMNamedElementImpl implements NASMLabel {
 
   @Override
   @Nullable
-  public NASMData getData() {
-    return findChildByClass(NASMData.class);
+  public NASMDataElement getDataElement() {
+    return findChildByClass(NASMDataElement.class);
   }
 
   @Override

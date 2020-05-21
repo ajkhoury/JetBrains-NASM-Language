@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface NASMMacro extends PsiElement {
 
   @NotNull
-  List<NASMData> getDataList();
+  List<NASMDataElement> getDataElementList();
 
   @NotNull
   List<NASMDirective> getDirectiveList();

@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface NASMLabel extends NASMNamedElement {
 
   @Nullable
-  NASMData getData();
+  NASMDataElement getDataElement();
 
   @Nullable
   NASMInstruction getInstruction();

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NASMData extends PsiElement {
+public interface NASMDataElement extends PsiElement {
 
   @NotNull
   List<NASMExpr> getExprList();

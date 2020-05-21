@@ -28,6 +28,12 @@ public class NASMIStrucImpl extends ASTWrapperPsiElement implements NASMIStruc {
 
   @Override
   @NotNull
+  public List<NASMConditional> getConditionalList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMConditional.class);
+  }
+
+  @Override
+  @NotNull
   public List<NASMExpr> getExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NASMExpr.class);
   }

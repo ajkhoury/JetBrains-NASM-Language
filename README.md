@@ -8,7 +8,7 @@ The latest release can be found in the [JetBrains Plugins](https://plugins.jetbr
 
 # Features
 
-Version v0.5-beta.7 pre-release
+Version v0.5-beta.8 pre-release
 
     FPU, MMX, HLE, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
@@ -26,64 +26,9 @@ Version v0.5-beta.7 pre-release
 - Goto Symbol
 - Debugger Support
 
-# v0.5-beta.7 Changes
+# v0.5-beta.8 Changes
 
-    Fixed several syntax highlighting errors.
-
-# Complete Changelog
-
-    Added macro syntax highlighting.
-    Added support for conditional assembly directives.
-    Fix for bug where blank comments would not match the comment regex.
-    Added support for structures and improved highlighting.
-    Fixed conditional assembly problems.
-    Fixed number size prefixes, segment addresses, data/instruction labels.
-    Added new operator expressions.
-    Added pinning for some repeating rules.
-    Added system instructions.
-    Added highlighting for segment addresses, and structure references.
-    Fix for blank labels in structs.
-    Fixed istruc structure parsing.
-    Added support for the RETF instruction.
-    Added bitwise operations and fixed macro label definitions.
-    Added BSS section.
-    Now allow structs to have macros and identifiers.
-    Fixed macro labels.
-    Allow expressions in struc fields.
-    Can now prefix expressions with bitwise NOT, minus, or plus symbol.
-    Fixed segment addresses.
-    Added AVX, AVX2, AVX512, and Virtualization instruction sets.
-    Added brace matching for braces, macros, preprocessor, and structs.
-    Fixed size type prefixes on expressions.
-    Added identifiers to istruc structure instances.
-    Added .RDATA section directive.
-    Added improved macro highlighting.
-    Fixed a null pointer exception that would happen with labels in segment addresses.
-    Added highlighting for macros in segment part of segment addresses.
-    Fixed section and segment directives so you can use any section/segment name.
-    Can now use size prefixes for macro calls/references.
-    Added the ability to use END tag in expressions.
-    Conditional and other preprocessor directives now supported inside macro definitions.
-    Nested macros now supported.
-    Macros without parameters now properly supported.
-    Single semicolon (comment) now allowed at end of file.
-    Added a "ChooseByNameContributor" that can navigate to a symbol by name.
-    Fixed bug where generic identifiers would error if a comment was after it.
-    Fixed highlighting which broke in v0.4.1.
-    Began adding more conditions for conditional expressions.
-    Added ability to use non-local to macro labels.
-    Macro parameters can now be any expression or mnemonic.
-    Added size type prefix for registers.
-    Added support for commas in directives. Thanks to github.com/snowwm.
-    Added support for back-tick strings.
-    Added initial references implementation for goto declaration support.
-    Fixed bug caused by an invalid index being used when getting references.
-    Add plugin logo icon and now use svg for file icons.
-    Fixed bug causing unresolved references in non ASM files.
-    Fixed bug where multi-line macro parameters would sometimes cause syntax highlighting errors.
-    Fixed bug where conditional defines cause syntax highlighting errors.
-    Added HLE locking instruction prefixes, and adjusted instruction prefix BNF.
-    Fixed several syntax highlighting errors.
+    Add support for conditional preprocessor expressions in structures.
 
 # License
 

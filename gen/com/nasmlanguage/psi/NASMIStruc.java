@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NASMIStruc extends PsiElement {
 
   @NotNull
+  List<NASMConditional> getConditionalList();
+
+  @NotNull
   List<NASMExpr> getExprList();
 
   @NotNull
