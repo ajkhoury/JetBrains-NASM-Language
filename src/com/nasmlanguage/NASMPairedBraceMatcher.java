@@ -25,16 +25,14 @@ SOFTWARE.
 
 package com.nasmlanguage;
 
+import org.jetbrains.annotations.*;
 import com.intellij.lang.BracePair;
 import com.intellij.lang.PairedBraceMatcher;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.nasmlanguage.psi.NASMTypes;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
+import com.nasmlanguage.psi.NASMTypes;
 
 public class NASMPairedBraceMatcher implements PairedBraceMatcher {
     private static final BracePair[] BRACE_PAIRS = new BracePair[]{

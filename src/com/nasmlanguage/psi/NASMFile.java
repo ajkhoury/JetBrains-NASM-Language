@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.Icon;
 
 public class NASMFile extends PsiFileBase {
-    private FileViewProvider fileViewProvider;
+    private final FileViewProvider fileViewProvider;
 
     public NASMFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, NASMLanguage.INSTANCE);

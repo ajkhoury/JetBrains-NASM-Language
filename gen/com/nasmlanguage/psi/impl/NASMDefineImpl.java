@@ -21,6 +21,7 @@ public class NASMDefineImpl extends ASTWrapperPsiElement implements NASMDefine {
     visitor.visitDefine(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

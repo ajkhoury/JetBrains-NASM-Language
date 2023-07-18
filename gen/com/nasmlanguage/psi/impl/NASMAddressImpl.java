@@ -16,10 +16,12 @@ public class NASMAddressImpl extends NASMExprImpl implements NASMAddress {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull NASMVisitor visitor) {
     visitor.visitAddress(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

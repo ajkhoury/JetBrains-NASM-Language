@@ -16,10 +16,12 @@ public class NASMStructureFieldImpl extends NASMExprImpl implements NASMStructur
     super(node);
   }
 
+  @Override
   public void accept(@NotNull NASMVisitor visitor) {
     visitor.visitStructureField(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

@@ -2,10 +2,11 @@
 package com.nasmlanguage.psi;
 
 import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
+
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.*;
 
 public interface NASMLabelIdentifier extends NASMExpr, NASMNamedElement {
 
@@ -14,6 +15,9 @@ public interface NASMLabelIdentifier extends NASMExpr, NASMNamedElement {
 
   @Nullable
   PsiElement getLbl();
+
+  @Nullable
+  PsiElement getMacroParamLblDef();
 
   @Nullable
   PsiElement getSizeType();

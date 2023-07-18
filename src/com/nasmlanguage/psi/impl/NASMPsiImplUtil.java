@@ -32,9 +32,8 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import com.nasmlanguage.NASMIcons;
 import com.nasmlanguage.psi.*;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class NASMPsiImplUtil {
@@ -109,13 +108,13 @@ public class NASMPsiImplUtil {
                 return element.getName();
             }
 
-            @Nullable
+            @NotNull
             @Override
             public String getLocationString() {
                 return element.getContainingFile().getName();
             }
 
-            @Nullable
+            @NotNull
             @Override
             public Icon getIcon(boolean unused) {
                 return NASMIcons.ASM_FILE;
@@ -166,13 +165,13 @@ public class NASMPsiImplUtil {
                 return element.getName();
             }
 
-            @Nullable
+            @NotNull
             @Override
             public String getLocationString() {
                 return element.getContainingFile().getName();
             }
 
-            @Nullable
+            @NotNull
             @Override
             public Icon getIcon(boolean unused) {
                 return NASMIcons.ASM_FILE;

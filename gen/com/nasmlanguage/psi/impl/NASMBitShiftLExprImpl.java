@@ -16,10 +16,12 @@ public class NASMBitShiftLExprImpl extends NASMExprImpl implements NASMBitShiftL
     super(node);
   }
 
+  @Override
   public void accept(@NotNull NASMVisitor visitor) {
     visitor.visitBitShiftLExpr(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

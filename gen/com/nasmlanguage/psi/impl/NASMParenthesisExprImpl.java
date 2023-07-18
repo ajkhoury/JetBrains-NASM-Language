@@ -16,10 +16,12 @@ public class NASMParenthesisExprImpl extends NASMExprImpl implements NASMParenth
     super(node);
   }
 
+  @Override
   public void accept(@NotNull NASMVisitor visitor) {
     visitor.visitParenthesisExpr(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

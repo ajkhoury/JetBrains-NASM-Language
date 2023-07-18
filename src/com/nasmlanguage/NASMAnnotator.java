@@ -25,6 +25,7 @@ SOFTWARE.
 
 package com.nasmlanguage;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -33,8 +34,8 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+
 import com.nasmlanguage.psi.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -75,10 +76,6 @@ public class NASMAnnotator implements Annotator {
                     if (identifierNode != null) {
                         highlightTextRange(identifierNode.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
                     }
-                    //List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferences(parentElement.getContainingFile(), nasmIdentifier);
-                    //for (NASMIdentifier identifierRef : identifierRefs) {
-                    //    highlightTextRange(identifierRef.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
-                    //}
                 } else if (parentElement instanceof NASMInstruction) {
                     List<NASMLabel> labels = NASMUtil.findLabels(parentElement.getContainingFile());
                     for (NASMLabel label : labels) {
@@ -91,16 +88,14 @@ public class NASMAnnotator implements Annotator {
                 }
             }
         } else if (element instanceof NASMConstant) {
-            NASMConstant nasmConstant = (NASMConstant) element;
-            PsiElement idElement = nasmConstant.getId();
+            PsiElement idElement = ((NASMConstant) element).getId();
             highlightTextRange(idElement.getTextRange(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
             List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferencesById(element.getContainingFile(), idElement.getText());
             for (NASMIdentifier identifierRef : identifierRefs) {
                 highlightTextRange(identifierRef.getTextRange(), NASMSyntaxHighlighter.NASM_CONSTANT, holder);
             }
         } else if (element instanceof NASMDefine) {
-            NASMDefine nasmDefine = (NASMDefine) element;
-            NASMIdentifier defineIdentifier = nasmDefine.getDefineIdentifier();
+            NASMIdentifier defineIdentifier = ((NASMDefine) element).getDefineIdentifier();
             highlightTextRange(defineIdentifier.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
             List<NASMIdentifier> identifierRefs = NASMUtil.findIdentifierReferences(element.getContainingFile(), defineIdentifier);
             for (NASMIdentifier identifierRef : identifierRefs) {
@@ -111,8 +106,7 @@ public class NASMAnnotator implements Annotator {
                 }
             }
         } else if (element instanceof NASMLabel) {
-            NASMLabel nasmLabel = (NASMLabel) element;
-            NASMLabelDefMacro nasmLabelDefMacro = nasmLabel.getLabelDefMacro();
+            NASMLabelDefMacro nasmLabelDefMacro = ((NASMLabel) element).getLabelDefMacro();
             if (nasmLabelDefMacro != null) {
                 PsiElement labelDefId = nasmLabelDefMacro.getId();
                 highlightTextRange(labelDefId.getTextRange(), NASMSyntaxHighlighter.NASM_MACRO, holder);
@@ -123,10 +117,9 @@ public class NASMAnnotator implements Annotator {
                 }
             }
         } else if (element instanceof NASMLabelIdentifier) {
-            NASMLabelIdentifier nasmLabelIdentifier = (NASMLabelIdentifier) element;
-            PsiElement parentElement = nasmLabelIdentifier.getParent();
+            PsiElement parentElement = element.getParent();
             if (!((parentElement instanceof NASMStruc) || (parentElement instanceof NASMIStruc))) {
-                PsiElement labelIdElement = nasmLabelIdentifier.getId();
+                PsiElement labelIdElement = ((NASMLabelIdentifier) element).getId();
                 if (labelIdElement != null) {
                     highlightTextRange(labelIdElement.getTextRange(), NASMSyntaxHighlighter.NASM_LABEL, holder);
                 }
@@ -143,11 +136,9 @@ public class NASMAnnotator implements Annotator {
                 highlightTextRange(tr.getStartOffset() + separatorIdx + 1, fieldText.length(), NASMSyntaxHighlighter.NASM_LABEL, holder);
             }
         } else if (element instanceof NASMSegmentAddress) {
-            NASMSegmentAddress nasmSegmentAddress = (NASMSegmentAddress) element;
-            //System.out.println("nasmSegmentAddress=" + nasmSegmentAddress.getText());
             // Handle segment (left side) value
-            PsiElement segmentElement = nasmSegmentAddress.getSegmentAddrL();
-            if (segmentElement != null) { // Its a number on the left
+            PsiElement segmentElement = ((NASMSegmentAddress) element).getSegmentAddrL();
+            if (segmentElement != null) { // It's a number on the left
                 String segAddrText = segmentElement.getText();
                 int separatorIdx = segAddrText.indexOf(':');
                 TextRange tr = segmentElement.getTextRange();
@@ -155,8 +146,8 @@ public class NASMAnnotator implements Annotator {
             }
             // Label def
             else {
-                segmentElement = nasmSegmentAddress.getLblDef();
-                if (segmentElement != null) { // Its an identifer on the left
+                segmentElement = ((NASMSegmentAddress) element).getLblDef();
+                if (segmentElement != null) { // It's an identifer on the left
                     String lblDefText = segmentElement.getText();
                     int separatorIdx = lblDefText.indexOf(':');
                     TextRange tr = segmentElement.getTextRange();
@@ -199,7 +190,7 @@ public class NASMAnnotator implements Annotator {
                             }
                         }
                     }
-                    // If a match wasnt found, color it a generic identifier color
+                    // If a match wasn't found, color it a generic identifier color
                     if (!found) {
                         highlightTextRange(tr.getStartOffset(), lblDefIdentifierText.length(),
                                 NASMSyntaxHighlighter.NASM_IDENTIFIER, holder);
@@ -207,8 +198,8 @@ public class NASMAnnotator implements Annotator {
                 }
                 // Label def macro
                 else {
-                    segmentElement = nasmSegmentAddress.getLabelDefMacro();
-                    if (segmentElement != null) { // Its an macro on the left
+                    segmentElement = ((NASMSegmentAddress) element).getLabelDefMacro();
+                    if (segmentElement != null) { // It's a macro on the left
                         TextRange tr = segmentElement.getTextRange();
                         highlightTextRange(tr.getStartOffset() + tr.getLength() - 1, 1,
                                 NASMSyntaxHighlighter.NASM_SEPARATOR, holder);
@@ -216,7 +207,7 @@ public class NASMAnnotator implements Annotator {
                 }
             }
             // Handle address (right side) value
-            PsiElement addrIdentifier = nasmSegmentAddress.getId();
+            PsiElement addrIdentifier = ((NASMSegmentAddress) element).getId();
             if (addrIdentifier != null) { // if it is not null that means the address value is an identifier
                 String addrIdentifierText = addrIdentifier.getText();
                 TextRange tr = addrIdentifier.getTextRange();
@@ -255,7 +246,7 @@ public class NASMAnnotator implements Annotator {
                         }
                     }
                 }
-                // If a match wasnt found, color it a generic identifier color
+                // If a match wasn't found, color it a generic identifier color
                 if (!found) {
                     highlightTextRange(tr, NASMSyntaxHighlighter.NASM_IDENTIFIER, holder);
                 }
@@ -263,15 +254,16 @@ public class NASMAnnotator implements Annotator {
         }
     }
 
-    private void highlightTextRange(int startOffset, int length, @NotNull TextAttributesKey textAttributes, @NotNull AnnotationHolder holder) {
-        TextRange range = new TextRange(startOffset, startOffset + length);
+    @SuppressWarnings("deprecation")
+    private void highlightTextRange(TextRange range, @NotNull TextAttributesKey textAttributes, @NotNull AnnotationHolder holder) {
+        //holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(range).textAttributes(textAttributes).create();
         Annotation annotation = holder.createInfoAnnotation(range, null);
         annotation.setTextAttributes(textAttributes);
     }
 
-    private void highlightTextRange(TextRange range, @NotNull TextAttributesKey textAttributes, @NotNull AnnotationHolder holder) {
-        Annotation annotation = holder.createInfoAnnotation(range, null);
-        annotation.setTextAttributes(textAttributes);
+    private void highlightTextRange(int startOffset, int length, @NotNull TextAttributesKey textAttributes, @NotNull AnnotationHolder holder) {
+        TextRange range = new TextRange(startOffset, startOffset + length);
+        highlightTextRange(range, textAttributes, holder);
     }
 
 }

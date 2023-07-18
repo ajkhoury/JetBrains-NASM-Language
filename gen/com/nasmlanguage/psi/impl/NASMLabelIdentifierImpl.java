@@ -2,15 +2,17 @@
 package com.nasmlanguage.psi.impl;
 
 import java.util.List;
+
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
+
 import static com.nasmlanguage.psi.NASMTypes.*;
 import com.nasmlanguage.psi.*;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.psi.PsiReference;
 
 public class NASMLabelIdentifierImpl extends NASMNamedElementImpl implements NASMLabelIdentifier {
 
@@ -22,6 +24,7 @@ public class NASMLabelIdentifierImpl extends NASMNamedElementImpl implements NAS
     visitor.visitLabelIdentifier(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);
@@ -37,6 +40,12 @@ public class NASMLabelIdentifierImpl extends NASMNamedElementImpl implements NAS
   @Nullable
   public PsiElement getLbl() {
     return findChildByType(LBL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMacroParamLblDef() {
+    return findChildByType(MACRO_PARAM_LBL_DEF);
   }
 
   @Override

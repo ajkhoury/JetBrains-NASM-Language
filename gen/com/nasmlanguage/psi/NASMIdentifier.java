@@ -2,10 +2,11 @@
 package com.nasmlanguage.psi;
 
 import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
+
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.*;
 
 public interface NASMIdentifier extends NASMExpr, NASMNamedElement {
 

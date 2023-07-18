@@ -16,10 +16,12 @@ public class NASMRegImpl extends NASMExprImpl implements NASMReg {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull NASMVisitor visitor) {
     visitor.visitReg(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NASMReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
-    private String myReferenceId;
+    private final String myReferenceId;
 
     public NASMReference(@NotNull PsiElement element, TextRange rangeInElement) {
         super(element, rangeInElement);
@@ -26,7 +26,7 @@ public class NASMReference extends PsiReferenceBase<PsiElement> implements PsiPo
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         List<NASMLabel> labels = NASMUtil.findLabelReferencesByIdInProject(myElement.getProject(), myReferenceId);
-        List<ResolveResult> results = new ArrayList<ResolveResult>();
+        List<ResolveResult> results = new ArrayList<>();
         for (NASMLabel label : labels) {
             results.add(new PsiElementResolveResult(label));
         }
@@ -44,14 +44,17 @@ public class NASMReference extends PsiReferenceBase<PsiElement> implements PsiPo
     @Override
     public Object[] getVariants() {
         List<NASMIdentifier> identifiers = NASMUtil.findIdentifierReferencesInProject(myElement.getProject());
-        List<LookupElement> variants = new ArrayList<LookupElement>();
+        List<LookupElement> variants = new ArrayList<>();
         for (final NASMIdentifier identifier : identifiers) {
-            String identifierText = identifier.getId().getText();
-            if (identifierText != null && identifierText.length() > 0) {
-                variants.add(LookupElementBuilder.create(identifier.getId()).
-                        withIcon(NASMIcons.ASM_FILE).
-                        withTypeText(identifier.getContainingFile().getName())
-                );
+            PsiElement identifierElement = identifier.getId();
+            if (identifierElement != null) {
+                String identifierText = identifierElement.getText();
+                if (identifierText != null && identifierText.length() > 0) {
+                    variants.add(LookupElementBuilder.create(identifier.getId()).
+                            withIcon(NASMIcons.ASM_FILE).
+                            withTypeText(identifier.getContainingFile().getName())
+                    );
+                }
             }
         }
         return variants.toArray();

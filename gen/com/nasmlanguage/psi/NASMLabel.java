@@ -11,6 +11,9 @@ public interface NASMLabel extends NASMNamedElement {
   NASMDataElement getDataElement();
 
   @Nullable
+  NASMExpr getExpr();
+
+  @Nullable
   NASMInstruction getInstruction();
 
   @Nullable
@@ -18,6 +21,9 @@ public interface NASMLabel extends NASMNamedElement {
 
   @Nullable
   NASMStructure getStructure();
+
+  @Nullable
+  PsiElement getLbl();
 
   @Nullable
   PsiElement getLblDef();

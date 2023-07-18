@@ -48,26 +48,9 @@ class NASMUtil {
 
         // Check the containing file's preprocessor defines
         Collection<NASMDefine> nasmDefines = PsiTreeUtil.collectElementsOfType(containingFile, NASMDefine.class);
-        if (!nasmDefines.isEmpty())
+        if (!nasmDefines.isEmpty()) {
             result.addAll(nasmDefines);
-
-        // Makes this plugin perform like shit
-        //Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
-        //        FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
-        //);
-        //for (VirtualFile virtualFile : virtualFiles) {
-        //    NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
-        //    if (assemblyFile != null) {
-        //        Collection<NASMPreprocessor> nasmPreprocessors = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMPreprocessor.class);
-        //        if (!nasmPreprocessors.isEmpty()) {
-        //            for (NASMPreprocessor nasmPreprocessor : nasmPreprocessors) {
-        //                NASMDefine define = nasmPreprocessor.getDefine();
-        //                if (define != null)
-        //                    result.add(define);
-        //            }
-        //        }
-        //    }
-        //}
+        }
 
         return result;
     }
@@ -77,31 +60,9 @@ class NASMUtil {
 
         // Check the containing file's labels
         Collection<NASMLabel> nasmLabels = PsiTreeUtil.collectElementsOfType(containingFile, NASMLabel.class);
-        if (!nasmLabels.isEmpty())
+        if (!nasmLabels.isEmpty()) {
             result.addAll(nasmLabels);
-
-        // Makes this plugin perform like shit
-        //Project project = containingFile.getProject();
-        //// Then check each include file for labels
-        //Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
-        //        FileTypeIndex.NAME, NASMFileType.INSTANCE, GlobalSearchScope.allScope(project)
-        //);
-        //Collection<NASMInclude> includes = PsiTreeUtil.collectElementsOfType(containingFile, NASMInclude.class);
-        //for (NASMInclude include : includes) {
-        //    String includeFileName = include.getIncludeString();
-        //    for (VirtualFile virtualFile : virtualFiles) {
-        //        String virtFileName = virtualFile.getName();
-        //        if (virtFileName.equals(includeFileName)) {
-        //            NASMFile assemblyFile = (NASMFile)PsiManager.getInstance(project).findFile(virtualFile);
-        //            if (assemblyFile != null) {
-        //                nasmLabels = PsiTreeUtil.collectElementsOfType(assemblyFile, NASMLabel.class);
-        //                if (!nasmLabels.isEmpty()) {
-        //                    result.addAll(nasmLabels);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        }
 
         return result;
     }
@@ -111,8 +72,9 @@ class NASMUtil {
 
         // First check the containing file's constants
         Collection<NASMConstant> nasmConstants = PsiTreeUtil.collectElementsOfType(containingFile, NASMConstant.class);
-        if (!nasmConstants.isEmpty())
+        if (!nasmConstants.isEmpty()) {
             result.addAll(nasmConstants);
+        }
 
         return result;
     }
@@ -154,7 +116,8 @@ class NASMUtil {
         // First check the containing file's identifiers
         Collection<NASMIdentifier> identifiers = PsiTreeUtil.collectElementsOfType(containingFile, NASMIdentifier.class);
         for (NASMIdentifier identifier : identifiers) {
-            if (targetIdentifierId.equals(identifier.getId().getText())) {
+            PsiElement idElement = identifier.getId();
+            if (idElement != null && targetIdentifierId.equals(idElement.getText())) {
                 if (result == null) {
                     result = new ArrayList<>();
                 }
@@ -175,9 +138,10 @@ class NASMUtil {
                 NASMIdentifier[] identifiers = PsiTreeUtil.getChildrenOfType(simpleFile, NASMIdentifier.class);
                 if (identifiers != null) {
                     for (NASMIdentifier identifier : identifiers) {
-                        if (targetIdentifierId.equals(identifier.getId().getText())) {
+                        PsiElement idElement = identifier.getId();
+                        if (idElement != null && targetIdentifierId.equals(idElement.getText())) {
                             if (result == null) {
-                                result = new ArrayList<NASMIdentifier>();
+                                result = new ArrayList<>();
                             }
                             result.add(identifier);
                         }
@@ -185,10 +149,9 @@ class NASMUtil {
                 }
             }
         }
-        return result != null ? result : Collections.<NASMIdentifier>emptyList();
+        return result != null ? result : Collections.emptyList();
     }
 
-    @SuppressWarnings("unchecked")
     @NotNull
     public static <T extends PsiElement> List<T> findAllChildrenOfTypeAsList(@Nullable PsiElement element, @NotNull Class<T> aClass, int depth) {
         // Don't search over a depth of 3, for performance reasons.
@@ -199,7 +162,7 @@ class NASMUtil {
         for(PsiElement child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
             if (aClass.isInstance(child)) {
                 if (result == null) {
-                    result = new SmartList();
+                    result = new SmartList<>();
                 }
                 result.add(aClass.cast(child));
             } else {
@@ -207,7 +170,7 @@ class NASMUtil {
                 List<T> subResult = findAllChildrenOfTypeAsList(child, aClass, depth + 1);
                 if (!subResult.isEmpty()) {
                     if (result == null) {
-                        result = new SmartList();
+                        result = new SmartList<>();
                     }
                     result.addAll(subResult);
                 }
@@ -221,7 +184,7 @@ class NASMUtil {
         if (element == null)
             return null;
         List<T> result = findAllChildrenOfTypeAsList(element, aClass, 0);
-        return result.isEmpty() ? null : (T[]) ArrayUtil.toObjectArray(result, aClass);
+        return result.isEmpty() ? null : ArrayUtil.toObjectArray(result, aClass);
     }
 
     static List<NASMLabel> findLabelReferencesByIdInProject(Project project, String targetLabelId) {
@@ -237,7 +200,7 @@ class NASMUtil {
                     for (NASMLabel label : labels) {
                         if (targetLabelId.equals(label.getName())) {
                             if (result == null) {
-                                result = new ArrayList<NASMLabel>();
+                                result = new ArrayList<>();
                             }
                             result.add(label);
                         }
@@ -246,7 +209,7 @@ class NASMUtil {
             }
         }
 
-        return result != null ? result : Collections.<NASMLabel>emptyList();
+        return result != null ? result : Collections.emptyList();
     }
 
     static List<NASMIdentifier> findIdentifierReferencesInProject(Project project) {

@@ -16,10 +16,12 @@ public class NASMBitwiseXORExprImpl extends NASMExprImpl implements NASMBitwiseX
     super(node);
   }
 
+  @Override
   public void accept(@NotNull NASMVisitor visitor) {
     visitor.visitBitwiseXORExpr(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);
