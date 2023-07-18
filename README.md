@@ -8,8 +8,6 @@ The latest release can be found in the [JetBrains Plugins](https://plugins.jetbr
 
 # Features
 
-Version v0.5-beta.8 pre-release
-
     FPU, MMX, HLE, SSE, SSE2, SSE3, SSE4, AVX, AVX2, AVX512, Virtualization, and General instruction support.
     Syntax highlighting.
     Single and multiline macro support.
@@ -25,10 +23,6 @@ Version v0.5-beta.8 pre-release
 - Find Usages
 - Goto Symbol
 - Debugger Support
-
-# v0.5-beta.8 Changes
-
-    Add support for conditional preprocessor expressions in structures.
 
 # License
 
