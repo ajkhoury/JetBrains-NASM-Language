@@ -45,8 +45,6 @@ SOFTWARE.
 
         EQU                 = 'regexp:([eE][qQ][uU])'
 
-        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
-
         INCLUDE_TAG         = 'regexp:((\s+)?[#%](\s+)?)([iI][nN][cC][lL][uU][dD][eE])'
         DEFINE_TAG          = 'regexp:((\s+)?[#%](\s+)?)(([xX]|[iI])?[dD][eE][fF][iI][nN][eE])'
         ASSIGN_TAG          = 'regexp:((\s+)?[#%](\s+)?)([iI]?[aA][sS][sS][iI][gG][nN])'
@@ -56,8 +54,8 @@ SOFTWARE.
         MACRO_PARAM_REF     = 'regexp:((%|%%)([1-9][0-9]*))'
         MACRO_PARAM_COUNT   = 'regexp:(%0)'
         MACRO_NOLIST_QUAL   = 'regexp:(\.)([Nn][Oo][Ll][Ii][Ss][Tt])'
-        MACRO_VAR_REF       = 'regexp:(%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._?#@]*)'
-        MACRO_PARAM_LBL_DEF = 'regexp:((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)):)'
+        MACRO_VAR_REF       = 'regexp:(%%)([a-zA-Z0-9$_?][a-zA-Z0-9$._?#@]*)'
+        MACRO_PARAM_LBL_DEF = 'regexp:((((%|%%)([a-zA-Z0-9$._?][a-zA-Z0-9$._]*))|(([a-zA-Z0-9$._?][a-zA-Z0-9$._]*)((%)[0-9]+)[a-zA-Z0-9$._]*)|((\.\.@[0-9]+)\.[a-zA-Z0-9$._?]+)):?)'
         IF_TAG              = 'regexp:((\s+)?[#%](\s+)?)([iI][fF])'
         IFID_TAG            = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][iI][dD])'
         IFDEF_TAG           = 'regexp:((\s+)?[#%](\s+)?)([iI][fF][nN]?[dD][eE][fF])'
@@ -85,7 +83,7 @@ SOFTWARE.
         IEND_TAG            = 'regexp:([iI][eE][nN][dD])'
         AT_TAG              = 'regexp:([aA][tT])'
         ID_EXTENSION        = 'regexp:(([a-zA-Z_]+[a-zA-Z0-9_]*)(\.)([a-zA-Z_]+[a-zA-Z0-9_]*))'
-        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]*):'
+        SEGMENT_ADDR_L      = 'regexp:((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|0*):'
 
         DIRECTIVE_OP        = 'regexp:([bB][iI][tT][sS]|[uU][sS][eE]16|[uU][sS][eE]32|[cC][oO][dD][eE]16|[cC][oO][dD][eE]32|[aA][bB][sS][oO][lL][uU][tT][eE]|[eE][xX][tT][eE][rR][nN]|[gG][lL][oO][bB][aA][lL]|[oO][rR][gG]|[aA][lL][iI][gG][nN]|[sS][tT][rR][uU][cC]|[eE][nN][dD][sS][tT][rR][uU][cC]|[cC][oO][mM][mM][oO][nN]|[cC][pP][uU]|[gG][rR][oO][uU][pP]|[uU][pP][pP][eE][rR][cC][aA][sS][eE]|[iI][mM][pP][oO][rR][tT]|[eE][xX][pP][oO][rR][tT]|[lL][iI][bB][rR][aA][rR][yY]|[mM][oO][dD][uU][lL][eE])'
         END_DIRECTIVE_OP    = 'regexp:([eE][nN][dD])'
@@ -231,7 +229,7 @@ SOFTWARE.
         // All kinds of registers
         REGISTER            = 'regexp:(%)?((([c-gs]s):)?(([abcd][hl])|([er]?[abcd]x)|([er]?[sb]p)|([er]?[sd]i|dil|sil|bpl|spl)|([er]?ip)|(r(8|9|1[0-5])[bdlw]?)|([er]?flags)|(cr[0-8])|(d[rb][0-367]|dr([89]|1[0-5]))|(tr[3-7])|(([gil]dt)r?|tr)|(bnd([0-3]|cfg[su]|status))|(efer|tpr|syscfg)|((mm|st|fpr)[0-7])|([xy]mm([0-9]|1[0-5])|mxcsr)|(zmm([12]?[0-9]|30|31))))|((([C-GS]S):)?(([ABCD][HL])|([ER]?[ABCD]X)|([ER]?[SB]P)|([ER]?[SD]I|DIL|SIL|BPL|SPL)|([ER]?IP)|(R(8|9|1[0-5])[BDLW]?)|([ER]?FLAGS)|(CR[0-8])|(D[RB][0-367]|DR([89]|1[0-5]))|(TR[3-7])|(([GIL]DT)R?|TR)|(BND([0-3]|CFG[SU]|STATUS))|(EFER|TPR|SYSCFG)|((MM|ST|FPR)[0-7])|([XY]MM([0-9]|1[0-5])|MXCSR)|(ZMM([12]?[0-9]|30|31))))'
         SEGMENT_REGISTER    = 'regexp:([c-gs]s)|([C-GS]S)'
-        SIZE_TYPE           = 'regexp:[sS][hH][oO][rR][tT]|[lL][oO][nN][gG]|[nN][eE][aA][rR]|[fF][aA][rR]|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|[bB][yY][tT][eE])(([ \t\x0B\f]+)[pP][tT][rR])?)'
+        SIZE_TYPE           = 'regexp:([sS][hH][oO][rR][tT])|([lL][oO][nN][gG])|([nN][eE][aA][rR])|([fF][aA][rR])|(((([dDqQoOtTyYzZ]|[xX][mM][mM])?[wW][oO][rR][dD])|([bB][yY][tT][eE]))(([ \t\x0B\f]+)[pP][tT][rR])?)'
 
         // Make last!
         ID                  = 'regexp:([a-zA-Z_?]+[a-zA-Z0-9_$.#@~?]*)' // Some identifier
@@ -239,9 +237,9 @@ SOFTWARE.
         LBL                 = 'regexp:([a-zA-Z$._?#@]+[a-zA-Z0-9$._~]*)' // Label can have chars like % . ? @ # ~ etc
 
         // Literals
-        BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1][0-1]*[bB]|[0-1][0-1]*[yY])'
+        BINARY              = 'regexp:(0[bB][0-1]+|0[yY][0-1]+|[0-1]+[bB]|[0-1]+[yY])'
         HEXADECIMAL         = 'regexp:(0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])'
-        ZEROES              = 'regexp:[0]+'
+        ZEROES              = 'regexp:0+'
         DECIMAL             = 'regexp:((0[dD])?[0-9]+)'
         FLOAT_DECIMAL       = 'regexp:(([0-9]*\.[^A-Za-z][0-9]*)([Ee][+-]?[0-9]+)?)'
         //SEGMENT_ADDR        = 'regexp:(((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[0]+):((0[xX][0-9a-fA-F]+|0[hH][0-9a-fA-F]+|\$[0-9]+[0-9a-fA-F]*|[0-9]+[0-9a-fA-F]*[hH])|[a-zA-Z_][a-zA-Z0-9_]*|[0]+))'
@@ -324,7 +322,7 @@ Define ::= ((DEFINE_TAG Identifier ROUND_L (Expr (SEPARATOR Expr)*)? ROUND_R Exp
         | (DEFINE_TAG Identifier (Expr|(PERCENT SQUARE_L Expr SQUARE_R))?)) SEPARATOR? NL* {methods=[getDefineIdentifier getDefineIdentifierString]}
 Assign ::= (ASSIGN_TAG Identifier Expr)
 Macro ::= MACRO_TAG Identifier MacroParams MacroDefaultParam? NL* ((MacroLabel|Label|DataElement|Instruction|Directive|Preprocessor|Expr) NL*)* MACRO_END_TAG { pin=1 methods=[getMacroIdentifierString]}
-MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|DataElement)? NL*)
+MacroLabel ::= (MACRO_PARAM_LBL_DEF (Instruction|DataElement)? NL*) // This has to be public
 private MacroParams ::= ((NumericLiteral MINUS NumericLiteral (PLUS|TIMES)?)|(NumericLiteral MINUS TIMES)|(NumericLiteral PLUS?)) MACRO_NOLIST_QUAL?
 private MacroDefaultParam ::= (Instruction|STRING|REGISTER|NumericLiteral|MacroCall)
 Strlen ::= STRLEN_TAG Identifier (STRING|ID) NL*
@@ -334,7 +332,7 @@ private IfConditionTag ::= (IFMACRO_TAG|IFCTX_TAG|IFNUM_TAG|IFSTR_TAG|IFIDN_TAG|
 private Condition ::= (Expr (EQUALEQUAL|NOTEQUAL|GREATERTHAN|LESSTHAN|GREATERTHANOREQUAL|LESSTHANOREQUAL|SEPARATOR) Expr)
 private MacroCondition ::= Identifier MacroParams MacroDefaultParam?
 
-Label ::= (LBL_DEF (Instruction|DataElement|Structure)? NL*) | (LabelDefMacro (Instruction|DataElement|Structure)? NL*) { mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
+Label ::= (LBL_DEF (Instruction|DataElement|Structure)? NL*) | (LabelDefMacro (Instruction|DataElement|Structure)? NL*) | (LBL (Instruction|MacroCall|MacroDefCall) NL*) { mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier] }
 LabelDefMacro ::= (ID MacroParenthesis COLON NL*) // This has to be public so we can highlight using NASMAnnotator
 Constant ::= (ID EQU ((MINUS|PLUS|BITWISE_NOT)? Expr)* NL*)
 
@@ -413,7 +411,7 @@ ParenthesisExpr ::= ROUND_L Expr ROUND_R { pin(".*")=1 extends=Expr }
 
 NumericLiteral ::= SIZE_TYPE? (BITWISE_NOT|MINUS|PLUS)? (BINARY|ZEROES|HEXADECIMAL|DECIMAL|FLOAT_DECIMAL|CHARACTER) { extends=Expr }
 Identifier ::= ID|MACRO_VAR_REF|MACRO_PARAM_REF { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getPresentation getReferences]}
-LabelIdentifier ::= SIZE_TYPE? (LBL|ID) { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getPresentation getReferences] }
+LabelIdentifier ::= SIZE_TYPE? (LBL|ID|MACRO_PARAM_LBL_DEF) { extends=Expr mixin="com.nasmlanguage.psi.impl.NASMNamedElementImpl" implements="com.nasmlanguage.psi.NASMNamedElement" methods=[getName setName getNameIdentifier getPresentation getReferences] }
 Reg ::= SIZE_TYPE? REGISTER { extends=Expr }
 Seg ::= SEGMENT_REGISTER { extends=Expr }
 Mnemonic ::= GENERAL_OP|SYSTEM_OP|VIRTUALIZATION_OP|X64_OP|FPU_OP|MMX_OP|SSE_OP|SSE2_OP|SSE3_OP|SSE4_OP|AVX_OP|AVX2_OP|AVX512_OP { extends=Expr }

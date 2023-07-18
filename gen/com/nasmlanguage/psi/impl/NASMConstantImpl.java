@@ -21,6 +21,7 @@ public class NASMConstantImpl extends ASTWrapperPsiElement implements NASMConsta
     visitor.visitConstant(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

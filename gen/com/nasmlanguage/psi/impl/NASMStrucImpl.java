@@ -21,6 +21,7 @@ public class NASMStrucImpl extends ASTWrapperPsiElement implements NASMStruc {
     visitor.visitStruc(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

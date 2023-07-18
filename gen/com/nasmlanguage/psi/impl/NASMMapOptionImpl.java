@@ -21,6 +21,7 @@ public class NASMMapOptionImpl extends ASTWrapperPsiElement implements NASMMapOp
     visitor.visitMapOption(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

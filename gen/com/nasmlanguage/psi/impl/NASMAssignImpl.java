@@ -21,6 +21,7 @@ public class NASMAssignImpl extends ASTWrapperPsiElement implements NASMAssign {
     visitor.visitAssign(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

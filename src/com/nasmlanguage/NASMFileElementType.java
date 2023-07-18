@@ -54,6 +54,7 @@ public class NASMFileElementType extends IStubFileElementType<NASMFileStub> {
         return new DefaultStubBuilder() {
             @NotNull
             @Override
+            @SuppressWarnings("rawtypes")
             protected StubElement createStubForFile(@NotNull PsiFile file) {
                 if (file instanceof NASMFile) {
                     return new NASMFileStub((NASMFile)file);

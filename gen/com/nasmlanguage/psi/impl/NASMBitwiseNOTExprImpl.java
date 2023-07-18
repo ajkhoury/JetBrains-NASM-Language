@@ -16,10 +16,12 @@ public class NASMBitwiseNOTExprImpl extends NASMExprImpl implements NASMBitwiseN
     super(node);
   }
 
+  @Override
   public void accept(@NotNull NASMVisitor visitor) {
     visitor.visitBitwiseNOTExpr(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

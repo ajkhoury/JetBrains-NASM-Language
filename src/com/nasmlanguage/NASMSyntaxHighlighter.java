@@ -32,9 +32,9 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.nasmlanguage.psi.NASMTypes;
-import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
@@ -121,7 +121,7 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final Map<IElementType, TextAttributesKey> AttributeKeys;
     static {
-        AttributeKeys = new THashMap<>();
+        AttributeKeys = new HashMap<>();
 
         AttributeKeys.put(NASMTypes.REGISTER, NASM_REGISTER);
         AttributeKeys.put(NASMTypes.SEGMENT_REGISTER, NASM_SEGMENT_REGISTER);
@@ -178,8 +178,6 @@ public class NASMSyntaxHighlighter extends SyntaxHighlighterBase {
 
         AttributeKeys.put(NASMTypes.LBL, NASM_LABEL);
         AttributeKeys.put(NASMTypes.LBL_DEF, NASM_LABEL);
-        //AttributeKeys.put(NASMTypes.LBL_INS, NASM_LABEL);
-        //AttributeKeys.put(NASMTypes.LBL_DATA, NASM_LABEL);
 
         AttributeKeys.put(NASMTypes.IDENTIFIER, NASM_IDENTIFIER);
 

@@ -16,10 +16,12 @@ public class NASMMacroDefCallImpl extends NASMExprImpl implements NASMMacroDefCa
     super(node);
   }
 
+  @Override
   public void accept(@NotNull NASMVisitor visitor) {
     visitor.visitMacroDefCall(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

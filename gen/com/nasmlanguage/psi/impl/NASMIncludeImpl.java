@@ -21,6 +21,7 @@ public class NASMIncludeImpl extends ASTWrapperPsiElement implements NASMInclude
     visitor.visitInclude(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);

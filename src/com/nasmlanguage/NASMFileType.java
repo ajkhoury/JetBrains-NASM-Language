@@ -41,13 +41,13 @@ public class NASMFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getName() {
-        return "Assembly File";
+        return "Assembly";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return "Assembly Language";
+        return "Assembly language";
     }
 
     @NotNull

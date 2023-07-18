@@ -20,6 +20,7 @@ public class NASMLabelImpl extends NASMNamedElementImpl implements NASMLabel {
     visitor.visitLabel(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NASMVisitor) accept((NASMVisitor)visitor);
     else super.accept(visitor);
@@ -29,6 +30,12 @@ public class NASMLabelImpl extends NASMNamedElementImpl implements NASMLabel {
   @Nullable
   public NASMDataElement getDataElement() {
     return findChildByClass(NASMDataElement.class);
+  }
+
+  @Override
+  @Nullable
+  public NASMExpr getExpr() {
+    return findChildByClass(NASMExpr.class);
   }
 
   @Override
@@ -47,6 +54,12 @@ public class NASMLabelImpl extends NASMNamedElementImpl implements NASMLabel {
   @Nullable
   public NASMStructure getStructure() {
     return findChildByClass(NASMStructure.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLbl() {
+    return findChildByType(LBL);
   }
 
   @Override
